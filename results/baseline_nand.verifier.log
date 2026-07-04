@@ -1,0 +1,918 @@
+libbpf: loading object from build/wm.bpf.o
+libbpf: elf: section(2) .text, size 632, link 0, flags 6, type=1
+libbpf: sec '.text': found program 'step_cb' at insn offset 0 (0 bytes), code size 79 insns (632 bytes)
+libbpf: elf: section(3) .rel.text, size 80, link 28, flags 40, type=9
+libbpf: elf: section(4) syscall, size 1128, link 0, flags 6, type=1
+libbpf: sec 'syscall': found program 'wm_nand' at insn offset 0 (0 bytes), code size 40 insns (320 bytes)
+libbpf: sec 'syscall': found program 'wm_fa' at insn offset 40 (320 bytes), code size 71 insns (568 bytes)
+libbpf: sec 'syscall': found program 'wm_adder32' at insn offset 111 (888 bytes), code size 30 insns (240 bytes)
+libbpf: elf: section(5) .relsyscall, size 176, link 28, flags 40, type=9
+libbpf: elf: section(6) license, size 4, link 0, flags 3, type=1
+libbpf: license of build/wm.bpf.o is GPL
+libbpf: elf: section(7) .maps, size 320, link 0, flags 3, type=1
+libbpf: elf: section(18) .BTF, size 2525, link 0, flags 0, type=1
+libbpf: elf: section(20) .BTF.ext, size 1544, link 0, flags 0, type=1
+libbpf: elf: section(28) .symtab, size 984, link 1, flags 0, type=2
+libbpf: looking for externs among 41 symbols...
+libbpf: collected 0 externs total
+libbpf: map 'TAPE': at sec_idx 7, offset 0.
+libbpf: map 'TAPE': found type = 2.
+libbpf: map 'TAPE': found key [8], sz = 4.
+libbpf: map 'TAPE': found value [11], sz = 8.
+libbpf: map 'TAPE': found max_entries = 256.
+libbpf: map 'G0': at sec_idx 7, offset 32.
+libbpf: map 'G0': found type = 1.
+libbpf: map 'G0': found key [8], sz = 4.
+libbpf: map 'G0': found value [11], sz = 8.
+libbpf: map 'G0': found max_entries = 2.
+libbpf: map 'G1': at sec_idx 7, offset 64.
+libbpf: map 'G1': found type = 1.
+libbpf: map 'G1': found key [8], sz = 4.
+libbpf: map 'G1': found value [11], sz = 8.
+libbpf: map 'G1': found max_entries = 2.
+libbpf: map 'G2': at sec_idx 7, offset 96.
+libbpf: map 'G2': found type = 1.
+libbpf: map 'G2': found key [8], sz = 4.
+libbpf: map 'G2': found value [11], sz = 8.
+libbpf: map 'G2': found max_entries = 2.
+libbpf: map 'G3': at sec_idx 7, offset 128.
+libbpf: map 'G3': found type = 1.
+libbpf: map 'G3': found key [8], sz = 4.
+libbpf: map 'G3': found value [11], sz = 8.
+libbpf: map 'G3': found max_entries = 2.
+libbpf: map 'G4': at sec_idx 7, offset 160.
+libbpf: map 'G4': found type = 1.
+libbpf: map 'G4': found key [8], sz = 4.
+libbpf: map 'G4': found value [11], sz = 8.
+libbpf: map 'G4': found max_entries = 2.
+libbpf: map 'G5': at sec_idx 7, offset 192.
+libbpf: map 'G5': found type = 1.
+libbpf: map 'G5': found key [8], sz = 4.
+libbpf: map 'G5': found value [11], sz = 8.
+libbpf: map 'G5': found max_entries = 2.
+libbpf: map 'G6': at sec_idx 7, offset 224.
+libbpf: map 'G6': found type = 1.
+libbpf: map 'G6': found key [8], sz = 4.
+libbpf: map 'G6': found value [11], sz = 8.
+libbpf: map 'G6': found max_entries = 2.
+libbpf: map 'G7': at sec_idx 7, offset 256.
+libbpf: map 'G7': found type = 1.
+libbpf: map 'G7': found key [8], sz = 4.
+libbpf: map 'G7': found value [11], sz = 8.
+libbpf: map 'G7': found max_entries = 2.
+libbpf: map 'G8': at sec_idx 7, offset 288.
+libbpf: map 'G8': found type = 1.
+libbpf: map 'G8': found key [8], sz = 4.
+libbpf: map 'G8': found value [11], sz = 8.
+libbpf: map 'G8': found max_entries = 2.
+libbpf: sec '.rel.text': collecting relocation for section(2) '.text'
+libbpf: sec '.rel.text': relo #0: insn #10 against 'TAPE'
+libbpf: prog 'step_cb': found map 0 (TAPE, sec 7, off 0) for insn #10
+libbpf: sec '.rel.text': relo #1: insn #23 against 'TAPE'
+libbpf: prog 'step_cb': found map 0 (TAPE, sec 7, off 0) for insn #23
+libbpf: sec '.rel.text': relo #2: insn #33 against 'TAPE'
+libbpf: prog 'step_cb': found map 0 (TAPE, sec 7, off 0) for insn #33
+libbpf: sec '.rel.text': relo #3: insn #59 against 'TAPE'
+libbpf: prog 'step_cb': found map 0 (TAPE, sec 7, off 0) for insn #59
+libbpf: sec '.rel.text': relo #4: insn #73 against 'TAPE'
+libbpf: prog 'step_cb': found map 0 (TAPE, sec 7, off 0) for insn #73
+libbpf: sec '.relsyscall': collecting relocation for section(4) 'syscall'
+libbpf: sec '.relsyscall': relo #0: insn #4 against 'TAPE'
+libbpf: prog 'wm_nand': found map 0 (TAPE, sec 7, off 0) for insn #4
+libbpf: sec '.relsyscall': relo #1: insn #17 against 'TAPE'
+libbpf: prog 'wm_nand': found map 0 (TAPE, sec 7, off 0) for insn #17
+libbpf: sec '.relsyscall': relo #2: insn #34 against 'TAPE'
+libbpf: prog 'wm_nand': found map 0 (TAPE, sec 7, off 0) for insn #34
+libbpf: sec '.relsyscall': relo #3: insn #44 against 'TAPE'
+libbpf: prog 'wm_fa': found map 0 (TAPE, sec 7, off 0) for insn #4
+libbpf: sec '.relsyscall': relo #4: insn #55 against 'TAPE'
+libbpf: prog 'wm_fa': found map 0 (TAPE, sec 7, off 0) for insn #15
+libbpf: sec '.relsyscall': relo #5: insn #65 against 'TAPE'
+libbpf: prog 'wm_fa': found map 0 (TAPE, sec 7, off 0) for insn #25
+libbpf: sec '.relsyscall': relo #6: insn #91 against 'TAPE'
+libbpf: prog 'wm_fa': found map 0 (TAPE, sec 7, off 0) for insn #51
+libbpf: sec '.relsyscall': relo #7: insn #105 against 'TAPE'
+libbpf: prog 'wm_fa': found map 0 (TAPE, sec 7, off 0) for insn #65
+libbpf: sec '.relsyscall': relo #8: insn #121 against 'TAPE'
+libbpf: prog 'wm_adder32': found map 0 (TAPE, sec 7, off 0) for insn #10
+libbpf: sec '.relsyscall': relo #9: insn #128 against 'TAPE'
+libbpf: prog 'wm_adder32': found map 0 (TAPE, sec 7, off 0) for insn #17
+libbpf: sec '.relsyscall': relo #10: insn #134 against '.text'
+libbpf: object 'wm': failed (-95) to create BPF token from '/sys/fs/bpf', skipping optional step...
+libbpf: prog 'wm_adder32': added 79 insns from sub-prog 'step_cb'
+libbpf: prog 'wm_adder32': insn #23 relocated, imm 6 points to subprog 'step_cb' (now at 30 offset)
+libbpf: map 'TAPE': created successfully, fd=4
+libbpf: map 'G0': created successfully, fd=5
+libbpf: map 'G1': created successfully, fd=6
+libbpf: map 'G2': created successfully, fd=7
+libbpf: map 'G3': created successfully, fd=8
+libbpf: map 'G4': created successfully, fd=9
+libbpf: map 'G5': created successfully, fd=10
+libbpf: map 'G6': created successfully, fd=11
+libbpf: map 'G7': created successfully, fd=12
+libbpf: map 'G8': created successfully, fd=13
+libbpf: prog 'wm_nand': -- BEGIN PROG LOAD LOG --
+func#0 @0
+Live regs before insn:
+      0: .......... (b7) r1 = 0
+      1: .1........ (63) *(u32 *)(r10 -16) = r1
+      2: .......... (bf) r2 = r10
+      3: ..2....... (07) r2 += -16
+      4: ..2....... (18) r1 = 0xffff00000049b000
+      6: .12....... (85) call bpf_map_lookup_elem#1
+      7: 0......... (b7) r7 = 1
+      8: 0......7.. (b7) r6 = 1
+      9: 0.....67.. (15) if r0 == 0x0 goto pc+4
+     10: 0.....67.. (79) r1 = *(u64 *)(r0 +0)
+     11: .1....67.. (57) r1 &= 1
+     12: .1....67.. (15) if r1 == 0x0 goto pc+1
+     13: .......7.. (b7) r6 = 0
+     14: ......67.. (63) *(u32 *)(r10 -16) = r7
+     15: ......67.. (bf) r2 = r10
+     16: ..2...67.. (07) r2 += -16
+     17: ..2...67.. (18) r1 = 0xffff00000049b000
+     19: .12...67.. (85) call bpf_map_lookup_elem#1
+     20: 0.....67.. (15) if r0 == 0x0 goto pc+4
+     21: 0.....67.. (79) r1 = *(u64 *)(r0 +0)
+     22: .1....67.. (57) r1 &= 1
+     23: .1....67.. (15) if r1 == 0x0 goto pc+1
+     24: ......6... (b7) r7 = 0
+     25: ......67.. (b7) r1 = 2
+     26: .1....67.. (63) *(u32 *)(r10 -4) = r1
+     27: ......67.. (4f) r6 |= r7
+     28: ......6... (57) r6 &= 1
+     29: ......6... (7b) *(u64 *)(r10 -16) = r6
+     30: .......... (bf) r2 = r10
+     31: ..2....... (07) r2 += -4
+     32: ..2....... (bf) r3 = r10
+     33: ..23...... (07) r3 += -16
+     34: ..23...... (18) r1 = 0xffff00000049b000
+     36: .123...... (b7) r4 = 0
+     37: .1234..... (85) call bpf_map_update_elem#2
+     38: .......... (b7) r0 = 0
+     39: 0......... (95) exit
+arg#0 reference type('UNKNOWN ') size cannot be determined: -22
+0: R1=ctx() R10=fp0
+; int wm_nand(void *ctx) @ wm.bpf.c:117
+0: (b7) r1 = 0                        ; R1_w=0
+1: (63) *(u32 *)(r10 -16) = r1        ; R1_w=0 R10=fp0 fp-16=????0
+2: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+3: (07) r2 += -16                     ; R2_w=fp-16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+4: (18) r1 = 0xffff00000049b000       ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+6: (85) call bpf_map_lookup_elem#1
+mark_precise: frame0: last_idx 6 first_idx 0 subseq_idx -1 
+mark_precise: frame0: regs= stack=-16 before 4: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 3: (07) r2 += -16
+mark_precise: frame0: regs= stack=-16 before 2: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 1: (63) *(u32 *)(r10 -16) = r1
+mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 0
+7: R0_w=map_value(map=TAPE,ks=4,vs=8)
+7: (b7) r7 = 1                        ; R7_w=1
+8: (b7) r6 = 1                        ; R6_w=1
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+9: (15) if r0 == 0x0 goto pc+4        ; R0_w=map_value(map=TAPE,ks=4,vs=8)
+10: (79) r1 = *(u64 *)(r0 +0)         ; R0_w=map_value(map=TAPE,ks=4,vs=8) R1_w=scalar()
+11: (57) r1 &= 1                      ; R1=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+; __u64 out = NAND_GATE(G0, a, b); @ wm.bpf.c:122
+12: (15) if r1 == 0x0 goto pc+1       ; R1=1
+13: (b7) r6 = 0                       ; R6_w=0
+14: (63) *(u32 *)(r10 -16) = r7       ; R7=1 R10=fp0 fp-16=????1
+15: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+16: (07) r2 += -16                    ; R2_w=fp-16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+17: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+19: (85) call bpf_map_lookup_elem#1
+mark_precise: frame0: last_idx 19 first_idx 12 subseq_idx -1 
+mark_precise: frame0: regs= stack=-16 before 17: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 16: (07) r2 += -16
+mark_precise: frame0: regs= stack=-16 before 15: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 14: (63) *(u32 *)(r10 -16) = r7
+mark_precise: frame0: regs=r7 stack= before 13: (b7) r6 = 0
+mark_precise: frame0: regs=r7 stack= before 12: (15) if r1 == 0x0 goto pc+1
+mark_precise: frame0: parent state regs=r7 stack=:  R0_w=map_value(map=TAPE,ks=4,vs=8) R1_rw=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R6_w=1 R7_rw=P1 R10=fp0 fp-16_r=????0
+mark_precise: frame0: last_idx 11 first_idx 0 subseq_idx 12 
+mark_precise: frame0: regs=r7 stack= before 11: (57) r1 &= 1
+mark_precise: frame0: regs=r7 stack= before 10: (79) r1 = *(u64 *)(r0 +0)
+mark_precise: frame0: regs=r7 stack= before 9: (15) if r0 == 0x0 goto pc+4
+mark_precise: frame0: regs=r7 stack= before 8: (b7) r6 = 1
+mark_precise: frame0: regs=r7 stack= before 7: (b7) r7 = 1
+20: R0_w=map_value(map=TAPE,ks=4,vs=8)
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+20: (15) if r0 == 0x0 goto pc+4       ; R0_w=map_value(map=TAPE,ks=4,vs=8)
+21: (79) r1 = *(u64 *)(r0 +0)         ; R0_w=map_value(map=TAPE,ks=4,vs=8) R1_w=scalar()
+22: (57) r1 &= 1                      ; R1=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+; __u64 out = NAND_GATE(G0, a, b); @ wm.bpf.c:122
+23: (15) if r1 == 0x0 goto pc+1       ; R1=1
+24: (b7) r7 = 0                       ; R7_w=0
+25: (b7) r1 = 2                       ; R1_w=2
+26: (63) *(u32 *)(r10 -4) = r1        ; R1_w=2 R10=fp0 fp-8=mmmm????
+27: (4f) r6 |= r7                     ; R6_w=0 R7_w=0
+28: (57) r6 &= 1                      ; R6_w=0
+; v &= 1ull; @ wm.bpf.c:48
+29: (7b) *(u64 *)(r10 -16) = r6       ; R6_w=0 R10=fp0 fp-16_w=0
+30: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+31: (07) r2 += -4                     ; R2_w=fp-4
+32: (bf) r3 = r10                     ; R3_w=fp0 R10=fp0
+33: (07) r3 += -16                    ; R3_w=fp-16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY); @ wm.bpf.c:49
+34: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+36: (b7) r4 = 0                       ; R4_w=0
+37: (85) call bpf_map_update_elem#2   ; R0=scalar()
+; return 0; @ wm.bpf.c:124
+38: (b7) r0 = 0                       ; R0_w=0
+39: (95) exit
+
+from 23 to 25: R0=map_value(map=TAPE,ks=4,vs=8) R1=0 R6=0 R7=1 R10=fp0 fp-16=????1
+25: R0=map_value(map=TAPE,ks=4,vs=8) R1=0 R6=0 R7=1 R10=fp0 fp-16=????1
+; __u64 out = NAND_GATE(G0, a, b); @ wm.bpf.c:122
+25: (b7) r1 = 2                       ; R1_w=2
+26: (63) *(u32 *)(r10 -4) = r1        ; R1_w=2 R10=fp0 fp-8=mmmm????
+27: (4f) r6 |= r7                     ; R6_w=1 R7=1
+28: (57) r6 &= 1                      ; R6_w=1
+; v &= 1ull; @ wm.bpf.c:48
+29: (7b) *(u64 *)(r10 -16) = r6       ; R6_w=1 R10=fp0 fp-16_w=1
+30: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+31: (07) r2 += -4                     ; R2_w=fp-4
+32: (bf) r3 = r10                     ; R3_w=fp0 R10=fp0
+33: (07) r3 += -16                    ; R3_w=fp-16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY); @ wm.bpf.c:49
+34: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+36: (b7) r4 = 0                       ; R4_w=0
+37: (85) call bpf_map_update_elem#2
+38: safe
+
+from 12 to 14: R0=map_value(map=TAPE,ks=4,vs=8) R1=0 R6=1 R7=1 R10=fp0 fp-16=????0
+14: R0=map_value(map=TAPE,ks=4,vs=8) R1=0 R6=1 R7=1 R10=fp0 fp-16=????0
+; __u64 out = NAND_GATE(G0, a, b); @ wm.bpf.c:122
+14: (63) *(u32 *)(r10 -16) = r7       ; R7=1 R10=fp0 fp-16=????1
+15: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+16: (07) r2 += -16                    ; R2_w=fp-16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+17: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+19: (85) call bpf_map_lookup_elem#1
+mark_precise: frame0: last_idx 19 first_idx 14 subseq_idx -1 
+mark_precise: frame0: regs= stack=-16 before 17: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 16: (07) r2 += -16
+mark_precise: frame0: regs= stack=-16 before 15: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 14: (63) *(u32 *)(r10 -16) = r7
+mark_precise: frame0: parent state regs=r7 stack=:  R0=map_value(map=TAPE,ks=4,vs=8) R1=0 R6=1 R7_r=P1 R10=fp0 fp-16_r=????0
+mark_precise: frame0: last_idx 12 first_idx 12 subseq_idx 14 
+mark_precise: frame0: regs=r7 stack= before 12: (15) if r1 == 0x0 goto pc+1
+mark_precise: frame0: parent state regs= stack=:  R0_w=map_value(map=TAPE,ks=4,vs=8) R1_rw=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R6_w=1 R7_rw=P1 R10=fp0 fp-16_r=????0
+20: R0_w=map_value(map=TAPE,ks=4,vs=8)
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+20: (15) if r0 == 0x0 goto pc+4       ; R0_w=map_value(map=TAPE,ks=4,vs=8)
+21: (79) r1 = *(u64 *)(r0 +0)         ; R0_w=map_value(map=TAPE,ks=4,vs=8) R1_w=scalar()
+22: (57) r1 &= 1
+23: safe
+verification time 101 usec
+stack depth 16
+processed 59 insns (limit 1000000) max_states_per_insn 0 total_states 4 peak_states 4 mark_read 3
+-- END PROG LOAD LOG --
+libbpf: prog 'wm_fa': -- BEGIN PROG LOAD LOG --
+func#0 @0
+Live regs before insn:
+      0: .......... (b7) r6 = 0
+      1: ......6... (63) *(u32 *)(r10 -16) = r6
+      2: ......6... (bf) r2 = r10
+      3: ..2...6... (07) r2 += -16
+      4: ..2...6... (18) r1 = 0xffff00000049b000
+      6: .12...6... (85) call bpf_map_lookup_elem#1
+      7: 0.....6... (b7) r7 = 0
+      8: 0.....67.. (15) if r0 == 0x0 goto pc+2
+      9: 0.....6... (79) r7 = *(u64 *)(r0 +0)
+     10: ......67.. (57) r7 &= 1
+     11: ......67.. (b7) r1 = 1
+     12: .1....67.. (63) *(u32 *)(r10 -16) = r1
+     13: ......67.. (bf) r2 = r10
+     14: ..2...67.. (07) r2 += -16
+     15: ..2...67.. (18) r1 = 0xffff00000049b000
+     17: .12...67.. (85) call bpf_map_lookup_elem#1
+     18: 0.....67.. (15) if r0 == 0x0 goto pc+2
+     19: 0......7.. (79) r6 = *(u64 *)(r0 +0)
+     20: ......67.. (57) r6 &= 1
+     21: ......67.. (b7) r1 = 3
+     22: .1....67.. (63) *(u32 *)(r10 -16) = r1
+     23: ......67.. (bf) r2 = r10
+     24: ..2...67.. (07) r2 += -16
+     25: ..2...67.. (18) r1 = 0xffff00000049b000
+     27: .12...67.. (85) call bpf_map_lookup_elem#1
+     28: 0.....67.. (b7) r8 = 0
+     29: 0.....678. (15) if r0 == 0x0 goto pc+2
+     30: 0.....67.. (79) r8 = *(u64 *)(r0 +0)
+     31: ......678. (57) r8 &= 1
+     32: ......678. (b7) r1 = 4
+     33: .1....678. (63) *(u32 *)(r10 -4) = r1
+     34: ......678. (bf) r1 = r6
+     35: .1....678. (4f) r1 |= r7
+     36: .1....678. (5f) r6 &= r7
+     37: .1....6.8. (b7) r9 = 1
+     38: .1....6.89 (b7) r7 = 1
+     39: .1....6789 (15) if r6 == 0x0 goto pc+1
+     40: .1......89 (b7) r7 = 0
+     41: .1.....789 (55) if r1 != 0x0 goto pc+1
+     42: .......78. (b7) r9 = 0
+     43: .......789 (5f) r9 &= r7
+     44: .......789 (bf) r1 = r9
+     45: .1.....789 (af) r1 ^= r8
+     46: .1.....789 (7b) *(u64 *)(r10 -16) = r1
+     47: .......789 (bf) r2 = r10
+     48: ..2....789 (07) r2 += -4
+     49: ..2....789 (bf) r3 = r10
+     50: ..23...789 (07) r3 += -16
+     51: ..23...789 (18) r1 = 0xffff00000049b000
+     53: .123...789 (b7) r4 = 0
+     54: .1234..789 (85) call bpf_map_update_elem#2
+     55: .......789 (5f) r9 &= r8
+     56: .......7.9 (b7) r1 = 5
+     57: .1.....7.9 (63) *(u32 *)(r10 -4) = r1
+     58: .......7.9 (af) r7 ^= r9
+     59: .......7.. (a7) r7 ^= 1
+     60: .......7.. (7b) *(u64 *)(r10 -16) = r7
+     61: .......... (bf) r2 = r10
+     62: ..2....... (07) r2 += -4
+     63: ..2....... (bf) r3 = r10
+     64: ..23...... (07) r3 += -16
+     65: ..23...... (18) r1 = 0xffff00000049b000
+     67: .123...... (b7) r4 = 0
+     68: .1234..... (85) call bpf_map_update_elem#2
+     69: .......... (b7) r0 = 0
+     70: 0......... (95) exit
+arg#0 reference type('UNKNOWN ') size cannot be determined: -22
+0: R1=ctx() R10=fp0
+; int wm_fa(void *ctx) @ wm.bpf.c:142
+0: (b7) r6 = 0                        ; R6_w=0
+1: (63) *(u32 *)(r10 -16) = r6        ; R6_w=0 R10=fp0 fp-16=????0
+2: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+3: (07) r2 += -16                     ; R2_w=fp-16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+4: (18) r1 = 0xffff00000049b000       ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+6: (85) call bpf_map_lookup_elem#1
+mark_precise: frame0: last_idx 6 first_idx 0 subseq_idx -1 
+mark_precise: frame0: regs= stack=-16 before 4: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 3: (07) r2 += -16
+mark_precise: frame0: regs= stack=-16 before 2: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 1: (63) *(u32 *)(r10 -16) = r6
+mark_precise: frame0: regs=r6 stack= before 0: (b7) r6 = 0
+7: R0_w=map_value(map=TAPE,ks=4,vs=8)
+7: (b7) r7 = 0                        ; R7_w=0
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+8: (15) if r0 == 0x0 goto pc+2        ; R0_w=map_value(map=TAPE,ks=4,vs=8)
+9: (79) r7 = *(u64 *)(r0 +0)          ; R0_w=map_value(map=TAPE,ks=4,vs=8) R7_w=scalar()
+10: (57) r7 &= 1                      ; R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+11: (b7) r1 = 1                       ; R1_w=1
+12: (63) *(u32 *)(r10 -16) = r1       ; R1_w=1 R10=fp0 fp-16=????1
+13: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+14: (07) r2 += -16                    ; R2_w=fp-16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+15: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+17: (85) call bpf_map_lookup_elem#1
+mark_precise: frame0: last_idx 17 first_idx 11 subseq_idx -1 
+mark_precise: frame0: regs= stack=-16 before 15: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 14: (07) r2 += -16
+mark_precise: frame0: regs= stack=-16 before 13: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 12: (63) *(u32 *)(r10 -16) = r1
+mark_precise: frame0: regs=r1 stack= before 11: (b7) r1 = 1
+18: R0_w=map_value(map=TAPE,ks=4,vs=8)
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+18: (15) if r0 == 0x0 goto pc+2       ; R0_w=map_value(map=TAPE,ks=4,vs=8)
+19: (79) r6 = *(u64 *)(r0 +0)         ; R0_w=map_value(map=TAPE,ks=4,vs=8) R6_w=scalar()
+20: (57) r6 &= 1                      ; R6=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+21: (b7) r1 = 3                       ; R1_w=3
+22: (63) *(u32 *)(r10 -16) = r1       ; R1_w=3 R10=fp0 fp-16=????3
+23: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+;  @ wm.bpf.c:0
+24: (07) r2 += -16                    ; R2_w=fp-16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+25: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+27: (85) call bpf_map_lookup_elem#1
+mark_precise: frame0: last_idx 27 first_idx 21 subseq_idx -1 
+mark_precise: frame0: regs= stack=-16 before 25: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 24: (07) r2 += -16
+mark_precise: frame0: regs= stack=-16 before 23: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 22: (63) *(u32 *)(r10 -16) = r1
+mark_precise: frame0: regs=r1 stack= before 21: (b7) r1 = 3
+28: R0_w=map_value(map=TAPE,ks=4,vs=8)
+28: (b7) r8 = 0                       ; R8_w=0
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+29: (15) if r0 == 0x0 goto pc+2       ; R0_w=map_value(map=TAPE,ks=4,vs=8)
+30: (79) r8 = *(u64 *)(r0 +0)         ; R0_w=map_value(map=TAPE,ks=4,vs=8) R8_w=scalar()
+31: (57) r8 &= 1                      ; R8=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+32: (b7) r1 = 4                       ; R1_w=4
+33: (63) *(u32 *)(r10 -4) = r1        ; R1_w=4 R10=fp0 fp-8=mmmm????
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+34: (bf) r1 = r6                      ; R1_w=scalar(id=1,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R6=scalar(id=1,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+35: (4f) r1 |= r7                     ; R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+; __u64 d   = NAND_GATE(G0, a, b); @ wm.bpf.c:130
+36: (5f) r6 &= r7                     ; R6_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+37: (b7) r9 = 1                       ; R9_w=1
+38: (b7) r7 = 1                       ; R7_w=1
+; __u64 e   = NAND_GATE(G1, a, d); @ wm.bpf.c:131
+39: (15) if r6 == 0x0 goto pc+1       ; R6_w=1
+40: (b7) r7 = 0                       ; R7_w=0
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+41: (55) if r1 != 0x0 goto pc+1       ; R1_w=0
+42: (b7) r9 = 0                       ; R9=0
+43: (5f) r9 &= r7                     ; R7=0 R9_w=0
+; *sum  = NAND_GATE(G7, h, i); @ wm.bpf.c:137
+44: (bf) r1 = r9                      ; R1_w=0 R9_w=0
+45: (af) r1 ^= r8                     ; R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R8=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+; v &= 1ull; @ wm.bpf.c:48
+46: (7b) *(u64 *)(r10 -16) = r1       ; R1_w=scalar(id=2,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R10=fp0 fp-16_w=scalar(id=2,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+47: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+48: (07) r2 += -4                     ; R2_w=fp-4
+49: (bf) r3 = r10                     ; R3_w=fp0 R10=fp0
+50: (07) r3 += -16                    ; R3_w=fp-16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY); @ wm.bpf.c:49
+51: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+53: (b7) r4 = 0                       ; R4_w=0
+54: (85) call bpf_map_update_elem#2   ; R0_w=scalar()
+; __u64 g   = NAND_GATE(G4, xab, cin); @ wm.bpf.c:134
+55: (5f) r9 &= r8                     ; R8=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R9_w=0
+56: (b7) r1 = 5                       ; R1_w=5
+57: (63) *(u32 *)(r10 -4) = r1        ; R1_w=5 R10=fp0 fp-8=mmmm????
+; *cout = NAND_GATE(G8, d, g); @ wm.bpf.c:138
+58: (af) r7 ^= r9                     ; R7_w=0 R9_w=0
+59: (a7) r7 ^= 1                      ; R7_w=1
+; v &= 1ull; @ wm.bpf.c:48
+60: (7b) *(u64 *)(r10 -16) = r7       ; R7_w=1 R10=fp0 fp-16_w=1
+61: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+62: (07) r2 += -4                     ; R2_w=fp-4
+63: (bf) r3 = r10                     ; R3_w=fp0 R10=fp0
+64: (07) r3 += -16                    ; R3_w=fp-16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY); @ wm.bpf.c:49
+65: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+67: (b7) r4 = 0                       ; R4_w=0
+68: (85) call bpf_map_update_elem#2   ; R0=scalar()
+; return 0; @ wm.bpf.c:154
+69: (b7) r0 = 0                       ; R0_w=0
+70: (95) exit
+
+from 41 to 43: safe
+
+from 39 to 41: R0=map_value(map=TAPE,ks=4,vs=8) R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R6_w=0 R7_w=1 R8=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R9_w=1 R10=fp0 fp-8=mmmm???? fp-16=????3
+41: R0=map_value(map=TAPE,ks=4,vs=8) R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R6_w=0 R7_w=1 R8=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R9_w=1 R10=fp0 fp-8=mmmm???? fp-16=????3
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+41: (55) if r1 != 0x0 goto pc+1       ; R1_w=0
+42: (b7) r9 = 0
+43: safe
+
+from 41 to 43: safe
+verification time 104 usec
+stack depth 16
+processed 71 insns (limit 1000000) max_states_per_insn 0 total_states 5 peak_states 5 mark_read 4
+-- END PROG LOAD LOG --
+libbpf: prog 'wm_adder32': -- BEGIN PROG LOAD LOG --
+func#0 @0
+func#1 @30
+Live regs before insn:
+      0: .......... (b7) r1 = 0
+      1: .1........ (7b) *(u64 *)(r10 -8) = r1
+      2: .......... (b7) r1 = 160
+      3: .1........ (63) *(u32 *)(r10 -12) = r1
+      4: .......... (b7) r1 = 161
+      5: .1........ (63) *(u32 *)(r10 -16) = r1
+      6: .......... (bf) r2 = r10
+      7: ..2....... (07) r2 += -12
+      8: ..2....... (bf) r6 = r10
+      9: ..2...6... (07) r6 += -8
+     10: ..2...6... (18) r1 = 0xffff00000049b000
+     12: .12...6... (bf) r3 = r6
+     13: .123..6... (b7) r4 = 0
+     14: .1234.6... (85) call bpf_map_update_elem#2
+     15: ......6... (bf) r2 = r10
+     16: ..2...6... (07) r2 += -16
+     17: ..2...6... (18) r1 = 0xffff00000049b000
+     19: .12...6... (bf) r3 = r6
+     20: .123...... (b7) r4 = 0
+     21: .1234..... (85) call bpf_map_update_elem#2
+     22: .......... (b7) r1 = 32
+     23: .1........ (18) r2 = 0x6
+     25: .12....... (b7) r3 = 0
+     26: .123...... (b7) r4 = 0
+     27: .1234..... (85) call bpf_loop#181
+     28: .......... (b7) r0 = 0
+     29: 0......... (95) exit
+     30: .1........ (bf) r6 = r1
+     31: .1....6... (b7) r0 = 1
+     32: 01....6... (67) r1 <<= 32
+     33: 01....6... (77) r1 >>= 32
+     34: 01....6... (25) if r1 > 0x1f goto pc+73
+     35: ......6... (bf) r1 = r6
+     36: .1....6... (07) r1 += 16
+     37: .1....6... (63) *(u32 *)(r10 -16) = r1
+     38: ......6... (bf) r2 = r10
+     39: ..2...6... (07) r2 += -16
+     40: ..2...6... (18) r1 = 0xffff00000049b000
+     42: .12...6... (85) call bpf_map_lookup_elem#1
+     43: 0.....6... (b7) r8 = 0
+     44: 0.....6.8. (b7) r9 = 0
+     45: 0.....6.89 (15) if r0 == 0x0 goto pc+2
+     46: 0.....6.8. (79) r9 = *(u64 *)(r0 +0)
+     47: ......6.89 (57) r9 &= 1
+     48: ......6.89 (bf) r1 = r6
+     49: .1....6.89 (47) r1 |= 64
+     50: .1....6.89 (63) *(u32 *)(r10 -16) = r1
+     51: ......6.89 (bf) r2 = r10
+     52: ..2...6.89 (07) r2 += -16
+     53: ..2...6.89 (18) r1 = 0xffff00000049b000
+     55: .12...6.89 (85) call bpf_map_lookup_elem#1
+     56: 0.....6.89 (15) if r0 == 0x0 goto pc+2
+     57: 0.....6..9 (79) r8 = *(u64 *)(r0 +0)
+     58: ......6.89 (57) r8 &= 1
+     59: ......6.89 (b7) r1 = 160
+     60: .1....6.89 (63) *(u32 *)(r10 -16) = r1
+     61: ......6.89 (bf) r2 = r10
+     62: ..2...6.89 (07) r2 += -16
+     63: ..2...6.89 (18) r1 = 0xffff00000049b000
+     65: .12...6.89 (85) call bpf_map_lookup_elem#1
+     66: 0.....6.89 (b7) r7 = 0
+     67: 0.....6789 (15) if r0 == 0x0 goto pc+2
+     68: 0.....6.89 (79) r7 = *(u64 *)(r0 +0)
+     69: ......6789 (57) r7 &= 1
+     70: ......6789 (07) r6 += 112
+     71: ......6789 (63) *(u32 *)(r10 -4) = r6
+     72: .......789 (bf) r1 = r8
+     73: .1.....789 (4f) r1 |= r9
+     74: .1.....789 (5f) r8 &= r9
+     75: .1.....78. (b7) r9 = 1
+     76: .1.....789 (b7) r6 = 1
+     77: .1....6789 (15) if r8 == 0x0 goto pc+1
+     78: .1.....7.9 (b7) r6 = 0
+     79: .1....67.9 (55) if r1 != 0x0 goto pc+1
+     80: ......67.. (b7) r9 = 0
+     81: ......67.9 (5f) r9 &= r6
+     82: ......67.9 (bf) r1 = r9
+     83: .1....67.9 (af) r1 ^= r7
+     84: .1....67.9 (7b) *(u64 *)(r10 -16) = r1
+     85: ......67.9 (bf) r2 = r10
+     86: ..2...67.9 (07) r2 += -4
+     87: ..2...67.9 (bf) r3 = r10
+     88: ..23..67.9 (07) r3 += -16
+     89: ..23..67.9 (18) r1 = 0xffff00000049b000
+     91: .123..67.9 (b7) r4 = 0
+     92: .1234.67.9 (85) call bpf_map_update_elem#2
+     93: ......67.9 (5f) r9 &= r7
+     94: ......6..9 (b7) r1 = 160
+     95: .1....6..9 (63) *(u32 *)(r10 -4) = r1
+     96: ......6..9 (af) r6 ^= r9
+     97: ......6... (a7) r6 ^= 1
+     98: ......6... (7b) *(u64 *)(r10 -16) = r6
+     99: .......... (bf) r2 = r10
+    100: ..2....... (07) r2 += -4
+    101: ..2....... (bf) r3 = r10
+    102: ..23...... (07) r3 += -16
+    103: ..23...... (18) r1 = 0xffff00000049b000
+    105: .123...... (b7) r4 = 0
+    106: .1234..... (85) call bpf_map_update_elem#2
+    107: .......... (b7) r0 = 0
+    108: 0......... (95) exit
+arg#0 reference type('UNKNOWN ') size cannot be determined: -22
+0: R1=ctx() R10=fp0
+; int wm_adder32(void *ctx) @ wm.bpf.c:176
+0: (b7) r1 = 0                        ; R1_w=0
+; __u64 zero = 0; @ wm.bpf.c:179
+1: (7b) *(u64 *)(r10 -8) = r1         ; R1_w=0 R10=fp0 fp-8_w=0
+2: (b7) r1 = 160                      ; R1_w=160
+; __u32 ci = CARRY_IDX; @ wm.bpf.c:180
+3: (63) *(u32 *)(r10 -12) = r1        ; R1_w=160 R10=fp0 fp-16=mmmm????
+4: (b7) r1 = 161                      ; R1_w=161
+; __u32 ei = ERR_IDX; @ wm.bpf.c:181
+5: (63) *(u32 *)(r10 -16) = r1        ; R1_w=161 R10=fp0 fp-16=mmmm161
+6: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
+; __u64 zero = 0; @ wm.bpf.c:179
+7: (07) r2 += -12                     ; R2_w=fp-12
+8: (bf) r6 = r10                      ; R6_w=fp0 R10=fp0
+9: (07) r6 += -8                      ; R6_w=fp-8
+; bpf_map_update_elem(&TAPE, &ci, &zero, BPF_ANY); @ wm.bpf.c:183
+10: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+12: (bf) r3 = r6                      ; R3_w=fp-8 R6_w=fp-8
+13: (b7) r4 = 0                       ; R4_w=0
+14: (85) call bpf_map_update_elem#2   ; R0_w=scalar()
+15: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+; __u64 zero = 0; @ wm.bpf.c:179
+16: (07) r2 += -16                    ; R2_w=fp-16
+; bpf_map_update_elem(&TAPE, &ei, &zero, BPF_ANY); @ wm.bpf.c:184
+17: (18) r1 = 0xffff00000049b000      ; R1_w=map_ptr(map=TAPE,ks=4,vs=8)
+19: (bf) r3 = r6                      ; R3_w=fp-8 R6_w=fp-8
+20: (b7) r4 = 0                       ; R4_w=0
+21: (85) call bpf_map_update_elem#2
+mark_precise: frame0: last_idx 21 first_idx 0 subseq_idx -1 
+mark_precise: frame0: regs= stack=-16 before 20: (b7) r4 = 0
+mark_precise: frame0: regs= stack=-16 before 19: (bf) r3 = r6
+mark_precise: frame0: regs= stack=-16 before 17: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 16: (07) r2 += -16
+mark_precise: frame0: regs= stack=-16 before 15: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 14: (85) call bpf_map_update_elem#2
+mark_precise: frame0: regs= stack=-16 before 13: (b7) r4 = 0
+mark_precise: frame0: regs= stack=-16 before 12: (bf) r3 = r6
+mark_precise: frame0: regs= stack=-16 before 10: (18) r1 = 0xffff00000049b000
+mark_precise: frame0: regs= stack=-16 before 9: (07) r6 += -8
+mark_precise: frame0: regs= stack=-16 before 8: (bf) r6 = r10
+mark_precise: frame0: regs= stack=-16 before 7: (07) r2 += -12
+mark_precise: frame0: regs= stack=-16 before 6: (bf) r2 = r10
+mark_precise: frame0: regs= stack=-16 before 5: (63) *(u32 *)(r10 -16) = r1
+mark_precise: frame0: regs=r1 stack= before 4: (b7) r1 = 161
+22: R0=scalar()
+; bpf_loop(WORDLEN, step_cb, 0, 0); @ wm.bpf.c:185
+22: (b7) r1 = 32                      ; R1_w=32
+23: (18) r2 = 0x6                     ; R2_w=func()
+25: (b7) r3 = 0                       ; R3_w=0
+26: (b7) r4 = 0                       ; R4=0
+27: (85) call bpf_loop#181
+mark_precise: frame0: last_idx 27 first_idx 27 subseq_idx -1 
+mark_precise: frame0: parent state regs=r4 stack=:  R0=scalar() R1_rw=32 R2_rw=func() R3_rw=0 R4_rw=P0 R6=fp-8 R10=fp0 fp-8=0 fp-16=mmmm161
+mark_precise: frame0: last_idx 26 first_idx 22 subseq_idx 27 
+mark_precise: frame0: regs=r4 stack= before 26: (b7) r4 = 0
+mark_precise: frame0: last_idx 27 first_idx 27 subseq_idx -1 
+mark_precise: frame0: parent state regs=r1 stack=:  R0=scalar() R1_rw=P32 R2_rw=func() R3_rw=0 R4_rw=P0 R6=fp-8 R10=fp0 fp-8=0 fp-16=mmmm161
+mark_precise: frame0: last_idx 26 first_idx 22 subseq_idx 27 
+mark_precise: frame0: regs=r1 stack= before 26: (b7) r4 = 0
+mark_precise: frame0: regs=r1 stack= before 25: (b7) r3 = 0
+mark_precise: frame0: regs=r1 stack= before 23: (18) r2 = 0x6
+mark_precise: frame0: regs=r1 stack= before 22: (b7) r1 = 32
+28: R0_w=scalar() R6=fp-8 R10=fp0 fp-8=0 fp-16=mmmm161
+; return 0; @ wm.bpf.c:186
+28: (b7) r0 = 0                       ; R0_w=0
+29: (95) exit
+
+from 27 to 30: frame1: R1=scalar() R2=0 R10=fp0 cb
+30: frame1: R1=scalar() R2=0 R10=fp0 cb
+; static long step_cb(__u32 i, void *data) @ wm.bpf.c:157
+30: (bf) r6 = r1                      ; frame1: R1=scalar(id=1) R6_w=scalar(id=1) cb
+31: (b7) r0 = 1                       ; frame1: R0_w=1 cb
+32: (67) r1 <<= 32                    ; frame1: R1_w=scalar(smax=0x7fffffff00000000,umax=0xffffffff00000000,smin32=0,smax32=umax32=0,var_off=(0x0; 0xffffffff00000000)) cb
+33: (77) r1 >>= 32                    ; frame1: R1_w=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff)) cb
+; if (i >= WORDLEN) @ wm.bpf.c:160
+34: (25) if r1 > 0x1f goto pc+73      ; frame1: R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=31,var_off=(0x0; 0x1f)) cb
+; __u64 xi = tape_read(X_BASE + i); @ wm.bpf.c:163
+35: (bf) r1 = r6                      ; frame1: R1_w=scalar(id=1) R6_w=scalar(id=1) cb
+36: (07) r1 += 16                     ; frame1: R1_w=scalar(id=1+16) cb
+37: (63) *(u32 *)(r10 -16) = r1       ; frame1: R1_w=scalar(id=1+16) R10=fp0 fp-16=????scalar() cb
+38: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+39: (07) r2 += -16                    ; frame1: R2_w=fp-16 cb
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+40: (18) r1 = 0xffff00000049b000      ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+42: (85) call bpf_map_lookup_elem#1   ; frame1: R0=map_value_or_null(id=2,map=TAPE,ks=4,vs=8) cb
+43: (b7) r8 = 0                       ; frame1: R8_w=0 cb
+44: (b7) r9 = 0                       ; frame1: R9_w=0 cb
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+45: (15) if r0 == 0x0 goto pc+2       ; frame1: R0=map_value(map=TAPE,ks=4,vs=8) cb
+46: (79) r9 = *(u64 *)(r0 +0)         ; frame1: R0=map_value(map=TAPE,ks=4,vs=8) R9_w=scalar() cb
+47: (57) r9 &= 1                      ; frame1: R9_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+; __u64 yi = tape_read(Y_BASE + i); @ wm.bpf.c:164
+48: (bf) r1 = r6                      ; frame1: R1_w=scalar(id=1) R6=scalar(id=1) cb
+49: (47) r1 |= 64                     ; frame1: R1_w=scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) cb
+50: (63) *(u32 *)(r10 -16) = r1       ; frame1: R1_w=scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) R10=fp0 fp-16=????scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) cb
+51: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+;  @ wm.bpf.c:0
+52: (07) r2 += -16                    ; frame1: R2_w=fp-16 cb
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+53: (18) r1 = 0xffff00000049b000      ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+55: (85) call bpf_map_lookup_elem#1   ; frame1: R0=map_value_or_null(id=3,map=TAPE,ks=4,vs=8) cb
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+56: (15) if r0 == 0x0 goto pc+2       ; frame1: R0=map_value(map=TAPE,ks=4,vs=8) cb
+57: (79) r8 = *(u64 *)(r0 +0)         ; frame1: R0=map_value(map=TAPE,ks=4,vs=8) R8_w=scalar() cb
+58: (57) r8 &= 1                      ; frame1: R8_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+59: (b7) r1 = 160                     ; frame1: R1_w=160 cb
+60: (63) *(u32 *)(r10 -16) = r1       ; frame1: R1_w=160 R10=fp0 fp-16=????160 cb
+61: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+;  @ wm.bpf.c:0
+62: (07) r2 += -16                    ; frame1: R2_w=fp-16 cb
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+63: (18) r1 = 0xffff00000049b000      ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+65: (85) call bpf_map_lookup_elem#1
+mark_precise: frame1: last_idx 65 first_idx 56 subseq_idx -1 
+mark_precise: frame1: regs= stack=-16 before 63: (18) r1 = 0xffff00000049b000
+mark_precise: frame1: regs= stack=-16 before 62: (07) r2 += -16
+mark_precise: frame1: regs= stack=-16 before 61: (bf) r2 = r10
+mark_precise: frame1: regs= stack=-16 before 60: (63) *(u32 *)(r10 -16) = r1
+mark_precise: frame1: regs=r1 stack= before 59: (b7) r1 = 160
+66: frame1: R0=map_value(map=TAPE,ks=4,vs=8) cb
+66: (b7) r7 = 0                       ; frame1: R7_w=0 cb
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+67: (15) if r0 == 0x0 goto pc+2       ; frame1: R0=map_value(map=TAPE,ks=4,vs=8) cb
+68: (79) r7 = *(u64 *)(r0 +0)         ; frame1: R0=map_value(map=TAPE,ks=4,vs=8) R7_w=scalar() cb
+69: (57) r7 &= 1                      ; frame1: R7_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+; tape_write(S_BASE + i, sum); @ wm.bpf.c:170
+70: (07) r6 += 112                    ; frame1: R6_w=scalar(id=1+112) cb
+71: (63) *(u32 *)(r10 -4) = r6        ; frame1: R6_w=scalar(id=1+112) R10=fp0 fp-8=mmmm???? cb
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+72: (bf) r1 = r8                      ; frame1: R1_w=scalar(id=4,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R8=scalar(id=4,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+73: (4f) r1 |= r9                     ; frame1: R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+; __u64 d   = NAND_GATE(G0, a, b); @ wm.bpf.c:130
+74: (5f) r8 &= r9                     ; frame1: R8_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+75: (b7) r9 = 1                       ; frame1: R9_w=1 cb
+76: (b7) r6 = 1                       ; frame1: R6_w=1 cb
+; __u64 e   = NAND_GATE(G1, a, d); @ wm.bpf.c:131
+77: (15) if r8 == 0x0 goto pc+1       ; frame1: R8_w=1 cb
+78: (b7) r6 = 0                       ; frame1: R6=0 cb
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+79: (55) if r1 != 0x0 goto pc+1       ; frame1: R1=0 cb
+80: (b7) r9 = 0                       ; frame1: R9_w=0 cb
+81: (5f) r9 &= r6                     ; frame1: R6=0 R9_w=0 cb
+; *sum  = NAND_GATE(G7, h, i); @ wm.bpf.c:137
+82: (bf) r1 = r9                      ; frame1: R1_w=0 R9_w=0 cb
+83: (af) r1 ^= r7                     ; frame1: R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+; v &= 1ull; @ wm.bpf.c:48
+84: (7b) *(u64 *)(r10 -16) = r1       ; frame1: R1_w=scalar(id=5,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R10=fp0 fp-16_w=scalar(id=5,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+85: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+86: (07) r2 += -4                     ; frame1: R2_w=fp-4 cb
+87: (bf) r3 = r10                     ; frame1: R3_w=fp0 R10=fp0 cb
+88: (07) r3 += -16                    ; frame1: R3_w=fp-16 cb
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY); @ wm.bpf.c:49
+89: (18) r1 = 0xffff00000049b000      ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+91: (b7) r4 = 0                       ; frame1: R4_w=0 cb
+92: (85) call bpf_map_update_elem#2   ; frame1: R0=scalar() cb
+; __u64 g   = NAND_GATE(G4, xab, cin); @ wm.bpf.c:134
+93: (5f) r9 &= r7                     ; frame1: R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R9_w=0 cb
+94: (b7) r1 = 160                     ; frame1: R1_w=160 cb
+95: (63) *(u32 *)(r10 -4) = r1        ; frame1: R1_w=160 R10=fp0 fp-8=mmmm???? cb
+; *cout = NAND_GATE(G8, d, g); @ wm.bpf.c:138
+96: (af) r6 ^= r9                     ; frame1: R6_w=0 R9_w=0 cb
+97: (a7) r6 ^= 1                      ; frame1: R6_w=1 cb
+; v &= 1ull; @ wm.bpf.c:48
+98: (7b) *(u64 *)(r10 -16) = r6       ; frame1: R6_w=1 R10=fp0 fp-16_w=1 cb
+99: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+100: (07) r2 += -4                    ; frame1: R2_w=fp-4 cb
+101: (bf) r3 = r10                    ; frame1: R3_w=fp0 R10=fp0 cb
+102: (07) r3 += -16                   ; frame1: R3_w=fp-16 cb
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY); @ wm.bpf.c:49
+103: (18) r1 = 0xffff00000049b000     ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+105: (b7) r4 = 0                      ; frame1: R4_w=0 cb
+106: (85) call bpf_map_update_elem#2          ; frame1: R0_w=scalar() cb
+107: (b7) r0 = 0                      ; frame1: R0_w=0 cb
+; } @ wm.bpf.c:173
+108: (95) exit
+mark_precise: frame1: last_idx 108 first_idx 93 subseq_idx -1 
+mark_precise: frame1: regs=r0 stack= before 107: (b7) r0 = 0
+returning from callee:
+ frame1: R0_w=0 R6_w=1 R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R8=1 R9_w=0 R10=fp0 fp-8=mmmm???? fp-16_w=1 cb
+to caller at 27:
+ R0=scalar() R1=32 R2=func() R3=0 R4=0 R6=fp-8 R10=fp0 fp-8=0 fp-16=mmmm161
+frame 0: propagating r1,r4
+mark_precise: frame0: last_idx 27 first_idx 93 subseq_idx -1 
+mark_precise: frame0: regs=r1,r4 stack= before 108: (95) exit
+
+from 108 to 27: safe
+
+from 79 to 81: frame1: R0=map_value(map=TAPE,ks=4,vs=8) R1=1 R6=0 R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R8=1 R9=1 R10=fp0 fp-8=mmmm???? fp-16=????160 cb
+81: frame1: R0=map_value(map=TAPE,ks=4,vs=8) R1=1 R6=0 R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R8=1 R9=1 R10=fp0 fp-8=mmmm???? fp-16=????160 cb
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+81: (5f) r9 &= r6                     ; frame1: R6=0 R9_w=0 cb
+; *sum  = NAND_GATE(G7, h, i); @ wm.bpf.c:137
+82: (bf) r1 = r9                      ; frame1: R1_w=0 R9_w=0 cb
+83: (af) r1 ^= r7                     ; frame1: R1_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+; v &= 1ull; @ wm.bpf.c:48
+84: (7b) *(u64 *)(r10 -16) = r1       ; frame1: R1_w=scalar(id=6,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R10=fp0 fp-16_w=scalar(id=6,smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) cb
+85: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+; __u64 xab = NAND_GATE(G3, e, f); @ wm.bpf.c:133
+86: (07) r2 += -4                     ; frame1: R2_w=fp-4 cb
+87: (bf) r3 = r10                     ; frame1: R3_w=fp0 R10=fp0 cb
+88: (07) r3 += -16                    ; frame1: R3_w=fp-16 cb
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY); @ wm.bpf.c:49
+89: (18) r1 = 0xffff00000049b000      ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+91: (b7) r4 = 0                       ; frame1: R4_w=0 cb
+92: (85) call bpf_map_update_elem#2
+93: safe
+
+from 77 to 79: safe
+
+from 56 to 59: frame1: R0=0 R6=scalar(id=1) R8=0 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R10=fp0 fp-16=????scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) cb
+59: frame1: R0=0 R6=scalar(id=1) R8=0 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1)) R10=fp0 fp-16=????scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) cb
+; return p ? (*p & 1ull) : 0; @ wm.bpf.c:43
+59: (b7) r1 = 160                     ; frame1: R1_w=160 cb
+60: (63) *(u32 *)(r10 -16) = r1       ; frame1: R1_w=160 R10=fp0 fp-16=????160 cb
+61: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+;  @ wm.bpf.c:0
+62: (07) r2 += -16                    ; frame1: R2_w=fp-16 cb
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+63: (18) r1 = 0xffff00000049b000      ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+65: (85) call bpf_map_lookup_elem#1
+mark_precise: frame1: last_idx 65 first_idx 56 subseq_idx -1 
+mark_precise: frame1: regs= stack=-16 before 63: (18) r1 = 0xffff00000049b000
+mark_precise: frame1: regs= stack=-16 before 62: (07) r2 += -16
+mark_precise: frame1: regs= stack=-16 before 61: (bf) r2 = r10
+mark_precise: frame1: regs= stack=-16 before 60: (63) *(u32 *)(r10 -16) = r1
+mark_precise: frame1: regs=r1 stack= before 59: (b7) r1 = 160
+66: safe
+
+from 45 to 48: frame1: R0=0 R6=scalar(id=1) R8=0 R9=0 R10=fp0 fp-16=????scalar() cb
+48: frame1: R0=0 R6=scalar(id=1) R8=0 R9=0 R10=fp0 fp-16=????scalar() cb
+; __u64 yi = tape_read(Y_BASE + i); @ wm.bpf.c:164
+48: (bf) r1 = r6                      ; frame1: R1_w=scalar(id=1) R6=scalar(id=1) cb
+49: (47) r1 |= 64                     ; frame1: R1_w=scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) cb
+50: (63) *(u32 *)(r10 -16) = r1       ; frame1: R1_w=scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) R10=fp0 fp-16=????scalar(smin=0x8000000000000040,umin=umin32=64,smin32=0x80000040,var_off=(0x40; 0xffffffffffffffbf)) cb
+51: (bf) r2 = r10                     ; frame1: R2_w=fp0 R10=fp0 cb
+;  @ wm.bpf.c:0
+52: (07) r2 += -16                    ; frame1: R2_w=fp-16 cb
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx); @ wm.bpf.c:42
+53: (18) r1 = 0xffff00000049b000      ; frame1: R1_w=map_ptr(map=TAPE,ks=4,vs=8) cb
+55: (85) call bpf_map_lookup_elem#1
+56: safe
+
+from 34 to 108: frame1: R0_w=1 R1_w=scalar(smin=umin=umin32=32,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff)) R2=0 R6_w=scalar(id=1) R10=fp0 cb
+108: frame1: R0_w=1 R1_w=scalar(smin=umin=umin32=32,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff)) R2=0 R6_w=scalar(id=1) R10=fp0 cb
+; } @ wm.bpf.c:173
+108: (95) exit
+mark_precise: frame1: last_idx 108 first_idx 27 subseq_idx -1 
+mark_precise: frame1: regs=r0 stack= before 34: (25) if r1 > 0x1f goto pc+73
+mark_precise: frame1: regs=r0 stack= before 33: (77) r1 >>= 32
+mark_precise: frame1: regs=r0 stack= before 32: (67) r1 <<= 32
+mark_precise: frame1: regs=r0 stack= before 31: (b7) r0 = 1
+returning from callee:
+ frame1: R0_w=1 R1_w=scalar(smin=umin=umin32=32,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff)) R2=0 R6_w=scalar(id=1) R10=fp0 cb
+to caller at 27:
+ R0=scalar() R1=32 R2=func() R3=0 R4=0 R6=fp-8 R10=fp0 fp-8=0 fp-16=mmmm161
+frame 0: propagating r1,r4
+mark_precise: frame0: last_idx 27 first_idx 27 subseq_idx -1 
+mark_precise: frame0: regs=r1,r4 stack= before 108: (95) exit
+
+from 108 to 27: safe
+verification time 264 usec
+stack depth 40+16
+processed 132 insns (limit 1000000) max_states_per_insn 0 total_states 9 peak_states 9 mark_read 4
+-- END PROG LOAD LOG --
+libbpf: prog 'wm_nand': pinned at '/sys/fs/bpf/wm_baseline_nand_190216/wm_nand'
+libbpf: prog 'wm_fa': pinned at '/sys/fs/bpf/wm_baseline_nand_190216/wm_fa'
+libbpf: prog 'wm_adder32': pinned at '/sys/fs/bpf/wm_baseline_nand_190216/wm_adder32'
+== xlated wm_nand ==
+int wm_nand(void * ctx):
+; int wm_nand(void *ctx)
+   0: (b7) r1 = 0
+   1: (63) *(u32 *)(r10 -16) = r1
+   2: (bf) r2 = r10
+; 
+   3: (07) r2 += -16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
+   4: (18) r1 = map[id:535]
+   6: (07) r1 += 264
+   7: (61) r0 = *(u32 *)(r2 +0)
+   8: (35) if r0 >= 0x100 goto pc+3
+   9: (67) r0 <<= 3
+  10: (0f) r0 += r1
+  11: (05) goto pc+1
+  12: (b7) r0 = 0
+  13: (b7) r7 = 1
+  14: (b7) r6 = 1
+; return p ? (*p & 1ull) : 0;
+  15: (15) if r0 == 0x0 goto pc+4
+; return p ? (*p & 1ull) : 0;
+  16: (79) r1 = *(u64 *)(r0 +0)
+; return p ? (*p & 1ull) : 0;
+  17: (57) r1 &= 1
+; __u64 out = NAND_GATE(G0, a, b);
+  18: (15) if r1 == 0x0 goto pc+1
+  19: (b7) r6 = 0
+  20: (63) *(u32 *)(r10 -16) = r7
+  21: (bf) r2 = r10
+; 
+  22: (07) r2 += -16
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
+  23: (18) r1 = map[id:535]
+  25: (07) r1 += 264
+  26: (61) r0 = *(u32 *)(r2 +0)
+  27: (35) if r0 >= 0x100 goto pc+3
+  28: (67) r0 <<= 3
+  29: (0f) r0 += r1
+  30: (05) goto pc+1
+  31: (b7) r0 = 0
+; return p ? (*p & 1ull) : 0;
+  32: (15) if r0 == 0x0 goto pc+4
+; return p ? (*p & 1ull) : 0;
+  33: (79) r1 = *(u64 *)(r0 +0)
+; return p ? (*p & 1ull) : 0;
+  34: (57) r1 &= 1
+; __u64 out = NAND_GATE(G0, a, b);
+  35: (15) if r1 == 0x0 goto pc+1
+  36: (b7) r7 = 0
+  37: (b7) r1 = 2
+  38: (63) *(u32 *)(r10 -4) = r1
+  39: (4f) r6 |= r7
+  40: (57) r6 &= 1
+; v &= 1ull;
+  41: (7b) *(u64 *)(r10 -16) = r6
+  42: (bf) r2 = r10
+; 
+  43: (07) r2 += -4
+  44: (bf) r3 = r10
+  45: (07) r3 += -16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+  46: (18) r1 = map[id:535]
+  48: (b7) r4 = 0
+  49: (85) call array_map_update_elem#428432
+; return 0;
+  50: (b7) r0 = 0
+  51: (95) exit

@@ -1,0 +1,14 @@
+results/nand_truth_table.jsonl: 400/400 passed
+TOTAL: 400/400 passed
+results/full_adder.jsonl: 8/8 passed
+TOTAL: 8/8 passed
+results/adder32.jsonl: 1005/1005 passed
+TOTAL: 1005/1005 passed
+results/adder32_exhaustive.jsonl: 65536/65536 passed
+TOTAL: 65536/65536 passed
+results/ablation_cap64.jsonl: 400/400 passed
+TOTAL: 400/400 passed
+results/ablation_k2_sentinel.jsonl: 400/400 passed
+TOTAL: 400/400 passed
+results/baseline_nand.jsonl: 400/400 passed
+TOTAL: 400/400 passed

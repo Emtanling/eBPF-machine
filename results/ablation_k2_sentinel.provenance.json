@@ -1,0 +1,8 @@
+{
+  "label": "ablation_k2_sentinel",
+  "build_flags": "GATE_CAP=2 -DWM_FORCE_SENTINEL_B",
+  "bpf_object_sha256": "88011208894b6fa49467cce9cf15427bb5734505d721dd6abd1281cb5137d464",
+  "verifier_log": "ablation_k2_sentinel.verifier.log",
+  "verifier_log_sha256": "64b58e228c563ab3c2879866dc2421c85422172b30b5e17e6d9341254436367f",
+  "bpftool_loadall_exit": 0
+}

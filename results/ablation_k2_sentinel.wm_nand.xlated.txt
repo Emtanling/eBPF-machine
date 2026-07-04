@@ -1,0 +1,149 @@
+int wm_nand(void * ctx):
+; int wm_nand(void *ctx)
+   0: (b7) r6 = 0
+   1: (63) *(u32 *)(r10 -8) = r6
+   2: (bf) r2 = r10
+; 
+   3: (07) r2 += -8
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
+   4: (18) r1 = map[id:516]
+   6: (07) r1 += 264
+   7: (61) r0 = *(u32 *)(r2 +0)
+   8: (35) if r0 >= 0x100 goto pc+3
+   9: (67) r0 <<= 3
+  10: (0f) r0 += r1
+  11: (05) goto pc+1
+  12: (b7) r0 = 0
+  13: (b7) r9 = 0
+; return p ? (*p & 1ull) : 0;
+  14: (15) if r0 == 0x0 goto pc+2
+; return p ? (*p & 1ull) : 0;
+  15: (79) r9 = *(u64 *)(r0 +0)
+; __u64 out = NAND_GATE(G0, a, b);
+  16: (57) r9 &= 1
+  17: (b7) r7 = 1
+  18: (63) *(u32 *)(r10 -8) = r7
+  19: (bf) r2 = r10
+; 
+  20: (07) r2 += -8
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
+  21: (18) r1 = map[id:516]
+  23: (07) r1 += 264
+  24: (61) r0 = *(u32 *)(r2 +0)
+  25: (35) if r0 >= 0x100 goto pc+3
+  26: (67) r0 <<= 3
+  27: (0f) r0 += r1
+  28: (05) goto pc+1
+  29: (b7) r0 = 0
+; __u64 out = NAND_GATE(G0, a, b);
+  30: (63) *(u32 *)(r10 -16) = r6
+  31: (63) *(u32 *)(r10 -20) = r7
+  32: (7b) *(u64 *)(r10 -32) = r7
+  33: (bf) r6 = r10
+; 
+  34: (07) r6 += -16
+; __u64 out = NAND_GATE(G0, a, b);
+  35: (18) r1 = map[id:515]
+  37: (bf) r2 = r6
+  38: (85) call htab_map_delete_elem#404256
+  39: (bf) r2 = r10
+; 
+  40: (07) r2 += -20
+; __u64 out = NAND_GATE(G0, a, b);
+  41: (18) r1 = map[id:515]
+  43: (85) call htab_map_delete_elem#404256
+  44: (b7) r1 = 2
+  45: (63) *(u32 *)(r10 -36) = r1
+  46: (bf) r2 = r10
+; 
+  47: (07) r2 += -36
+; __u64 out = NAND_GATE(G0, a, b);
+  48: (18) r1 = map[id:515]
+  50: (85) call htab_map_delete_elem#404256
+  51: (bf) r7 = r10
+; 
+  52: (07) r7 += -32
+; __u64 out = NAND_GATE(G0, a, b);
+  53: (18) r1 = map[id:515]
+  55: (bf) r2 = r6
+  56: (bf) r3 = r7
+  57: (b7) r4 = 1
+  58: (85) call htab_map_update_elem#409384
+  59: (bf) r8 = r0
+  60: (61) r1 = *(u32 *)(r10 -16)
+  61: (61) r2 = *(u32 *)(r10 -20)
+  62: (1f) r2 -= r1
+  63: (2f) r2 *= r9
+  64: (0f) r2 += r1
+  65: (63) *(u32 *)(r10 -40) = r2
+  66: (bf) r2 = r10
+; 
+  67: (07) r2 += -40
+; __u64 out = NAND_GATE(G0, a, b);
+  68: (18) r1 = map[id:515]
+  70: (bf) r3 = r7
+  71: (b7) r4 = 0
+  72: (85) call htab_map_update_elem#409384
+; __u64 out = NAND_GATE(G0, a, b);
+  73: (4f) r8 |= r0
+; __u64 out = NAND_GATE(G0, a, b);
+  74: (18) r1 = map[id:515]
+  76: (bf) r2 = r6
+  77: (bf) r3 = r7
+  78: (b7) r4 = 0
+  79: (85) call htab_map_update_elem#409384
+  80: (bf) r6 = r0
+; __u64 out = NAND_GATE(G0, a, b);
+  81: (15) if r8 == 0x0 goto pc+26
+  82: (b7) r1 = 161
+; __u32 idx = ERR_IDX;
+  83: (63) *(u32 *)(r10 -12) = r1
+  84: (bf) r2 = r10
+; 
+  85: (07) r2 += -12
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
+  86: (18) r1 = map[id:516]
+  88: (07) r1 += 264
+  89: (61) r0 = *(u32 *)(r2 +0)
+  90: (35) if r0 >= 0x100 goto pc+3
+  91: (67) r0 <<= 3
+  92: (0f) r0 += r1
+  93: (05) goto pc+1
+  94: (b7) r0 = 0
+  95: (b7) r1 = 1
+; __u64 v = (p ? *p : 0) + 1;
+  96: (15) if r0 == 0x0 goto pc+2
+; __u64 v = (p ? *p : 0) + 1;
+  97: (79) r1 = *(u64 *)(r0 +0)
+; __u64 v = (p ? *p : 0) + 1;
+  98: (07) r1 += 1
+; __u64 v = (p ? *p : 0) + 1;
+  99: (7b) *(u64 *)(r10 -8) = r1
+ 100: (bf) r2 = r10
+ 101: (07) r2 += -12
+ 102: (bf) r3 = r10
+ 103: (07) r3 += -8
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+ 104: (18) r1 = map[id:516]
+ 106: (b7) r4 = 0
+ 107: (85) call array_map_update_elem#428432
+ 108: (b7) r1 = 2
+ 109: (63) *(u32 *)(r10 -32) = r1
+ 110: (b7) r1 = 1
+; __u64 out = NAND_GATE(G0, a, b);
+ 111: (15) if r6 == 0x0 goto pc+1
+ 112: (b7) r1 = 0
+; v &= 1ull;
+ 113: (7b) *(u64 *)(r10 -8) = r1
+ 114: (bf) r2 = r10
+; 
+ 115: (07) r2 += -32
+ 116: (bf) r3 = r10
+ 117: (07) r3 += -8
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+ 118: (18) r1 = map[id:516]
+ 120: (b7) r4 = 0
+ 121: (85) call array_map_update_elem#428432
+; return 0;
+ 122: (b7) r0 = 0
+ 123: (95) exit

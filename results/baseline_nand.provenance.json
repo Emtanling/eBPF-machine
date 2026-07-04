@@ -1,0 +1,8 @@
+{
+  "label": "baseline_nand",
+  "build_flags": "GATE_CAP=2 -DWM_BASELINE_NAND",
+  "bpf_object_sha256": "cb848a70a8ddbca7c63a3c0043205970d58146216e6ad1443dad6cf0379642c6",
+  "verifier_log": "baseline_nand.verifier.log",
+  "verifier_log_sha256": "470e3029625031eb2d990e4f4b1d02fbeec027e26214772d4b656c85abb940ce",
+  "bpftool_loadall_exit": 0
+}
