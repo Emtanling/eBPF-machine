@@ -3,6 +3,6 @@
   "build_flags": "GATE_CAP=2",
   "bpf_object_sha256": "57b95a811d0897af3e6347ede44b5868910d1a3f11d28ec323a26fad8f39e602",
   "verifier_log": "nand.verifier.log",
-  "verifier_log_sha256": "594a140a3f05b384c7856f5ce793f893a7a7f38c1694b3a7e548773a5e2b5a83",
+  "verifier_log_sha256": "bcd17fd5a9e95bbb6c1286a9c3ad5e1a1915aab30b96fbef476dc648397a6298",
   "bpftool_loadall_exit": 0
 }

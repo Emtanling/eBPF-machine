@@ -3,6 +3,6 @@
   "build_flags": "GATE_CAP=64",
   "bpf_object_sha256": "376258bf4ebd7564c477440028b6eb475284c60403de28b7b9ae86b3d8b3fd0c",
   "verifier_log": "ablation_cap64.verifier.log",
-  "verifier_log_sha256": "043843c7261ed403213c5aae141e9ec1a331a66da41c76f5475146425f8cdbd9",
+  "verifier_log_sha256": "93a67f041a067e75626fce1a0a649786137db3aeb0a0994f1e3b446b68c74ef9",
   "bpftool_loadall_exit": 0
 }
