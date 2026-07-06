@@ -11,7 +11,8 @@
 ## Claims and Scope
 
 What this artifact establishes, at honest strength (full development in
-Appendix A.9 / A.10 and `results/exploitable_gap.md`).
+Appendix A.9 / A.10, `results/exploitable_gap.md`, and the second witness in
+`witness2/`).
 
 **Proven (deductive or exhaustive):**
 
@@ -31,6 +32,11 @@ Appendix A.9 / A.10 and `results/exploitable_gap.md`).
   the third insert's return at `⊤` (`scalar()`, no bounds) and forks at the
   output branch, so the occupancy bit that carries the gate output is
   quotiented to `⊤` (Appendix A.9).
+- A second, structurally different witness in `witness2/` reproduces the same
+  opacity pattern in a join-based interval analyzer and in Frama-C EVA: the
+  working mod-3 gate is certified as `{0; 1} = ⊤`, while the mod-7 ablation is
+  certified as `{1}`. This is empirical support for system-independence, not a
+  completed structural theorem.
 
 **Proven conditionally (theorem with discharged hypotheses):**
 
@@ -49,8 +55,10 @@ Appendix A.9 / A.10 and `results/exploitable_gap.md`).
   check forbids unbounded opaque memory).
 - Not a vulnerability: no verifier bypass, privilege escalation, or memory
   corruption. Root/CAP_BPF, offline `BPF_PROG_TEST_RUN`, isolated VM only.
-- Not yet system-independent: one system (eBPF). A second witness in another
-  sound verifier (`results/exploitable_gap.md` §6) is future work.
+- Not a completed structural theorem over all sound abstractions. The
+  `witness2/` interval/Frama-C result is a second discharged instance and
+  empirical support for the thesis, not a proof that every abstraction gap is
+  exploitable.
 
 ## Expected Results
 
@@ -86,6 +94,9 @@ Appendix A.9 / A.10 and `results/exploitable_gap.md`).
 - `results/xlated_compare.html` (self-contained A.7/A.8 side-by-side, no external assets)
 - `results/abstraction_gap_witness.md` (formal witness: verifier quotients occupancy to ⊤)
 - `results/exploitable_gap.md` (definition of an exploitable gap + opacity theorem)
+- `witness2/README.md` and `witness2/witness.py` (self-contained interval witness)
+- `witness2/frama_c/RESULTS.md` and `witness2/frama_c/out/eva_slevel0.log`
+  (Frama-C EVA reproduction of the second witness)
 
 ## Appendix A: Reproducibility and Audit Evidence
 
@@ -97,7 +108,7 @@ Index: A.1 environment · A.2 per-variant provenance · A.3 verifier
 acceptance · A.4 output = helper return · A.5 coverage & audit · A.6
 one-command repro · A.7 weird-machine xlated · A.8 baseline xlated
 (contrast) · A.9 formal witness (occupancy → ⊤) · A.10 exploitable gaps
-& opacity theorem.
+& opacity theorem · A.11 second witness.
 
 ### A.1 Environment (`results/env.json`)
 
@@ -533,7 +544,29 @@ arbitrary circuits.
 **The eBPF PoC discharges every clause** (`exploitable_gap.md` §5): `φ`=occupancy
 `c(G0)`; E1 = `if r6==0`; E2 = `key=base+delta·bit`, readout `[1+a+b>2]`; E3 =
 `delete S,A,B`; E4 = `G0..G8`; gate = NAND, verified through the exhaustive 8-bit
-adder. §6 turns the definition into a porting checklist (WASM `table.grow`, JVM
-collection size / exceptions, interval/SMT domains) for a system-independent
-second witness. Honest scope: a biconditional for opaque *Boolean-circuit*
-computation, not a Turing-complete or fully-general "weird machine" claim.
+adder. §6 turns the definition into a porting checklist; `witness2/` discharges
+that checklist for a join-based interval analyzer and Frama-C EVA. Honest scope:
+a biconditional for opaque *Boolean-circuit* computation, not a Turing-complete
+or fully-general "weird machine" claim.
+
+### A.11 Second witness — interval analyzer and Frama-C EVA
+
+`witness2/` provides an independent `(C, A)` pair with no eBPF maps, helper
+returns, or verifier path sensitivity. The gate is:
+
+```text
+NAND(a, b) = [ (1 + a + b) mod 3 != 0 ]
+```
+
+The concrete channel `φ` is the congruence `acc mod 3`, which the interval
+domain does not represent. The self-contained analyzer in `witness2/witness.py`
+checks every concrete transfer for sound over-approximation and exhaustively
+confirms NAND plus composed AND/XOR behavior. Its abstract output for the
+working gate is `[0,1] = ⊤`, while the mod-7 ablation is `[1,1]`.
+
+`witness2/frama_c/` runs the same construction through Frama-C EVA. The captured
+log (`out/eva_slevel0.log`) reports `Frama_C_show_each_NAND_out: {0; 1}`,
+`Frama_C_show_each_ABLATION_out: {1}`, `acc ∈ {1; 2; 3}`, and zero alarms. This
+independent analyzer result supports the paper's system-independence argument:
+the same opacity pattern appears in a join-based interval domain, not only in
+the path-sensitive eBPF verifier.

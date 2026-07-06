@@ -64,22 +64,18 @@ Every interval transfer is checked to over-approximate the concrete output set a
 (`assert_sound`), so the analyzer is genuinely **sound** — the imprecision is designed
 incompleteness, not a bug. That is what makes this a witness rather than a broken analyzer.
 
-## Honest scope of this skeleton
+## Independent analyzer reproduction
 
 The interval interpreter here is written for this repository so the witness is
-self-contained and exhaustively checkable. It *is* a sound join-based interval analysis,
-but external validity is stronger if the **same construction** is fed to an independent,
-production abstract interpreter. Two drop-in targets, both interval/numeric and join-based:
+self-contained and exhaustively checkable. The same construction is also fed to
+Frama-C EVA, an independent production value analysis. That run is confirmed in
+`frama_c/RESULTS.md`: the working mod-3 gate has output `{0; 1} = ⊤`, while the
+mod-7 ablation narrows to `{1}` with zero alarms. This upgrades the evidence
+from "our interpreter is blind" to "an independent sound analyzer we did not
+write exhibits the same localized blindness."
 
-- **Frama-C EVA** — emit the NAND-via-mod program as C (`out` from `(1+a+b) % 3`), run
-  `frama-c -eva`, and read EVA's inferred range for `out` (expect `[0..1]`); the mod-7
-  ablation should narrow to a singleton. EVA is a sound value analysis by abstract
-  interpretation.
-- **IKOS / Crab** — the same program in LLVM IR analyzed with the interval domain of the
-  Crab library (the same numeric-domain family PREVAIL builds on), which sharpens the
-  "join-based vs the path-sensitive eBPF verifier, same phenomenon" contrast.
-
-Reproducing item (2) — output range `= ⊤` for the working channel, narrowed for the
-ablation — in either tool upgrades this from "our interpreter" to "an independent sound
-analyzer," which is what the paper's system-independence claim needs. That port is the
-next concrete step; the construction, the checks, and the expected numbers are fixed here.
+IKOS / Crab remains an optional third target: the same C/LLVM shape can be
+analyzed with the interval domain of the Crab library, the numeric-domain family
+that PREVAIL builds on. That would sharpen the contrast further, but the paper's
+second-witness claim is already backed by the self-contained analyzer and the
+captured Frama-C EVA result.

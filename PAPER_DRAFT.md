@@ -424,7 +424,7 @@ though it depends on the inputs (A-opacity, Definition 2). Because the domain is
 `⊤` is a *single top value* — `⟦π⟧#_out = ⊤` holds literally, with none of the path-sensitivity
 qualification the eBPF verifier needs. Crucially, the **same** analyzer certifies the modulus-7
 ablation as the singleton `{1}` (the gate degenerates to a constant): the blindness is *localized*
-to the incomplete `mod` operation, not a blanket weakness, showing that the blindness is localized to the abstract domain's treatment of `mod`, not to the whole analysis. EVA reports `acc ∈ {1,2,3}` and raises zero alarms, so the
+to the abstract domain's treatment of `mod`, not to the whole analysis. EVA reports `acc ∈ {1,2,3}` and raises zero alarms, so the
 result is not an artifact of imprecision elsewhere. Composed gates (AND, XOR) keep the output at
 `⊤` while the number of channel uses grows, and an input-partitioned (disjunctive) refinement
 certifies the output per input — the same channel-composition and precision-repair pattern observed in a real tool.

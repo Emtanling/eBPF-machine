@@ -1,8 +1,8 @@
 # eBPF Weird Machine PoC
 
 This artifact implements the capacity-saturation NAND PoC described in the
-paper notes. It is intended for an isolated Linux VM with root access and BTF
-enabled.
+paper draft, plus a second interval-analyzer witness. It is intended for an
+isolated Linux VM with root access and BTF enabled.
 
 ## What this proves
 
@@ -66,13 +66,29 @@ The suite records JSONL outputs under `results/` for the normal NAND/full-adder
 
 It also emits per-variant provenance (`<variant>.provenance.json`), a
 per-variant verifier log, xlated disassembly of `wm_nand`, and an exhaustive
-8-bit adder dataset. Re-check everything with `make verify`
-(68149/68149, `semantic audit: ok`). Evidence files and the formal analysis
-(A.9 abstraction-gap witness, A.10 opacity theorem) are catalogued in
-`ARTIFACT.md`.
+8-bit adder dataset. Re-check the eBPF evidence with `make verify`
+(68149/68149, `semantic audit: ok`). Evidence files, the formal analysis
+(A.9 abstraction-gap witness, A.10 opacity theorem), and the second witness
+are catalogued in `ARTIFACT.md`.
 
 This is not a verifier bypass, privilege escalation, or memory-corruption PoC.
 It uses verifier-accepted bounded programs and offline `BPF_PROG_TEST_RUN`.
+
+## Second Witness
+
+The `witness2/` directory provides a structurally different witness in a
+join-based interval analyzer: `python3 witness2/witness.py` runs the
+self-contained analyzer, and `bash witness2/frama_c/run.sh` reproduces the
+core result in Frama-C EVA. On Ubuntu 24.04, install Frama-C with
+`sudo apt-get install -y frama-c-base`. The captured EVA result is in
+`witness2/frama_c/RESULTS.md`.
+
+Optional checks:
+
+```sh
+make verify-witness2
+make verify-framac
+```
 
 ## Outlook
 
@@ -88,11 +104,12 @@ theorem with boundary conditions: *given what class of sound abstractions `α`
 does a program-constructible `⊤`-channel necessarily arise, and when is it
 necessarily exploitable?* That moves the result from "another instance" to a
 citable theory result — the durable contribution is the framework, not any one
-construction. The near-term down-payment is empirical: a second witness in a
-structurally different verifier (`results/exploitable_gap.md` §6) tests whether
-the phenomenon tracks sound-but-incomplete abstraction rather than an eBPF
-quirk. High ceiling, low probability, and off the current engineering path —
-but the position it targets is a foundational one.
+construction. The near-term empirical down-payment is now in `witness2/`: a
+structurally different, join-based interval-analysis witness, with a Frama-C
+EVA reproduction, showing that the phenomenon tracks sound-but-incomplete
+abstraction rather than an eBPF quirk. The remaining high-ceiling target is a
+structural theorem characterizing which abstractions necessarily admit such
+channels.
 
 **2. Weird machines in the neural-semantic layer.**
 eBPF is an old concept on a new substrate; the largely unexplored direction is

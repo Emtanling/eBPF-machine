@@ -4,7 +4,7 @@ Runs the **same construction** as `witness2/witness.py` through an independent,
 production, sound abstract interpreter (Frama-C's EVA value analysis). This is what
 upgrades the second witness from "our own interpreter is blind" to "an independent sound
 analyzer we did not write is blind" — the third-party backing for the paper's
-system-independence claim (§9.6).
+system-independence claim (paper §7 and §9).
 
 Best run on **Ubuntu** (this repo's eBPF witness is Linux-only anyway, so the whole
 artifact reproduces on one OS).
@@ -12,7 +12,7 @@ artifact reproduces on one OS).
 ## Run
 
 ```sh
-sudo apt-get update && sudo apt-get install -y frama-c   # Ubuntu one-liner
+sudo apt-get update && sudo apt-get install -y frama-c-base   # Ubuntu 24.04
 bash run.sh                                              # captures out/*.log
 ```
 
@@ -31,13 +31,13 @@ yet certifies the ablation (modulus 7, constant 1). That the blindness is *local
 working channel* — not a blanket weakness — is exactly the abstraction-gap outlook (below the complete shell at
 `mod`) and the non-triviality point.
 
-## The `slevel` knob = the repair of the repair outlook
+## The `slevel` knob = the repair outlook
 
 EVA's `-eva-slevel N` controls how many states it keeps separate before joining. At
-`slevel 0` it is join-based and blind (result above). Raising it (`run.sh` step 2) makes
-EVA case-split the inputs — a disjunctive/trace-partitioned refinement — which is precisely
-the *precision price* the repair outlook (§9) predicts for seeing through the channel. Same
-tool, one flag, both sides of the boundary: opacity at `slevel 0`, repair as `slevel` grows.
+`slevel 0` it is join-based and blind (result above). Raising it asks EVA to keep more
+states separate — a disjunctive/trace-partitioned refinement — which is the *precision
+price* the repair outlook (§9) predicts for seeing through the channel. The repository's
+self-contained `witness.py` demonstrates the same repair pattern by input partitioning.
 
 ## Optional: IKOS (interval domain, join-based) via Docker
 
@@ -53,7 +53,6 @@ analysis, structurally different, exhibit the same opacity.
 
 ## Honest status
 
-The C source, commands, and expected numbers are fixed here; the captured tool output is
-the one step that needs a machine with Frama-C (or the IKOS image) installed. Once
-`out/eva_slevel0.log` shows `NAND_out ∈ {0;1}` and `ABLATION_out ∈ {1}`, cite it as the
-independent-analyzer witness alongside the eBPF verifier.
+The Frama-C EVA reproduction is complete for the working channel and ablation; see
+`RESULTS.md` and `out/eva_slevel0.log`. IKOS remains optional follow-up evidence, not a
+requirement for the current paper claim.

@@ -28,7 +28,7 @@ BPF_CFLAGS  ?= -O2 -g -target bpf -D__TARGET_ARCH_$(BPF_ARCH)
 LIBBPF_LIBS := $(shell pkg-config --libs libbpf 2>/dev/null || echo -lbpf)
 LIBBPF_CFLAGS := $(shell pkg-config --cflags libbpf 2>/dev/null)
 
-.PHONY: all test data clean env verify
+.PHONY: all test data clean env verify verify-witness2 verify-framac
 
 all: $(BUILD)/wm_user
 
@@ -67,6 +67,12 @@ $(BUILD)/test_logic_model: $(TESTS)/test_logic_model.c $(SRC)/wm_common.h
 verify:
 	$(PYTHON) $(SCRIPTS)/check_results.py $(RESULTS)/*.jsonl
 	$(PYTHON) $(SCRIPTS)/audit_results.py --full-suite $(RESULTS)
+
+verify-witness2:
+	$(PYTHON) witness2/witness.py
+
+verify-framac:
+	bash witness2/frama_c/run.sh
 
 clean:
 	rm -rf $(BUILD) $(SRC)/vmlinux.h

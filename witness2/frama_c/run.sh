@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Third-party reproduction of the second witness on Frama-C EVA.
-# Target: Ubuntu (apt install frama-c).  Run:  bash run.sh
+# Target: Ubuntu (apt install frama-c-base on 24.04).  Run:  bash run.sh
 set -u
 cd "$(dirname "$0")"
 mkdir -p out
 
 if ! command -v frama-c >/dev/null 2>&1; then
-  echo "frama-c not found. On Ubuntu:  sudo apt-get update && sudo apt-get install -y frama-c"
+  echo "frama-c not found. On Ubuntu 24.04:  sudo apt-get update && sudo apt-get install -y frama-c-base"
   exit 1
 fi
 
