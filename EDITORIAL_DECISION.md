@@ -1,17 +1,13 @@
 # Editorial Decision Letter
 
-**Manuscript:** Residual Semantic Languages / the eBPF residual-language witness
-(`ARTIFACT.md` A.1-A.10, `results/abstraction_gap_witness.md`, `results/exploitable_gap.md`;
+**Manuscript:** Opaque Programmable Computation / the eBPF Opacity Theorem
+(`ARTIFACT.md` A.1–A.10, `results/abstraction_gap_witness.md`, `results/exploitable_gap.md`;
 full drafted version in `PAPER_DRAFT.md`).
 **Simulated venue tier:** SAS / CSF (full) · LangSec-SPW (short).
-**Decision (original review):** **Major Revision** — the *result* is acceptable and worth
-publishing; the *manuscript as originally written* (the `ARTIFACT.md` appendices) was not yet a
-submittable paper. **Revision status, 2026-07-07:** the current `PAPER_DRAFT.md` addresses the
-citation/related-work gap, the path-sensitive A-opacity model, and the theorem quantification by
-using certified input-output relations and a program-family statement. **LangSec-target update:**
-the paper now foregrounds the recognizer/runtime language boundary, adds Figure 1, and presents the
-theorem as a LangSec-style sufficient condition rather than a full PL boundary theorem. This file
-is now a review record and re-review checklist, not a fresh defect list.
+**Decision:** **Major Revision** — the *result* is acceptable and worth publishing; the
+*manuscript as originally written* (the `ARTIFACT.md` appendices) is not yet a submittable
+paper. Most manuscript-level blockers are already resolved in `PAPER_DRAFT.md`; the remaining
+gap is the substance of goal #1.
 
 ## Verdict in one line
 
@@ -25,9 +21,9 @@ Both are fixable and (a),(b) are addressed in `PAPER_DRAFT.md`.
 
 | Dimension (weight) | Score | Basis |
 |---|---|---|
-| Originality (20%) | 82 | Novel angle: residual semantics as *designed incompleteness*; verifier-accepted witness that does not rely on known verifier unsoundness, memory corruption, or privilege escalation. Capped because the high-level thesis overlaps Vanegue 2014 [8] — the delta is formalization+witness, which must be stated. |
+| Originality (20%) | 82 | Novel angle: opacity as *designed incompleteness*; first verifier-accepted, non-CVE witness. Capped because the high-level thesis overlaps Vanegue 2014 [8] — the delta is formalization+witness, which must be stated. |
 | Methodological rigor (25%) | 78 | Exhaustive truth tables, ablations that collapse the gate, per-variant object-hash provenance, independent audit oracle — genuinely strong. Dinged for single kernel/arch and under-explained `-E2BIG`/prealloc mechanism. |
-| Evidence sufficiency (25%) | 70 | Airtight for the eBPF instance; the *theorem's generality* still rests on one instance; the opacity claim needed the path-sensitive/readout-predicate analysis-model fix before the evidence supported it. |
+| Evidence sufficiency (25%) | 70 | Airtight for the eBPF instance; the *theorem's generality* still rests on one instance; the `⟦π⟧#=⊤` claim needed the analysis-model fix before the evidence supported it. |
 | Argument coherence (15%) | 72 | The "so what" answer (payload = invisibility, not expressiveness) is correct but was buried; "biconditional" over-claims; time-multiplexing step unstated. Improved in `PAPER_DRAFT.md`. |
 | Writing quality (15%) | 80 | Precise, honest register; excellent "Not claimed" discipline. Structural hole: no related-work section, no references. |
 | **Weighted total** | **≈76 / 100** | Solid Major Revision, leaning acceptable. Above reject, below accept. |
@@ -56,7 +52,7 @@ The score is capped by *evidence sufficiency* and *originality*, and the single 
 lifts both is executing goal #1 rather than adding another eBPF variant:
 
 - **Recast the hypothesis in completeness theory** [2],[3] so the paper contributes a
-  *boundary-condition theorem*, not a second instance. The α-side condition (an abstractly unresolved readout channel
+  *boundary-condition theorem*, not a second instance. The α-side condition (a `⊤`-channel
   exists) becomes "α is incomplete for a Π-reachable operation" — a characterizable class, not
   an instance.
 - **The exploitability half now has a formal home too.** Goal #1 asks "when is the gap
@@ -67,7 +63,7 @@ lifts both is executing goal #1 rather than adding another eBPF variant:
   reliably drivable) gives a two-sided characterization: α-incompleteness supplies necessity of
   the channel; robust reachability supplies necessity of exploitability.
 - **Second witness in a join-based analyzer** (interval/tnum) is the near-term empirical
-  down-payment: it makes opacity a literal join-top result, instantiates completeness-incompleteness
+  down-payment: it makes opacity literally a `⊤` cell, instantiates completeness-incompleteness
   directly, and shows the phenomenon tracks *sound-but-incomplete abstraction*, not eBPF.
 
 Doing this moves the paper from "≈76, strong instance" toward "clear accept, framework

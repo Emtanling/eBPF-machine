@@ -1,637 +1,360 @@
-# Residual Semantic Languages: Weird Machines Inside Recognized Safety Languages
+# Opaque Programmable Computation: Weird Machines from the Designed Incompleteness of Sound Verifiers
 
 # Abstract
 
-Language-theoretic security treats security boundaries as language boundaries: a recognizer
-accepts a language, and downstream computation should act only on recognized structure. This
-paper extends that lens from parsers and protocol processors to program verifiers. A verifier can
-soundly recognize a *safety language* while the concrete runtime still interprets a
-program-visible *residual semantic language*. Acceptance closes the safety boundary, but it need
-not close the semantic boundary consumed by the runtime.
+A *weird machine* is usually presented as the computational residue of a bug: a malformed input, parser differential, memory corruption, or metadata quirk drives an implementation into an unintended state space that an attacker can program. This paper studies a different source of weird computation: the designed incompleteness of sound program verifiers. We do not claim that eBPF can compute; ordinary eBPF bytecode is already computationally expressive. Instead, we show that computation can be relocated into concrete residual state that an abstract-interpretation verifier erases. If that erased state remains controllable, observable, resettable, and composable by accepted programs, and if the induced operation realizes a functionally complete gate, then it is sufficient to obtain verifier-opaque programmable computation.
 
-We formalize this recognizer/interpreter mismatch for sound verifiers. Let `V` recognize a safety
-language `L_V`, let `I` be the concrete interpreter for accepted programs, and let `α` denote the
-state and trace abstractions through which `V` observes behavior. The residual semantic language
-of an accepted program is a frontier-local, observation-labeled relation over residual words: the
-runtime can distinguish the words, but the recognizer's trace abstraction identifies them. Our
-main result is a LangSec-style sufficient condition split into two claims. First, if the accepted
-toolkit inside `L_V` supplies a controllable, observable, resettable, composable, and
-functionally complete residual transducer basis, then for every finite Boolean circuit `C` there
-is an accepted bounded program instance `P_C in L_V` whose concrete execution computes `C`.
-Second, under an additional local gate-opacity condition excluding recognizer-visible shadow logic, the
-recognizer cannot certify the corresponding input-output graph.
+We formalize this phenomenon as a `⊤`-channel: a program-visible operation whose concrete result depends on a residual state component outside the abstraction, while the verifier's abstract transfer maps the result to top. We then state a conditional Opacity Theorem: an exploitable `⊤`-channel whose induced gate is functionally complete can compute arbitrary bounded Boolean circuits while the verifier's certified output abstraction expresses no input-output relation for the computed function. The theorem is a sufficiency result, not a universal claim that every abstraction gap yields a weird machine.
 
-This is not a vulnerability report; it is a recognizer-boundary witness in eBPF. The Linux eBPF
-verifier recognizes memory-safe, bounded, helper-safe bytecode; the
-concrete map/helper runtime also interprets dynamic map occupancy, a state component absent from
-the verifier abstraction. We show that map occupancy and helper return symbols form a finite-state
-residual transducer implementing NAND. The witness is verifier-accepted, memory-safe, bounded,
-and does not rely on any known verifier unsoundness, memory corruption, or privilege-escalation
-bug. Ablations and an explicit-logic baseline show that the computation is carried by residual
-runtime semantics rather than ordinary bytecode logic. A second interval-analysis witness supports
-the claim that the phenomenon tracks sound-but-incomplete recognition rather than an eBPF quirk.
+We give, to our knowledge, the first verifier-success, non-CVE, memory-safe constructive witness in a production eBPF verifier setting. The witness realizes NAND entirely through eBPF hash-map occupancy and helper return metadata: map occupancy is not represented in the verifier abstraction, yet a capacity-probing insert exposes a threshold bit through its return code. The program is accepted by the in-kernel verifier, performs no memory corruption or verifier bypass, and composes the gate into finite arithmetic circuits. Ablations remove capacity saturation and collapse the gate to a constant; a baseline computes the same truth table with explicit bytecode logic; and independent audits re-derive the outputs. We further include a second, structurally different witness in a join-based interval analyzer and Frama-C EVA, as empirical evidence that the phenomenon tracks sound-but-incomplete abstraction rather than an eBPF quirk. The broader goal — a structural theorem characterizing which abstractions necessarily admit exploitable channels — remains an outlook, not a claim completed by this paper.
 
-**Keywords:** language-theoretic security, recognizers, residual semantic languages, weird
-machines, abstract interpretation, completeness, eBPF, verifier-opaque computation.
+**Keywords:** weird machines, abstract interpretation, completeness, sound verification, eBPF, language-theoretic security, opaque computation.
 
 ---
 
 # 1. Introduction
 
-Language-theoretic security (LangSec) treats security boundaries as language boundaries: an
-input processor should recognize a well-defined language before any downstream computation acts
-on it [24], [25]. The familiar examples are parsers, protocol processors, and file-format
-validators, where insecurity appears when later machinery consumes structure the recognizer did
-not precisely accept. Program verification has the same shape. A verifier recognizes a language
-of acceptable program artifacts, rejects artifacts outside that language, and then hands accepted
-artifacts to a concrete interpreter. The crucial LangSec question is therefore not only *what does
-the verifier accept?* but also *what language does the runtime still interpret after acceptance?*
+The eBPF verifier is one of the most consequential program analyzers deployed today: it
+gates untrusted code into the Linux kernel on billions of machines, and it does so by
+abstract interpretation — it simulates the program over an abstract domain and rejects
+anything it cannot prove safe [12], [13]. Its guarantee is *soundness for safety*: an
+accepted program does not read or write out of bounds, does not loop forever, and does not
+dereference an invalid pointer. What the verifier does *not* promise is equally important and
+far less discussed: it says nothing about *what the accepted program computes*. That silence
+is not an accident or an oversight. It is the designed incompleteness of a sound abstraction —
+the price every sound, terminating analyzer pays for decidability [1], [2].
 
-This paper answers that question for sound program verifiers. We argue that safe recognition is
-not semantic recognition. A verifier may soundly recognize a safety language--for example,
-programs that do not access memory out of bounds, do not loop forever, and call helpers with
-well-typed arguments--while still erasing concrete runtime state that accepted programs can
-observe, reset, and compose. When that erased state forms a program-visible transducer, the
-accepted language contains a hidden interpreter: a weird machine inside the recognized safety
-language, relative to the recognizer's abstraction.
+This paper is about what lives in that silence. We show, constructively and with a
+machine-checkable witness, that residual state erased by a sound verifier can become a
+*weird machine* when the accepted toolkit can control, observe, reset, and compose it: a
+programmable computational artifact whose input-to-output behavior the analysis cannot see. The construction uses no bug. The program
+is accepted. Nothing is corrupted. The entire computation lives in a concrete quantity —
+the occupancy of a bounded hash map — that the verifier's abstract domain does not represent
+and, being sound, is not obliged to represent.
 
-Our central object is the **residual semantic language**. Given a recognizer `V`, an accepted
-program `P`, a concrete interpreter `I`, and the recognizer abstraction `α`, the residual semantic
-language `L_res(P, α)` is an observation-labeled relation over residual operation words: the
-runtime and program can distinguish observations that the trace abstraction `α_T` identifies. In
-LangSec terms, the recognizer has accepted a safety language while leaving an additional semantic
-sublanguage inside accepted inputs. In abstract-interpretation terms, this is an incompleteness
-witness whose outputs remain program-visible.
+## 1.1 The gap is not a bug
 
-This reframing changes the role of eBPF in the paper. eBPF is not the theoretical source of the
-result; it is the witness. The Linux eBPF verifier is one of the most consequential deployed
-program recognizers: it gates untrusted bytecode into the kernel by abstract interpretation and
-rejects anything it cannot prove safe [12], [13]. Its guarantee is *soundness for safety*.
-What it does not promise is complete recognition of all program-visible semantics. Dynamic hash
-map occupancy is one such residual state component: the verifier tracks map identity and static
-attributes, but not the number of live entries. The concrete map/helper runtime does interpret
-that number, and helper return codes expose it to accepted programs.
+The weird-machine literature, from its origin in language-theoretic security [5] through its
+formal treatments [9], [10], has almost always assumed a defect: a parser differential, a
+memory-corrupting input, a malformed metadata table [6], [7]. The "weird" instructions are
+unintended state transitions unlocked by that defect. Our phenomenon is different in kind.
+The verifier is *correct*. There is no unsound step, no accepted-but-unsafe program, no CVE.
+The computation is invisible not because the analyzer is wrong but because it is sound and
+therefore incomplete: it abstracts away the state that carries the computation, exactly as
+its design intends.
 
-## 1.1 Safe recognition is not semantic recognition
+This distinction matters for defense. A weird machine born of a bug is closed by fixing the
+bug. A weird machine born of *sound incompleteness* cannot be closed without changing what the
+abstraction tracks — and any such change trades decidability, precision, or performance. The
+gap is structural.
 
-A conventional weird machine is often presented as the residue of a defect: a malformed input,
-parser differential, memory-corrupting input, or metadata quirk drives an implementation into an
-unintended state space that an attacker can program [5]-[7], [9], [10]. Our phenomenon is
-different. The recognizer is not unsound. The program is accepted. Nothing is corrupted. The
-computation lives in a concrete residual state component that the recognizer deliberately does
-not model because that component is irrelevant to the safety property being recognized.
+## 1.2 Two independent conditions: on the abstraction, and on the toolkit
 
-This distinction matters for defense. A weird machine born of a parser bug or memory-corruption
-bug is closed by fixing that bug. A weird machine born of residual semantics is closed only by
-changing the recognized language or the abstraction through which program-visible semantics are
-recognized. In LangSec terms, the boundary is not merely syntactic validity versus invalidity;
-it is the boundary between the recognizer-visible language and the runtime-interpreted residual
-language.
+Prior informal statements of this idea — most directly Vanegue's observation that "any used
+abstraction is the opportunity for an attacker to introduce uncaptured computations" [8] —
+conflate two conditions that we hold apart, because separating them is what makes the result a
+theorem rather than a slogan:
 
-## 1.2 From abstraction gaps to residual languages
+- A **condition on the abstraction** α: there is a program-expressible operation `op` and a
+  concrete state component φ such that the concrete effect of `op` depends on φ while α erases
+  φ. In the language of abstract interpretation, α is *incomplete* for `op` at φ [2]. This
+  produces what we call a **`⊤`-channel**: a program-visible location that `op` sets to a
+  non-constant function of φ, but that the abstract transfer sets to top.
 
-An abstraction gap alone is not enough. Prior informal statements of this idea--most directly
-Vanegue's proof-carrying-code account of abstractions that leave untrusted computation outside
-the proof model [8]--identify the opportunity, but not the operational conditions that turn the
-opportunity into a programmable machine. We separate two sides:
+- A **condition on the toolkit** Π (the accepted instruction/primitive set): the `⊤`-channel
+  is **observable** (its value can be branched into a program bit), **input-controllable**
+  (inputs can steer φ so the readout realizes a chosen Boolean dependence), **resettable**
+  (φ can be restored, making the channel a pure re-evaluable gate), and **composable**
+  (independent instances exist, so one gate can drive another).
 
-- A **recognizer-side condition**: a concrete operation depends on runtime state that `α` erases,
-  and its program-visible result is mapped to an abstract value or trace summary that cannot
-  decide the readout predicate. This is the residual semantic language.
-
-- A **toolkit-side condition**: accepted operations can control, observe, reset, and compose the
-  residual state so that it behaves as a reusable transducer basis.
-
-Given both sides, plus functional completeness of the induced gate, the accepted language contains
-a family of bounded program instances realizing arbitrary finite Boolean circuits. If, in
-addition, the residual schedule is gate-opaque--that is, no recognizer-visible shadow computation
-certifies the same local gate relation--then the recognizer's certified abstraction does not
-entail the corresponding input-output graph.
+The abstraction condition determines *whether the channel exists*; the toolkit conditions
+determine *whether it is programmable*. Given both, plus functional completeness of the
+induced gate, the accepted program computes arbitrary bounded Boolean circuits whose entire
+input-to-output dependence is invisible to the analysis (Section 5).
 
 ## 1.3 Contributions
 
-1. **Residual semantic languages.** We define residual semantic languages as runtime-interpreted
-   behavior that is collapsed by a recognizer's abstraction but remains program-visible inside
-   accepted inputs.
+1. **A semantic sufficient condition for verifier-opaque weird machines.** We define a
+   `⊤`-channel as a program-visible operation whose concrete return depends on state erased by
+   the abstraction, while the verifier maps the return to top. We then separate the
+   abstraction-side condition (the erased residual state influences a reachable operation) from
+   the toolkit-side conditions (observability, input-control, resettability, and composability).
+   This gives a precise sufficiency theorem for *opaque programmable computation* without
+   claiming that every abstraction gap is exploitable.
 
-2. **A LangSec-style sufficient condition.** We state a recognizer-boundary theorem pair: a
-   controllable, observable, resettable, and composable residual transducer basis inside an
-   accepted language realizes finite Boolean circuits; with an additional local gate-opacity condition
-   excluding recognizer-visible shadow logic, those circuits remain opaque to the recognizer's
-   certified input-output relations.
+2. **A verifier-success, non-CVE eBPF witness.** We construct a NAND gate in eBPF map/helper
+   runtime metadata, not in ordinary ALU bytecode. Hash-map occupancy is absent from the verifier
+   abstraction, yet helper return codes expose a capacity threshold that accepted programs can
+   branch on. The result is accepted by the Linux verifier, memory-safe, bounded, and not a
+   verifier bypass.
 
-3. **An eBPF recognizer/interpreter witness.** We instantiate the theorem in eBPF, treating the
-   verifier as a recognizer for a safety language and the map/helper runtime as a concrete
-   interpreter. The construction is verifier-accepted, memory-safe, bounded, and does not
-   rely on any known verifier unsoundness, memory corruption, or privilege-escalation bug.
+3. **A machine-checkable abstraction-gap witness.** We connect the construction to the verifier's
+   own trace: the capacity-probing helper return is held as `scalar()`/`⊤`, and the verifier
+   forks at the output branch. The concrete map occupancy separates truth-table cases that the
+   abstract state quotients into a top value.
 
-4. **A residual gate-language artifact.** We implement a finite-state residual gate language
-   using map occupancy and helper return symbols, validate the NAND truth table and bounded
-   composition, and provide ablations showing that the computation is carried by residual
-   runtime semantics rather than explicit bytecode logic.
+4. **Evidence that the phenomenon is not merely an eBPF quirk.** In addition to the eBPF witness,
+   we include a second join-based interval-analysis witness, checked by a self-contained analyzer
+   and Frama-C EVA. This is empirical support for the abstraction-gap thesis, not a completed
+   general theorem.
 
-5. **A bridge to abstract-interpretation completeness.** We connect the LangSec residual-language
-   view to completeness for abstract interpretation [2]-[4], [17], framing the next theoretical
-   step as a boundary theorem for which abstractions necessarily admit program-visible residual
-   languages.
+5. **A research program from instances to boundary conditions.** We identify the next theoretical
+   target: characterize the classes of sound abstractions `α` for which a program-constructible
+   `⊤`-channel necessarily arises, and the toolkit conditions under which such a channel is
+   necessarily exploitable. We frame this in the language of completeness for abstract
+   interpretation, but leave the full structural theorem as future work.
 
-Scope matters. This paper does not claim that eBPF is newly computationally expressive, that the
-verifier is unsound, that a CVE exists, or that every abstraction gap yields a weird machine. The
-claim is conditional: an accepted safety language whose toolkit contains a controllable,
-observable, resettable, composable, and functionally complete residual basis contains a family of
-bounded program instances; under the additional local gate-opacity condition, those instances are
-verifier-opaque for the computed relation.
+Scope matters. This paper does not claim that eBPF is Turing-complete, that the verifier is
+unsound, that a CVE exists, or that every abstraction gap yields a weird machine. The claim is a
+conditional one: erased residual state plus the right program operations is sufficient for
+bounded verifier-opaque programmability.
 
-# 2. Background: Recognizers, Weird Machines, and Abstract Semantics
+---
 
-## 2.1 Language boundaries and recognizers
+# 2. Background
 
-LangSec views insecurity as a failure to recognize the language actually consumed by a system:
-input processors should accept a precise language, reject inputs outside it, and ensure later
-computation operates only on recognized structure [24]-[26]. We use *recognizer* broadly. A
-recognizer may be a parser for a file format, a validator for a protocol message, or a verifier
-for program artifacts. In each case, it defines an accepted language and a boundary between what
-has been recognized and what downstream machinery may still interpret.
+## 2.1 Abstract interpretation, soundness, and completeness
 
-For program verifiers, the recognized language is property-specific. A verifier can soundly
-recognize a safety language without recognizing every semantic distinction the concrete runtime
-will later interpret. This paper studies exactly that case: safety recognition succeeds, but a
-program-visible residual semantic language remains.
+An abstract interpreter approximates a concrete semantics `⟦·⟧ : Σ → Σ` by an abstract
+semantics `⟦·⟧# : 𝒜 → 𝒜` connected to the concrete world by a Galois connection
+`(α : ℘(Σ) → 𝒜, γ : 𝒜 → ℘(Σ))` [1]. **Soundness** requires each abstract transfer to
+over-approximate its concrete counterpart: `α ∘ ⟦op⟧ ⊑ ⟦op⟧# ∘ α`. Soundness alone is cheap;
+the top element `⊤` (with `γ(⊤) = Σ`) is a sound abstraction of everything and certifies
+nothing.
 
-## 2.2 Abstract interpretation, soundness, and completeness
+**Completeness** is the property that the abstraction loses *no* information at an operation
+relative to what it can already express: α is (backward-)complete for `op` when
+`α ∘ ⟦op⟧ = α ∘ ⟦op⟧ ∘ γ ∘ α` [2]. Giacobazzi, Ranzato, and Scozzari showed that
+completeness is a property of the *abstraction and the operation together*, and gave
+constructive characterizations (the complete shell and core) of the domains that are complete
+for a given semantics [2]. Bruni, Giacobazzi, Gori, and Ranzato later localized the notion:
+*local completeness* holds for particular inputs or program fragments, and supports a proof
+system that reasons simultaneously about correctness and incorrectness [3]. Incompleteness is
+not a defect to be removed at will — for a sound, terminating analyzer over an undecidable
+property it is unavoidable — but it *is* precisely characterizable, and that is what we
+exploit.
 
-An abstract interpreter approximates a concrete transition system over states `Σ`. For an
-operation `op`, write its collecting concrete transformer as `T_op : P(Σ) -> P(Σ)` and its
-abstract transformer as `T#_op : A -> A`, connected by a Galois connection
-`(α : P(Σ) -> A, γ : A -> P(Σ))` [1]. **Soundness** requires each abstract transfer to
-over-approximate its concrete counterpart:
+The reading we need is simple: **a `⊤`-channel is a witness of incompleteness.** If `op`'s
+concrete effect depends on a component φ that α discards, then at that point
+`α ∘ ⟦op⟧ ⊐ α ∘ ⟦op⟧ ∘ γ ∘ α`, and the abstract result is `⊤` where the concrete result is
+informative. The rest of the paper studies when such a witness is *program-constructible* and
+*programmable*.
 
-`α(T_op(X)) <= T#_op(α(X))` for all `X subseteq Σ`.
+## 2.2 The eBPF verifier as an abstract interpreter
 
-For individual states we write `σ0 ≡_α σ1` as shorthand for `α({σ0}) = α({σ1})`. For finite
-traces, `α_T` denotes the pointwise/event-level lift of the state abstraction to trace summaries;
-when the lifted domain is clear from context, we write `α` for the appropriate state or trace
-abstraction. Soundness alone is cheap: a very coarse abstract value can be sound while certifying
-no precise semantic relation.
+The Linux eBPF verifier statically checks untrusted bytecode before it runs in the kernel
+[12]. It performs a symbolic pass that tracks, per register and stack slot, an abstract value:
+a *tristate number* (tnum, a known-bits abstraction) refined by signed and unsigned interval
+bounds [13]. Its abstract domain represents pointer types, map-value regions, and scalar
+ranges, and it explores program paths to prove memory safety and bounded termination.
+Vishwanathan et al. formally specified and proved sound the tnum domain now used in the kernel
+[13]; Gershuni et al. built an abstract-interpretation-based verifier (PREVAIL) with an
+explicitly chosen numeric domain [12]. In all these treatments the verifier is *sound for
+safety*: it may reject safe programs, but it does not accept unsafe ones.
 
-**Completeness** asks whether the abstraction loses no information relevant to an operation:
+Crucially for us, the verifier's abstract domain represents each map's *identity* and *static*
+attributes — type, key and value size, `max_entries` — but has **no component for a map's
+dynamic occupancy**, the number of live entries. Occupancy is a concrete quantity the analysis
+discards. That is the φ we will use.
 
-`α(T_op(X)) = α(T_op(γ(α(X))))` for all `X subseteq Σ` [2].
+We distinguish our *abstraction gap* from the well-known eBPF *language–verifier gap* [12],
+[14], which describes correct programs that the verifier *rejects* because the compiler and
+verifier disagree — a usability problem about false rejections. Our gap is the opposite
+direction: an *accepted* program whose semantics the sound verifier cannot see.
 
-Giacobazzi, Ranzato, and Scozzari showed that completeness is a property of the abstraction and
-the operation together, and gave constructive characterizations of complete shells and cores [2].
-Later work localized and quantified incompleteness [3], [4], [17]. We use this theory as the
-mathematical account of why a recognizer can be sound for a safety language while incomplete for
-program-visible semantics.
-
-## 2.3 The eBPF verifier as a safety recognizer
-
-The Linux eBPF verifier statically checks untrusted bytecode before it runs in the kernel [12].
-It performs a symbolic pass over registers and stack slots, tracking pointer types, scalar
-ranges, map-value regions, and a tristate-number known-bits abstraction refined by intervals
-[13]. Prior eBPF verification work formalizes the verifier and its domains as sound safety
-analyses: they may reject safe programs, but they should not accept unsafe ones [12], [13].
-
-In the language of this paper, the verifier recognizes a safety language `L_V`: accepted eBPF
-program artifacts that satisfy the verifier's memory-safety, bounded-control-flow, and helper-use
-rules. The concrete interpreter is the Linux eBPF runtime plus helper and map implementations.
-The verifier abstraction represents each map's identity and static attributes--type, key/value
-size, and `max_entries`--but has no component for dynamic hash-map occupancy. Occupancy is a
-concrete runtime state interpreted by helpers and observable through return symbols, but it is
-not part of the recognizer-visible language.
-
-We distinguish this abstraction gap from the eBPF language-verifier gap [12], [14], where valid
-programs are rejected because language, compiler, and verifier expectations do not align. Our
-gap goes in the opposite direction: the program is accepted, but the recognizer has not captured
-all program-visible concrete semantics.
-
-## 2.4 Weird machines
+## 2.3 Weird machines
 
 The weird-machine framing originates with Bratus and colleagues, who recast exploitation as
 programming an unintended machine whose instructions are the target's unexpected state
-transitions [5]. Constructive demonstrations exposed unintended computation in substrates such
-as page-fault handling [6] and ELF metadata [7]. Formal accounts model weird machines as
-state-transition systems or as target-level behaviors not expressible at the source level [9],
-[10]. Vanegue's proof-carrying-code work is the closest antecedent to our setting: it observes
-that abstractions used by proof systems can leave untrusted computation outside the proof model
-[8], and later gives an under-approximate adversarial logic for exploitability [11].
-
-Our contribution is a recognizer-theoretic sufficient condition: a weird machine arises when an
-accepted language contains a program-visible residual semantic language with a reusable
-transducer basis.
-
----
-
-# 3. Residual Semantic Languages
-
-We model a recognizer boundary by a tuple `(V, I, α)`: `V` is the recognizer, `I` is the concrete
-interpreter for accepted artifacts, and `α` is the abstraction family through which `V` observes
-or summarizes concrete behavior. We use `α` for state abstractions and `α_T` for their trace-level
-lifts when the distinction matters.
-
-
-**Figure 1. Recognizer-visible language and runtime-interpreted residual language.**
-
-```text
-program artifact P
-      |
-      |  V accepts
-      v
-recognized safety language L_V
-      |
-      |  concrete interpreter I executes accepted P
-      v
-concrete traces Tr_I(P) -------------------- α_T --------------------> Tr_α(P)
-      |
-      | residual words w in Σ_res(P)^*
-      v
-program-visible observations o
-      |
-      | same abstract trace, different concrete observations
-      v
-residual semantic language L_res(P, α)  -->  residual transducer / weird machine
-```
-
-Figure 1 is the LangSec boundary shift studied here. The recognizer accepts `P` into the safety
-language `L_V`, but the concrete interpreter may still consume residual operation words whose
-observations are collapsed by `α_T`. A residual weird machine exists only when that collapsed
-residual language is also controllable, observable, resettable, and composable by accepted
-programs.
-
-> **Definition 1 (recognizer language).** Let `V` be a verifier or recognizer over program
-> artifacts `Σ_P*`. The language accepted by `V` is
->
-> `L_V = { P in Σ_P* | V(P) = accept }`.
->
-> We call `L_V` the safety language recognized by `V` when acceptance certifies a safety
-> property such as memory safety, bounded control flow, or well-typed helper use.
-
-> **Definition 2 (concrete and abstract trace languages).** For `P in L_V`, let `Tr_I(P)` be
-> the set of concrete traces generated by executing `P` under interpreter `I`. The abstract
-> trace language visible to the recognizer is
->
-> `Tr_α(P) = { α_T(τ) | τ in Tr_I(P) }`.
->
-> For a finite state trace `τ = <σ0, ..., σn>`, we use the pointwise lift
-> `α_T(τ) = <α_S(σ0), ..., α_S(σn)>`. If traces also carry recognized instruction or event
-> labels, `α_T` preserves those labels and applies `α_S` to the state components. This is the
-> formal sense in which two concrete traces can be abstract-trace equivalent.
-
-> **Definition 3 (frontier-local residual semantic language).** For `P in L_V`, let
-> `Σ_res(P)` be the alphabet of accepted, program-controllable residual operations available
-> inside `P`. At a recognized frontier, write a concrete state as `σ = (pc, x, r, η)`, where
-> `pc` is the program point, `x = X(σ)` is the program-visible explicit state, `r` is the
-> residual runtime component erased by the recognizer abstraction, and `η` is other recognized
-> state. Let `K(σ)` be the recognizer-visible abstraction of the explicit state and other
-> recognized facts at that frontier. The corresponding recognized frontier fiber is
->
-> `F_{pc,a,κ} = { σ in Reach(P) | pc(σ)=pc, α_S(σ)=a, K(σ)=κ }`.
->
-> Concrete program-visible explicit states may differ inside `F_{pc,a,κ}` unless they are
-> recognized by `K`.
->
-> For a residual word `w in Σ_res(P)^*` and an admissible concrete pre-state `σ`, write
-> `⟦w⟧_I(σ) = (τ, o, σ')` for the finite concrete trace segment, program-visible observation, and
-> post-state produced by interpreter `I`. The residual semantic language under `α`, local to
-> recognized frontier `(pc,a,κ)`, is the observation-labeled ambiguity relation
->
-> `R_res^{pc,a,κ}(P, α) = { (w, x0, x1, o0, o1) | exists σ0, σ1 in F_{pc,a,κ}. X(σ_i)=x_i, ⟦w⟧_I(σ_i) = (τ_i, o_i, σ_i'), α_T(τ0) = α_T(τ1), and o0 != o1 }`.
->
-> The global residual language `L_res(P, α)` is the union of these frontier-local relations over
-> reachable frontiers. We keep the word *language* because the relation is generated by words over
-> the residual alphabet; formally, it is an observation-labeled relation on recognizer-collapsed
-> residual executions, not a claim that arbitrary unrelated states may be compared.
-
-> **Definition 4 (residual transducer and residual monoid).** A residual transducer is a
-> finite-state Mealy transducer `T_res = (Q, Σ_in, Γ_out, δ, λ, q0)` defined at a frontier fiber.
-> Its states `Q` are quotient classes of residual runtime states erased by `α`; its input symbols
-> `Σ_in` are accepted program-controllable operations; its output symbols `Γ_out` are
-> program-visible effects; and its transition/output functions `δ` and `λ` are interpreted by the
-> concrete runtime rather than precisely represented in `Tr_α(P)`. The quotient is required to be
-> well-defined for the chosen residual alphabet: if two concrete residual states are in the same
-> class, then every accepted residual symbol is either undefined for both or produces the same
-> output symbol and successor quotient class. This is the congruence condition that lets `δ` and
-> `λ` descend to `Q`. In this paper the condition is obtained only under the reset-normalized gate
-> discipline and restricted input alphabet introduced in Definition 7. The reset class `q0` is the
-> canonical class reached by the accepted reset sequence. When accepted residual words compose
-> without leaving the frontier discipline, the induced partial transformations
-> `{ δ_w : Q ⇀ Q | w in Σ_in^* }` form a partial transformation semigroup under composition where
-> defined. When the identity residual word is included and composition is closed for the schedule
-> discipline under discussion, we call it the residual partial transformation monoid.
-
-The definitions deliberately separate acceptance from interpretation. `V` decides membership in
-`L_V`; `I` still interprets concrete state while executing `P`; and `α` determines which of those
-concrete distinctions are recognized.
-
-> **Proposition 1 (no residual weird machine under semantic recognition).** If every
-> program-visible concrete effect factors through `α`, and `α`-equivalence is a congruence for all
-> program-controllable transitions, then no `α`-residual semantic language is available to the
-> program. Consequently, relative to the given residual alphabet, frontiers, and accepted toolkit,
-> `L_V` contains no weird machine of the residual-language kind defined here.
-
-*Proof sketch.* If all program-visible effects factor through `α`, then any two concrete states
-with the same abstract image produce the same program-visible result under every accepted
-transition. Congruence preserves this equivalence under sequencing. Hence no residual words can
-produce observations distinguished by the runtime and the program while the recognizer collapses
-the corresponding trace. Without such a residual word pair, no residual transducer can be
-constructed. ∎
-
-The defensive meaning is LangSec-shaped: the target is not to eliminate abstraction, but to
-ensure that all program-visible semantics relevant to downstream computation have been
-recognized.
+transitions [5]. Constructive demonstrations followed in exotic substrates — the x86
+page-fault handler [6], ELF loader metadata [7], DWARF unwinding — typically establishing
+Turing-completeness of an unintended interpreter. On the formal side, Dullien modeled a weird
+machine as a finite-state transducer emerging after a state corruption and studied
+exploitability and provable unexploitability [9]; Paykin et al. characterized weird machines
+as insecure compilation, where an exploit is a target-level behavior no source context can
+produce, tied to robust hyperproperty preservation [10]; and Vanegue examined weird machines
+in proof-carrying code, observing informally that any abstraction the proof system uses is an
+opportunity for uncaptured computation [8], and later gave an under-approximate adversarial
+logic for exploitability [11]. Section 8 positions our result precisely against each.
 
 ---
 
-# 4. Residual Channels and A-Opacity
+# 3. The ⊤-channel: incompleteness made program-visible
 
-A residual semantic language becomes operational when a concrete operation exposes an abstractly
-erased state component to the program. This is the point where the LangSec recognizer view and
-abstract-interpretation incompleteness meet.
+We fix a concrete system `C = (Σ, →, In, Out)` with a toolkit Π of constructible operations
+(for eBPF, the verifier-accepted instruction set plus map primitives), and a sound abstraction
+`A = (𝒜, α, γ, {⟦·⟧#})` that certifies a property `P` (memory safety, bounded termination) and
+has top `⊤`.
 
-> **Definition 5 (abstractly unresolved readout channel).** A triple `(op, φ, ψ)`, with `op` a
-> constructible operation, `φ` a concrete-state component, and `ψ` a predicate over the
-> program-visible readout `r` written by `op`, is an *abstractly unresolved readout channel* if
-> there exist reachable pre-states `σ0, σ1` for `op` at the same program point and under the same
-> recognized frontier `(pc,a,κ)` such that (g1) the recognizer identifies the relevant pre-state and
-> trace prefix, `σ0 ≡_α σ1` and equal `α_T` prefixes, while `φ` differs; (g2) the concrete transfer
-> writes readouts `r0, r1` with `ψ(r0) != ψ(r1)`; and (g3) the abstract transfer cannot decide `ψ`
-> at `r`, either because both truth values remain abstractly possible or because the abstract
-> state records no relation sufficient to prove either side.
+> **Definition 1 (⊤-channel).** A pair `(op, φ)`, with `op ∈ Π` a constructible operation and
+> φ a concrete-state component, is a *⊤-channel* if
+> - **(g1)** the concrete transfer of `op` writes a program-visible location `r` with a value
+>   that is a *non-constant* function of φ; and
+> - **(g2)** the abstract transfer sets `r := ⊤`, and α is constant in φ (φ is unrepresented
+>   in 𝒜).
 
-An abstractly unresolved readout channel is a witness of incompleteness for `op`: concrete
-execution distinguishes reachable states that the recognizer abstraction identifies, and that
-distinction remains program-visible. In residual-language terms, it supplies an output symbol for
-`L_res(P, α)`. When this paper later says that a value is `top`, that is shorthand for an abstract
-readout too coarse to decide the concrete predicate `ψ`; it need not be the greatest element of an
-implementation lattice.
+Definition 1 is exactly a witness of α's incompleteness for `op`: by (g1) the concrete result
+depends on φ, by (g2) α forgets φ, so `α∘⟦op⟧ ⊐ α∘⟦op⟧∘γ∘α` at any two states differing only
+in φ. This is the **condition on the abstraction**. It says nothing yet about programmability;
+a `⊤`-channel can exist and be useless if the toolkit cannot observe or drive it (Section 5).
 
-**The eBPF instance.** Let `φ` be the occupancy `c(G)` of a preallocated, non-LRU hash map `G` with
-`max_entries = k`. The witness relies on the following deterministic capacity predicate:
-`CAP(k)` says that a fresh-key update succeeds and increments `c(G)` exactly when `c(G) < k`, and
-otherwise fails without changing `c(G)`. The readout predicate is `ψ(r) = [r == 0]`. Thus `ψ` is a
-non-constant function of occupancy under `CAP(k)`. The verifier's helper prototype is an integer
-return, represented as an unconstrained scalar, and the verifier abstraction has no occupancy
-component. Thus map update exposes a residual state bit while the recognizer collapses the
-predicate that reads that bit.
+**The eBPF instance.** Let φ be the occupancy `c(G)` of a preallocated, non-LRU hash map `G`
+with `max_entries = k`. The map-insert helper `bpf_map_update_elem(G, key, val, BPF_ANY)` for
+a fresh key returns `0` and increments `c(G)` when `c(G) < k`, and returns `-E2BIG` leaving
+`c(G)` unchanged when `c(G) = k`. So the returned value in register `r0` satisfies
+`[r0 = 0] ⇔ c(G) < k` — a non-constant function of occupancy (g1). The helper's return
+prototype is `RET_INTEGER`, which the scalar domain models as the top scalar `⊤ = scalar()`;
+and 𝒜 has no occupancy component, so α is constant in `c(G)` (g2). The pair
+`(op = insert, φ = c(G))` is a `⊤`-channel.
 
-> **Proposition 2 (conditional occupancy readout).** Assume a map implementation satisfying
-> `CAP(k)`. Let `σ0, σ1` be two reachable pre-states of a fresh insert at the same program point
-> and recognized frontier. The registers, stack facts, static map attributes, and key argument
-> agree; the inserted key is fresh in both states; one state has capacity remaining and the other
-> is at capacity. The concrete map contents and key set may differ, but only in dynamic map
-> components erased by the verifier abstraction. Then (i) `σ0 ≡_α σ1`; (ii) the concrete transfer
-> separates them, returning `0` in one case and a negative error code in the other; and (iii) the
-> verifier abstraction leaves the readout predicate `ψ(r) = [r == 0]` undecided. Hence the
-> concrete distinction is a residual output symbol.
+We formalize (g2) as a proposition about the verifier's own transfer function.
 
-*Proof.* Item (i) follows because dynamic occupancy and key-set contents are absent from the
-verifier abstraction used at this helper boundary; item (ii) follows from `CAP(k)` for a fresh key
-below capacity versus at capacity; item (iii) follows from the verifier's integer helper-return
-abstraction. The concrete predicate exposed by the return code is therefore interpreted by `I` and
-the program, but not recognized by `α`. ∎
+> **Proposition 1 (occupancy is quotiented to ⊤).** Let `σ0, σ1` be two pre-states of the
+> insert that differ only in `c(G)` — one below capacity, one at capacity. Then (i) their
+> abstract images coincide, `α(σ0) = α(σ1)`; (ii) the concrete transfer separates them,
+> `⟦op⟧(σ0)(r0) = 0 ≠ -E2BIG = ⟦op⟧(σ1)(r0)`; and (iii) the abstract transfer collapses both,
+> `⟦op⟧#(α(σ0))(r0) = ⟦op⟧#(α(σ1))(r0) = ⊤`. Hence `⟦op⟧#` is non-injective on the classes
+> that `⟦op⟧` separates: the single bit `[r0 = 0]` that distinguishes the concrete outcomes is
+> mapped into one `⊤` cell.
 
-Our tested Linux 6.17.0/aarch64, preallocated non-LRU hash-map configuration instantiates
-`CAP(2)` for the artifact, with at-capacity failure observed as `-E2BIG`. Section 7 treats
-portability of that instantiation as a threat to validity; the proposition above is intentionally
-conditional on the capacity semantics rather than a universal Linux-kernel claim.
+*Proof.* (i) holds because α is constant in `c(G)`; (ii) is the concrete insert semantics with
+the chosen occupancies; (iii) is the constant abstract transfer for `RET_INTEGER`. Combining,
+`α(σ0)=α(σ1)` forces equal abstract outputs while the concrete outputs disagree on `r0`. ∎
 
-We name the resulting blindness at program outputs.
-
-> **Definition 6 (A-opacity relative to a relation vocabulary).** Let `π` be an accepted program
-> with finite input domain `D` and concrete input-output function `f_π : D -> O`. Let `Q` be the
-> class of input-output relations expressible in the recognizer's abstract report language, such
-> as intervals, equalities, branch facts, range facts, or finite Boolean relations over tracked
-> variables. Let `Cert^Q_α(π)` be the relations in `Q` entailed by the recognizer's final abstract
-> trace summaries over the input and output variables. Program `π` is *A-opaque* for `f_π`
-> relative to `(α,Q)` if `f_π` is non-constant and no certified relation
-> `R# in Cert^Q_α(π)` entails the graph `{(x, f_π(x)) | x in D}`. For a join-based analyzer this
-> may appear as a literal full-range value at the exit; for a path-sensitive analyzer, the
-> relevant object is the union or join of path-final summaries together with the absence of any
-> recognized relation, expressible in `Q`, between inputs and the chosen path.
-
-For the Linux verifier witness, `Q` consists of relations expressible in the verifier's
-scalar/range/branch summaries over the relevant input and output cells. The verifier does not
-expose a functional graph certificate for map-occupancy-dependent helper returns, so the claim is
-not that an external verifier could never infer the function; it is that the recognizer's own
-report language does not certify it.
-
-> **Remark 1 (where opacity loses precision).** A-opacity is not caused by any arbitrary
-> abstraction gap. The lost distinction must be program-visible: along the output derivation,
-> some concrete dependency that affects the final value is erased by the recognizer and later
-> read through an abstractly unresolved readout channel. This remark only locates the precision
-> loss; the weird-machine claim requires the stronger toolkit conditions below.
+Proposition 1 is machine-checkable against the verifier's trace (Section 6.3): at the branch
+that reads `r0`, the verifier reports `r0` as an unbounded scalar and explores both
+successors.
 
 ---
 
-# 5. Residual-Language Weird Machine Theorems
+# 4. A-opacity, pinned to the analysis model
 
-For LangSec purposes, the theorem pair below is a recognizer-boundary sufficient condition, not a full
-classification of all abstract interpreters. A residual channel is not yet a weird machine. It
-becomes programmable only when the accepted toolkit can operate it as a transducer while staying
-inside the recognized safety language.
+The payload of a `⊤`-channel is not new expressiveness — the verifier already accepts explicit
+NAND written with ordinary arithmetic (Section 6.2). The payload is *computation the sound
+analysis cannot see*. We name the property precisely, and we are deliberate about *which*
+abstract quantity must be `⊤`, because the answer differs between a join-based analyzer and a
+path-sensitive one, and a loose statement would be false for the latter.
 
-> **Definition 7 (exploitable residual basis).** A residual transducer basis inside `L_V` is
-> exploitable when the accepted toolkit provides:
-> - **(E1) Observability**: the residual readout predicate `ψ` can be branched on or stored as a
->   program bit.
-> - **(E2) Input-control**: for each gate input vector `x`, there exists an accepted setup
->   sequence `u_x` that selects the intended residual transitions and produces the corresponding
->   concrete `ψ` readout.
-> - **(E3) Resettability**: an accepted reset sequence returns the residual component to a known
->   canonical equivalence class and leaves no hidden state depending on the prior gate evaluation
->   except explicit wire cells.
-> - **(E4) Composability**: for each finite circuit, the accepted toolkit either allocates enough
->   independent residual instances or schedules resettable instances with explicit wire values,
->   including the ordinary store, copy, and fan-out operations needed to route those wires, while
->   all operations remain in `L_V`.
+Let `⟦π⟧#_out` denote the analysis's **certified output abstraction** of program π: the
+abstract value the analysis certifies for π's output cell over all reachable executions. For a
+**join-based** analyzer that maintains one abstract state per program point,
+`⟦π⟧#_out` is literally the value in the output cell at the exit point. For a **path-sensitive**
+analyzer (such as the eBPF verifier) that explores paths separately, we define
+`⟦π⟧#_out := ⨆_{paths p} out#(p)`, the join over the path-final abstract outputs — i.e. what the
+analysis has proved about the output *taking all explored paths together*.
 
-> **Definition 8 (induced residual gate).** Under E1-E4, the induced gate is the Boolean function
-> obtained by resetting the residual state, applying the input-selected accepted sequence, and
-> observing the residual readout predicate `ψ`. At this construction level, the program-visible
-> explicit state `x` of Definition 3 is specialized to circuit wire cells and gate input/output
-> cells; Definition 3 itself does not assume that all program-visible explicit state has this form.
+> **Definition 2 (A-opacity).** A program π is *A-opaque* if its concrete output is a
+> non-constant function of its inputs, yet `⟦π⟧#_out = ⊤`: the analysis certifies nothing about
+> the output value.
 
-> **Lemma 1 (frontier-local readout ambiguity).** If `(op, φ, ψ)` is an abstractly unresolved
-> readout channel with witnesses reachable at the same program point and under the same recognized
-> frontier `(pc,a,κ)`, then a branch or stored bit derived only from `ψ(r)` has both truth values
-> in the abstract successor set at that frontier, unless a prior recognized relation already
-> decides `ψ`.
+Under this definition both analyzer shapes are covered by one statement. For a join-based
+interval or tnum analyzer, the output cell is `⊤` outright. For the path-sensitive eBPF
+verifier, along each explored path the output bit is a *known* constant (the verifier resolves
+`r6` to `0` on one branch and to an unknown non-zero on the other), but the join over paths is
+the unknown bit `{0,1}` — and, crucially, this join is `⊤` *independently of any relation the
+analysis can express between the inputs and the output*. That last clause is the real content:
+A-opacity says the analysis cannot prove `output = f(inputs)` for any non-trivial `f`, because
+the reachable output set is all of `{0,1}` at the abstract level regardless of the inputs.
 
-*Proof sketch.* By Definition 5, there are same-frontier reachable states with the same abstract
-view but opposite concrete values of `ψ`. Soundness requires the abstract post-state for that
-frontier to include both concrete executions, while the abstraction records no relation that
-decides `ψ`. Any accepted branch or store derived only from `ψ(r)` must therefore preserve both
-abstract possibilities. The claim is frontier-local: it does not assert that every individual
-concrete execution reaches both outcomes. ∎
+This is the fix to the most dangerous soft spot in a naive account. Writing "`⟦π_f⟧# = ⊤`"
+without saying *which* abstraction is `⊤` invites the objection that a path-sensitive verifier
+"knows" the output on each path. Definition 2 answers it: opacity is a property of the
+*certified* (join-over-paths) output abstraction, which is `⊤` in both models.
 
-The conditions above are not ornamental. Each removes a nearby counterexample:
+> **Proposition 2 (a bare gap is necessary for opacity).** If π is A-opaque then its output
+> derivation contains a `⊤`-channel.
 
-| Missing condition | Counterexample | Consequence |
-|---|---|---|
-| program-visible readout | hidden state differs but no accepted code can observe it | no residual language witness |
-| input-control | output depends only on uncontrolled environment noise | not a programmable machine |
-| reset | the channel can be consumed only once | no reusable gate basis |
-| composition | an isolated gate exists but cannot route wires | no circuit family |
-| functional completeness | the residual gate is only a projection or constant | no arbitrary finite circuits |
-| gate-opacity | explicit bytecode separately proves the same output relation | computes, but not A-opaque |
+*Proof.* The certified output is `⊤` while the concrete output depends on the input. By
+soundness each abstract transfer over-approximates its concrete one, so somewhere on the
+derivation a transfer produced `⊤` in a cell whose concrete value still depended on the input —
+that transfer and that component are a `⊤`-channel. ∎
 
-> **Lemma 2 (accepted schedules realize circuit semantics).** Let `S_C` be an accepted finite
-> schedule for a circuit `C`. Assume each residual gate invocation realizes the induced gate
-> under the explicit wire values supplied to that invocation, resets satisfy E3, and E4 supplies
-> storage, copying, fan-out, and either fresh or resettable residual instances. Then the concrete
-> wire valuation after each scheduled gate equals the corresponding circuit valuation.
+Proposition 2 is the α-side necessity: no opacity without incompleteness. It does not yet give
+programmability, which needs the toolkit.
 
-*Proof sketch.* Induct over the circuit schedule. The base case is the single induced gate in
-Definition 8. For the inductive step, E3 removes hidden residual carry-over between gate
-evaluations except for explicit wire cells, and E4 supplies accepted routing from existing wire
-values to the next gate invocation. The next residual readout is therefore evaluated with exactly
-the circuit inputs scheduled for that gate, and the stored output wire agrees with the Boolean
-gate semantics. ∎
+---
 
-> **Theorem 1 (residual realization theorem).** Let `V` recognize a safety language `L_V`, let
-> `I` be the concrete interpreter for programs accepted by `V`, let `α` be the recognizer
-> abstraction, and let `Π` be an accepted toolkit closed under finite schedules inside `L_V`.
-> If `Π` contains an exploitable residual transducer basis whose induced gate is functionally
-> complete, then for every finite Boolean circuit `C` there exists an accepted bounded program
-> instance `P_C in L_V` such that `I(P_C)` computes `C`.
+# 5. Exploitability and the Opacity Theorem
 
-*Proof sketch.* Functional completeness yields a finite gate-level circuit for `C`. Construct
-`P_C` by realizing each gate with the accepted residual basis: reset a residual transducer
-instance (E3), apply the input-selected sequence for the current wire vector (E2), observe or
-store the readout predicate (E1), and write the result into accepted wire cells. E4 supplies the
-fresh or resettable residual instances and wire routing needed to sequence the gates without
-leaving `L_V`. Lemma 2 gives the gate-by-gate correctness invariant, so the concrete interpreter
-computes `C`. ∎
+A `⊤`-channel becomes a *gate* only if the toolkit can operate it. The following four
+conditions are properties of Π — the accepted operations around `op` — not of the abstraction.
 
-> **Definition 9 (local gate-opacity).** A residual gate invocation is locally gate-opaque
-> relative to `(α,Q)` when: (i) its exported output cell is assigned only from the predicate
-> `ψ(r)` over the residual readout; (ii) no relation in `Q` certified at that gate frontier
-> entails the gate output as a function of the gate's concrete input wires; and (iii) no
-> recognizer-visible instruction in the same gate invocation computes a Boolean expression
-> equivalent to the induced gate and writes it to the exported output cell.
+> **Definition 3 (exploitable gap).** A `⊤`-channel `(op, φ)` is *exploitable* over `C` if Π
+> also provides:
+> - **(E1) Observability** — `r` can be branched on, so its `⊤`-value becomes a definite
+>   program bit feeding later computation.
+> - **(E2) Input-control** — ops apply *input-conditioned* transitions to φ, so the observed
+>   predicate realizes a chosen non-trivial Boolean dependence on inputs.
+> - **(E3) Resettability** — an op restores φ to a known value, making the channel a *pure*
+>   function re-evaluable per invocation.
+> - **(E4) Composability** — arbitrarily many mutually non-interfering instances `(opₖ, φₖ)`
+>   are allocatable, so one instance's output (E1) can drive another's input (E2).
 
-> **Theorem 2 (residual opacity theorem).** Under the hypotheses of Theorem 1, additionally
-> assume that each residual gate invocation is locally gate-opaque relative to `(α,Q)`, each
-> residual readout satisfies Lemma 1 at the recognized frontier for its gate invocation, and `Q`
-> is closed under the relational composition and projection operations used to route explicit
-> program-visible state. Assume further that every global certificate in `Cert^Q_α(P_C)` is
-> bounded by relational composition of the certified local gate summaries and explicit state-copy
-> summaries; equivalently, the recognizer does not synthesize a global functional relation that is
-> absent from all local certificates. Then the constructed program `P_C` is A-opaque for `C`
-> relative to `(α,Q)`. Hence the accepted language `L_V` contains a residual-language weird
-> machine relative to `(α,Q)`.
+> **Definition 4 (induced gate).** Under (E1)–(E4) the *gate* of the exploitable gap is the
+> Boolean function `g(x₁,…,xₙ)` obtained by resetting φ, applying the input-conditioned
+> transitions, and observing the readout.
 
-*Proof sketch.* Lemma 1 supplies frontier-local abstract ambiguity for each residual readout: at
-the recognized frontier, the abstraction cannot decide the readout predicate that becomes the
-gate output. Local gate-opacity rules out the counterexample where ordinary bytecode inside a
-gate computes and exports the same Boolean relation in recognizer-visible form. By induction over
-the same schedule as Theorem 1, explicit wires carry the concrete circuit values, but every
-nontrivial gate output is introduced through an unresolved residual readout rather than through a
-relation in `Q` certified at that gate. Because `Q` is closed under the relevant relational
-composition operations and global certificates are bounded by the composition of local summaries,
-the abstract summary can only propagate the imprecision already present in those local gate
-relations; it cannot introduce a missing functional gate relation. The final certified summaries
-therefore do not entail the graph of `C` in `Q`, so Definition 6 gives A-opacity relative to
-`(α,Q)`. ∎
+> **Theorem 1 (Opacity Theorem).** Suppose `(C, A)` admits an exploitable gap whose induced
+> gate `g` is functionally complete together with the freely available represented operations
+> (negation, constants, wiring). Then for every Boolean function `f : {0,1}ⁿ → {0,1}` there is
+> a program `π_f ∈ Π` such that (1) `π_f` computes `f`, and (2) `π_f` is A-opaque: its whole
+> input-to-output dependence factors through `⊤`-channel operations, so `⟦π_f⟧#_out = ⊤`.
 
-The theorem pair is bounded and conditional. It does not claim Turing-completeness, an exploit,
-or a bug, and it is not a complete abstract-interpretation boundary theorem. The realization
-theorem says when a residual language is programmable; the opacity theorem adds the extra
-recognizer-side condition needed to keep that computation outside the certified input-output
-relations expressible in `Q`.
+*Proof.* Functional completeness of `g` yields a circuit for `f`. Realize the circuit by
+**time-multiplexing** a bounded set of physical gate instances: evaluate the circuit's gates
+in topological order; for each gate, reset its instance (E3), apply the input-conditioned
+transitions from the wire values (E2), observe the readout (E1), and store the resulting bit
+to a wire cell; reuse instances across gates and use independent instances only where two
+gates are live simultaneously (E4). A statically bounded number of instances and wire cells
+suffices for any fixed circuit. For opacity, maintain the invariant "every wire cell is
+`⊤`-derived": the base case is Definition 1(g2); (E2) feeds a `⊤`-derived bit forward as a
+`⊤`-derived input, so by induction on circuit depth the certified output abstraction is `⊤`.
+Correctness (1) is the gate truth table lifted along the circuit; opacity (2) is the invariant.
+∎
+
+Two consequences of the construction are worth stating. First, because the circuit is realized
+by time-multiplexing a *statically bounded* number of instances and wire cells, the result is
+**combinational and bounded, not Turing-complete**: unbounded opaque memory would require a
+resettable store the verifier's termination check forbids. Second, the number of physical gate
+instances need not equal the number of gates in the circuit — a point that a reader who counts
+"nine maps" in the eBPF witness (Section 6) must not mistake for a nine-gate ceiling.
+
+**Scope of the theorem.** Theorem 1 is a sufficiency theorem for a precise sub-notion of
+"weird machine": bounded, verifier-opaque programmable computation. Proposition 2 gives a weak
+necessity statement for opacity itself — some abstractly erased, program-visible dependence must
+appear in the output derivation — but the full E1–E4 package is a construction discipline, not an
+intrinsic characterization of all weird machines. In particular, E3 and E4 are the conditions we
+use to upgrade one opaque gate into arbitrary bounded circuits; we do not claim that every weird
+machine must have resettable, composable gate instances. This distinction is what keeps the result
+from becoming the overbroad slogan "gap implies weird machine." Section 9 returns to the harder,
+open problem of structural boundary conditions.
+
+---
 
 # 6. The eBPF witness
 
-We instantiate the Definition 7 hypotheses for an eBPF NAND basis, demonstrate the Theorem 1
-program-family construction on finite adders accepted by the in-kernel verifier, and discharge
-the Theorem 2 local gate-opacity condition by contrasting the residual witness with an explicit-logic
-baseline. The programs are
-`SEC("syscall")` eBPF programs run offline via `bpf_prog_test_run_opts()`; they use only legal
-helper calls and bounded loops; they perform no out-of-bounds access and no verifier bypass. All
-experiments run in a local VM under a privileged configuration sufficient for the exact kernel
-version and program type used by the artifact. We do not claim unprivileged loadability,
-attachability, privilege escalation, or deployment in a live kernel path. The general
-program-family claim follows from the construction in Section 5; the artifact validates the eBPF
-basis and representative finite compositions.
+We discharge every clause of Definition 3 and Theorem 1 in a program the in-kernel verifier
+accepts. The program is a `SEC("syscall")` eBPF program run offline via
+`bpf_prog_test_run_opts()`; it uses only legal helper calls and bounded loops; it performs no
+out-of-bounds access, no verifier bypass, and no privilege escalation beyond the `CAP_BPF`
+required to load any eBPF program.
 
-**Artifact interface note.** We use `BPF_PROG_TYPE_SYSCALL` because the artifact requires
-map-update helper traces without attaching a program to a live kernel hook. On the tested kernel,
-this program type is accepted by the verifier and executed through `bpf_prog_test_run_opts()`;
-the artifact records the exact program type, helper set, kernel version, and verifier logs. The
-construction is not tied to syscall attachment semantics: the theorem depends only on accepted
-helper traces and private map semantics.
+## 6.1 The capacity-saturation NAND
 
-## 6.1 The residual gate language
+The gate uses one hash map `G` with `max_entries = 2`, preloaded with a sentinel entry.
+Encoding inputs `a, b ∈ {0,1}`, the construction inserts, for each input, a key selected
+*branchlessly* by `key = base + delta · bit`, then probes capacity with a third insert. With
+the sentinel occupying one slot, the map is full exactly when both inputs contributed a
+distinct new key — i.e. when `a = b = 1`. The third insert therefore returns `-E2BIG` iff
+`a ∧ b`, and the output bit is `[r0 = 0] = ¬(a ∧ b) = NAND(a, b)`. Formally the gate is
+`g(a,b) = ¬[ 1 + a + b > 2 ]`, the sentinel supplying the `1` and `max_entries = 2` the
+threshold. NAND is functionally complete, satisfying the hypothesis of Theorem 1.
 
-The witness is a finite-state residual transducer over hash-map occupancy. The gate uses one
-`BPF_MAP_TYPE_HASH` map `G` with `max_entries = 2`. The map is non-LRU and, as defined in the
-artifact, has no `BPF_F_NO_PREALLOC` flag; it therefore uses the ordinary preallocated hash-map
-configuration relied on by the deterministic capacity-saturation witness. The keys `S`, `A`,
-and `B` are distinct, and the maps are private to offline `SEC("syscall")` runs via
-`bpf_prog_test_run_opts()`.
-
-The mechanism is capacity saturation, not allocation failure as an attacker primitive. The tested
-preallocated, non-LRU hash-map configuration instantiates `CAP(2)`: a fresh-key update succeeds
-while live occupancy is below `max_entries`; once the live-entry count reaches `max_entries`, the
-same helper returns a negative error (observed as `-E2BIG`) rather than evicting an entry. The
-offline private map and reset discipline make this threshold deterministic for the artifact;
-Section 7 treats kernel-version and architecture portability as a threat to validity.
-
-The residual quotient states are the key-set classes reachable under the reset-normalized gate
-discipline:
-
-`Q_G = { q_empty, q_S, q_SA, q_SB }`,
-
-representing `empty`, `{S}`, `{S,A}`, and `{S,B}`. The alphabet is
-
-`Σ_G = { reset, insS, updS, insA, insB }`.
-
-`reset` deletes the sentinel and input keys `S`, `A`, and `B`; `insS` inserts the sentinel key
-`S`; `updS` updates the existing sentinel and therefore does not increase occupancy; `insA` and
-`insB` insert fresh input keys. Each gate starts from the invariant occupancy `{S}` after
-`reset . insS`. The output alphabet is `{ ε, 1, 0 }`, where `1` means helper success
-(`ret == 0`), `0` means helper failure (`ret != 0`), and `ε` is an ignored normalization output.
-The partial transition/output table needed by the gate is:
-
-| State | Input | Next state | Output |
-|---|---|---|---|
-| any | `reset` | `q_empty` | `ε` |
-| `q_empty` | `insS` | `q_S` | `ε` |
-| `q_S` | `updS` | `q_S` | `1` |
-| `q_S` | `insA` | `q_SA` | `1` |
-| `q_S` | `insB` | `q_SB` | `1` |
-| `q_SA` | `updS` | `q_SA` | `1` |
-| `q_SA` | `insA` | `q_SA` | `1` |
-| `q_SA` | `insB` | `q_SA` | `0` |
-| `q_SB` | `updS` | `q_SB` | `1` |
-| `q_SB` | `insB` | `q_SB` | `1` |
-| `q_SB` | `insA` | `q_SB` | `0` |
-
-Rows not reachable under the reset-normalized gate schedule are outside the partial transducer
-used in the proof. For input bits `a,b in {0,1}`, the residual word is
-
-`w_ab = reset . insS . op_a . op_b`, where `op_0 = updS` and `op_1` is the corresponding fresh
-insert (`insA` for the first input, `insB` for the second). The output symbol is the predicate
-`out = [ret == 0]` over the return code of the **second input operation** `op_b`, not a third
-probe. At gate exit, the output is determined only by success or non-success of that second
-input operation. This matches the artifact's `GATE_CAP=2` implementation and avoids the
-off-by-one ambiguity of a sentinel-plus-third-probe variant.
-
-| a | b | residual word | second input result | output |
-|---|---|---|---|---|
-| 0 | 0 | `reset insS updS updS` | success | 1 |
-| 0 | 1 | `reset insS updS insB` | success | 1 |
-| 1 | 0 | `reset insS insA updS` | success | 1 |
-| 1 | 1 | `reset insS insA insB` | failure (negative errno; observed `-E2BIG`) | 0 |
-
-Thus the residual transducer implements `NAND(a,b)`. The accepted bytecode does not combine
-`a` and `b` arithmetically to compute this truth table. The inputs are used only to select
-whether an operation targets the existing sentinel key or a fresh key; the truth value is the
-helper return symbol produced by the concrete map/runtime interpreter. Since NAND is
-functionally complete, the residual gate satisfies the functional-completeness hypothesis of
-Theorem 1. The explicit-logic baseline in the next subsection is excluded by the local gate-opacity
-condition of Theorem 2: its truth table is recognizer-visible ordinary bytecode logic rather than
-an output derived only from the residual readout.
+The post-verifier (xlated) instruction stream confirms that **no instruction combines `a` and
+`b` arithmetically**: the inputs appear only in the branchless key selection that decides
+*which* key each insert targets, and the stored truth value is decided solely by a single
+`if r6 == 0` on the third insert's return code (repository Appendix A.7). The computation is in
+the map metadata, not in the bytecode.
 
 ## 6.2 Contrast: an explicit-logic baseline the verifier accepts identically
 
@@ -641,51 +364,26 @@ baseline is *also* verifier-accepted and produces an identical 400/400 truth tab
 NAND is legible in the bytecode (repository Appendix A.8). The verifier sees two safe, bounded
 programs with identical I/O; only the baseline's logic is visible to it. This is the point of
 the paper in one comparison: the gap is not about *what* can be computed but about *what the
-recognizer abstraction can recognize*.
+sound analysis can see*.
 
 ## 6.3 Discharging the clauses
 
 | Clause | eBPF realization | Evidence |
 |---|---|---|
-| `(V, I, α)` | eBPF verifier; concrete map/helper runtime; verifier abstraction | `results/nand.verifier.log`, `env.json` |
-| residual channel (g1-g3) | φ = occupancy `c(G)`; `op` = update/insert; `ψ(ret) = [ret == 0]` abstractly unresolved at the same verifier frontier | Prop. 2; verifier log insn 78/79 |
+| `C`, `A` | BPF machine; in-kernel verifier (sound abstract interp.) | `results/verifier.log`, `env.json` |
+| `⊤`-channel (g1,g2) | φ = occupancy `c(G)`; `op` = insert; `r0 := ⊤` | Prop. 1; verifier log insn 78/79 |
 | E1 observability | `if r6 == 0` decides the output bit | xlated insn 122 |
-| E2 input-control | input bits select `updS` versus fresh-key insert; `op_b` return is the readout | xlated insn 66-68 / 79-81 |
-| E3 resettability | delete `S,A,B`, then insert `S`; gate restarts in canonical class `{S}` / occupancy 1 | xlated insn 44 / 49 / 54 |
-| E4 composability | maps `G0..G8` plus explicit wire cells on `TAPE`; resettable schedules support finite circuits | `full_adder.jsonl` |
-| gate `g` = NAND (complete) | NAND truth table exhaustive; finite adders demonstrate representative compositions | `nand_truth_table.jsonl`, `adder32_exhaustive.jsonl` |
-| opacity | verifier cannot resolve `ret == 0`; both path-final output values remain reachable without a certified input-output graph | verifier log 104 (both successors) |
+| E2 input-control | `key = base + delta·bit` ⇒ φ = `1+a+b`; readout `[φ>2]` | xlated insn 66–68 / 79–81 |
+| E3 resettability | `bpf_map_delete_elem` restores `c(G)` | xlated insn 44 / 49 / 54 |
+| E4 composability | independent maps `G0..G8`; time-multiplexed | `full_adder.jsonl` |
+| gate `g` = NAND (complete) | 32-bit adder checked over all 8-bit operand pairs | `adder32_exhaustive.jsonl` |
+| opacity | verifier forks at output branch; both truth values reachable | verifier log 104 (both successors) |
 
-The representative full-adder composition uses the standard nine-NAND schedule:
-
-`n1 = NAND(a,b)`
-
-`n2 = NAND(a,n1)`
-
-`n3 = NAND(b,n1)`
-
-`x = NAND(n2,n3)`
-
-`n4 = NAND(x,cin)`
-
-`n5 = NAND(x,n4)`
-
-`n6 = NAND(cin,n4)`
-
-`sum = NAND(n5,n6)`
-
-`carry = NAND(n1,n4)`
-
-Each line is one reset-normalized residual-gate invocation, with intermediate values stored in
-explicit wire cells and routed to later invocations by the accepted ordinary store/copy
-operations required by E4.
-
-The machine-checkable heart is the last row. Verbatim from the verifier log, the helper return
-for the input-conditioned map operation flows as an unconstrained scalar into the output branch;
-the verifier cannot resolve the predicate `ret == 0` and explores both successors. This realizes
-Proposition 2 at the helper boundary and Definition 6 relative to the verifier relation
-vocabulary `Q`: the concrete output is input-dependent, but the certified summaries do not entail
-the NAND input-output graph in `Q`.
+The machine-checkable heart is the last row. Verbatim from the verifier log, the third insert
+returns a top scalar, that scalar flows into the output register, and at the output branch the
+verifier cannot resolve the guard and explores both successors — so both truth values are
+abstractly reachable regardless of the inputs. That is Proposition 1 and Definition 2 realized
+in the verifier's own trace.
 
 ---
 
@@ -709,32 +407,36 @@ baseline — are all verifier-accepted (`loadall_exit = 0`).
 
 **Independent audit.** An oracle re-derives every expected truth table and sum independently of
 the harness's own pass flag, and asserts full input coverage; the aggregate re-check reports
-68149/68149 and a passing semantic audit. The aggregate consists of 400 NAND trials, 8 full-adder
-trials, 65536 exhaustive 8-bit operand-pair trials for the 32-bit adder harness, 1005 full-width
-sampled 32-bit cases, and 1200 ablation/baseline truth-table checks. All artifacts are
-regenerated by a single command and re-checked by another.
+68149/68149 and a passing semantic audit. All artifacts are regenerated by a single command and
+re-checked by another.
 
 **Second witness — an independent, join-based analyzer.** To test whether the phenomenon tracks
 sound-but-incomplete abstraction rather than an eBPF idiosyncrasy, we reproduce it in a
 structurally different `(C, A)`: a numeric program whose gate is `NAND(a,b) = [(1+a+b) mod 3 ≠ 0]`,
-analyzed by a **sound, non-relational, join-based interval domain**. The residual component is
-the congruence `acc mod 3`, which intervals do not represent. A self-contained reference analyzer
-and Frama-C EVA v25.0 [18] both certify the working gate's output as `{0,1} = top`, while the
-modulus-7 ablation is certified as the singleton `{1}`. Thus the imprecision is localized to the
-erased congruence component rather than to the whole analysis. The artifact contains the
-exhaustive reference run, EVA command line, logs, composed-gate checks, and the input-partitioned
-refinement that repairs the precision loss.
+analyzed by a **sound, non-relational, join-based interval domain**. The channel `φ` is now the
+congruence `acc mod 3` — unrepresented by intervals — in place of hash-map occupancy. We run it
+through two independent realizations of that domain: a self-contained reference interval
+interpreter (exhaustive over the inputs, with every abstract transfer checked at runtime to
+over-approximate the concrete output), and **Frama-C's EVA value analysis, v25.0 — a production
+analyzer we did not write** [18]. Both agree. For the working gate the analyzer's certified value
+for the output is the full Boolean range `{0,1} = ⊤`: it proves nothing about the output bit
+though it depends on the inputs (A-opacity, Definition 2). Because the domain is join-based, this
+`⊤` is a *single top value* — `⟦π⟧#_out = ⊤` holds literally, with none of the path-sensitivity
+qualification the eBPF verifier needs. Crucially, the **same** analyzer certifies the modulus-7
+ablation as the singleton `{1}` (the gate degenerates to a constant): the blindness is *localized*
+to the abstract domain's treatment of `mod`, not to the whole analysis. EVA reports `acc ∈ {1,2,3}` and raises zero alarms, so the
+result is not an artifact of imprecision elsewhere. Composed gates (AND, XOR) keep the output at
+`⊤` while the number of channel uses grows, and an input-partitioned (disjunctive) refinement
+certifies the output per input — the same channel-composition and precision-repair pattern observed in a real tool.
 
 | | analyzer | style | channel `φ` | certified output |
 |---|---|---|---|---|
-| eBPF witness (§6) | Linux verifier | path-sensitive | map occupancy | unresolved predicate; both path-final outputs reachable |
+| eBPF witness (§6) | Linux verifier | path-sensitive | map occupancy | `⊤` (join over paths) |
 | second witness | interval domain / Frama-C EVA | **join-based** | `acc mod 3` | `out ∈ {0,1} = ⊤` |
 
-Two structurally different sound analyzers thus exhibit the same recognizer-side opacity pattern,
-which is the limited system-independence claim needed for the LangSec framing. The interval witness
-is not a second eBPF-style exploitability proof; it is evidence that residual opacity follows from
-sound-but-incomplete recognition rather than from one kernel substrate. The full construction, the
-runnable reference analyzer, and the verbatim EVA log are in the artifact.
+Two structurally different sound analyzers thus exhibit the same opacity pattern — the
+system-independence the abstraction-gap thesis predicts. The full
+construction, the runnable reference analyzer, and the verbatim EVA log are in the artifact.
 
 **Threats to validity.** The eBPF evidence is from one kernel (6.17.0, aarch64). Hash-map internals
 and verifier behavior can drift across kernel versions and architectures; in particular, the
@@ -743,28 +445,20 @@ non-LRU) and single-CPU offline execution, since preallocated hash maps reserve 
 elements that can perturb the capacity threshold under concurrency. The exhaustive truth tables
 establish that the mechanism holds as described on the tested configuration; portability across
 eBPF kernels and architectures remains future work. The demand for a second, structurally
-different analyzer is satisfied by the join-based witness above.
+different analyzer is discharged by the join-based witness above.
 
 ---
 
 # 8. Related work
 
-**Language-theoretic security.** LangSec argues that security failures often arise when a
-system does not precisely recognize the language it consumes, or when later computation acts on
-structure that has not been fully recognized [24]-[27]. The usual setting is parsing: input
-languages, recognizers, parser differentials, Postel-style ambiguity, and the complexity of the
-notional input-accepting automaton. Our work extends this lens from parsers to safety
-recognizers. The analogue of the parser/interpreter split is the verifier/runtime split: a program
-verifier can correctly recognize a safety language while the concrete runtime still interprets and
-exposes a residual semantic language inside accepted programs.
-
 **Weird machines: informal and constructive.** Bratus et al. introduced the weird-machine frame
 as a way to see exploitation as programming an unintended machine [5]; constructive
-demonstrations exposed unintended computation in substrates such as the page-fault handler [6]
-and ELF metadata [7]. These works answer what can be computed in a substrate not meant to
-compute, typically after or around a defect. Our witness differs on two axes: the substrate is an
-accepted program with no recognizer failure, and the property we establish is not
-Turing-completeness but residual-language opacity inside a recognized safety language.
+demonstrations established Turing-complete computation in unintended substrates such as the
+page-fault handler [6] and ELF metadata [7]. These works answer *what can be computed* in a
+substrate not meant to compute, typically after or around a defect. Our witness differs on two
+axes: the substrate is a *verifier-accepted* program with no defect, and the property we
+establish is not Turing-completeness but *invisibility to a sound analysis* of a bounded
+computation.
 
 **Other substrates and later variants.** Subsequent work broadens the catalog of weird-machine
 substrates and patterns. Bratus et al. describe recurring weird-machine patterns across systems
@@ -774,87 +468,83 @@ state: Evtyushkin et al. show computation with timing and microarchitectural sta
 Wang et al. study weird machines in transient execution [22]. Levy and Maldonado use the weird
 machine lens for attack-surface measurement [23]. These papers reinforce that hidden or
 under-specified state is a recurring substrate; our contribution is to isolate the analogous
-substrate as a residual language left inside a recognizer's accepted language.
+substrate in a verifier abstraction and to give a verifier-success, non-CVE construction.
 
-**Weird machines as insecure compilation.** Paykin et al. cast weird machines as insecure
-compilation: an exploit is a target-context behavior no source context can produce, and a
-compiler is exploit-free iff it preserves robust hyperproperties [10]. Our account is
-orthogonal. Their boundary is source language versus target language; ours is recognizer-visible
-language versus runtime-interpreted residual language. Both are computation that violates an
-abstraction, but the abstraction is a different object.
+**Weird machines: formal.** Dullien models a weird machine as a transducer that emerges after a
+state corruption and formalizes *exploitability* — reachability of an attacker goal state — and
+its negation, provable unexploitability [9]. Our property is orthogonal: *opacity* is about what
+a sound analysis can see, not about reaching a goal state, and our machine presupposes no
+corruption. Paykin et al. cast weird machines as *insecure compilation*: an exploit is a
+target-context behavior no source context can produce, and a compiler is exploit-free iff it
+preserves robust hyperproperties [10]. The abstraction they invoke is the *source language's*;
+ours is the *analyzer's abstract domain*. Both are "computation that violates an abstraction,"
+but the abstraction is a different mathematical object, and ours requires no compiler pair.
 
 **The closest prior art.** Vanegue's study of weird machines in proof-carrying code is the
-nearest antecedent: it observes that when a proof system's abstraction fails to capture
-untrusted computation, a shadow execution can arise, and the machine abstraction becomes one
-such opportunity [8]. We regard our contribution as a LangSec-style formalization of this
-observation: residual semantic languages make the abstraction gap a language object, and the
-residual transducer theorem states when that language becomes programmable. Vanegue's later
+nearest antecedent: it observes, informally and taxonomically, that when a proof system's
+abstraction fails to capture untrusted computation a "shadow execution" arises, and names the
+machine abstraction as one such opportunity [8]. We regard our contribution as the
+formalization of exactly this observation: we turn "any used abstraction is an opportunity for
+uncaptured computation" into (i) a machine-checkable proposition about the analyzer's transfer
+function (Prop. 1), (ii) a conditional theorem with the α-side and Π-side conditions separated
+(Thm. 1), and (iii) a discharged instance in a production verifier (Section 6). Vanegue's later
 adversarial logic gives an under-approximate proof system for exploitability [11]; it is
-complementary to ours, which concerns the sound over-approximate recognizer's blind spot rather
+complementary to ours, which concerns the *sound over-approximate* analysis's blind spot rather
 than the discovery of true attack paths.
 
 **Completeness in abstract interpretation.** Our reframing rests on the theory of completeness:
 Giacobazzi, Ranzato, and Scozzari characterize when an abstraction is complete for an operation
 and construct the complete shell and core [2]; Bruni et al. localize completeness to fragments
 and build a logic that reasons about correctness and incorrectness together [3], with follow-up
-work quantifying partial incompleteness [4]. Abstract interpretation explains how recognizers
-soundly approximate concrete semantics for chosen properties. Our question is language-theoretic
-and security-specific: when does erased concrete behavior still constitute a program-visible
-language?
+work quantifying partial incompleteness [4]. To our knowledge, no prior work connects the
+weird-machine phenomenon to this theory constructively. Doing so is what lets us state the
+open problem of Section 9 in an established language.
 
-**eBPF verification.** eBPF is our witness, not the theoretical source of the paper. The eBPF
-verifier and its abstract domains have been formalized and, in part, proved sound: PREVAIL uses
-abstract interpretation with a chosen numeric domain [12], and the tnum domain used in the
-kernel has a machine-checked soundness proof [13]. This line is about proving the verifier
-correct for safety. Our result is compatible with and depends on that correctness: the verifier
-recognizes a safety language, and the weird machine lives in residual semantics left after that
-recognition succeeds. Systems such as MOAT isolate potentially malicious BPF programs using
-Intel MPK [28]. That line is complementary: MOAT hardens execution after verifier acceptance,
-whereas our question is what residual semantic language remains interpreted yet unrecognized
-inside accepted programs.
+**eBPF verification.** The eBPF verifier and its abstract domains have been formalized and, in
+part, proved sound: PREVAIL uses abstract interpretation with a chosen numeric domain [12], and
+the tnum domain used in the kernel has a machine-checked soundness proof [13]. This line is
+about proving the verifier *correct*. Our result is compatible with and depends on that
+correctness: the verifier is sound, and the weird machine lives in its *designed
+incompleteness*, not in any unsound step.
+
+---
 
 # 9. Outlook: from witnesses to a structural theorem
 
-The Residual-Language Weird Machine theorem pair in Section 5 is conditional: it assumes an
-exploitable residual transducer basis inside an accepted language, and opacity additionally
-requires gate-opacity rather than recognizer-visible shadow logic. In this paper those hypotheses
-are instantiated constructively in eBPF; the structurally different interval-analysis witness
-supports the recognizer-side claim that the pattern tracks sound-but-incomplete abstraction. The
-foundational target is stronger: characterize when a sound recognizer necessarily leaves a
-program-visible residual semantic language, and when that language is necessarily exploitable. We
-do **not** claim to have completed that step here.
+The Opacity Theorem in Section 5 is already a theorem, but it is conditional: it assumes an
+*exploitable gap*. In this paper that hypothesis is established constructively, first in eBPF and
+then in a structurally different interval-analysis witness. The foundational target is stronger:
+turn the statement "an abstraction-layer gap yields a programmable weird machine" into a theorem
+with explicit boundary conditions. We do **not** claim to have completed that step here.
 
 The open problem has two halves.
 
-## 9.1 Which recognizer abstractions necessarily admit residual languages?
+## 9.1 Which abstractions necessarily admit a channel?
 
-The recognizer-side question is naturally a completeness question. In abstract-interpretation
-terms, a residual semantic language appears when an operation's concrete result depends on a
-state component that `α` quotients away, yet the result remains visible to the accepted program.
-That is a failure of completeness for a program-visible operation: `α` is sound for the safety
-property it certifies, but incomplete for the semantic distinction later interpreted by the
-runtime. The mature theory of complete shells, complete cores, local completeness, and measured
-incompleteness [2], [3], [4], [17] is therefore the right mathematical setting for the next
-step.
+The abstraction-side question is naturally a completeness question. In the terminology of
+abstract interpretation, a `⊤`-channel appears when an operation's concrete result depends on a
+state component that the abstraction `α` quotients away. This resembles failure of completeness:
+`α` is sound for the safety property it certifies, but incomplete for the operation whose result
+is later observed by the program. The mature theory of complete shells, complete cores, and local
+completeness [2], [3], [4], [17] is therefore the right mathematical setting for the next step.
 
-A plausible theorem would characterize a class of recognizers, abstractions, and concrete
-interpreters such that:
+A plausible theorem would characterize a class of sound abstractions and toolkits such that:
 
 1. `α` erases a concrete residual component `φ`;
-2. some accepted operation `op` has a program-visible output whose concrete value is
-   non-constant across an `α`-fiber varying only in `φ`;
-3. the abstract transfer for `op` must over-approximate those concrete outcomes by an abstract
-   value that cannot decide the readout predicate `ψ`; and
-4. accepted operations can route that value into later computation.
+2. some program-constructible operation `op` has an output whose concrete value is non-constant
+   across an `α`-fiber varying only in `φ`;
+3. the abstract transfer for `op` must over-approximate those concrete outcomes by a top or
+   top-like value at a program-visible location; and
+4. the program can route that location into later computation.
 
 The eBPF map-occupancy witness instantiates this shape with `φ = c(G)` and `op =
 bpf_map_update_elem`; the interval witness instantiates it with a congruence component erased by
 intervals. What remains is to state the class of abstractions for which this implication is not
-just observed by instance but guaranteed by the structure of `α`, `op`, and the accepted toolkit.
+just observed by instance but guaranteed by the structure of `α` and `op`.
 
-## 9.2 When is the residual language exploitable?
+## 9.2 When is the channel exploitable?
 
-A residual language is not yet a weird machine. It becomes programmable only when the toolkit can
+A bare channel is not yet a weird machine. It becomes programmable only when the toolkit can
 observe it, drive it with inputs, reset the underlying state, and compose independent uses. In a
 closed offline experiment, such as `BPF_PROG_TEST_RUN` with private maps, uncontrolled state is
 minimal; in a live system, scheduling, concurrency, shared maps, allocator state, or unrelated
@@ -863,10 +553,10 @@ condition, not merely reachability.
 
 Robust reachability [15], [16] is a promising language for this half of the problem: it asks
 whether a controlled choice reaches the desired branch for all uncontrolled choices. For this
-paper we use the simpler, empirical discipline: isolate the residual transducer, reset it before
-each gate, use private instances for composition, and validate the truth table exhaustively on
-the relevant finite domains. A full exploitability theorem would connect E1--E4 to a
-robust-reachability condition over the controlled/uncontrolled split of the host system.
+paper we use the simpler, empirical discipline: isolate the channel, reset it before each gate,
+use private instances for composition, and validate the truth table exhaustively on the relevant
+finite domains. A full exploitability theorem would connect E1--E4 to a robust-reachability
+condition over the controlled/uncontrolled split of the host system.
 
 ## 9.3 Why the second witness matters
 
@@ -874,47 +564,40 @@ The second witness is a down-payment on generality. It is deliberately unlike th
 its analyzer is join-based rather than path-sensitive, its residual state is a congruence rather
 than map occupancy, and its substrate is numeric arithmetic rather than kernel helper metadata.
 Yet the same pattern appears: the concrete program computes through state that the sound
-recognizer abstraction does not represent, and the certified output abstraction is the full
-Boolean range (a literal join-top result for the interval witness). This supports the hypothesis
-that the phenomenon tracks sound-but-incomplete recognition, not an eBPF-specific quirk.
+abstraction does not represent, and the certified output abstraction is top. This supports the
+hypothesis that the phenomenon tracks sound-but-incomplete abstraction, not an eBPF-specific
+quirk.
 
 Still, two witnesses are not a structural theorem. The durable contribution we target next is a
-framework in which one can read off, from `(V, I, α, Π)`, whether a recognizer leaves a
-program-visible residual semantic language and whether the accepted toolkit can operate it as a
-transducer. The present paper supplies the formal vocabulary, the conditional theorem, and a
-production-verifier witness; the complete boundary characterization remains future work.
+framework in which one can read off, from `(α, Π)`, whether a program-constructible `⊤`-channel
+must arise and whether it is necessarily exploitable. The present paper supplies the formal
+vocabulary, the conditional theorem, and the first production-verifier witness; the complete
+boundary characterization remains future work.
 
 # 10. Limitations
 
 The eBPF evidence is from one kernel and architecture, so portability across kernel versions,
 map implementations, and architectures remains to be established. Section 7 supplies a second
 analyzer witness, including Frama-C EVA, but that witness is empirical support rather than a
-complete structural characterization of all sound recognizers. The Residual-Language Weird
-Machine theorem pair characterizes a precise sub-notion--bounded programmable computation plus
-recognizer opacity under gate-opacity--not weird machines in general. E3 and E4 are construction conditions for bounded
-circuits, not claimed necessary features of every weird machine. The result is deliberately
-bounded and combinational, not Turing-complete. Finally, the boundary-condition theorem sketched
-in Section 9 remains future work: deciding when an arbitrary `(V, I, α, Π)` tuple necessarily
-admits an exploitable residual semantic language is richer than this paper solves.
+complete structural characterization of all sound abstractions. The Opacity Theorem characterizes
+a precise sub-notion, opaque *programmable* computation, not weird machines in general; E3 and E4
+are construction conditions for bounded circuits, not claimed necessary features of every weird
+machine. The result is deliberately bounded and combinational, not Turing-complete. Finally, the
+boundary-condition theorem sketched in Section 9 remains future work: deciding when an arbitrary
+`(α, Π)` pair necessarily admits an exploitable `⊤`-channel is a richer problem than this paper
+solves.
 
 # 11. Conclusion
 
-LangSec teaches that security boundaries are language boundaries. This paper shows that the
-same lesson applies to sound program verifiers: recognizing a safety language does not by itself
-recognize every semantic language interpreted by the concrete runtime. A verifier can be correct
-about safety while accepted programs still operate a residual semantic language that the
-recognizer abstraction collapses.
-
-We formalized that residual language, stated a residual-language weird-machine theorem pair, and
-instantiated its hypotheses in eBPF with verifier-accepted, memory-safe, bounded witnesses that do
-not rely on any known verifier unsoundness, memory corruption, or privilege-escalation bug. The
-witness implements NAND as a residual finite-state transducer over map occupancy and helper
-return symbols, then composes it into representative bounded circuits following the program-family
-construction. The result is not that eBPF has a trick; it is that safe recognition is not semantic
-recognition. When residual semantics are controllable, observable, resettable, composable, and
-expressive enough to supply a reusable transducer basis, they form a weird machine inside the
-accepted language; when the schedule is locally gate-opaque, that computation is hidden from the
-recognizer's certified relations in the chosen vocabulary `Q`.
+Weird machines are usually paid for with a bug. We showed they can also be paid for with
+soundness: a verifier that is correct about safety and, by design, silent about semantics hosts
+a programmable computation it cannot see, with no vulnerability involved. The condition splits
+cleanly into incompleteness of the abstraction and expressibility of the toolkit, and when the
+induced gate is functionally complete the invisible computation extends to arbitrary bounded
+circuits. Our eBPF witness makes this concrete and machine-checkable in a production verifier,
+and the completeness-theoretic framing turns the phenomenon from a single instance into a
+boundary-condition research program that other sound analyzers can be tested against. The gap is not a
+bug to be fixed; it is the shape of soundness itself, and it is programmable.
 
 ---
 
@@ -931,10 +614,11 @@ analyzer designers can reason about it.
 disassembly, and exhaustive result datasets are in the accompanying repository and are
 regenerated by a single command.
 
-**Submission disclosure note.** If the target venue requires AI-use reporting, disclose in the
-submission metadata or cover letter that an AI writing pipeline assisted with structuring,
-drafting, and literature positioning. The authors remain responsible for all technical claims,
-the artifact, the formal statements, and final bibliographic verification.
+**AI-usage disclosure.** This draft was prepared with the assistance of an AI writing pipeline
+for structuring, drafting, and literature positioning; all technical claims, the artifact, and
+the formal statements originate with the authors, and all citations were checked to correspond
+to real works. Final bibliographic metadata should be verified against the publisher records
+before submission.
 
 **Conflicts of interest.** None declared.
 
@@ -943,110 +627,78 @@ the artifact, the formal statements, and final bibliographic verification.
 ## References
 
 [1] P. Cousot and R. Cousot, "Abstract interpretation: a unified lattice model for static
-analysis of programs by construction or approximation of fixpoints," in *Proceedings of the 4th
-ACM SIGACT-SIGPLAN Symposium on Principles of Programming Languages (POPL '77)*, pp. 238-252,
-1977, doi:10.1145/512950.512973.
+analysis of programs by construction or approximation of fixpoints," in *POPL*, 1977.
 
 [2] R. Giacobazzi, F. Ranzato, and F. Scozzari, "Making abstract interpretations complete,"
-*Journal of the ACM*, vol. 47, no. 2, pp. 361-416, 2000, doi:10.1145/333979.333989.
+*Journal of the ACM*, vol. 47, no. 2, pp. 361–416, 2000.
 
 [3] R. Bruni, R. Giacobazzi, R. Gori, and F. Ranzato, "A logic for locally complete abstract
-interpretations," in *2021 36th Annual ACM/IEEE Symposium on Logic in Computer Science (LICS)*,
-pp. 1-13, 2021, doi:10.1109/LICS52264.2021.9470608.
+interpretations," in *LICS*, 2021 (Distinguished Paper).
 
-[4] M. Campion, M. Dalla Preda, and R. Giacobazzi, "Partial (in)completeness in abstract
-interpretation: limiting the imprecision in program analysis," *Proceedings of the ACM on
-Programming Languages*, vol. 6, no. POPL, pp. 1-31, 2022, doi:10.1145/3498721.
+[4] R. Bruni, R. Giacobazzi, R. Gori, and F. Ranzato, "Partial (in)completeness in abstract
+interpretation: limiting the imprecision in program analysis," *Proc. ACM Program. Lang.*, vol. 6,
+no. POPL, 2022.
 
 [5] S. Bratus, M. E. Locasto, M. L. Patterson, L. Sassaman, and A. Shubina, "Exploit
 programming: from buffer overflows to weird machines and theory of computation," *USENIX
-;login:*, vol. 36, no. 6, pp. 13-21, 2011.
+;login:*, 2011.
 
-[6] J. Bangert, S. Bratus, R. Shapiro, and S. W. Smith, "The Page-Fault Weird Machine: Lessons
-in Instruction-less Computation," in *7th USENIX Workshop on Offensive Technologies (WOOT 13)*,
-Washington, DC, USA, Aug. 2013.
+[6] J. Bangert, S. Bratus, R. Shapiro, and S. W. Smith, "The page-fault weird machine: lessons
+in instruction-less computation," in *USENIX WOOT*, 2013.
 
-[7] R. Shapiro, S. Bratus, and S. W. Smith, "'Weird Machines' in ELF: A Spotlight on the
-Underappreciated Metadata," in *7th USENIX Workshop on Offensive Technologies (WOOT 13)*,
-Washington, DC, USA, Aug. 2013.
+[7] R. Shapiro, S. Bratus, and S. W. Smith, "'Weird machines' in ELF: a spotlight on the
+underappreciated metadata," in *USENIX WOOT*, 2013.
 
-[8] J. Vanegue, "The Weird Machines in Proof-Carrying Code," in *2014 IEEE Security and Privacy
-Workshops*, pp. 209-213, 2014, doi:10.1109/SPW.2014.37.
+[8] J. Vanegue, "The weird machines in proof-carrying code," in *IEEE Security and Privacy
+Workshops (LangSec)*, 2014, doi:10.1109/SPW.2014.37.
 
 [9] T. Dullien, "Weird machines, exploitability, and provable unexploitability," *IEEE
-Transactions on Emerging Topics in Computing*, vol. 8, no. 2, pp. 391-403, 2020,
+Transactions on Emerging Topics in Computing*, vol. 8, no. 2, pp. 391–403, 2020,
 doi:10.1109/TETC.2017.2785299.
 
 [10] J. Paykin, E. Mertens, M. Tullsen, L. Maurer, B. Razet, A. Bakst, and S. Moore, "Weird
-Machines as Insecure Compilation," arXiv:1911.00157, 2019.
+machines as insecure compilation," *arXiv:1911.00157*, 2019.
 
-[11] J. Vanegue, "Adversarial Logic," in *Static Analysis*, LNCS 13790, pp. 422-448, Springer,
-2022, doi:10.1007/978-3-031-22308-2_19.
+[11] J. Vanegue, "Adversarial logic," in *Static Analysis Symposium (SAS)*, LNCS 13790, 2022,
+doi:10.1007/978-3-031-22308-2_19.
 
-[12] E. Gershuni, N. Amit, A. Gurfinkel, N. Narodytska, J. A. Navas, N. Rinetzky, L. Ryzhyk, and
-M. Sagiv, "Simple and precise static analysis of untrusted Linux kernel extensions," in
-*Proceedings of the 40th ACM SIGPLAN Conference on Programming Language Design and
-Implementation (PLDI '19)*, pp. 1069-1084, 2019, doi:10.1145/3314221.3314590.
+[12] E. Gershuni et al., "Simple and precise static analysis of untrusted Linux kernel
+extensions," in *PLDI*, 2019.
 
 [13] H. Vishwanathan, M. Shachnai, S. Narayana, and S. Nagarakatte, "Sound, precise, and fast
-abstract interpretation with tristate numbers," in *2022 IEEE/ACM International Symposium on
-Code Generation and Optimization (CGO)*, pp. 254-265, 2022, doi:10.1109/CGO53902.2022.9741267.
+abstract interpretation with tristate numbers," in *CGO*, 2022, arXiv:2105.05398.
 
-[14] J. Jia, R. Qin, M. Craun, E. Lukiyanov, A. Bansal, M. V. Le, H. Franke, H. Jamjoom,
-T. Xu, and D. Williams, "Safe and usable kernel extensions with Rax," arXiv:2502.18832, 2025.
+[14] (Survey) "The eBPF runtime in the Linux kernel," *arXiv:2410.00026*, 2024.
 
-[15] G. Girol, B. Farinier, and S. Bardin, "Not All Bugs Are Created Equal, But Robust
-Reachability Can Tell the Difference," in *Computer Aided Verification (CAV 2021)*, pp. 669-693,
-2021, doi:10.1007/978-3-030-81685-8_32.
+[15] G. Girol, B. Farinier, and S. Bardin, "Not all bugs are created equal, but robust
+reachability can tell the difference," in *CAV*, 2021.
 
-[16] Y. Sellami, G. Girol, F. Recoules, D. Couroussé, and S. Bardin, "Inference of Robust
-Reachability Constraints," *Proceedings of the ACM on Programming Languages*, vol. 8, no. POPL,
-pp. 2731-2760, 2024, doi:10.1145/3632933.
+[16] Y. Sellami, G. Girol, and S. Bardin, "Inference of robust reachability constraints," *Proc.
+ACM Program. Lang.*, vol. 8, no. POPL, pp. 2731–2760, 2024.
 
-[17] M. Campion, C. Urban, M. Dalla Preda, and R. Giacobazzi, "A Formal Framework to Measure the
-Incompleteness of Abstract Interpretations," in *Static Analysis*, LNCS 14284, pp. 114-138,
-Springer, 2023, doi:10.1007/978-3-031-44245-2_7.
+[17] M. Campion, C. Urban, M. Dalla Preda, and R. Giacobazzi, "A formal framework to measure the
+incompleteness of abstract interpretations," in *SAS*, LNCS 14284, pp. 114–138, 2023,
+doi:10.1007/978-3-031-44245-2_7.
+
+
 
 [18] F. Kirchner, N. Kosmatov, V. Prevosto, J. Signoles, and B. Yakobowski, "Frama-C: A software
-analysis perspective," *Formal Aspects of Computing*, vol. 27, no. 3, pp. 573-609, 2015,
-doi:10.1007/s00165-014-0326-7.
+analysis perspective," *Formal Aspects of Computing*, vol. 27, no. 3, pp. 573–609, 2015. (EVA
+value-analysis plug-in.)
 
-[19] S. Bratus, J. Bangert, A. Gabrovsky, A. Shubina, M. E. Locasto, and D. Bilar, "'Weird
-Machine' Patterns," in *Cyberpatterns*, C. Blackwell and H. Zhu, Eds., pp. 157-171, Springer,
-2014, doi:10.1007/978-3-319-04447-7_13.
+[19] S. Bratus et al., "'Weird machine' patterns," in *Software Engineering for Resilient
+Systems*, LNCS 8166, 2014, doi:10.1007/978-3-319-04447-7_13.
 
-[20] P. Anantharaman, V. Kothari, J. P. Brady, I. R. Jenkins, S. Ali, M. C. Millian, R. Koppel,
-J. Blythe, S. Bratus, and S. W. Smith, "Mismorphism: The Heart of the Weird Machine," in
-*Security Protocols XXVII*, LNCS 12287, pp. 113-124, Springer, 2020,
-doi:10.1007/978-3-030-57043-9_11.
+[20] P. Anantharaman et al., "Mismorphism: The heart of the weird machine," in *Foundations and
+Practice of Security*, LNCS 12056, 2020, doi:10.1007/978-3-030-57043-9_11.
 
-[21] D. Evtyushkin, T. Benjamin, J. Elwell, J. A. Eitel, A. Sapello, and A. Ghosh, "Computing
-with time: microarchitectural weird machines," in *Proceedings of the 26th ACM International
-Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS
-'21)*, pp. 758-772, 2021, doi:10.1145/3445814.3446729.
+[21] D. Evtyushkin et al., "Computing with time: microarchitectural weird machines," in *ASPLOS
+Workshop on Hardware and Architectural Support for Security and Privacy*, 2021,
+doi:10.1145/3445814.3446729.
 
 [22] P.-L. Wang, F. Brown, and R. S. Wahby, "The ghost is the machine: Weird machines in
-transient execution," in *2023 IEEE Security and Privacy Workshops (SPW)*, pp. 264-272, 2023,
+transient execution," in *IEEE Security and Privacy Workshops*, 2023,
 doi:10.1109/SPW59333.2023.00029.
 
-[23] M. Levy and F. Maldonado, "Attack Surface Measurement: A Weird Machines Perspective," in
-*European Interdisciplinary Cybersecurity Conference (EICC 2024)*, pp. 90-94, 2024,
-doi:10.1145/3655693.3655705.
-
-[24] L. Sassaman, M. L. Patterson, S. Bratus, and M. E. Locasto, "Security Applications of
-Formal Language Theory," *IEEE Systems Journal*, vol. 7, no. 3, pp. 489-500, 2013,
-doi:10.1109/JSYST.2012.2222000.
-
-[25] F. Momot, S. Bratus, S. M. Hallberg, and M. L. Patterson, "The Seven Turrets of Babel: A
-Taxonomy of LangSec Errors and How to Expunge Them," in *2016 IEEE Cybersecurity Development
-(SecDev)*, pp. 45-52, 2016, doi:10.1109/SecDev.2016.019.
-
-[26] L. Sassaman, M. L. Patterson, and S. Bratus, "A Patch for Postel's Robustness Principle,"
-*IEEE Security & Privacy*, vol. 10, no. 2, pp. 87-91, 2012, doi:10.1109/MSP.2012.31.
-
-[27] S. Ali, P. Anantharaman, Z. Lucas, and S. W. Smith, "What We Have Here Is Failure to
-Validate: Summer of LangSec," *IEEE Security & Privacy*, vol. 19, no. 3, pp. 17-23, 2021,
-doi:10.1109/MSEC.2021.3059167.
-
-[28] H. Lu, S. Wang, Y. Wu, W. He, and F. Zhang, "MOAT: Towards Safe BPF Kernel Extension,"
-arXiv:2301.13421v3, 2024.
+[23] M. L. Levy and F. Maldonado, "Attack surface measurement: A weird machines perspective,"
+in *Cyber Security Experimentation and Test Workshop*, 2024, doi:10.1145/3655693.3655705.

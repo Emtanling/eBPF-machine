@@ -1,18 +1,9 @@
-# Peer Review — "Residual Semantic Languages and the eBPF Weird-Machine Witness"
+# Peer Review — "eBPF Weird Machine: Abstraction-Gap Witness and Opacity Theorem"
 
 Simulated multi-perspective review (academic-paper-reviewer, full mode). Reviewed
 materials: `ARTIFACT.md` (Claims + Appendix A.1–A.10), `results/abstraction_gap_witness.md`,
 `results/exploitable_gap.md`, `README.md`, `ETHICS.md`. Read-only: this is a separate
 document; the manuscript was not modified.
-
-**Revision status, 2026-07-07:** this remains the original simulated review record. The current
-`PAPER_DRAFT.md` addresses the listed blockers by adding related work/references, defining
-A-opacity through certified input-output relations rather than a path-sensitive `⊤` cell, and
-restating the theorem as a program-family result. **LangSec-target update:** the draft now leads
-with the recognizer/runtime language-boundary claim, adds Figure 1, and treats the theorem as a
-sufficient condition for residual weird machines inside a recognized safety language. Use the issue
-list below as historical review context and a re-review checklist, not as the current state of the
-manuscript.
 
 ---
 
@@ -21,7 +12,7 @@ manuscript.
 - **Primary field:** systems security / language-theoretic security (weird machines, LangSec).
 - **Secondary field:** programming languages — abstract interpretation, soundness vs.
   completeness of static analysis.
-- **Paradigm:** constructive artifact + conditional theorem with artifact instantiation.
+- **Paradigm:** constructive artifact + conditional (hypothesis-discharged) theorem.
 - **Maturity:** *artifact* is strong and near-publishable; *theory wrapper* (A.9/A.10) is
   early-stage and currently un-situated.
 - **Realistic venue as-written:** LangSec/SPW workshop, or WOOT-class. **Venue the theory
@@ -34,11 +25,11 @@ manuscript.
 The core idea is genuinely novel in one specific, defensible way: it recasts the
 weird-machine phenomenon as **incompleteness of a sound static analysis**, makes it a
 **machine-checkable proposition** (A.9), and lifts it to a **conditional theorem** (A.10)
-with the eBPF hypotheses instantiated by a reproducible artifact. The engineering artifact
+with every hypothesis discharged by a reproducible instance. The engineering artifact
 (exhaustive truth tables, ablations, per-variant object-hash provenance, independent audit
 oracle) is above the bar for its field.
 
-At review time, three issues blocked acceptance *as a theory paper*:
+Three issues block acceptance *as a theory paper*:
 
 1. **No related work, no bibliography.** For a paper asserting a *theorem about weird
    machines*, omitting the closest prior art is disqualifying. (Blocker.)
@@ -68,8 +59,8 @@ result, only in how it is stated and situated.
   harness `passed` flag) are strong reproducibility practice.
 
 **Concerns.**
-- **M1 (mechanism precision — the −E2BIG story).** The claim that the second input-conditioned fresh-key update
-  returns a negative errno exactly at `max_entries` depends on map type. For
+- **M1 (mechanism precision — the −E2BIG story).** The claim that the third distinct-key
+  insert returns `−E2BIG` exactly at `max_entries` depends on map type. For
   `BPF_MAP_TYPE_HASH` with prealloc, the kernel reserves per-CPU *extra elements*; the
   effective capacity can exceed `max_entries` and be allocation/CPU-order sensitive. State
   explicitly: (a) prealloc vs. `BPF_F_NO_PREALLOC`, (b) that runs are single-CPU offline
@@ -102,7 +93,7 @@ delta you should claim over each:
   model / machine abstraction / formal system, and the line "any used abstraction is the
   opportunity for an attacker to introduce uncaptured computations." **Your contribution over
   Vanegue is precisely that you make it (a) machine-checkable (A.9) and (b) a conditional
-  theorem with an artifact-instantiated basis (A.10).** Cite him and sharpen that delta — it
+  theorem with a discharged instance (A.10).** Cite him and sharpen that delta — it
   *strengthens* your novelty claim. Omit him and a domain reviewer rejects on prior art.
 - **Dullien (2020), "Weird Machines, Exploitability, and Provable Unexploitability," IEEE
   TETC 8(2).** The foundational finite-state/transducer model. Your "opacity" is a *different
@@ -130,7 +121,7 @@ delta you should claim over each:
     Interpretation with Tristate Numbers," CGO** — the *formal spec + soundness proof of the
     tnum domain* you invoke in A.9. You describe the scalar lattice as "a tnum refined by
     interval bounds"; cite the paper that formalizes it.
-  - MOAT (Lu et al., arXiv:2301.13421) as complementary BPF hardening work: it isolates accepted BPF programs, while this paper studies residual semantics inside accepted programs.
+  - The eBPF-runtime survey (arXiv:2410.00026) for verifier background.
 
 **Domain contribution:** real, but **currently un-situated and therefore unverifiable by a
 reviewer.** With the six citations above and the deltas made explicit, the contribution
@@ -147,7 +138,7 @@ instance" into a theorem.
 
 - **Giacobazzi, Ranzato, Scozzari (2000), "Making Abstract Interpretations Complete," JACM
   47(2).** An abstraction α is *complete* for a concrete operation f iff `α∘f = α∘f∘γ∘α`.
-  An **abstractly unresolved readout channel at `op` is definitionally a point where α is incomplete for `op`** relative to
+  A **⊤-channel at `op` is definitionally a point where α is incomplete for `op`** relative to
   the concrete component φ: your (g1) says the concrete transfer depends on φ, your (g2) says
   α collapses it — that is exactly the failure of the completeness equation at that point.
   GRS give constructive *complete-shell / complete-core* characterizations of which domains
@@ -157,10 +148,10 @@ instance" into a theorem.
   Interpretations," LICS (Distinguished Paper).** *Local* completeness ties (in)completeness
   to specific inputs / program fragments and gives a proof system unifying correctness and
   incorrectness. **This is literally your "boundary conditions" calculus** — LCL is how you
-  state, per fragment, whether α is complete or admits a constructible abstractly unresolved readout channel.
+  state, per fragment, whether α is complete or admits a constructible ⊤-channel.
 - **Bruni et al. (2022), "Partial (In)Completeness in Abstract Interpretation," POPL /
-  PACMPL** and the **SAS 2023 "measuring incompleteness"** follow-ups — quantify *how much* an
-  abstractly unresolved readout channel leaks, which is the natural refinement of a binary "exploitable/not."
+  PACMPL** and the **SAS 2023 "measuring incompleteness"** follow-ups — quantify *how much* a
+  ⊤-channel leaks, which is the natural refinement of a binary "exploitable/not."
 
 **Scope discipline.** Outlook #2 (weird machines in the neural-semantic layer) is a genuinely
 interesting bet but a *separate paper*; keep it to one paragraph so it doesn't dilute the
@@ -188,7 +179,7 @@ the counter-argument and stops.
   about the *join / reachable-value set*, not a single ⊤ cell. For a join-based interpreter
   (intervals, tnum-with-join) the ⊤-cell statement is literally true; for the path-sensitive
   eBPF verifier it must be restated. As written, Theorem 5's opacity invariant assumes the
-  join-based reading while the eBPF instance (A.9) is path-sensitive. **Fix:** define
+  join-based reading while the discharging instance (A.9) is path-sensitive. **Fix:** define
   A-opacity in terms of the analysis's *certified output abstraction* (the join over reachable
   paths / the analysis's post-condition), and show both models satisfy it. This is also what
   makes goal #1 tractable — the incompleteness framing is cleanest for join-based α.
@@ -235,17 +226,17 @@ wrapper. Priority order:
 
 ---
 
-## On goal #1 — turning the Residual-Language Weird Machine Theorem into a theorem with boundary conditions
+## On goal #1 — turning the Opacity Theorem into a theorem with boundary conditions
 
 The durable, citable version is a **completeness-theoretic** theorem, with eBPF as the
-artifact-instantiated instance and the *framework* as the contribution:
+discharged instance and the *framework* as the contribution:
 
-**Definition (constructible abstractly unresolved readout channel).** For toolkit Π and sound abstraction α, α admits a
-constructible abstractly unresolved readout channel iff ∃ `op ∈ Π` and concrete component φ such that α is **incomplete**
+**Definition (constructible ⊤-channel).** For toolkit Π and sound abstraction α, α admits a
+constructible ⊤-channel iff ∃ `op ∈ Π` and concrete component φ such that α is **incomplete**
 for `op` at φ in the GRS sense (`α∘⟦op⟧ ⊐ α∘⟦op⟧∘γ∘α` there). *(This subsumes your Def. 1.)*
 
 **Necessity (which α necessarily admit one).** Any sound α that fails to be forward-complete
-for some input-controllable `op ∈ Π` admits a constructible abstractly unresolved readout channel. **Completeness is the
+for some input-controllable `op ∈ Π` admits a constructible ⊤-channel. **Completeness is the
 exact boundary:** complete-for-Π ⇒ no channel; incomplete-at-a-reachable-op ⇒ channel. GRS's
 complete-shell/core constructions characterize the boundary constructively.
 

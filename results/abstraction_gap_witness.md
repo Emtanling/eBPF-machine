@@ -1,130 +1,133 @@
-# Formal Witness — Occupancy Yields an Abstractly Unresolved Readout
+# Formal Witness — the verifier quotients hash-map occupancy to ⊤
 
 This note turns the informal claim "the eBPF verifier does not model the state
-that carries the residual computation" into a precise, machine-checkable
-proposition about the verifier's abstract semantics. It grounds the claim in the
-exact abstract-domain facts recorded in `results/nand.verifier.log`.
-
-The witness is not a verifier bug. The verifier remains sound for its safety
-property. The point is narrower: one helper readout depends on concrete map
-occupancy, while the verifier abstraction has no occupancy component and leaves
-the readout predicate undecided.
+that carries the weird machine's computation" into a precise, machine-checkable
+proposition about the verifier's abstract semantics, and grounds it in the exact
+abstract-domain facts recorded in `results/nand.verifier.log`. It is the formal
+bridge between the concrete PoC (Appendix A.4/A.7) and the abstraction-gap
+thesis: it exhibits, at one program point, a transfer function whose concrete
+output depends on state that the abstraction collapses to ⊤.
 
 ## 1. Notation
 
-- Concrete states `σ in Σ` include, for each hash map `M`, its live-entry count
-  `c(σ, M)` with `0 <= c(σ, M) <= max_entries(M)`.
+- Concrete states `σ ∈ Σ` include, for each hash map `M`, its live-entry count
+  (occupancy) `c(σ, M)` with `0 ≤ c(σ, M) ≤ max_entries(M)`.
 - The verifier is a sound-for-safety abstract interpreter with abstract domain
-  `A` over registers and stack slots. Its scalar facts are tnum known-bits plus
-  signed/unsigned bounds; an unconstrained integer helper return is printed as
-  `scalar()` in the verifier log.
-- The abstraction represents each map's identity and static attributes (type,
-  key/value size, `max_entries`) but has no component for dynamic occupancy or
-  the concrete key set. Thus if two states agree on registers, stack facts,
-  static map attributes, and the key argument, while differing only in dynamic
-  map contents erased by the verifier, we write `σ0 ≡_α σ1` for that verifier
-  frontier.
+  `𝒜` (per-register/stack types: pointers, `map_value`, and scalars). Its scalar
+  lattice is a tnum (known-bits) refined by signed/unsigned interval bounds; its
+  top element is `⊤ = scalar()` (unknown bits, full range). Write `α : Σ → 𝒜`
+  and `γ : 𝒜 → ℘(Σ)` for the abstraction/concretization pair modelling the
+  analysis; soundness means `σ ∈ γ(α(σ))` and each transfer over-approximates.
+- Crucially, `𝒜` represents each map's *identity* and *static* attributes
+  (type, key/value size, `max_entries`) but has **no component for the dynamic
+  occupancy `c(σ, M)`**. Hence `α` is constant in `c`: if `σ0, σ1` differ only in
+  `c(·, M)`, then `α(σ0) = α(σ1)`.
 
-## 2. Concrete and Abstract Map-Update Readout
+## 2. The map-update transfer — concrete vs abstract
 
-Consider `r0 := bpf_map_update_elem(M, k, v, BPF_ANY)` with a fresh key `k`.
-For a preallocated, non-LRU `BPF_MAP_TYPE_HASH` map, the tested kernel returns
-`0` and inserts the key when capacity remains; when the map is full, it returns a
-negative error code (observed as `-E2BIG`) and leaves occupancy unchanged.
+Consider the instruction `r0 := bpf_map_update_elem(M, k, v, BPF_ANY)` with a key
+`k` not currently present in `M` (a fresh key). The kernel's concrete transfer
+`T` is:
 
-The concrete readout predicate is
+    T(σ)(r0) = 0                         and  c ↦ c+1     if c(σ, M) < max_entries(M)
+    T(σ)(r0) = -E2BIG (= -7)             and  c unchanged  if c(σ, M) = max_entries(M)
 
-```text
-ψ(r0) = [r0 == 0].
-```
+So the concrete post-value of `r0` is a **non-constant function of occupancy**:
+`[T(σ)(r0) = 0] ⇔ c(σ, M) < max_entries(M)`.
 
-For states below capacity and at capacity, `ψ` differs. The verifier's abstract
-transfer, however, is fixed by the helper prototype `RET_INTEGER`: the return is
-an unconstrained scalar. Since occupancy is absent from the abstraction, the
-abstract state cannot decide `ψ(r0)`.
+The verifier's abstract transfer `T#` for the same instruction is fixed by the
+helper's return prototype `bpf_map_update_elem.ret_type = RET_INTEGER`, which the
+scalar domain models as the top scalar:
 
-## 3. Proposition
+    T#(a)(r0) = ⊤ = scalar()             for every abstract state a, independent of a.
 
-> Let `σ0, σ1` be reachable pre-states of the final input-conditioned map update
-> in the NAND gate at the same verifier frontier. Registers, stack facts, static
-> map attributes, and the key argument agree; the key is fresh in both states;
-> one state has capacity remaining and the other is full. Their concrete key sets
-> and occupancy may differ, but only in dynamic map components erased by the
-> verifier abstraction. Then:
+## 3. Proposition (occupancy is quotiented to ⊤)
+
+> Let `σ0, σ1 ∈ Σ` be two pre-states of the third gate insert that are identical
+> except `c(σ0, G0) = max_entries − 1` and `c(σ1, G0) = max_entries` (so the fresh-key
+> insert succeeds from `σ0` and fails from `σ1`). Then
 >
-> 1. `σ0 ≡_α σ1` for the verifier-visible facts.
-> 2. Concrete execution separates them: one readout satisfies `ψ(r0)`, the other
->    does not.
-> 3. The verifier transfer maps both helper returns to an unconstrained scalar,
->    so it cannot decide `ψ(r0)`.
+> 1. **α agrees:** `α(σ0) = α(σ1)` — occupancy is unrepresented in `𝒜` (§1).
+> 2. **T separates:** `T(σ0)(r0) = 0 ≠ -E2BIG = T(σ1)(r0)` — the concrete post-states
+>    differ in exactly the bit `[r0 = 0]`.
+> 3. **T# collapses:** `T#(α(σ0))(r0) = T#(α(σ1))(r0) = scalar() = ⊤`.
 >
-> Therefore map occupancy yields an abstractly unresolved readout channel.
+> Therefore `T#` is **non-injective on the classes that `T` separates**: the one
+> bit `[r0 = 0]` that distinguishes the two concrete outcomes is mapped by the
+> abstraction into a single ⊤ cell.
 
-*Proof.* Item 1 follows from the absence of dynamic occupancy and key-set facts
-in the verifier abstract domain at this helper boundary. Item 2 is the concrete
-hash-map update semantics for a fresh key below capacity versus at capacity. Item
-3 follows from the helper return prototype and is visible in the verifier log as
-`R0=scalar()`. Thus a concrete distinction interpreted by the runtime and read by
-the program is not recognized by the verifier abstraction. ∎
+*Proof.* (1) is §1's constancy of `α` in `c`. (2) is the definition of `T` in §2
+with the chosen occupancies. (3) is the definition of `T#` in §2, which is a
+constant function returning ⊤. Combining, `α(σ0)=α(σ1)` forces
+`T#(α(σ0))=T#(α(σ1))`, while `T(σ0)` and `T(σ1)` disagree on `r0`. ∎
 
-## 4. Corollary — The Gate Output Is Not Recognized
+## 4. Corollary — the gate output is abstraction-unrepresentable
 
-The NAND gate writes `out = [r2 == 0]` to `TAPE[IDX_NAND_OUT]`, where `r2` is the
-return of the second input-conditioned update `op_b` after sentinel setup. By the
-Proposition, the truth of this predicate is a function of occupancy at that
-operation, and the verifier cannot decide it without an occupancy component.
+The NAND gate writes `out = [r0₃ = 0]` to `TAPE[IDX_NAND_OUT]`, where `r0₃` is the
+return of the **third** insert. By the Proposition, `out` is a total function of
+`c(G0)` at that insert, and that argument is ⊤ in `𝒜`. Hence **no sound
+strengthening of the reachable abstract state can predict `out` without extending
+`𝒜` with a map-occupancy component.** The verifier's own search confirms it: at
+the output branch it cannot resolve the guard and must fork, so *both* truth
+values are abstractly reachable (see the two out-edges in §5).
 
-The verifier's own search confirms this. At the output branch, it cannot resolve
-`r6 == 0` and explores both successors, so both truth values are abstractly
-reachable.
+## 5. Empirical witness — verbatim from `results/nand.verifier.log`
 
-## 5. Empirical Witness — Verbatim From `results/nand.verifier.log`
+Within `wm_nand` (verifier trace, lines 529–739), the three gate inserts and the
+output decision appear as follows. Every `bpf_map_update_elem` return is the top
+scalar; the third one flows into the output register `r6`, which the verifier
+then cannot resolve:
 
-Within `wm_nand` (verifier trace, lines 529-739), the setup update, the two
-input-conditioned updates, and the output decision appear as follows. The final
-input-conditioned update's return flows into `r6`, which the verifier then cannot
-resolve:
-
-```text
- 50: (85) call bpf_map_update_elem#2   ; R0=scalar()                       # sentinel setup
- 64: (85) call bpf_map_update_elem#2   ; R0_w=scalar()                     # first input update
- 78: (85) call bpf_map_update_elem#2   ; R0=scalar()                       # second input update, readout source
- 79: (bf) r6 = r0                       ; R0=scalar(id=3) R6_w=scalar(id=3) # readout register
-104: (15) if r6 == 0x0 goto pc+1        ; R6=scalar(id=3,umin=1)           # predicate unresolved; verifier forks
+```
+ 50: (85) call bpf_map_update_elem#2   ; R0=scalar()                       # insert 1 (sentinel S)
+ 64: (85) call bpf_map_update_elem#2   ; R0_w=scalar()                     # insert 2 (key from A)
+ 78: (85) call bpf_map_update_elem#2   ; R0=scalar()                       # insert 3 (key from B) — capacity probe
+ 79: (bf) r6 = r0                       ; R0=scalar(id=3) R6_w=scalar(id=3) # output reg = ⊤ (no bounds)
+104: (15) if r6 == 0x0 goto pc+1        ; R6=scalar(id=3,umin=1)           # output decision over ⊤ — verifier forks
 ```
 
-Both successors of the output branch are explored:
+Both successors of the output branch are explored (occupancy could not decide it):
 
-```text
-from 104 to 106: R0=scalar() R1_w=1 R6=0    R7=scalar(umin=1) ...          # r6 == 0 branch  => out = 1
-        ...        R0=scalar() ...     R6=scalar(id=3) ...                 # r6 != 0 branch  => out = 0
+```
+from 104 to 106: R0=scalar() R1_w=1 R6=0    R7=scalar(umin=1) …            # r6 == 0 branch  ⇒ out = 1
+        …        R0=scalar() …     R6=scalar(id=3) …                        # r6 != 0 branch  ⇒ out = 0
 ```
 
-Instruction-number correspondence to the xlated listing (post-verification
-renumbering):
+`R0=scalar()` / `R6=scalar(id=3)` printed with no `smin/smax/var_off` is the top
+scalar: unknown bits, full range. The gate's truth value is therefore carried by
+a register the abstraction holds at ⊤ from insert until the branch.
 
-| role | verifier insn | xlated insn |
+Instruction-number correspondence to the xlated listing (Appendix A.7), which is
+renumbered post-verification:
+
+| role | verifier insn (this log) | xlated insn (A.7) |
 |---|---|---|
-| final input-conditioned update | 78 | 90 |
-| capture readout register `r6 = r0` | 79 | 91 |
+| 3rd insert (capacity probe) | 78 | 90 |
+| capture output register `r6 = r0` | 79 | 91 |
 | output decision `if r6 == 0` | 104 | 122 |
 | store `out` to `TAPE[IDX_NAND_OUT]` | 114 | 132 |
 
-## 6. What This Licenses
+## 6. What this licenses
 
-The proposition makes the abstraction-layer gap precise at this program point:
-a concrete transfer exposes a readout predicate that depends on a concrete state
-component erased by `α`. It is an existence witness, not a universal theorem.
+The Proposition makes "abstraction-layer gap" precise *at this point* as: **a
+program point whose concrete transfer output is a non-constant function of a
+concrete-state component that `α` maps to a single ⊤ cell.** This is an
+existence witness (∃), not a universal theorem — but it is now a machine-checkable
+one, and it is sound-for-safety by construction: the verifier remains correct
+about everything it *claims* (memory safety, bounded termination); the gap lies
+entirely in semantics it never claims. That is the designed incompleteness of a
+sound abstraction, not a bug.
 
-The witness also isolates what makes the readout programmable in this artifact:
+The witness also isolates what makes the ⊤-bit *programmable*, i.e. the extra
+conditions beyond "a gap exists":
 
-- **observable**: the helper return is copied to `r6` and branched on;
-- **input-controlled**: input bits select whether the operation targets the
-  sentinel or a fresh key;
-- **resettable**: `bpf_map_delete_elem` removes `S,A,B`, then reinserting `S`
-  restores the canonical gate class `{S}`;
-- **composable**: maps `G0..G8` plus explicit wire cells on `TAPE` schedule finite
-  gate compositions without hidden residual interference.
+- **observable** — the ⊤-bit is returned in a register (`r0`) and branched on;
+- **resettable** — `bpf_map_delete_elem` restores `c(G0)`, so the gate is a pure
+  function re-evaluable per call;
+- **composable** — independent maps `G0..G8` compose gates without interference.
 
-Together these conditions support a functionally complete residual gate (NAND),
-validated by the artifact's exhaustive finite checks.
+An *observable, resettable, composable* ⊤-bit supports a functionally complete
+gate (NAND), hence arbitrary Boolean circuits (Appendix A.5: exhaustive 8-bit
+adder, 65536/65536). Necessity ("every weird machine has such a gap") and general
+sufficiency ("every such gap is programmable") remain separate theoretical claims
+this witness motivates but does not discharge.

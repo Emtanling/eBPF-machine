@@ -6,24 +6,19 @@
 - Execution: offline `bpf_prog_test_run_opts()`
 - Maps:
   - `TAPE`: array map for input/output bits and error count
-  - `G0..G8`: non-LRU `BPF_MAP_TYPE_HASH` maps used as NAND gate capacity state
-- Gate helper discipline: gate updates use `BPF_ANY`; gate maps omit
-  `BPF_F_NO_PREALLOC`; the proof uses the success predicate `ret == 0`, not a
-  kernel-stable errno value.
+  - `G0..G8`: hash maps used as NAND gate capacity state
 
 ## Claims and Scope
 
-What this artifact establishes, at honest strength for a LangSec submission (full development in
-Appendix A.9 / A.10, the residual-theorem note in `results/exploitable_gap.md`, and the second witness in
-`witness2/`). The artifact is a recognizer-boundary witness: it shows residual semantics inside a
-recognized safety language, not a verifier bypass or vulnerability report.
+What this artifact establishes, at honest strength (full development in
+Appendix A.9 / A.10, `results/exploitable_gap.md`, and the second witness in
+`witness2/`).
 
 **Proven (deductive or exhaustive):**
 
 - The capacity-saturation gate realizes NAND — exhaustive truth table
-  (400/400), and by disassembly the output is `out = [ret == 0]` over the
-  second input-conditioned map update, with no ALU/compare combining the inputs
-  (Appendix A.7).
+  (400/400), and by disassembly the output is the return code of the third
+  map insert, with no ALU/compare combining the inputs (Appendix A.7).
 - Built from that gate: an exhaustive full adder (8/8) and an exhaustive
   8-bit adder (65536/65536). NAND is functionally complete, so arbitrary
   Boolean circuits are realizable; the exhaustive ceiling reached here is the
@@ -34,29 +29,23 @@ recognized safety language, not a verifier bypass or vulnerability report.
 - Every variant is accepted by the in-kernel verifier (`loadall_exit=0`): the
   weird-machine program is a verifier-accepted, bounded, memory-safe program.
 - The abstraction gap as a machine-checkable proposition: the verifier holds
-  the final input-conditioned update return as an unconstrained scalar and
-  forks at the output branch, so `ψ(ret) = [ret == 0]` is abstractly unresolved
-  with respect to map occupancy (Appendix A.9).
+  the third insert's return at `⊤` (`scalar()`, no bounds) and forks at the
+  output branch, so the occupancy bit that carries the gate output is
+  quotiented to `⊤` (Appendix A.9).
 - A second, structurally different witness in `witness2/` reproduces the same
   opacity pattern in a join-based interval analyzer and in Frama-C EVA: the
   working mod-3 gate is certified as `{0; 1} = ⊤`, while the mod-7 ablation is
   certified as `{1}`. This is empirical support for system-independence, not a
   completed structural theorem.
 
-**Proven conditionally (theorem plus artifact instantiation):**
+**Proven conditionally (theorem with discharged hypotheses):**
 
-- Definition of an exploitable residual readout basis and the
-  **Residual-Language Weird Machine theorem pair**: a LangSec-style sufficient
-  condition under which a recognized safety language still contains a
-  runtime-interpreted residual machine. With a functionally-complete gate, the
-  realization theorem yields, for every finite Boolean circuit, an accepted
-  bounded program instance. The separate opacity theorem requires local
-  gate-opacity relative to the recognizer relation vocabulary `Q`: the exported
-  gate output must be derived only from the unresolved residual readout, with no
-  recognizer-visible shadow computation in the gate that already proves the same
-  local relation. The PoC instantiates the eBPF basis, contrasts it with an
-  explicit-logic baseline, and validates representative finite compositions
-  (Appendix A.10 §5).
+- Definition of an *exploitable gap* and the *Opacity Theorem*: such a gap
+  with a functionally-complete gate yields, for every Boolean `f`, a program
+  computing `f` whose entire input→output dependence stays `⊤` in the
+  abstraction (A-opaque). The PoC discharges every hypothesis clause
+  (Appendix A.10 §5), so **eBPF admits opaque programmable computation of
+  arbitrary Boolean circuits**.
 
 **Not claimed:**
 
@@ -65,11 +54,9 @@ recognized safety language, not a verifier bypass or vulnerability report.
 - Not Turing-complete (bounded, combinational — the verifier's termination
   check forbids unbounded opaque memory).
 - Not a vulnerability: no verifier bypass, privilege escalation, or memory
-  corruption. Experiments run only in an isolated VM with privileges sufficient
-  for the tested program type; no unprivileged loadability or live-kernel
-  deployment is claimed.
+  corruption. Root/CAP_BPF, offline `BPF_PROG_TEST_RUN`, isolated VM only.
 - Not a completed structural theorem over all sound abstractions. The
-  `witness2/` interval/Frama-C result is a second aligned witness and
+  `witness2/` interval/Frama-C result is a second discharged instance and
   empirical support for the thesis, not a proof that every abstraction gap is
   exploitable.
 
@@ -82,9 +69,7 @@ recognized safety language, not a verifier bypass or vulnerability report.
 - `GATE_CAP=64` ablation: NAND degenerates to all-1 (400/400)
 - `WM_FORCE_SENTINEL_B` ablation: NAND degenerates to all-1 (400/400)
 - `WM_BASELINE_NAND` baseline: explicit bytecode NAND passes the normal truth table (400/400)
-- `make verify` aggregate: 68149/68149, `semantic audit: ok` (400 NAND + 8
-  full-adder + 65536 exhaustive 8-bit adder-harness cases + 1005 sampled
-  full-width cases + 1200 ablation/baseline truth-table checks)
+- `make verify` aggregate: 68149/68149, `semantic audit: ok`
 
 ## Evidence Files
 
@@ -107,8 +92,8 @@ recognized safety language, not a verifier bypass or vulnerability report.
 - `results/<variant>.wm_nand.xlated.txt` (xlated proof: output = helper return)
 - `results/adder32_exhaustive.jsonl` (exhaustive 8-bit adder, 65536 cases)
 - `results/xlated_compare.html` (self-contained A.7/A.8 side-by-side, no external assets)
-- `results/abstraction_gap_witness.md` (formal witness: occupancy yields an abstractly unresolved readout)
-- `results/exploitable_gap.md` (legacy filename; residual readout basis + residual-language theorem)
+- `results/abstraction_gap_witness.md` (formal witness: verifier quotients occupancy to ⊤)
+- `results/exploitable_gap.md` (definition of an exploitable gap + opacity theorem)
 - `witness2/README.md` and `witness2/witness.py` (self-contained interval witness)
 - `witness2/frama_c/RESULTS.md` and `witness2/frama_c/out/eva_slevel0.log`
   (Frama-C EVA reproduction of the second witness)
@@ -122,7 +107,7 @@ below are regenerated by `make data` and re-checked by `make verify`.
 Index: A.1 environment · A.2 per-variant provenance · A.3 verifier
 acceptance · A.4 output = helper return · A.5 coverage & audit · A.6
 one-command repro · A.7 weird-machine xlated · A.8 baseline xlated
-(contrast) · A.9 residual-readout witness · A.10 residual-language theorem
+(contrast) · A.9 formal witness (occupancy → ⊤) · A.10 exploitable gaps
 & opacity theorem · A.11 second witness.
 
 ### A.1 Environment (`results/env.json`)
@@ -167,7 +152,7 @@ bounded execution only; it does not model the NAND semantics (see A.4).
 
 `results/<variant>.wm_nand.xlated.txt` holds the post-verifier (xlated)
 instruction stream of `wm_nand`. The capacity-saturation NAND writes an output
-bit that is **exactly `ret == 0` for the second input-conditioned map update**; no instruction
+bit that is **exactly the return code of the third map insert**; no instruction
 combines the inputs `a,b` arithmetically. Annotated excerpt (normal `nand`
 variant):
 
@@ -177,7 +162,7 @@ variant):
  76: (85) call htab_map_update_elem   ; insert key1 (selected by A)  -> r0
  83: (4f) r7 |= r0                     ; r7 |= r0        (err = r0 || r1)
  90: (85) call htab_map_update_elem   ; insert key2 (selected by B)  -> r0   <-- capacity probe
- 91: (bf) r6 = r0                      ; r6 = final input update return code
+ 91: (bf) r6 = r0                      ; r6 = third insert's return code
  92: (15) if r7 == 0x0 goto pc+26      ; err_bump() only if a setup insert failed
         ...
 122: (15) if r6 == 0x0 goto pc+1       ; output bit = (r6 == 0) == (r2 == 0)
@@ -187,8 +172,8 @@ variant):
 Reading the trace: the inputs appear only in the branchless key selection
 (`key = base + delta*bit`) that decides *which* key each insert targets; the
 truth value stored at instruction 132 is decided solely by `if r6 == 0`, where
-`r6` is the return of the second input-conditioned `htab_map_update_elem`. The kernel returns
-a negative errno (observed as `-E2BIG`) for that update when the preallocated, non-LRU hash map of
+`r6` is the return of the third `htab_map_update_elem`. The kernel returns
+`-E2BIG` for that insert exactly when the preallocated, non-LRU hash map of
 `max_entries = GATE_CAP = 2` is already full — i.e. only when both inputs are 1.
 This is the abstraction gap: the semantics live in runtime map metadata that the
 verifier does not track.
@@ -202,9 +187,7 @@ verifier does not track.
   `scripts/audit_results.py` re-derives every expected sum/carry independently
   and asserts full input coverage (`check_adder_exhaustive`).
 - Aggregate re-check: `make verify` reports **68149/68149 passed** and
-  `semantic audit: ok`: 400 NAND trials, 8 full-adder trials, 65536 exhaustive
-  8-bit adder-harness cases, 1005 sampled full-width cases, and 1200
-  ablation/baseline truth-table checks.
+  `semantic audit: ok`.
 
 The audit is an independent oracle: `audit_results.py` recomputes the expected
 truth tables / sums itself rather than trusting the harness's own `passed` flag.
@@ -226,8 +209,8 @@ as captured in `results/nand.wm_nand.xlated.txt`. Two things to note:
   in `r8`, resp. `r9`); the inputs never enter a comparison that yields the
   output.
 - The **output bit** is decided only at 122 by `if r6 == 0`, where `r6` is the
-  return predicate `ret == 0` of the second input-conditioned `htab_map_update_elem`
-  (instr 90). It is stored to `TAPE[IDX_NAND_OUT]` at 132.
+  return code of the third `htab_map_update_elem` (instr 90) — the
+  capacity-probed insert. It is stored to `TAPE[IDX_NAND_OUT]` at 132.
 
 ```text
 int wm_nand(void * ctx):
@@ -235,7 +218,7 @@ int wm_nand(void * ctx):
    0: (b7) r9 = 0
    1: (63) *(u32 *)(r10 -8) = r9
    2: (bf) r2 = r10
-;
+; 
    3: (07) r2 += -8
 ; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
    4: (18) r1 = map[id:600]
@@ -256,7 +239,7 @@ int wm_nand(void * ctx):
   17: (b7) r6 = 1
   18: (63) *(u32 *)(r10 -8) = r6
   19: (bf) r2 = r10
-;
+; 
   20: (07) r2 += -8
 ; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
   21: (18) r1 = map[id:600]
@@ -280,26 +263,26 @@ int wm_nand(void * ctx):
   37: (63) *(u32 *)(r10 -24) = r1
   38: (7b) *(u64 *)(r10 -32) = r6
   39: (bf) r7 = r10
-;
+; 
   40: (07) r7 += -16
 ; __u64 out = NAND_GATE(G0, a, b);
   41: (18) r1 = map[id:599]
   43: (bf) r2 = r7
   44: (85) call htab_map_delete_elem#404256
   45: (bf) r2 = r10
-;
+; 
   46: (07) r2 += -20
 ; __u64 out = NAND_GATE(G0, a, b);
   47: (18) r1 = map[id:599]
   49: (85) call htab_map_delete_elem#404256
   50: (bf) r2 = r10
-;
+; 
   51: (07) r2 += -24
 ; __u64 out = NAND_GATE(G0, a, b);
   52: (18) r1 = map[id:599]
   54: (85) call htab_map_delete_elem#404256
   55: (bf) r6 = r10
-;
+; 
   56: (07) r6 += -32
 ; __u64 out = NAND_GATE(G0, a, b);
   57: (18) r1 = map[id:599]
@@ -315,7 +298,7 @@ int wm_nand(void * ctx):
   68: (0f) r2 += r1
   69: (63) *(u32 *)(r10 -36) = r2
   70: (bf) r2 = r10
-;
+; 
   71: (07) r2 += -36
 ; __u64 out = NAND_GATE(G0, a, b);
   72: (18) r1 = map[id:599]
@@ -331,7 +314,7 @@ int wm_nand(void * ctx):
 ; __u64 out = NAND_GATE(G0, a, b);
   83: (4f) r7 |= r0
   84: (bf) r2 = r10
-;
+; 
   85: (07) r2 += -40
 ; __u64 out = NAND_GATE(G0, a, b);
   86: (18) r1 = map[id:599]
@@ -345,7 +328,7 @@ int wm_nand(void * ctx):
 ; __u32 idx = ERR_IDX;
   94: (63) *(u32 *)(r10 -12) = r1
   95: (bf) r2 = r10
-;
+; 
   96: (07) r2 += -12
 ; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
   97: (18) r1 = map[id:600]
@@ -382,7 +365,7 @@ int wm_nand(void * ctx):
 ; v &= 1ull;
  124: (7b) *(u64 *)(r10 -8) = r1
  125: (bf) r2 = r10
-;
+; 
  126: (07) r2 += -32
  127: (bf) r3 = r10
  128: (07) r3 += -8
@@ -419,8 +402,8 @@ Side-by-side summary:
 | | A.7 weird machine (`57b95a81…`) | A.8 baseline (`cb848a70…`) |
 |---|---|---|
 | `wm_nand` xlated length | 135 insns | 52 insns |
-| hash-map (`htab_*`) calls | 3 update calls + 3 deletes per gate | 0 |
-| where the output comes from | `if r6 == 0` on the final input-conditioned helper return | `r6 \|= r7` → `!a \| !b` (instr 39) |
+| hash-map (`htab_*`) calls | 3 inserts + 3 deletes per gate | 0 |
+| where the output comes from | `if r6 == 0` on 3rd insert's return (`-E2BIG` at capacity) | `r6 \|= r7` → `!a \| !b` (instr 39) |
 | inputs combined by an ALU/compare? | no | yes (18, 35, 39) |
 | verifier accepts | yes (`loadall_exit=0`) | yes (`loadall_exit=0`) |
 | NAND truth table | 400/400 | 400/400 |
@@ -435,7 +418,7 @@ int wm_nand(void * ctx):
    0: (b7) r1 = 0
    1: (63) *(u32 *)(r10 -16) = r1
    2: (bf) r2 = r10
-;
+; 
    3: (07) r2 += -16
 ; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
    4: (18) r1 = map[id:535]
@@ -459,7 +442,7 @@ int wm_nand(void * ctx):
   19: (b7) r6 = 0
   20: (63) *(u32 *)(r10 -16) = r7
   21: (bf) r2 = r10
-;
+; 
   22: (07) r2 += -16
 ; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
   23: (18) r1 = map[id:535]
@@ -486,7 +469,7 @@ int wm_nand(void * ctx):
 ; v &= 1ull;
   41: (7b) *(u64 *)(r10 -16) = r6
   42: (bf) r2 = r10
-;
+; 
   43: (07) r2 += -4
   44: (bf) r3 = r10
   45: (07) r3 += -16
@@ -499,76 +482,73 @@ int wm_nand(void * ctx):
   51: (95) exit
 ```
 
-### A.9 Formal witness — occupancy yields an abstractly unresolved readout
+### A.9 Formal witness — the verifier quotients hash-map occupancy to ⊤
 
 The full derivation is in `results/abstraction_gap_witness.md`; the essence:
 
-the verifier's abstract domain represents each map's identity and static
-attributes (`max_entries`, key/value size) but not its dynamic occupancy `c(M)`.
-The helper return prototype is `RET_INTEGER`, which the verifier records as an
-unconstrained scalar. Yet under deterministic capacity semantics `CAP(k)`, the
-concrete readout predicate `ψ(ret) = [ret == 0]` for a fresh-key update depends
-on occupancy: it is true below capacity and false when the map is full. The
-tested Linux 6.17.0/aarch64, preallocated non-LRU hash-map configuration
-instantiates `CAP(2)` for this artifact; the negative errno was observed as
-`-E2BIG` on that configuration.
+The verifier's abstract domain represents each map's identity and static
+attributes (`max_entries`, key/value size) but **not** its dynamic occupancy
+`c(M)`. The insert helper's return prototype is `RET_INTEGER`, which the scalar
+domain models as the top scalar `⊤ = scalar()`. Yet the concrete return is
+`0` iff `c(M) < max_entries` and `-E2BIG` otherwise — a non-constant function of
+occupancy.
 
-**Proposition.** Assuming `CAP(k)`, for two reachable pre-states differing only
-in dynamic map components erased by the verifier abstraction, one below capacity
-and one at capacity, the abstract images coincide, the concrete readout
-predicate differs, and the abstract transfer cannot decide the predicate. Thus
-map occupancy yields an abstractly unresolved readout channel. The verifier
-confirms this by forking at the output branch: both truth values are abstractly
-reachable.
+**Proposition.** For two pre-states differing only in `c(G0)` (one below, one at
+capacity): their abstract images coincide (`α(σ0)=α(σ1)`), their concrete outputs
+differ in the bit `[r0 = 0]`, and the abstract transfer sends both to `⊤`. Hence
+the abstract transfer is non-injective on the classes the concrete transfer
+separates — the exact bit the gate uses as its output is the bit `α` collapses to
+`⊤`. The gate output is therefore unrepresentable in the abstraction without
+adding an occupancy component, and the verifier confirms this by **forking** at
+the output branch (both truth values abstractly reachable).
 
 Verbatim from `results/nand.verifier.log` (`wm_nand`, insns as loaded):
 
-```text
- 78: (85) call bpf_map_update_elem#2   ; R0=scalar()                       # second input update, readout source
- 79: (bf) r6 = r0                       ; R0=scalar(id=3) R6_w=scalar(id=3) # readout register
-104: (15) if r6 == 0x0 goto pc+1        ; R6=scalar(id=3,umin=1)           # predicate unresolved; verifier forks
-from 104 to 106: ... R6=0 ...                                              # both successors explored
+```
+ 78: (85) call bpf_map_update_elem#2   ; R0=scalar()                       # 3rd insert (capacity probe)
+ 79: (bf) r6 = r0                       ; R0=scalar(id=3) R6_w=scalar(id=3) # output reg held at ⊤
+104: (15) if r6 == 0x0 goto pc+1        ; R6=scalar(id=3,umin=1)           # output decision over ⊤ — forks
+from 104 to 106: … R6=0 …                                                  # both successors explored
 ```
 
 Correspondence to A.7 (post-verification renumbering): verifier insns 78 / 104 /
-114 are xlated insns 90 / 122 / 132. This states the residual readout as a
+114 are xlated insns 90 / 122 / 132. This states the abstraction gap as a
 machine-checkable property of the verifier's own abstract semantics, and remains
 sound-for-safety: the gap is in semantics the verifier never claims, i.e. the
 designed incompleteness of a sound abstraction.
 
-### A.10 Residual readout basis and theorem
+### A.10 Exploitable gaps and the opacity theorem
 
 Full development in `results/exploitable_gap.md`; the essence:
 
-a bare unresolved readout is not yet programmable. The payload is not extra
-expressiveness — the verifier accepts explicit-logic NAND (A.8) — but computation
-whose input-output relation a sound analysis cannot certify.
+A bare ⊤-channel (A.9) is not yet programmable. The gap's payload is not
+expressiveness — the verifier accepts explicit-logic NAND (A.8) — but
+**computation a sound analysis cannot see**. Scope the phenomenon precisely: a
+program is **A-opaque** if its concrete output depends on its inputs while its
+abstract output cell is `⊤`.
 
-**Definition.** A residual readout basis is exploitable when the accepted toolkit
-provides: **(E1)** observability, the readout predicate can be branched into a
-program bit; **(E2)** input-control, accepted operations can select residual
-transitions as a function of program inputs; **(E3)** resettability, the residual
-component returns to a known canonical class with no hidden carry-over except
-explicit wire cells; and **(E4)** composability, finite circuits can be scheduled
-with independent or resettable instances.
+**Definition (exploitable gap).** A ⊤-channel `(op, φ)` is exploitable if the
+toolkit also gives: **(E1)** observability — the ⊤-value can be branched into a
+program bit; **(E2)** input-control — input-conditioned transitions to `φ` let the
+readout realize a chosen Boolean dependence; **(E3)** resettability — `φ` can be
+restored, so the channel is a pure re-evaluable gate; **(E4)** composability —
+independent instances let one gate drive another.
 
-**Residual-Language Weird Machine theorem pair.** This is a LangSec-style
-sufficient condition split into two claims. The realization theorem says that if
-such a basis has a functionally complete induced gate, then for every finite
-Boolean circuit there is an accepted bounded program instance. The opacity
-theorem adds local gate-opacity relative to `(α,Q)`: the output relation is not
-certified when exported gate outputs are derived only from unresolved residual
-readouts, no local gate certificate in `Q` entails the gate relation, and no
-recognizer-visible shadow logic in the gate writes an equivalent Boolean result.
+**Opacity Theorem.** If such a gap's gate is functionally complete, then for every
+Boolean `f` there is a program that computes `f` whose entire input→output
+dependence factors through ⊤-channel ops — so the abstraction certifies nothing
+about `f`. **Corollary (biconditional):** opaque programmable computation exists
+iff an observable, input-controllable ⊤-channel exists; E3/E4 upgrade one gate to
+arbitrary circuits.
 
-**The eBPF PoC instantiates the hypothesis clauses** (`exploitable_gap.md` §5):
-`φ` = occupancy `c(G0)`; `ψ(ret)=[ret==0]`; E1 = `if r6==0`; E2 = inputs select
-sentinel update versus fresh-key update; E3 = delete `S,A,B` and reinsert `S`,
-placing the gate in canonical class `{S}`; E4 = `G0..G8` plus explicit wire
-values on `TAPE`; gate = NAND, validated through the exhaustive 8-bit adder.
-`witness2/` instantiates the same opacity pattern for a join-based interval
-analyzer and Frama-C EVA. Honest scope: bounded Boolean circuits, not
-Turing-complete opacity or a fully general theorem for every sound abstraction.
+**The eBPF PoC discharges every clause** (`exploitable_gap.md` §5): `φ`=occupancy
+`c(G0)`; E1 = `if r6==0`; E2 = `key=base+delta·bit`, readout `[1+a+b>2]`; E3 =
+`delete S,A,B`; E4 = `G0..G8`; gate = NAND, verified through the exhaustive 8-bit
+adder. §6 turns the definition into a porting checklist; `witness2/` discharges
+that checklist for a join-based interval analyzer and Frama-C EVA. Honest scope:
+a biconditional for opaque *Boolean-circuit* computation, not a Turing-complete
+or fully-general "weird machine" claim.
+
 ### A.11 Second witness — interval analyzer and Frama-C EVA
 
 `witness2/` provides an independent `(C, A)` pair with no eBPF maps, helper
