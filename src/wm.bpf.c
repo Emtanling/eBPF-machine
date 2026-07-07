@@ -64,10 +64,11 @@ static __always_inline void err_bump(void)
  * Capacity-saturation NAND. The output truth value is NOT produced by any
  * ALU/compare on A,B: the inputs only select which key is written, and that
  * selection is branchless (key = base + delta * bit). The result bit is the
- * return code of the third insert, which the kernel reports as -E2BIG exactly
- * when the map is full. Determinism rests on BPF_MAP_TYPE_HASH being
- * preallocated (no BPF_F_NO_PREALLOC) and non-evicting (not LRU): a new key
- * on a full map of max_entries = GATE_CAP = 2 deterministically fails.
+ * return predicate (r2 == 0) of the second input-conditioned update, after
+ * sentinel setup and the first input update. Determinism rests on
+ * BPF_MAP_TYPE_HASH being preallocated (no BPF_F_NO_PREALLOC) and non-evicting
+ * (not LRU): a new key on a full map of max_entries = GATE_CAP = 2
+ * deterministically fails, observed as -E2BIG on the tested kernel.
  */
 #define NAND_GATE(MAP, A, B) ({                                      \
     __u32 ks = K_S, ka = K_A, kb = K_B;                              \

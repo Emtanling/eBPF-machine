@@ -6,34 +6,45 @@ isolated Linux VM with root access and BTF enabled.
 
 ## What this proves
 
-Full statement in `ARTIFACT.md` (Claims and Scope + Appendix A.9/A.10).
-In short:
+Full statement in `ARTIFACT.md` (Claims and Scope + Appendix A.9/A.10). In
+short:
 
-- **Proven.** The hash-map capacity-saturation gate realizes NAND
-  (exhaustive 400/400; by disassembly the output is a map-insert return
-  code, not ALU on the inputs). From it: an exhaustive full adder (8/8) and
-  8-bit adder (65536/65536); NAND is universal, so any Boolean circuit is
-  realizable. Every variant is verifier-accepted (`loadall_exit=0`).
-- **The gap, formally.** The verifier holds the insert's return at `⊤`
-  (`scalar()`) and forks at the output branch — the occupancy bit carrying
-  the gate output is quotiented to `⊤`, a machine-checkable property of its
-  abstract semantics (`ARTIFACT.md` A.9).
-- **Opacity theorem.** An *exploitable gap* (observable + input-controllable
-  + resettable + composable `⊤`-channel) with a complete gate computes every
-  Boolean `f` while the abstraction certifies nothing about `f`; the PoC
-  discharges every clause (A.10). So eBPF admits *opaque programmable
-  computation* of arbitrary Boolean circuits.
+- **Proven.** The hash-map capacity-saturation gate realizes NAND (exhaustive
+  400/400). By disassembly, the output is the predicate `ret == 0` over the
+  second input-conditioned map update, after sentinel setup; no ALU/compare on
+  the inputs computes the truth table. From it: an exhaustive full adder (8/8)
+  and 8-bit adder (65536/65536). Every variant is verifier-accepted
+  (`loadall_exit=0`).
+- **The residual readout, formally.** The verifier leaves the helper return as
+  an unconstrained scalar and forks at `if r6 == 0`. Thus `ψ(ret) = [ret == 0]`
+  is an abstractly unresolved readout predicate over map occupancy
+  (`ARTIFACT.md` A.9).
+- **LangSec boundary claim.** The verifier recognizes a safety language, but the
+  concrete runtime still interprets residual map/helper semantics that accepted
+  programs can observe and compose. This is a recognizer-boundary witness, not a
+  vulnerability report.
+- **Residual-language theorem pair.** A controllable, observable, resettable, and
+  composable residual readout basis with a complete gate yields, for every finite
+  Boolean circuit, an accepted bounded program instance. A separate local
+  local gate-opacity condition, relative to the recognizer relation vocabulary `Q`,
+  excludes recognizer-visible shadow logic before claiming that the verifier
+  abstraction cannot certify the concrete input-output graph. The PoC
+  instantiates the eBPF basis, contrasts it with an explicit-logic baseline, and
+  validates representative finite compositions (A.10).
 
-**Not** a Turing-completeness or universal "gap ⇒ weird machine" claim, and
-not a verifier bypass, privilege escalation, or memory-corruption PoC.
+**Not** a Turing-completeness or universal "gap => weird machine" claim, and not
+a verifier bypass, privilege escalation, or memory-corruption PoC.
 
 ## Requirements
 
-- Isolated Linux VM with root (CAP_BPF/CAP_SYS_ADMIN) and BTF at
-  `/sys/kernel/btf/vmlinux`.
+- Isolated Linux VM with privileges sufficient to load `SEC("syscall")` eBPF
+  programs and BTF at `/sys/kernel/btf/vmlinux`.
 - Kernel >= 5.17 for `SEC("syscall")` programs and `bpf_loop()`.
 - `clang`, `bpftool`, `libbpf`, and `pkg-config` on the build host.
 - Captured feature detection lands in `results/feature_probe.txt`.
+- The witness assumes non-LRU `BPF_MAP_TYPE_HASH` gate maps, no
+  `BPF_F_NO_PREALLOC`, and `BPF_ANY` helper updates; exact object hashes and
+  build flags are recorded in per-variant provenance files.
 
 ## Build
 
@@ -67,8 +78,10 @@ The suite records JSONL outputs under `results/` for the normal NAND/full-adder
 It also emits per-variant provenance (`<variant>.provenance.json`), a
 per-variant verifier log, xlated disassembly of `wm_nand`, and an exhaustive
 8-bit adder dataset. Re-check the eBPF evidence with `make verify`
-(68149/68149, `semantic audit: ok`). Evidence files, the formal analysis
-(A.9 abstraction-gap witness, A.10 opacity theorem), and the second witness
+(68149/68149: 400 NAND + 8 full-adder + 65536 exhaustive 8-bit adder-harness
+cases + 1005 sampled full-width cases + 1200 ablation/baseline truth-table
+checks, `semantic audit: ok`). Evidence files, the formal analysis
+(A.9 residual-readout witness, A.10 residual-language theorem), and the second witness
 are catalogued in `ARTIFACT.md`.
 
 This is not a verifier bypass, privilege escalation, or memory-corruption PoC.
@@ -95,21 +108,20 @@ make verify-framac
 Two directions extend this work beyond the present eBPF instance; they are
 noted here as research bets, with honest tractability.
 
-**1. From instances to a theorem — the sufficiency of abstraction gaps.**
-The Opacity Theorem (Appendix A.10) is already a conditional theorem, but its
-hypothesis — an *exploitable gap* — is today established by instances, not by a
+**1. From instances to a structural theorem.**
+The Residual-Language Weird Machine theorem pair (Appendix A.10) is already
+conditional, but its hypotheses — an exploitable residual readout basis plus
+local gate-opacity for opacity claims — are today established by instances, not by a
 structural characterization of the abstraction. The foundational target is to
-turn "an abstraction-layer gap yields a programmable weird machine" into a
-theorem with boundary conditions: *given what class of sound abstractions `α`
-does a program-constructible `⊤`-channel necessarily arise, and when is it
-necessarily exploitable?* That moves the result from "another instance" to a
-citable theory result — the durable contribution is the framework, not any one
-construction. The near-term empirical down-payment is now in `witness2/`: a
-structurally different, join-based interval-analysis witness, with a Frama-C
-EVA reproduction, showing that the phenomenon tracks sound-but-incomplete
-abstraction rather than an eBPF quirk. The remaining high-ceiling target is a
-structural theorem characterizing which abstractions necessarily admit such
-channels.
+characterize boundary conditions:
+given what class of sound abstractions `α` does a program-constructible
+abstractly unresolved readout necessarily arise, and when is it necessarily
+exploitable? That moves the result from "another instance" to a citable theory
+result. The near-term empirical down-payment is now in `witness2/`: a
+structurally different, join-based interval-analysis witness, with a Frama-C EVA
+reproduction, showing that the phenomenon tracks sound-but-incomplete abstraction
+rather than an eBPF quirk. The remaining high-ceiling target is a structural
+theorem characterizing which abstractions necessarily admit such channels.
 
 **2. Weird machines in the neural-semantic layer.**
 eBPF is an old concept on a new substrate; the largely unexplored direction is
@@ -124,4 +136,3 @@ it concerns systems already deployed worldwide. The ceiling here is highest
 does not touch: formalizing weird state over *probabilistic* systems, and
 cross-turn error correction. Solving them is a separate — possibly more
 important — paper.
-
