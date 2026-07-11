@@ -1,81 +1,163 @@
-# Second witness — opaque computation in a join-based interval analyzer
+# Precision control: value ranges versus relational certification
 
-This is the empirical down-payment for the boundary-condition theorem (paper §9): a
-**second, structurally different** `(C, A)` pair that reproduces the same phenomenon as
-the eBPF witness. If the phenomenon appears here too, it tracks *sound-but-incomplete
-abstraction*, not an eBPF quirk.
+This directory is a mechanized **precision-control experiment**. It replaces the
+earlier claim that an output interval `{0,1}` localized a modulo-specific
+abstraction gap. That claim was not justified: `{0,1}` is the exact global output
+range of every nonconstant Boolean function, including a projection, explicit
+NAND, and modulo-based NAND.
 
-`python3 witness.py` — no dependencies. It runs today and prints the table in one screen.
+The experiment now asks three separate questions:
 
-## Why this pair, and how it differs from the eBPF witness
+1. Is the inferred global output value range exact?
+2. Does the abstract result certify the complete input/output graph?
+3. Does a stated completeness equation hold on the actually reachable set?
 
-| | eBPF witness (paper §6) | This second witness |
-|---|---|---|
-| Analyzer `A` | in-kernel verifier — **path-sensitive** | interval abstract interpreter — **join-based, non-relational** |
-| Channel `φ` | hash-map **occupancy** `c(G)` | a **congruence** quantity `acc mod k` |
-| `⟦π⟧# = ⊤` | join *over explored paths* (certified output abstraction, Def. 2) | **literally one `⊤` interval** — no path-sensitivity caveat |
-| Substrate | kernel maps + helper return codes | pure integer arithmetic |
+It is a self-contained toy abstract interpreter, **not** a model of the Linux
+eBPF verifier and **not** evidence that the eBPF phenomenon is system-independent.
 
-The two share nothing at the systems level, which is the point. What they share is the
-*abstract* structure of the paper's abstraction-gap outlook.
+## Reproduce
 
-## The gate
+From the repository root:
 
-```
-NAND(a, b) = [ (1 + a + b) mod 3 != 0 ]
+```sh
+bash witness2/run.sh
 ```
 
-The sentinel `1` and modulus `3` play the roles of the eBPF sentinel and `max_entries`.
-`acc = 1 + a + b ∈ {1,2,3}`; `acc mod 3 ∈ {1,2,0}`; the readout `[·≠0]` gives `1,1,1,0` =
-NAND. `AND` and `XOR` are built by composing NAND gates (2 and 4 channel uses).
+This runs ten Python regression tests, performs a host-compiler syntax check
+of the current Frama-C C model, and writes deterministic reports to:
 
-## Relating this pair to the paper's abstraction-gap outlook
+- `witness2/out/witness.txt`
+- `witness2/out/witness.json`
+- `witness2/out/SHA256SUMS`
 
-- **(α) erased residual state / incomplete operation.** The interval domain is
-  backward-incomplete for `mod`: `acc ∈ [1,3] ⇒ acc mod 3` is soundly abstracted to
-  `[0,2]`, and the readout joins to `[0,1] = ⊤`. `φ` = the residue class, unrepresented by
-  intervals.
-- **(Π) expressibility E1–E4.** E1 = branch on `[acc mod 3 ≠ 0]`; E2 = `acc = 1+a+b`
-  (input-driven); E3 = fresh `acc` (sentinel `1`) per gate; E4 = independent accumulators,
-  used by `and_gate` / `xor_gate`.
-- **(R) robust functional completeness.** Deterministic evaluation, no uncontrolled input
-  `u`, so the gate is robustly realized (the same degenerate corner as the eBPF offline
-  run); NAND is functionally complete.
+The script has no third-party Python dependencies.
 
-## What the script proves
+## Programs under comparison
 
-1. **Concrete correctness** — exhaustive oracle: NAND, and composed AND and XOR, match
-   spec (`matches spec: True`).
-2. **A-opacity (Definition 2)** — the interval analyzer returns `[0,1] = ⊤` for the output
-   of every mod-3 gate: it certifies nothing about the output bit though it depends on the
-   inputs.
-3. **Non-triviality (localization / repair)** — the ablation `mod 7` degenerates the gate to
-   the constant `1`, and the **same** interval analyzer then certifies `[1,1]`. So the
-   domain is *not* trivially always-`⊤`; the blindness is localized to the working `mod`
-   channel. (This is the interval analogue of the eBPF `GATE_CAP=64` ablation.)
-4. **Repair = precision price** — a disjunctive / input-partitioned
-   analysis certifies the output per input. Closing the channel costs the analyzer exactly
-   this added precision (tracking the channel variable's value set), not free.
-5. **Leakage composition pattern** — AND and XOR keep the output at `⊤` (`L_out ≤ 1` bit)
-   while the number of channel uses grows (`L_trace ≈ 1, 2, 4` bits): the analysis is blind
-   to `Θ(circuit size)` bits of computation, not to one.
+For Boolean inputs `a,b ∈ {0,1}`:
 
-Every interval transfer is checked to over-approximate the concrete output set at runtime
-(`assert_sound`), so the analyzer is genuinely **sound** — the imprecision is designed
-incompleteness, not a bug. That is what makes this a witness rather than a broken analyzer.
+```text
+projection(a,b)    = a
+explicit_nand(a,b) = 1 - a*b
+modulo_nand(a,b)   = ((1+a+b) mod 3 != 0)
+```
 
-## Independent analyzer reproduction
+The last two programs compute the same NAND truth table:
 
-The interval interpreter here is written for this repository so the witness is
-self-contained and exhaustively checkable. The same construction is also fed to
-Frama-C EVA, an independent production value analysis. That run is confirmed in
-`frama_c/RESULTS.md`: the working mod-3 gate has output `{0; 1} = ⊤`, while the
-mod-7 ablation narrows to `{1}` with zero alarms. This upgrades the evidence
-from "our interpreter is blind" to "an independent sound analyzer we did not
-write exhibits the same localized blindness."
+```text
+(0,0) -> 1   (0,1) -> 1   (1,0) -> 1   (1,1) -> 0
+```
 
-IKOS / Crab remains an optional third target: the same C/LLVM shape can be
-analyzed with the interval domain of the Crab library, the numeric-domain family
-that PREVAIL builds on. That would sharpen the contrast further, but the paper's
-second-witness claim is already backed by the self-contained analyzer and the
-captured Frama-C EVA result.
+The projection is a nonconstant control; it is not claimed to compute NAND.
+
+## Claim matrix
+
+The executable report verifies the following matrix:
+
+| program | global interval is exact | global range certifies I/O graph | toy row relation with range-only `MOD` | congruence-aware refinement | singleton input partition |
+|---|---:|---:|---:|---:|---:|
+| projection | yes | no | certifies | certifies | certifies |
+| explicit NAND | yes | no | certifies | certifies | certifies |
+| modulo NAND | yes | no | **does not certify** | certifies | certifies |
+
+### Reading the columns
+
+- **Global interval.** All three programs yield `[0,1]`, and `[0,1]` is their
+  exact global output range. The range is therefore sound and value-range
+  complete, but it contains no association between a particular input and its
+  output. It cannot certify any of the three nonconstant I/O graphs.
+- **Toy row relation with range-only `MOD`.** Values are indexed by the four
+  input rows. Ordinary arithmetic transfers preserve those rows, so the
+  projection and explicit NAND are certified. The deliberately imprecise
+  `MOD` transfer joins all rows, computes a residue range, and assigns that
+  range to every row. It remains sound but cannot certify modulo NAND.
+- **Congruence-aware refinement.** Keeping residues per input row restores the
+  exact modulo-NAND graph. This implementation is finite row enumeration, not a
+  claim about a scalable production congruence domain.
+- **Singleton input partition.** Running the interval transfer separately for
+  all four inputs also certifies every graph. This is a generic finite-domain
+  repair, not evidence that a production analyzer implements it.
+
+## Completeness equations on the actual reachable state
+
+The modulo operand reaches the concrete value set
+
+```text
+X = {1,2,3}.
+```
+
+For the ordinary interval abstraction `α_iv` and the implemented interval
+`MOD` transfer:
+
+```text
+α_iv({x mod 3 | x ∈ X}) = [0,2]
+MOD#(α_iv(X))           = [0,2].
+```
+
+The two sides are **equal**. The artifact therefore does not call this an
+interval-completeness violation.
+
+For the row-indexed relation at the same program point, let
+
+```text
+R = {(00,1), (01,2), (10,2), (11,3)}.
+```
+
+Here `α_rel` is explicitly the identity over finite row-indexed value sets, so
+the row-indexed domain can represent the exact relation. Its exact concrete
+`MOD` image is
+
+```text
+{(00,{1}), (01,{2}), (10,{2}), (11,{0})}.
+```
+
+The toy range-only `MOD#` instead returns `{0,1,2}` for every row. Thus
+
+```text
+α_rel(MOD(R)) ⊊ MOD#_range(α_rel(R)).
+```
+
+This strict inequality is an executable witness of **transfer imprecision in
+this toy row-forgetting `MOD` implementation**. It must not be generalized to
+the ordinary interval value abstraction, Frama-C EVA, or Linux eBPF. The
+congruence-aware row-preserving transfer restores equality on this finite state.
+
+## Soundness checks
+
+Every reported certificate is checked against the exhaustive concrete oracle:
+the concrete output for each input row must belong to the reported set. Exact
+certification additionally requires that every row contain exactly its one
+oracle output. The test suite fails if either equivalent NAND implementation
+changes, if a certificate becomes unsound, or if any matrix entry changes.
+
+## Frama-C material
+
+`frama_c/out/eva_slevel0.log` is a preserved, verbatim historical run of the
+previous one-`volatile` input model. It shows that EVA inferred `{0,1}` for
+modulo NAND and `{1}` for a different, constant mod-7 program. These are global
+value-range facts about that old run only:
+
+- `{0,1}` is the exact output range of modulo NAND;
+- the mod-7 program computes a different constant function;
+- the log does not compare modulo NAND with an equivalent explicit NAND;
+- the log contains no row-indexed I/O certificate;
+- it therefore does not establish modulo-specific incompleteness, relational
+  opacity, or cross-system generality.
+
+The Frama-C result is not used to support any relational claim in
+`out/witness.json`.
+
+The current C source uses two independent `Frama_C_interval(0,1)` calls. The
+recorded VM rerun produced `frama_c/out/eva_slevel0.current.log`: modulo NAND
+is `{0;1}`, the different constant mod-7 control is `{1}`, and EVA reports zero
+alarms. `frama_c/out/current.provenance.json` binds that log to the current
+source, runner, tool version, `results/env.json`, and certified eBPF run ID.
+
+## Residual limitations
+
+- The input space contains four Boolean rows and is exhaustively enumerated.
+- The repairs establish no scaling bound or local-to-global circuit theorem.
+- The strict inequality diagnoses a deliberately imprecise transfer in this
+  reference analyzer, not an unavoidable limitation of interval analysis.
+- No production analyzer in this directory has been configured to certify an
+  explicit I/O relation for the same-semantics pair.

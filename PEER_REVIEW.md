@@ -1,5 +1,13 @@
 # Peer Review — "Residual Semantic Languages and the eBPF Weird-Machine Witness"
 
+> **SUPERSEDED HISTORICAL REVIEW (2026-07-10).** This review applies to an
+> earlier manuscript and intentionally remains as an audit trail. Its A-opacity,
+> unbounded-circuit, second-witness, and per-CPU-spare discussions are not the
+> revised paper's claims and include statements later found technically
+> inaccurate. The authoritative current assessment is
+> `RE_REVIEW_2026-07-10.md`, with traceability in
+> `REVISION_RESPONSE_2026-07-10.md`.
+
 Simulated multi-perspective review (academic-paper-reviewer, full mode). Reviewed
 materials: `ARTIFACT.md` (Claims + Appendix A.1–A.10), `results/abstraction_gap_witness.md`,
 `results/exploitable_gap.md`, `README.md`, `ETHICS.md`. Read-only: this is a separate

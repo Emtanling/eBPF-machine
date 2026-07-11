@@ -1,0 +1,12 @@
+{
+  "name": "half_adder",
+  "inputs": ["a", "b"],
+  "gates": [
+    {"id": "d", "op": "nand", "args": ["a", "b"]},
+    {"id": "e", "op": "nand", "args": ["a", "d"]},
+    {"id": "f", "op": "nand", "args": ["b", "d"]},
+    {"id": "sum", "op": "nand", "args": ["e", "f"]},
+    {"id": "carry", "op": "nand", "args": ["d", "d"]}
+  ],
+  "outputs": ["sum", "carry"]
+}

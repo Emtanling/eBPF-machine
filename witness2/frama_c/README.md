@@ -1,58 +1,102 @@
-# Frama-C EVA port — third-party reproduction of the second witness
+# Frama-C EVA: global value-range observation
 
-Runs the **same construction** as `witness2/witness.py` through an independent,
-production, sound abstract interpreter (Frama-C's EVA value analysis). This is what
-upgrades the second witness from "our own interpreter is blind" to "an independent sound
-analyzer we did not write is blind" — the third-party backing for the paper's
-system-independence claim (paper §7 and §9).
+This directory contains a C rendering of modulo NAND for Frama-C EVA. Its scope
+is deliberately narrow: it records **global value ranges**, not input/output
+relations.
 
-Best run on **Ubuntu** (this repo's eBPF witness is Linux-only anyway, so the whole
-artifact reproduces on one OS).
+The source and current-run provenance classify this experiment as a numeric
+precision control. Any source change requires a new Frama-C run and provenance
+manifest before the evidence can be treated as bound again.
 
-## Run
+## Current input model
 
-```sh
-sudo apt-get update && sudo apt-get install -y frama-c-base   # Ubuntu 24.04
-bash run.sh                                              # captures out/*.log
+The current `nand_mod.c` obtains the two Boolean inputs independently:
+
+```c
+int a = Frama_C_interval(0, 1);
+int b = Frama_C_interval(0, 1);
 ```
 
-## Result — CONFIRMED (Frama-C 25.0-beta, see RESULTS.md + out/eva_slevel0.log)
+`__fc_builtin.h` is Frama-C's installed builtin header. Separate calls make the
+intended four-row Boolean input space explicit; the model no longer relies on
+two reads of one `volatile` object. The interface and example use are documented
+in the [Frama-C 25.0 Manganese EVA manual](https://frama-c.com/download/eva-manual-25.0-Manganese.pdf).
 
-`frama-c -eva -eva-slevel 0 nand_mod.c` printed, at the `Frama_C_show_each` points:
+## Reproduce the current model
 
-| readout | EVA inferred value | meaning |
-|---|---|---|
-| `Frama_C_show_each_NAND_out`     | **`{0; 1}`** (full Boolean range) | **TOP → A-opaque**: EVA certifies nothing about the output bit |
-| `Frama_C_show_each_ABLATION_out` | **`{1}`** (singleton)             | **certified**: the same analyzer *does* prove the degenerate gate |
-
-with `acc ∈ {1;2;3}` in both gates and **0 alarms**. The contrast is the witness: a real,
-sound analyzer is blind to the working `mod`-channel gate (output = the full Boolean range)
-yet certifies the ablation (modulus 7, constant 1). That the blindness is *localized to the
-working channel* — not a blanket weakness — is exactly the abstraction-gap outlook (below the complete shell at
-`mod`) and the non-triviality point.
-
-## The `slevel` knob = the repair outlook
-
-EVA's `-eva-slevel N` controls how many states it keeps separate before joining. At
-`slevel 0` it is join-based and blind (result above). Raising it asks EVA to keep more
-states separate — a disjunctive/trace-partitioned refinement — which is the *precision
-price* the repair outlook (§9) predicts for seeing through the channel. The repository's
-self-contained `witness.py` demonstrates the same repair pattern by input partitioning.
-
-## Optional: IKOS (interval domain, join-based) via Docker
+On a system with Frama-C installed:
 
 ```sh
-docker run --rm -v "$PWD":/w ikosverif/ikos ikos /w/nand_mod.c
-# inspect the interval invariant inferred for `out` (ikos-view or -d);
-# expect the working channel's out invariant to be [0,1], the ablation's to be [1,1].
+bash run.sh
 ```
 
-IKOS builds on the same numeric-domain family (Crab) that PREVAIL uses for eBPF, which
-sharpens the contrast: the *path-sensitive* eBPF verifier and a *join-based* Crab/interval
-analysis, structurally different, exhibit the same opacity.
+Run the eBPF suite first so `results/env.json` and
+`results/nand.provenance.json` identify the environment/run to which this
+control is attached.
 
-## Honest status
+The script runs:
 
-The Frama-C EVA reproduction is complete for the working channel and ablation; see
-`RESULTS.md` and `out/eva_slevel0.log`. IKOS remains optional follow-up evidence, not a
-requirement for the current paper claim.
+```sh
+frama-c -eva -eva-slevel 0 nand_mod.c
+```
+
+and writes `out/eva_slevel0.current.log`. It also requires both independent
+input ranges and the zero-alarm summary, then writes and re-verifies
+`out/current.provenance.json`. That manifest binds the C source, runner,
+provenance checker, current log, version record, environment snapshot, and eBPF
+run ID by SHA-256. It deliberately does not overwrite the archived
+`out/eva_slevel0.log`. Like the eBPF manifests, it is a self-issued consistency
+record, not an external signature.
+
+The corrected model was rerun on the recorded artifact VM with Frama-C
+25.0-beta (Manganese). The current log reports `NAND_out: {0; 1}` and
+`ABLATION_out: {1}`, with zero alarms. Its SHA-256 is
+`6d496d5685ced6d0d0a33bc4e7ff6b67648b6bc0d3250a970dd6dfc203611176`.
+
+## Historical log boundary
+
+`out/eva_slevel0.log` is an unchanged historical run from Frama-C 25.0-beta
+(Manganese). Its source used one `volatile int input` and assigned both `a` and
+`b` from separate reads of that object. The log's locators
+`nand_mod.c:41`/`:44` refer to that **old source revision**. The corrected source
+happens to place the display calls on the same line numbers, but that coincidence
+does not bind the historical log to the new source contents.
+
+Therefore the historical log is not proof that the corrected independent-input
+model runs or produces the same abstract values. That evidence is supplied only
+by the separately generated `out/eva_slevel0.current.log`; the historical file
+remains unchanged rather than being relabeled.
+
+The historical run reported `{0;1}` for modulo NAND, `{1}` for the different
+constant mod-7 control, `acc ∈ {1;2;3}`, and zero alarms. These observations are
+retained only as provenance for the old model.
+
+## Local syntax-only check
+
+Without Frama-C, the C source can be parsed by a host compiler using an isolated
+declaration stub:
+
+```sh
+bash syntax_check.sh
+```
+
+The stub is under `static_check/`; Frama-C's normal run does not add that path
+and therefore uses its own `__fc_builtin.h`. Passing this syntax check does not
+execute EVA and does not validate Frama-C-specific semantics.
+
+## What a `{0,1}` result would and would not establish
+
+`{0,1}` is the exact value range of every nonconstant Boolean function. An
+ordinary projection and explicit NAND have the same global range. Consequently,
+even a successful corrected-model rerun would establish only the reported
+global value range. It would not establish:
+
+- a modulo-specific loss relative to equivalent explicit NAND;
+- failure of a completeness equation on the actual reachable value set;
+- failure to certify an input/output graph under a relational query;
+- relational opacity, a weird-machine interpretation, or cross-system
+  generality.
+
+The mod-7 observation is not a same-semantics ablation: it changes NAND into a
+constant function. The relational comparison in `../witness.py` is a separate,
+explicitly toy experiment; no Frama-C log supports its relational claims.

@@ -1,0 +1,592 @@
+int wm_circuit(void * ctx):
+; int wm_circuit(void *ctx)
+   0: (b7) r6 = 0
+; __u32 key = 0;
+   1: (63) *(u32 *)(r10 -8) = r6
+; struct vm_run_ctx run = {};
+   2: (7b) *(u64 *)(r10 -48) = r6
+   3: (7b) *(u64 *)(r10 -56) = r6
+   4: (7b) *(u64 *)(r10 -64) = r6
+; __u64 zero = 0;
+   5: (7b) *(u64 *)(r10 -72) = r6
+   6: (b7) r7 = 1
+; __u64 one = 1;
+   7: (7b) *(u64 *)(r10 -80) = r7
+   8: (b7) r1 = 164
+   9: (63) *(u32 *)(r10 -4) = r1
+  10: (b7) r1 = 2
+  11: (7b) *(u64 *)(r10 -40) = r1
+  12: (bf) r2 = r10
+; 
+  13: (07) r2 += -4
+  14: (bf) r3 = r10
+  15: (07) r3 += -40
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+  16: (18) r1 = map[id:1799]
+  18: (b7) r4 = 0
+  19: (85) call array_map_update_elem#428528
+  20: (b7) r1 = 165
+  21: (63) *(u32 *)(r10 -4) = r1
+  22: (b7) r1 = 64
+  23: (7b) *(u64 *)(r10 -40) = r1
+  24: (bf) r2 = r10
+; 
+  25: (07) r2 += -4
+  26: (bf) r3 = r10
+  27: (07) r3 += -40
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+  28: (18) r1 = map[id:1799]
+  30: (b7) r4 = 0
+  31: (85) call array_map_update_elem#428528
+  32: (b7) r1 = 162
+  33: (63) *(u32 *)(r10 -4) = r1
+  34: (7b) *(u64 *)(r10 -40) = r6
+  35: (bf) r2 = r10
+; 
+  36: (07) r2 += -4
+  37: (bf) r3 = r10
+  38: (07) r3 += -40
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+  39: (18) r1 = map[id:1799]
+  41: (b7) r4 = 0
+  42: (85) call array_map_update_elem#428528
+  43: (b7) r1 = 163
+  44: (63) *(u32 *)(r10 -4) = r1
+  45: (7b) *(u64 *)(r10 -40) = r6
+  46: (bf) r2 = r10
+; 
+  47: (07) r2 += -4
+  48: (bf) r3 = r10
+  49: (07) r3 += -40
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+  50: (18) r1 = map[id:1799]
+  52: (b7) r4 = 0
+  53: (85) call array_map_update_elem#428528
+  54: (b7) r1 = 161
+  55: (63) *(u32 *)(r10 -4) = r1
+  56: (7b) *(u64 *)(r10 -40) = r6
+  57: (bf) r2 = r10
+; 
+  58: (07) r2 += -4
+  59: (bf) r3 = r10
+  60: (07) r3 += -40
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+  61: (18) r1 = map[id:1799]
+  63: (b7) r4 = 0
+  64: (85) call array_map_update_elem#428528
+  65: (bf) r2 = r10
+; 
+  66: (07) r2 += -8
+; control_ptr = bpf_map_lookup_elem(&VM_CONTROL, &key);
+  67: (18) r1 = map[id:1796]
+  69: (07) r1 += 264
+  70: (61) r0 = *(u32 *)(r2 +0)
+  71: (35) if r0 >= 0x1 goto pc+3
+  72: (67) r0 <<= 5
+  73: (0f) r0 += r1
+  74: (05) goto pc+1
+  75: (b7) r0 = 0
+; if (!control_ptr)
+  76: (15) if r0 == 0x0 goto pc+117
+; control = *control_ptr;
+  77: (61) r1 = *(u32 *)(r0 +20)
+  78: (67) r1 <<= 32
+  79: (61) r2 = *(u32 *)(r0 +16)
+  80: (4f) r1 |= r2
+  81: (7b) *(u64 *)(r10 -24) = r1
+  82: (61) r1 = *(u32 *)(r0 +12)
+  83: (67) r1 <<= 32
+  84: (61) r2 = *(u32 *)(r0 +8)
+  85: (4f) r1 |= r2
+  86: (61) r2 = *(u32 *)(r0 +28)
+  87: (67) r2 <<= 32
+  88: (61) r3 = *(u32 *)(r0 +24)
+  89: (4f) r2 |= r3
+  90: (7b) *(u64 *)(r10 -16) = r2
+  91: (7b) *(u64 *)(r10 -32) = r1
+  92: (61) r1 = *(u32 *)(r0 +0)
+  93: (61) r2 = *(u32 *)(r0 +4)
+; control.executed = 0;
+  94: (63) *(u32 *)(r10 -20) = r6
+  95: (18) r3 = 0xffffffff
+; control.failing_gate = VM_NO_FAILING_GATE;
+  97: (63) *(u32 *)(r10 -16) = r3
+; control = *control_ptr;
+  98: (67) r2 <<= 32
+  99: (4f) r2 |= r1
+ 100: (7b) *(u64 *)(r10 -40) = r2
+; if (control.abi_version != VM_ABI_VERSION) {
+ 101: (67) r2 <<= 32
+ 102: (77) r2 >>= 32
+; if (control.abi_version != VM_ABI_VERSION) {
+ 103: (55) if r2 != 0x1 goto pc+79
+ 104: (b7) r7 = 2
+; if (control.input_count > VM_MAX_INPUTS) {
+ 105: (61) r8 = *(u32 *)(r10 -36)
+; if (control.input_count > VM_MAX_INPUTS) {
+ 106: (25) if r8 > 0x40 goto pc+76
+ 107: (b7) r7 = 3
+; if (control.gate_count > VM_MAX_GATES) {
+ 108: (61) r6 = *(u32 *)(r10 -32)
+; if (control.gate_count > VM_MAX_GATES) {
+ 109: (25) if r6 > 0x200 goto pc+73
+; VM_INPUT_BASE + control.input_count + control.gate_count ||
+ 110: (bf) r1 = r8
+ 111: (0f) r1 += r6
+ 112: (b7) r7 = 4
+; VM_INPUT_BASE + control.input_count + control.gate_count ||
+ 113: (07) r1 += 2
+ 114: (67) r1 <<= 32
+ 115: (77) r1 >>= 32
+; if (control.wire_count !=
+ 116: (61) r9 = *(u32 *)(r10 -28)
+; VM_INPUT_BASE + control.input_count + control.gate_count ||
+ 117: (5d) if r9 != r1 goto pc+65
+ 118: (25) if r9 > 0x242 goto pc+64
+ 119: (bf) r2 = r10
+; if (bpf_map_update_elem(&WIRES, &key, &zero, BPF_ANY)) {
+ 120: (07) r2 += -8
+ 121: (bf) r3 = r10
+ 122: (07) r3 += -72
+ 123: (18) r1 = map[id:1797]
+ 125: (b7) r4 = 0
+ 126: (85) call array_map_update_elem#428528
+ 127: (b7) r7 = 6
+; if (bpf_map_update_elem(&WIRES, &key, &zero, BPF_ANY)) {
+ 128: (55) if r0 != 0x0 goto pc+54
+ 129: (b7) r1 = 1
+; key = VM_CONST_ONE;
+ 130: (63) *(u32 *)(r10 -8) = r1
+ 131: (bf) r2 = r10
+ 132: (07) r2 += -8
+ 133: (bf) r3 = r10
+ 134: (07) r3 += -80
+; if (bpf_map_update_elem(&WIRES, &key, &one, BPF_ANY)) {
+ 135: (18) r1 = map[id:1797]
+ 137: (b7) r4 = 0
+ 138: (85) call array_map_update_elem#428528
+; if (bpf_map_update_elem(&WIRES, &key, &one, BPF_ANY)) {
+ 139: (55) if r0 != 0x0 goto pc+43
+ 140: (18) r1 = 0xffffffff00000000
+; run.executed = 0;
+ 142: (7b) *(u64 *)(r10 -48) = r1
+; run.wire_count = control.wire_count;
+ 143: (63) *(u32 *)(r10 -56) = r9
+; run.input_count = control.input_count;
+ 144: (63) *(u32 *)(r10 -64) = r8
+; run.status = VM_STATUS_OK;
+ 145: (b7) r1 = 0
+ 146: (63) *(u32 *)(r10 -52) = r1
+; run.gate_count = control.gate_count;
+ 147: (63) *(u32 *)(r10 -60) = r6
+ 148: (bf) r3 = r10
+; run.executed = 0;
+ 149: (07) r3 += -64
+; loop_ret = bpf_loop(control.gate_count, circuit_step_cb, &run, 0);
+ 150: (bf) r1 = r6
+ 151: (18) r2 = subprog[+44]
+ 153: (b7) r4 = 0
+ 154: (b5) if r1 <= 0x800000 goto pc+2
+ 155: (b4) w0 = -7
+ 156: (05) goto pc+16
+ 157: (7b) *(u64 *)(r10 -104) = r6
+ 158: (7b) *(u64 *)(r10 -96) = r7
+ 159: (7b) *(u64 *)(r10 -88) = r8
+ 160: (bf) r6 = r1
+ 161: (b4) w7 = 0
+ 162: (bf) r8 = r3
+ 163: (3d) if r7 >= r6 goto pc+5
+ 164: (bf) r1 = r7
+ 165: (bf) r2 = r8
+ 166: (85) call pc+29#bpf_prog_6ef3bc9be1e1b14e_circuit_step_cb
+ 167: (07) r7 += 1
+ 168: (15) if r0 == 0x0 goto pc-6
+ 169: (bf) r0 = r7
+ 170: (79) r6 = *(u64 *)(r10 -104)
+ 171: (79) r7 = *(u64 *)(r10 -96)
+ 172: (79) r8 = *(u64 *)(r10 -88)
+; control.failing_gate = run.failing_gate;
+ 173: (61) r1 = *(u32 *)(r10 -44)
+; control.failing_gate = run.failing_gate;
+ 174: (63) *(u32 *)(r10 -16) = r1
+; control.executed = run.executed;
+ 175: (61) r1 = *(u32 *)(r10 -48)
+; control.executed = run.executed;
+ 176: (63) *(u32 *)(r10 -20) = r1
+; control.status = run.status;
+ 177: (61) r2 = *(u32 *)(r10 -52)
+; control.status = run.status;
+ 178: (63) *(u32 *)(r10 -24) = r2
+; if (control.status == VM_STATUS_OK &&
+ 179: (55) if r2 != 0x0 goto pc+4
+ 180: (b7) r7 = 10
+; (loop_ret != control.gate_count ||
+ 181: (5d) if r0 != r6 goto pc+1
+ 182: (1d) if r1 == r6 goto pc+1
+; 
+ 183: (63) *(u32 *)(r10 -24) = r7
+ 184: (b7) r1 = 0
+; key = 0;
+ 185: (63) *(u32 *)(r10 -8) = r1
+ 186: (bf) r2 = r10
+; done:
+ 187: (07) r2 += -8
+ 188: (bf) r3 = r10
+ 189: (07) r3 += -40
+; bpf_map_update_elem(&VM_CONTROL, &key, &control, BPF_ANY);
+ 190: (18) r1 = map[id:1796]
+ 192: (b7) r4 = 0
+ 193: (85) call array_map_update_elem#428528
+; }
+ 194: (b7) r0 = 0
+ 195: (95) exit
+long circuit_step_cb(__u32 i, void * data):
+; static long circuit_step_cb(__u32 i, void *data)
+ 196: (bf) r6 = r2
+ 197: (bf) r7 = r1
+; __u32 gate_key = i;
+ 198: (63) *(u32 *)(r10 -20) = r7
+ 199: (b7) r1 = 0
+; struct wm_gate_trace trace = {};
+ 200: (7b) *(u64 *)(r10 -48) = r1
+ 201: (7b) *(u64 *)(r10 -56) = r1
+ 202: (b7) r8 = 1
+ 203: (bf) r1 = r7
+ 204: (67) r1 <<= 32
+ 205: (77) r1 >>= 32
+; if (i >= ctx->gate_count)
+ 206: (61) r2 = *(u32 *)(r6 +4)
+; if (i >= ctx->gate_count)
+ 207: (3d) if r1 >= r2 goto pc+17
+ 208: (bf) r2 = r10
+; gate_ptr = bpf_map_lookup_elem(&CIRCUIT, &gate_key);
+ 209: (07) r2 += -20
+ 210: (18) r1 = map[id:1800]
+ 212: (07) r1 += 264
+ 213: (61) r0 = *(u32 *)(r2 +0)
+ 214: (35) if r0 >= 0x200 goto pc+3
+ 215: (67) r0 <<= 4
+ 216: (0f) r0 += r1
+ 217: (05) goto pc+1
+ 218: (b7) r0 = 0
+; if (!gate_ptr)
+ 219: (55) if r0 != 0x0 goto pc+7
+; if (ctx->status == VM_STATUS_OK) {
+ 220: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 221: (55) if r1 != 0x0 goto pc+3
+; ctx->failing_gate = gate;
+ 222: (63) *(u32 *)(r6 +20) = r7
+ 223: (b7) r1 = 5
+; ctx->status = status;
+ 224: (63) *(u32 *)(r6 +12) = r1
+; }
+ 225: (bf) r0 = r8
+ 226: (95) exit
+; gate = *gate_ptr;
+ 227: (61) r1 = *(u32 *)(r0 +12)
+ 228: (67) r1 <<= 32
+ 229: (61) r2 = *(u32 *)(r0 +8)
+ 230: (4f) r1 |= r2
+ 231: (7b) *(u64 *)(r10 -32) = r1
+ 232: (61) r1 = *(u32 *)(r0 +0)
+ 233: (61) r2 = *(u32 *)(r0 +4)
+ 234: (67) r2 <<= 32
+ 235: (4f) r2 |= r1
+ 236: (7b) *(u64 *)(r10 -40) = r2
+; if (gate.op != VM_OP_NAND || gate.dst != expected_dst ||
+ 237: (67) r2 <<= 32
+ 238: (77) r2 >>= 32
+; if (gate.op != VM_OP_NAND || gate.dst != expected_dst ||
+ 239: (55) if r2 != 0x1 goto pc+21
+; expected_dst = VM_INPUT_BASE + ctx->input_count + i;
+ 240: (61) r2 = *(u32 *)(r6 +0)
+; expected_dst = VM_INPUT_BASE + ctx->input_count + i;
+ 241: (bf) r1 = r7
+ 242: (0f) r1 += r2
+; expected_dst = VM_INPUT_BASE + ctx->input_count + i;
+ 243: (07) r1 += 2
+ 244: (bf) r2 = r1
+ 245: (67) r2 <<= 32
+ 246: (77) r2 >>= 32
+; if (gate.op != VM_OP_NAND || gate.dst != expected_dst ||
+ 247: (61) r3 = *(u32 *)(r10 -28)
+; if (gate.op != VM_OP_NAND || gate.dst != expected_dst ||
+ 248: (5d) if r3 != r2 goto pc+12
+; gate.src0 >= gate.dst || gate.src1 >= gate.dst ||
+ 249: (61) r3 = *(u32 *)(r10 -36)
+; gate.src0 >= gate.dst || gate.src1 >= gate.dst ||
+ 250: (3d) if r3 >= r2 goto pc+10
+; gate.src0 >= gate.dst || gate.src1 >= gate.dst ||
+ 251: (bf) r2 = r1
+ 252: (67) r2 <<= 32
+ 253: (77) r2 >>= 32
+; gate.src0 >= gate.dst || gate.src1 >= gate.dst ||
+ 254: (61) r3 = *(u32 *)(r10 -32)
+; gate.src0 >= gate.dst || gate.src1 >= gate.dst ||
+ 255: (3d) if r3 >= r2 goto pc+5
+; gate.dst >= ctx->wire_count || gate.dst >= VM_MAX_WIRES)
+ 256: (25) if r2 > 0x241 goto pc+4
+ 257: (61) r2 = *(u32 *)(r6 +8)
+ 258: (67) r1 <<= 32
+ 259: (77) r1 >>= 32
+ 260: (2d) if r2 > r1 goto pc+3
+; if (ctx->status == VM_STATUS_OK) {
+ 261: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 262: (55) if r1 != 0x0 goto pc-38
+ 263: (05) goto pc-42
+; src_ptr = bpf_map_lookup_elem(&WIRES, &gate.src0);
+ 264: (bf) r2 = r10
+ 265: (07) r2 += -36
+ 266: (18) r1 = map[id:1797]
+ 268: (07) r1 += 264
+ 269: (61) r0 = *(u32 *)(r2 +0)
+ 270: (35) if r0 >= 0x242 goto pc+3
+ 271: (67) r0 <<= 3
+ 272: (0f) r0 += r1
+ 273: (05) goto pc+1
+ 274: (b7) r0 = 0
+; if (!src_ptr)
+ 275: (55) if r0 != 0x0 goto pc+5
+; if (ctx->status == VM_STATUS_OK) {
+ 276: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 277: (55) if r1 != 0x0 goto pc-53
+; ctx->failing_gate = gate;
+ 278: (63) *(u32 *)(r6 +20) = r7
+ 279: (b7) r1 = 6
+ 280: (05) goto pc-57
+; a = *src_ptr & 1ull;
+ 281: (bf) r2 = r10
+ 282: (07) r2 += -32
+ 283: (79) r9 = *(u64 *)(r0 +0)
+; src_ptr = bpf_map_lookup_elem(&WIRES, &gate.src1);
+ 284: (18) r1 = map[id:1797]
+ 286: (07) r1 += 264
+ 287: (61) r0 = *(u32 *)(r2 +0)
+ 288: (35) if r0 >= 0x242 goto pc+3
+ 289: (67) r0 <<= 3
+ 290: (0f) r0 += r1
+ 291: (05) goto pc+1
+ 292: (b7) r0 = 0
+; if (!src_ptr)
+ 293: (55) if r0 != 0x0 goto pc+3
+; if (ctx->status == VM_STATUS_OK) {
+ 294: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 295: (55) if r1 != 0x0 goto pc-71
+ 296: (05) goto pc-19
+; b = *src_ptr & 1ull;
+ 297: (79) r1 = *(u64 *)(r0 +0)
+ 298: (7b) *(u64 *)(r10 -104) = r1
+ 299: (b7) r1 = 0
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 300: (63) *(u32 *)(r10 -60) = r1
+ 301: (b7) r2 = 1
+ 302: (63) *(u32 *)(r10 -64) = r2
+ 303: (b7) r1 = 2
+ 304: (63) *(u32 *)(r10 -68) = r1
+ 305: (7b) *(u64 *)(r10 -80) = r2
+ 306: (bf) r8 = r9
+ 307: (bf) r9 = r10
+; 
+ 308: (07) r9 += -60
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 309: (18) r1 = map[id:1798]
+ 311: (bf) r2 = r9
+ 312: (85) call htab_map_delete_elem#404352
+ 313: (bf) r2 = r10
+; 
+ 314: (07) r2 += -64
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 315: (18) r1 = map[id:1798]
+ 317: (7b) *(u64 *)(r10 -112) = r2
+ 318: (85) call htab_map_delete_elem#404352
+ 319: (bf) r2 = r10
+; 
+ 320: (07) r2 += -68
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 321: (18) r1 = map[id:1798]
+ 323: (7b) *(u64 *)(r10 -128) = r2
+ 324: (85) call htab_map_delete_elem#404352
+ 325: (bf) r3 = r10
+; 
+ 326: (07) r3 += -80
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 327: (18) r1 = map[id:1798]
+ 329: (bf) r2 = r9
+ 330: (7b) *(u64 *)(r10 -120) = r3
+ 331: (b7) r4 = 1
+ 332: (85) call htab_map_update_elem#409480
+ 333: (7b) *(u64 *)(r10 -96) = r0
+ 334: (57) r8 &= 1
+ 335: (bf) r1 = r9
+ 336: (15) if r8 == 0x0 goto pc+1
+ 337: (79) r1 = *(u64 *)(r10 -112)
+ 338: (61) r1 = *(u32 *)(r1 +0)
+ 339: (63) *(u32 *)(r10 -84) = r1
+ 340: (bf) r2 = r10
+ 341: (07) r2 += -84
+ 342: (18) r1 = map[id:1798]
+ 344: (79) r8 = *(u64 *)(r10 -120)
+ 345: (bf) r3 = r8
+ 346: (b7) r4 = 0
+ 347: (85) call htab_map_update_elem#409480
+ 348: (7b) *(u64 *)(r10 -112) = r0
+ 349: (79) r1 = *(u64 *)(r10 -104)
+ 350: (57) r1 &= 1
+ 351: (15) if r1 == 0x0 goto pc+1
+ 352: (79) r9 = *(u64 *)(r10 -128)
+ 353: (61) r1 = *(u32 *)(r9 +0)
+ 354: (63) *(u32 *)(r10 -88) = r1
+ 355: (bf) r2 = r10
+ 356: (07) r2 += -88
+ 357: (18) r1 = map[id:1798]
+ 359: (bf) r3 = r8
+ 360: (b7) r4 = 0
+ 361: (85) call htab_map_update_elem#409480
+ 362: (bf) r9 = r0
+ 363: (b7) r1 = 162
+ 364: (63) *(u32 *)(r10 -4) = r1
+ 365: (7b) *(u64 *)(r10 -16) = r9
+ 366: (bf) r2 = r10
+ 367: (07) r2 += -4
+ 368: (bf) r3 = r10
+ 369: (07) r3 += -16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+ 370: (18) r1 = map[id:1799]
+ 372: (b7) r4 = 0
+ 373: (85) call array_map_update_elem#428528
+ 374: (b7) r1 = 163
+ 375: (63) *(u32 *)(r10 -4) = r1
+ 376: (b7) r8 = 1
+ 377: (7b) *(u64 *)(r10 -16) = r8
+ 378: (bf) r2 = r10
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 379: (07) r2 += -4
+ 380: (bf) r3 = r10
+ 381: (07) r3 += -16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+ 382: (18) r1 = map[id:1799]
+ 384: (b7) r4 = 0
+ 385: (85) call array_map_update_elem#428528
+ 386: (79) r1 = *(u64 *)(r10 -96)
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 387: (79) r2 = *(u64 *)(r10 -112)
+ 388: (4f) r1 |= r2
+ 389: (15) if r1 == 0x0 goto pc+1
+ 390: (b7) r8 = 0
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 391: (15) if r1 == 0x0 goto pc+26
+ 392: (b7) r1 = 161
+; __u32 idx = ERR_IDX;
+ 393: (63) *(u32 *)(r10 -4) = r1
+ 394: (bf) r2 = r10
+; 
+ 395: (07) r2 += -4
+; __u64 *p = bpf_map_lookup_elem(&TAPE, &idx);
+ 396: (18) r1 = map[id:1799]
+ 398: (07) r1 += 264
+ 399: (61) r0 = *(u32 *)(r2 +0)
+ 400: (35) if r0 >= 0x100 goto pc+3
+ 401: (67) r0 <<= 3
+ 402: (0f) r0 += r1
+ 403: (05) goto pc+1
+ 404: (b7) r0 = 0
+ 405: (b7) r1 = 1
+; __u64 v = (p ? *p : 0) + 1;
+ 406: (15) if r0 == 0x0 goto pc+2
+; __u64 v = (p ? *p : 0) + 1;
+ 407: (79) r1 = *(u64 *)(r0 +0)
+; __u64 v = (p ? *p : 0) + 1;
+ 408: (07) r1 += 1
+; __u64 v = (p ? *p : 0) + 1;
+ 409: (7b) *(u64 *)(r10 -16) = r1
+ 410: (bf) r2 = r10
+ 411: (07) r2 += -4
+ 412: (bf) r3 = r10
+ 413: (07) r3 += -16
+; bpf_map_update_elem(&TAPE, &idx, &v, BPF_ANY);
+ 414: (18) r1 = map[id:1799]
+ 416: (b7) r4 = 0
+ 417: (85) call array_map_update_elem#428528
+ 418: (b7) r1 = 1
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 419: (15) if r9 == 0x0 goto pc+1
+ 420: (b7) r1 = 0
+; out = NAND_GATE_OBS(G0, a, b, raw, valid, setup_ok);
+ 421: (7b) *(u64 *)(r10 -16) = r1
+; if (!setup_ok)
+ 422: (57) r8 &= 1
+ 423: (55) if r8 != 0x0 goto pc+6
+ 424: (b7) r8 = 1
+; if (ctx->status == VM_STATUS_OK) {
+ 425: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 426: (55) if r1 != 0x0 goto pc-202
+; ctx->failing_gate = gate;
+ 427: (63) *(u32 *)(r6 +20) = r7
+ 428: (b7) r1 = 7
+ 429: (05) goto pc-206
+ 430: (b7) r8 = 1
+; if (valid && raw > 0)
+ 431: (6d) if r8 s> r9 goto pc+5
+; if (ctx->status == VM_STATUS_OK) {
+ 432: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 433: (55) if r1 != 0x0 goto pc-209
+; ctx->failing_gate = gate;
+ 434: (63) *(u32 *)(r6 +20) = r7
+ 435: (b7) r1 = 8
+ 436: (05) goto pc-213
+; if (bpf_map_update_elem(&WIRES, &gate.dst, &out, BPF_ANY))
+ 437: (bf) r2 = r10
+ 438: (07) r2 += -28
+ 439: (bf) r3 = r10
+ 440: (07) r3 += -16
+ 441: (18) r1 = map[id:1797]
+ 443: (b7) r4 = 0
+ 444: (85) call array_map_update_elem#428528
+; if (bpf_map_update_elem(&WIRES, &gate.dst, &out, BPF_ANY))
+ 445: (15) if r0 == 0x0 goto pc+3
+; if (ctx->status == VM_STATUS_OK) {
+ 446: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 447: (55) if r1 != 0x0 goto pc-223
+ 448: (05) goto pc-171
+; trace.second_update_raw_ret = raw;
+ 449: (7b) *(u64 *)(r10 -56) = r9
+; trace.valid = valid;
+ 450: (63) *(u32 *)(r10 -44) = r8
+; trace.output = (__u32)(out & 1ull);
+ 451: (79) r1 = *(u64 *)(r10 -16)
+; trace.output = (__u32)(out & 1ull);
+ 452: (57) r1 &= 1
+; trace.output = (__u32)(out & 1ull);
+ 453: (63) *(u32 *)(r10 -48) = r1
+ 454: (bf) r2 = r10
+; trace.second_update_raw_ret = raw;
+ 455: (07) r2 += -20
+ 456: (bf) r3 = r10
+ 457: (07) r3 += -56
+; if (bpf_map_update_elem(&VM_TRACE, &gate_key, &trace, BPF_ANY))
+ 458: (18) r1 = map[id:1801]
+ 460: (b7) r4 = 0
+ 461: (85) call array_map_update_elem#428528
+; if (bpf_map_update_elem(&VM_TRACE, &gate_key, &trace, BPF_ANY))
+ 462: (15) if r0 == 0x0 goto pc+5
+; if (ctx->status == VM_STATUS_OK) {
+ 463: (61) r1 = *(u32 *)(r6 +12)
+; if (ctx->status == VM_STATUS_OK) {
+ 464: (55) if r1 != 0x0 goto pc-240
+; ctx->failing_gate = gate;
+ 465: (63) *(u32 *)(r6 +20) = r7
+ 466: (b7) r1 = 9
+ 467: (05) goto pc-244
+; ctx->executed++;
+ 468: (61) r1 = *(u32 *)(r6 +16)
+ 469: (07) r1 += 1
+ 470: (63) *(u32 *)(r6 +16) = r1
+ 471: (b7) r8 = 0
+ 472: (05) goto pc-248

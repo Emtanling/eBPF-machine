@@ -1,0 +1,24 @@
+baseline_gates=166
+baseline_rows=205
+baseline_runs=39
+cap64_gates=166
+cap64_rows=205
+cap64_runs=39
+negative_rows=8
+normal_boundary_gates=1024
+normal_boundary_rows=1026
+normal_boundary_runs=2
+normal_known_gates=166
+normal_known_rows=205
+normal_known_runs=39
+normal_random_gates=23776
+normal_random_rows=25652
+normal_random_runs=1876
+normal_zero_gate_gates=0
+normal_zero_gate_rows=1
+normal_zero_gate_runs=1
+sentinel_gates=166
+sentinel_rows=205
+sentinel_runs=39
+stress_runs=10000
+interpreter audit: ok

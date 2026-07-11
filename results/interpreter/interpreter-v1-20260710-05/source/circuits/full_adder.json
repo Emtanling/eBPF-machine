@@ -1,0 +1,16 @@
+{
+  "name": "full_adder",
+  "inputs": ["a", "b", "cin"],
+  "gates": [
+    {"id": "d", "op": "nand", "args": ["a", "b"]},
+    {"id": "e", "op": "nand", "args": ["a", "d"]},
+    {"id": "f", "op": "nand", "args": ["b", "d"]},
+    {"id": "xab", "op": "nand", "args": ["e", "f"]},
+    {"id": "g", "op": "nand", "args": ["xab", "cin"]},
+    {"id": "h", "op": "nand", "args": ["xab", "g"]},
+    {"id": "i", "op": "nand", "args": ["cin", "g"]},
+    {"id": "sum", "op": "nand", "args": ["h", "i"]},
+    {"id": "cout", "op": "nand", "args": ["d", "g"]}
+  ],
+  "outputs": ["sum", "cout"]
+}

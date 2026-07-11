@@ -1,8 +1,111 @@
 {
-  "label": "ablation_k2_sentinel",
+  "artifacts": {
+    "bpf_object": {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/wm.bpf.o",
+      "sha256": "fb50f6b3c87abe1d0a6308f6b18ab49ba261fb0a2baa17b634c62be706fd5646"
+    },
+    "build_log": {
+      "path": "ablation_k2_sentinel.build.log",
+      "sha256": "4d132290ed448dea81dc2d6d8969548d900ca6fe9650fde51a4cbd24cb9028af"
+    },
+    "user_binary": {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/wm_user",
+      "sha256": "298bd1bf1d68a28bc7658ca3957b0a5ed7a8663b66c890860e0b6116491c7bb6"
+    },
+    "verifier_log": {
+      "path": "ablation_k2_sentinel.verifier.log",
+      "sha256": "d88b968b374c3d0473b7517cb47ef38b1770c5e059e041ff03ae7ac3b3a9d9fa"
+    },
+    "xlated_dump": {
+      "path": "ablation_k2_sentinel.wm_nand.xlated.txt",
+      "sha256": "1e08458282c438e869583d112e7da7bcf44e6f18ddd65d24bb374448b49b9798"
+    }
+  },
+  "bpftool_loadall_exit": 0,
   "build_flags": "GATE_CAP=2 -DWM_FORCE_SENTINEL_B",
-  "bpf_object_sha256": "88011208894b6fa49467cce9cf15427bb5734505d721dd6abd1281cb5137d464",
-  "verifier_log": "ablation_k2_sentinel.verifier.log",
-  "verifier_log_sha256": "5e51b6989e1bc1e516a203bc2a0c389f4f0ddf79522d82ef5c7214bbc8af6b2c",
-  "bpftool_loadall_exit": 0
+  "environment": {
+    "path": "env.json",
+    "sha256": "8aa44976c7eddec6f7e8788bfb9b2637e81cc02e81ed2960db046052620bef02",
+    "snapshot": {
+      "bpf_object_sha256": "1a946c69ff68071cc917c219416a7c2874cd793aab1b30a5020015e390eba2e2",
+      "bpftool_version": "bpftool v7.7.0\nusing libbpf v1.7\nfeatures:",
+      "btf_vmlinux_exists": true,
+      "cc_version": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "clang_version": "Ubuntu clang version 18.1.3 (1ubuntu1)\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/bin",
+      "feature_probe_sha256": "b6325da4c8b274bf01b5a07073099f0ece53609b0ed75c143cafbd93113ec3f5",
+      "libbpf_version": "1.3.0",
+      "python_version": "Python 3.12.3",
+      "uname": "Linux ubuntu-gnu-linux-24-04-3 6.17.0-35-generic #35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:14:16 UTC 2 aarch64 aarch64 aarch64 GNU/Linux",
+      "verifier_log_sha256": "73d22d1f00446a228327d22c7522e349e93da6755da1ba420bd4a9eb88901242",
+      "vmlinux_btf_sha256": "418da9e2d375fecf6f450fb9569a37bedd0723c32cb2786fd6c2117ef687ebe8",
+      "vmlinux_header_sha256": "6e941e2bff03a6877793709afda677d5b5bc7f055378ba9fc31037fd3394f9e0"
+    }
+  },
+  "label": "ablation_k2_sentinel",
+  "results": [
+    {
+      "path": "ablation_k2_sentinel.jsonl",
+      "sha256": "daf42a1fec6a496f68782006501dd06d5e5ec1a833b6298d2f75106a499dbf8f"
+    }
+  ],
+  "run_id": "20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20",
+  "schema": "weirdmachinebpf.provenance/v2",
+  "source_snapshot": [
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/Makefile",
+      "sha256": "04285f438232cbabab8a416cf7621fa64378d82fed77f7057b4e67ecb443f0e1",
+      "workspace_path": "Makefile"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/src/wm.bpf.c",
+      "sha256": "f703cc06118b6e3c34c861d7fe5855dbf520c9a940acb7ba857b6ad4a9e7fd32",
+      "workspace_path": "src/wm.bpf.c"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/src/wm_user.c",
+      "sha256": "799a813f0768dcf59273e0e27de932c363b578ce64f2ce67ea0c08ba6d841f4b",
+      "workspace_path": "src/wm_user.c"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/src/wm_common.h",
+      "sha256": "c79a9a2a27e51478e182c26755edd9795108c490393a50308a9f3bc23cd5f32e",
+      "workspace_path": "src/wm_common.h"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/src/vmlinux.h",
+      "sha256": "6e941e2bff03a6877793709afda677d5b5bc7f055378ba9fc31037fd3394f9e0",
+      "workspace_path": "src/vmlinux.h"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/scripts/run_kernel_suite.sh",
+      "sha256": "75b33c0484af80584ed4605bd149f654e2118d3b4219f70c8fdc54e6a62c5b94",
+      "workspace_path": "scripts/run_kernel_suite.sh"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/scripts/write_provenance.py",
+      "sha256": "129d23f6e08bed429b44f5060981a0ddcf814d43c40177cdd29171b0bfd357fc",
+      "workspace_path": "scripts/write_provenance.py"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/scripts/audit_results.py",
+      "sha256": "45a839689f454fde299a881cf75f19736ef9aff9cac0395193ac96518cd17243",
+      "workspace_path": "scripts/audit_results.py"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/scripts/capture_system_evidence.sh",
+      "sha256": "453e6c2c5ca33282fd62ed9ef9d1960fcda7c52979df30219eb23145714d9be0",
+      "workspace_path": "scripts/capture_system_evidence.sh"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/scripts/record_env.py",
+      "sha256": "4a4d6687660a32fa5a12cf4d75d1d92e1033d19be16ed90bb8a871ec2db2a1f8",
+      "workspace_path": "scripts/record_env.py"
+    },
+    {
+      "path": "variants/20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20/ablation_k2_sentinel/source/scripts/check_results.py",
+      "sha256": "1883bee07e824e4037b03af0e0502c3bbe2745424ff514c5fef50fbcfe7c5262",
+      "workspace_path": "scripts/check_results.py"
+    }
+  ],
+  "timestamp_utc": "2026-07-10T04:44:12Z"
 }

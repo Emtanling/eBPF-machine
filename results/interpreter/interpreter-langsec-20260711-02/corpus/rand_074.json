@@ -1,0 +1,20 @@
+{
+  "gates": [
+    {
+      "args": [
+        "i0",
+        "i0"
+      ],
+      "id": "g0",
+      "op": "nand"
+    }
+  ],
+  "inputs": [
+    "i0",
+    "i1"
+  ],
+  "name": "rand_074",
+  "outputs": [
+    "0"
+  ]
+}

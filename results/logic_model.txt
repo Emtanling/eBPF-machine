@@ -1,6 +1,10 @@
+make[1]: Entering directory '/home/parallels/Desktop/weirdmachineBPF'
+mkdir -p src
+bpftool btf dump file /sys/kernel/btf/vmlinux format c > src/vmlinux.h
 mkdir -p build
 cc -O2 -g -Wall -Wextra -I. tests/test_logic_model.c -o build/test_logic_model
 ./build/test_logic_model
 logic model: ok
 python3 tests/test_audit_results.py
 audit result tests: ok
+make[1]: Leaving directory '/home/parallels/Desktop/weirdmachineBPF'

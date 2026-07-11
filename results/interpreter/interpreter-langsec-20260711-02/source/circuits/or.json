@@ -1,0 +1,10 @@
+{
+  "name": "or",
+  "inputs": ["a", "b"],
+  "gates": [
+    {"id": "na", "op": "nand", "args": ["a", "a"]},
+    {"id": "nb", "op": "nand", "args": ["b", "b"]},
+    {"id": "out", "op": "nand", "args": ["na", "nb"]}
+  ],
+  "outputs": ["out"]
+}

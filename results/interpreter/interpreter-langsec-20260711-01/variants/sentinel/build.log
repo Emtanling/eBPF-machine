@@ -1,0 +1,8 @@
+make: Entering directory '/home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-langsec-20260711-01/source'
+mkdir -p /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-langsec-20260711-01/variants/sentinel/work
+clang -O2 -g -target bpf -D__TARGET_ARCH_arm64 -DGATE_CAP=2 -DWM_FORCE_SENTINEL_B \
+	-c src/wm.bpf.c -o /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-langsec-20260711-01/variants/sentinel/work/wm.bpf.o
+mkdir -p /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-langsec-20260711-01/variants/sentinel/work
+cc -O2 -g -Wall -Wextra -I.  src/wm_vm_user.c \
+	-lbpf  -lelf -lz -o /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-langsec-20260711-01/variants/sentinel/work/wm_vm_user
+make: Leaving directory '/home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-langsec-20260711-01/source'

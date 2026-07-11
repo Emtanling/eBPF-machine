@@ -1,8 +1,8 @@
-{"case":"full_adder","a":0,"b":0,"cin":0,"expected_sum":0,"expected_cout":0,"actual_sum":0,"actual_cout":0,"err":0,"passed":true}
-{"case":"full_adder","a":0,"b":0,"cin":1,"expected_sum":1,"expected_cout":0,"actual_sum":1,"actual_cout":0,"err":0,"passed":true}
-{"case":"full_adder","a":0,"b":1,"cin":0,"expected_sum":1,"expected_cout":0,"actual_sum":1,"actual_cout":0,"err":0,"passed":true}
-{"case":"full_adder","a":0,"b":1,"cin":1,"expected_sum":0,"expected_cout":1,"actual_sum":0,"actual_cout":1,"err":0,"passed":true}
-{"case":"full_adder","a":1,"b":0,"cin":0,"expected_sum":1,"expected_cout":0,"actual_sum":1,"actual_cout":0,"err":0,"passed":true}
-{"case":"full_adder","a":1,"b":0,"cin":1,"expected_sum":0,"expected_cout":1,"actual_sum":0,"actual_cout":1,"err":0,"passed":true}
-{"case":"full_adder","a":1,"b":1,"cin":0,"expected_sum":0,"expected_cout":1,"actual_sum":0,"actual_cout":1,"err":0,"passed":true}
-{"case":"full_adder","a":1,"b":1,"cin":1,"expected_sum":1,"expected_cout":1,"actual_sum":1,"actual_cout":1,"err":0,"passed":true}
+{"case":"full_adder","a":0,"b":0,"cin":0,"expected_sum":0,"expected_cout":0,"actual_sum":0,"actual_cout":0,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":-7,"second_update_errno":7,"passed":true}
+{"case":"full_adder","a":0,"b":0,"cin":1,"expected_sum":1,"expected_cout":0,"actual_sum":1,"actual_cout":0,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":-7,"second_update_errno":7,"passed":true}
+{"case":"full_adder","a":0,"b":1,"cin":0,"expected_sum":1,"expected_cout":0,"actual_sum":1,"actual_cout":0,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":-7,"second_update_errno":7,"passed":true}
+{"case":"full_adder","a":0,"b":1,"cin":1,"expected_sum":0,"expected_cout":1,"actual_sum":0,"actual_cout":1,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":0,"second_update_errno":0,"passed":true}
+{"case":"full_adder","a":1,"b":0,"cin":0,"expected_sum":1,"expected_cout":0,"actual_sum":1,"actual_cout":0,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":-7,"second_update_errno":7,"passed":true}
+{"case":"full_adder","a":1,"b":0,"cin":1,"expected_sum":0,"expected_cout":1,"actual_sum":0,"actual_cout":1,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":0,"second_update_errno":0,"passed":true}
+{"case":"full_adder","a":1,"b":1,"cin":0,"expected_sum":0,"expected_cout":1,"actual_sum":0,"actual_cout":1,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":0,"second_update_errno":0,"passed":true}
+{"case":"full_adder","a":1,"b":1,"cin":1,"expected_sum":1,"expected_cout":1,"actual_sum":1,"actual_cout":1,"err":0,"variant_id":1,"gate_cap":2,"second_update_observed":true,"second_update_raw_ret":0,"second_update_errno":0,"passed":true}
