@@ -2,5 +2,39 @@ __pycache__/
 *.py[cod]
 .DS_Store
 ._*
-build/test_logic_model
-build/test_logic_model.dSYM/
+
+# Local backups and agent work files.
+*.bak_*
+/.bak_*/
+/.codex-backup-*/
+/.codex_backups/
+/.interpreter_suite.lock
+
+# Rebuildable native and generated source artifacts.
+/build/
+/src/vmlinux.h
+/circuits/*.wmc
+/circuits/boundary/
+/circuits/generated/
+/witness2/frama_c/static_check/
+
+# Keep only the report-bound evidence bundle in version control.
+/results/*
+!/results/interpreter/
+/results/interpreter/*
+!/results/interpreter/interpreter-final-20260711-02/
+
+# Keep the final paper PDF, not LaTeX intermediates.
+/output/pdf/*
+!/output/pdf/PAPER_REPORT.pdf
+
+# Historical/internal documents retained locally only.
+/EDITORIAL_DECISION.md
+/PAPER_DRAFT.md
+/PEER_REVIEW.md
+/PAPER_*_REPORT.md
+/PAPER_*_REPORT.tex
+/*_REVISION_*.md
+/*_RE_REVIEW_*.md
+/REVISION_RESPONSE_*.md
+/RE_REVIEW_*.md

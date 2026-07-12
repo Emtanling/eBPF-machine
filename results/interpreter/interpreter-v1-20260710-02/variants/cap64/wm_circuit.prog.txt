@@ -1,4 +1,0 @@
-1581: syscall  name wm_circuit  tag 53ae6337817a0a3b  gpl
-	loaded_at 2026-07-10T21:25:35+0800  uid 0
-	xlated 3784B  jited 2440B  memlock 4096B  map_ids 663,660,661,664,662,665
-	btf_id 484

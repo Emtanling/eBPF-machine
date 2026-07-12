@@ -39,8 +39,6 @@ snapshot_sources() {
     ARTIFACT.md
     README.md
     INTERPRETER_IMPLEMENTATION_2026-07-10.md
-    results/abstraction_gap_witness.md
-    results/exploitable_gap.md
     src/wm.bpf.c
     src/wm_common.h
     src/wm_user.c

@@ -34,6 +34,7 @@ python3 current_provenance.py verify
 echo
 echo "Current-model log: $current_log"
 echo "Version record: out/eva_slevel0.current.version.txt"
+echo "Environment: out/environment.current.json"
 echo "Provenance: out/current.provenance.json"
 echo "Archived old-model log remains unchanged: out/eva_slevel0.log"
 echo "Interpretation and limitations: README.md and RESULTS.md"

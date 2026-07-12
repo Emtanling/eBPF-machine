@@ -1,9 +1,0 @@
-{
-  "name": "and",
-  "inputs": ["a", "b"],
-  "gates": [
-    {"id": "n", "op": "nand", "args": ["a", "b"]},
-    {"id": "out", "op": "nand", "args": ["n", "n"]}
-  ],
-  "outputs": ["out"]
-}

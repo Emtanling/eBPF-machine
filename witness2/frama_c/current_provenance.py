@@ -5,12 +5,14 @@ import argparse
 import hashlib
 import json
 import os
+import platform
 import re
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
 
-SCHEMA = "weirdmachinebpf.frama-c-eva/v1"
+SCHEMA = "weirdmachinebpf.frama-c-eva/v2"
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "out"
@@ -22,8 +24,7 @@ BOUND_PATHS = {
     "provenance_tool": Path(__file__).resolve(),
     "eva_log": OUT / "eva_slevel0.current.log",
     "version_record": OUT / "eva_slevel0.current.version.txt",
-    "environment": ROOT / "results" / "env.json",
-    "ebpf_provenance": ROOT / "results" / "nand.provenance.json",
+    "environment": OUT / "environment.current.json",
 }
 
 REQUIRED_EXACT_LINES = (
@@ -84,20 +85,45 @@ def check_log() -> None:
     validate_log_text(BOUND_PATHS["eva_log"].read_text(encoding="utf-8"))
 
 
+def command_output(command: list[str]) -> str:
+    return subprocess.check_output(
+        command, text=True, stderr=subprocess.STDOUT
+    ).strip()
+
+
+def write_environment() -> None:
+    version = BOUND_PATHS["version_record"].read_text(encoding="utf-8").strip()
+    environment = {
+        "frama_c_version": version,
+        "machine": platform.machine(),
+        "python_version": command_output(["python3", "--version"]),
+        "uname": command_output(["uname", "-a"]),
+    }
+    OUT.mkdir(parents=True, exist_ok=True)
+    BOUND_PATHS["environment"].write_text(
+        json.dumps(environment, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
+def validate_environment(version: str) -> None:
+    environment = load_object(BOUND_PATHS["environment"])
+    if environment.get("frama_c_version") != version:
+        raise ValueError("environment and Frama-C version record disagree")
+    for field in ("machine", "python_version", "uname"):
+        value = environment.get(field)
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"environment lacks non-empty {field}")
+
+
 def write_manifest() -> None:
     check_log()
-    ebpf = load_object(BOUND_PATHS["ebpf_provenance"])
-    if ebpf.get("schema") != "weirdmachinebpf.provenance/v2":
-        raise ValueError("eBPF provenance is not schema v2")
-    run_id = ebpf.get("run_id")
-    if not isinstance(run_id, str) or not run_id:
-        raise ValueError("eBPF provenance lacks run_id")
-
     version = BOUND_PATHS["version_record"].read_text(encoding="utf-8").strip()
+    write_environment()
+    validate_environment(version)
     manifest = {
         "schema": SCHEMA,
         "timestamp_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "ebpf_run_id": run_id,
         "command": ["frama-c", "-eva", "-eva-slevel", "0", "nand_mod.c"],
         "tool_version": version,
         "bindings": {name: binding(path) for name, path in BOUND_PATHS.items()},
@@ -137,18 +163,10 @@ def verify_manifest() -> None:
         if record.get("sha256") != sha256_file(expected_path):
             raise ValueError(f"SHA-256 mismatch for {name}")
 
-    ebpf = load_object(BOUND_PATHS["ebpf_provenance"])
-    if manifest.get("ebpf_run_id") != ebpf.get("run_id"):
-        raise ValueError("Frama-C and eBPF provenance run IDs do not join")
-    ebpf_environment = ebpf.get("environment")
-    if not isinstance(ebpf_environment, dict) or (
-        ebpf_environment.get("sha256")
-        != bindings["environment"].get("sha256")
-    ):
-        raise ValueError("Frama-C environment hash does not match eBPF provenance")
     version = BOUND_PATHS["version_record"].read_text(encoding="utf-8").strip()
     if manifest.get("tool_version") != version:
         raise ValueError("Frama-C version record does not match manifest")
+    validate_environment(version)
     if manifest.get("observations") != {
         "nand_global_range": [0, 1],
         "mod7_control_global_range": [1],
@@ -156,7 +174,7 @@ def verify_manifest() -> None:
     }:
         raise ValueError("Frama-C observation summary is unexpected")
     check_log()
-    print(f"Frama-C provenance audit: ok (eBPF run_id={manifest['ebpf_run_id']})")
+    print("Frama-C provenance audit: ok")
 
 
 def main() -> int:

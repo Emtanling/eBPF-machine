@@ -9,6 +9,8 @@ RESULTS  := results
 TESTS    := tests
 SCRIPTS  := scripts
 CIRCUITS := circuits
+REPORT_RUN := results/interpreter/interpreter-final-20260711-02
+INTERPRETER_RUN ?= $(REPORT_RUN)
 
 UNAME_M := $(shell uname -m)
 ifeq ($(UNAME_M),aarch64)
@@ -34,7 +36,7 @@ LIBBPF_CFLAGS := $(shell pkg-config --cflags libbpf 2>/dev/null)
 
 all: $(BUILD)/wm_user $(BUILD)/wm_vm_user
 
-test: $(BUILD)/test_logic_model
+test: $(SRC)/vmlinux.h $(BUILD)/test_logic_model
 	$(BUILD)/test_logic_model
 	$(PYTHON) $(TESTS)/test_audit_results.py
 	$(PYTHON) $(TESTS)/test_circuit_tool.py
@@ -57,8 +59,8 @@ interpreter-data:
 	bash $(SCRIPTS)/run_interpreter_suite.sh
 
 verify-interpreter:
-	@test -n "$(INTERPRETER_RUN)" || \
-		{ echo "set INTERPRETER_RUN=results/interpreter/<run-id>" >&2; exit 2; }
+	@test -d "$(INTERPRETER_RUN)" || \
+		{ echo "missing interpreter run: $(INTERPRETER_RUN)" >&2; exit 2; }
 	PYTHONDONTWRITEBYTECODE=1 $(PYTHON) $(INTERPRETER_RUN)/source/scripts/audit_interpreter.py $(INTERPRETER_RUN)
 	PYTHONDONTWRITEBYTECODE=1 $(PYTHON) $(INTERPRETER_RUN)/source/scripts/write_interpreter_provenance.py verify $(INTERPRETER_RUN)
 
@@ -89,9 +91,7 @@ $(BUILD)/test_logic_model: $(TESTS)/test_logic_model.c $(SRC)/wm_common.h
 	mkdir -p $(BUILD)
 	$(CC) $(CFLAGS) $< -o $@
 
-verify:
-	$(PYTHON) $(SCRIPTS)/check_results.py $(RESULTS)/*.jsonl
-	$(PYTHON) $(SCRIPTS)/audit_results.py --full-suite $(RESULTS)
+verify: verify-interpreter
 
 verify-witness2:
 	bash witness2/run.sh

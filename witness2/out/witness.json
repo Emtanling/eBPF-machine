@@ -1,0 +1,261 @@
+{
+  "claim_matrix": {
+    "explicit_nand": {
+      "congruence_refined_relation_certifies_graph": true,
+      "exact_global_value_range": [
+        0,
+        1
+      ],
+      "global_range_certifies_graph": false,
+      "global_value_range_exact": true,
+      "interval_global_value_range": [
+        0,
+        1
+      ],
+      "nonconstant": true,
+      "singleton_input_partition_certifies_graph": true,
+      "toy_row_relation_range_mod_certifies_graph": true,
+      "truth_table": [
+        {
+          "input": [
+            0,
+            0
+          ],
+          "output": 1
+        },
+        {
+          "input": [
+            0,
+            1
+          ],
+          "output": 1
+        },
+        {
+          "input": [
+            1,
+            0
+          ],
+          "output": 1
+        },
+        {
+          "input": [
+            1,
+            1
+          ],
+          "output": 0
+        }
+      ]
+    },
+    "modulo_nand": {
+      "congruence_refined_relation_certifies_graph": true,
+      "exact_global_value_range": [
+        0,
+        1
+      ],
+      "global_range_certifies_graph": false,
+      "global_value_range_exact": true,
+      "interval_global_value_range": [
+        0,
+        1
+      ],
+      "nonconstant": true,
+      "singleton_input_partition_certifies_graph": true,
+      "toy_row_relation_range_mod_certifies_graph": false,
+      "truth_table": [
+        {
+          "input": [
+            0,
+            0
+          ],
+          "output": 1
+        },
+        {
+          "input": [
+            0,
+            1
+          ],
+          "output": 1
+        },
+        {
+          "input": [
+            1,
+            0
+          ],
+          "output": 1
+        },
+        {
+          "input": [
+            1,
+            1
+          ],
+          "output": 0
+        }
+      ]
+    },
+    "projection": {
+      "congruence_refined_relation_certifies_graph": true,
+      "exact_global_value_range": [
+        0,
+        1
+      ],
+      "global_range_certifies_graph": false,
+      "global_value_range_exact": true,
+      "interval_global_value_range": [
+        0,
+        1
+      ],
+      "nonconstant": true,
+      "singleton_input_partition_certifies_graph": true,
+      "toy_row_relation_range_mod_certifies_graph": true,
+      "truth_table": [
+        {
+          "input": [
+            0,
+            0
+          ],
+          "output": 0
+        },
+        {
+          "input": [
+            0,
+            1
+          ],
+          "output": 0
+        },
+        {
+          "input": [
+            1,
+            0
+          ],
+          "output": 1
+        },
+        {
+          "input": [
+            1,
+            1
+          ],
+          "output": 1
+        }
+      ]
+    }
+  },
+  "completeness": {
+    "interval_on_actual_value_set": {
+      "actual_X": [
+        1,
+        2,
+        3
+      ],
+      "equal": true,
+      "interpretation": "No interval-completeness violation occurs for MOD on the actually reachable value set.",
+      "lhs_alpha_of_concrete_mod_X": [
+        0,
+        2
+      ],
+      "rhs_interval_mod_of_alpha_X": [
+        0,
+        2
+      ]
+    },
+    "row_relation_on_actual_reachable_state": {
+      "alpha_rel": "identity over finite row-indexed value sets",
+      "equal": false,
+      "interpretation": "Strict inequality is caused by this toy analyzer's row-forgetting range-only MOD transfer, not by the ordinary interval value abstraction and not by Linux eBPF.",
+      "lhs_alpha_rel_of_concrete_mod_R": [
+        {
+          "input": [
+            0,
+            0
+          ],
+          "values": [
+            1
+          ]
+        },
+        {
+          "input": [
+            0,
+            1
+          ],
+          "values": [
+            2
+          ]
+        },
+        {
+          "input": [
+            1,
+            0
+          ],
+          "values": [
+            2
+          ]
+        },
+        {
+          "input": [
+            1,
+            1
+          ],
+          "values": [
+            0
+          ]
+        }
+      ],
+      "lhs_strict_subset_of_rhs": true,
+      "refined_rhs_equal_to_lhs": true,
+      "rhs_range_only_mod_of_alpha_rel_R": [
+        {
+          "input": [
+            0,
+            0
+          ],
+          "values": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "input": [
+            0,
+            1
+          ],
+          "values": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "input": [
+            1,
+            0
+          ],
+          "values": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "input": [
+            1,
+            1
+          ],
+          "values": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    }
+  },
+  "same_concrete_nand_function": true,
+  "schema": "witness2-precision-audit-v2",
+  "scope": [
+    "A full Boolean output range is exact for every nonconstant Boolean function; it does not by itself establish relational opacity.",
+    "The strict completeness inequality is specific to the toy row-forgetting MOD transfer implemented here.",
+    "The result is not a model of, and supplies no system-independence evidence about, the Linux eBPF verifier.",
+    "The archived old-input-model Frama-C log reports global value ranges only; it is not a run of the corrected two-input source and does not validate this report's relational claims.",
+    "The exact residue and singleton-partition repairs enumerate four Boolean input rows; they establish no scalability or circuit-composition theorem."
+  ]
+}

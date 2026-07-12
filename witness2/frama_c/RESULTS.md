@@ -9,9 +9,8 @@
 - Host: Ubuntu 24.04.3, Linux 6.17.0-35-generic, aarch64.
 - Command: `frama-c -eva -eva-slevel 0 nand_mod.c` via `bash run.sh`.
 - Current log: `out/eva_slevel0.current.log`.
-- Provenance: `out/current.provenance.json`, which binds this source/log/version
-  to `results/env.json` and eBPF run ID
-  `20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20`.
+- Provenance: `out/current.provenance.json`, which binds this source, runner,
+  checker, log, version record, and `out/environment.current.json` by SHA-256.
 - Current-log SHA-256:
   `6d496d5685ced6d0d0a33bc4e7ff6b67648b6bc0d3250a970dd6dfc203611176`.
 - Result: `NAND_out: {0; 1}`, `ABLATION_out: {1}`, and 0 alarms.

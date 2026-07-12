@@ -1,3 +1,0 @@
-semantic audit: ok
-helper-return audit: success=0 and at-capacity ret<0; observed negative return(s)=[-7], errno(s)=[7]
-provenance audit: ok (run_id=20260710T044401Z-604a5721-8db0-4681-b46f-55fafb354c20)

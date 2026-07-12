@@ -104,10 +104,11 @@ both successors of the `ret == 0` branch. The artifact does not infer a full
 `Report_log`, a concretization `γ`, a joined-cell witness containing specified
 concrete executions, or a transfer-soundness theorem from those lines.
 
-Consequently, any application of Definition 5 or Proposition 3 is conditional
-on separately defining `Report_log` and proving the necessary local
-transfer-soundness and coverage facts. The current artifact does not discharge
-those extra premises and does not claim global Q-certificate opacity.
+Consequently, Proposition 1 and Definition 2 of the current report can be
+instantiated only after supplying an extractor for actual computed cells, a
+declared concretization, frontier coverage, a fixed context fiber, and a checked
+behavioral non-factorization witness. The current artifact does not discharge
+those premises and therefore does not establish Linux node R or `L_res^R`.
 
 ## 5. Integrity manifest boundary
 
@@ -119,12 +120,9 @@ timestamp authority, or protection against a party who can replace all files
 and issue a matching new manifest. It supports reproducibility and anti-mix-up
 checks, not external provenance or authorship claims.
 
-## 6. Relationship to historical reviews
+## 6. Current scope
 
-`REVISION_RESPONSE_2026-07-10.md`, `RE_REVIEW_2026-07-10.md`,
-The revision notes and independent review records document the earlier
-gate-only revision
-state. Their statements that no E4 implementation/compiler existed, or that
-only hand-written schedules were executed, are historical pre-`P_U` statements.
-Their limits on E4-A, report extraction, whole-program opacity, and
-policy/threat-model-based weird-machine classification remain current.
+This record and `PAPER_REPORT.md` state the current implementation boundary.
+The artifact establishes no E4-A compiler, Linux report extraction or
+non-factorization result, concurrent-use guarantee, or policy/threat-model-based
+weird-machine classification.

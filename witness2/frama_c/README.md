@@ -30,9 +30,7 @@ On a system with Frama-C installed:
 bash run.sh
 ```
 
-Run the eBPF suite first so `results/env.json` and
-`results/nand.provenance.json` identify the environment/run to which this
-control is attached.
+This control is self-contained and does not require a prior eBPF suite run.
 
 The script runs:
 
@@ -43,8 +41,8 @@ frama-c -eva -eva-slevel 0 nand_mod.c
 and writes `out/eva_slevel0.current.log`. It also requires both independent
 input ranges and the zero-alarm summary, then writes and re-verifies
 `out/current.provenance.json`. That manifest binds the C source, runner,
-provenance checker, current log, version record, environment snapshot, and eBPF
-run ID by SHA-256. It deliberately does not overwrite the archived
+provenance checker, current log, version record, and a locally captured
+environment snapshot by SHA-256. It deliberately does not overwrite the archived
 `out/eva_slevel0.log`. Like the eBPF manifests, it is a self-issued consistency
 record, not an external signature.
 

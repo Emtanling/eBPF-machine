@@ -1,4 +1,0 @@
-1128: syscall  name wm_circuit  tag f750d7ea92ce2ac1  gpl
-	loaded_at 2026-07-10T20:30:15+0800  uid 0
-	xlated 2728B  jited 1792B  memlock 4096B  map_ids 502,500,501,503,504
-	btf_id 395

@@ -1,8 +1,0 @@
-mkdir -p src
-bpftool btf dump file /sys/kernel/btf/vmlinux format c > src/vmlinux.h
-mkdir -p build
-clang -O2 -g -target bpf -D__TARGET_ARCH_arm64 -DGATE_CAP=64  \
-	-c src/wm.bpf.c -o build/wm.bpf.o
-mkdir -p build
-cc -O2 -g -Wall -Wextra -I.  src/wm_vm_user.c \
-	-lbpf  -lelf -lz -o build/wm_vm_user

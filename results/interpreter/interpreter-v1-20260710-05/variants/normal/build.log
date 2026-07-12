@@ -1,8 +1,0 @@
-make: Entering directory '/home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-v1-20260710-05/source'
-mkdir -p /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-v1-20260710-05/variants/normal/work
-clang -O2 -g -target bpf -D__TARGET_ARCH_arm64 -DGATE_CAP=2  \
-	-c src/wm.bpf.c -o /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-v1-20260710-05/variants/normal/work/wm.bpf.o
-mkdir -p /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-v1-20260710-05/variants/normal/work
-cc -O2 -g -Wall -Wextra -I.  src/wm_vm_user.c \
-	-lbpf  -lelf -lz -o /home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-v1-20260710-05/variants/normal/work/wm_vm_user
-make: Leaving directory '/home/parallels/Desktop/weirdmachineBPF/results/interpreter/interpreter-v1-20260710-05/source'

@@ -1,0 +1,21 @@
+PRECISION CONTROL — VALUE RANGE VS RELATIONAL CERTIFICATION
+========================================================================
+Equivalent concrete NAND implementations: True
+
+CLAIM MATRIX
+case              range exact   global graph   toy range-MOD graph   refined graph  partition graph
+projection        True          False          True                  True           True           
+explicit_nand     True          False          True                  True           True           
+modulo_nand       True          False          False                 True           True           
+
+COMPLETENESS CHECKS ON ACTUAL REACHABLE STATES
+  interval values: alpha(mod(X)) = [0, 2]; mod#(alpha(X)) = [0, 2]; equal=True
+  toy row relation: exact MOD result is a strict subset of the range-only MOD result: True
+  congruence-aware refinement restores equality: True
+
+INTERPRETATION
+  - A full Boolean output range is exact for every nonconstant Boolean function; it does not by itself establish relational opacity.
+  - The strict completeness inequality is specific to the toy row-forgetting MOD transfer implemented here.
+  - The result is not a model of, and supplies no system-independence evidence about, the Linux eBPF verifier.
+  - The archived old-input-model Frama-C log reports global value ranges only; it is not a run of the corrected two-input source and does not validate this report's relational claims.
+  - The exact residue and singleton-partition repairs enumerate four Boolean input rows; they establish no scalability or circuit-composition theorem.

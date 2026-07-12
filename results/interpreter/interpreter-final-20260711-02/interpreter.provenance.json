@@ -1210,34 +1210,34 @@
       "sha256": "333b3a12ec8aa48f769d1c515d485bc94b335ea5b56752e24a45b7cb28a64453"
     },
     {
-      "bytes": 28284,
+      "bytes": 6614,
       "path": "source/ARTIFACT.md",
-      "sha256": "abc4f907fb196700916920582b26956a4c632657dfe763866667bcd63d31b1ec"
+      "sha256": "88288abcf608aaff002df16cd27d7684dd33b9e19a14af0cbb50096900376a71"
     },
     {
-      "bytes": 7091,
+      "bytes": 6970,
       "path": "source/INTERPRETER_IMPLEMENTATION_2026-07-10.md",
-      "sha256": "a6866f03efc709bea42c69a087f5664e41a59d80684ff2de5b666059c9a8c831"
+      "sha256": "b9cd3a074a64a6e592fc50af1a79cbafd72e293de60c7685068d493a25f0107d"
     },
     {
-      "bytes": 2926,
+      "bytes": 2933,
       "path": "source/Makefile",
-      "sha256": "2e61c230eb11f63140b25349d88dfe6ac99ab56d22c3e3eb48f5da2446afc20f"
+      "sha256": "351796f54dd82f8cf16db35e82f46805c06d7eaa3133ded75087196e524fba47"
     },
     {
-      "bytes": 51508,
+      "bytes": 54799,
       "path": "source/PAPER_REPORT.md",
-      "sha256": "56aaf5072f796e88a18552d654de8539f6948889d86fb1f56b03fa747684f312"
+      "sha256": "2323aea0adbe71cdbc52f32ac6a42c8016bd64a211ba1640039a4ce58e9b5ad2"
     },
     {
-      "bytes": 55250,
+      "bytes": 58415,
       "path": "source/PAPER_REPORT.tex",
-      "sha256": "195d8c486f48290d0db9027e666927159ad3258fc020dd8c546253c3eaa10cb9"
+      "sha256": "38ab07777bd2697ca9e3bdda3b080d942b032d33539d4e441b8cc5f4ca2ec707"
     },
     {
-      "bytes": 12014,
+      "bytes": 4521,
       "path": "source/README.md",
-      "sha256": "eb2aca6722410e45a0bc3c3712fa394627c819cfcbb980498f5c28a944ed0ff9"
+      "sha256": "b0efe9ae9d59ba836e04152ce786dc65d5291cd35387e35c9081f22c1459bc54"
     },
     {
       "bytes": 187,
@@ -1285,16 +1285,6 @@
       "sha256": "425ef4e88e77a3973e8bb9ccc947fe2ba999731f40880649609f82886a31567c"
     },
     {
-      "bytes": 5319,
-      "path": "source/results/abstraction_gap_witness.md",
-      "sha256": "7698973cf5757d09adf8ca670f49f465ba755e436f8038f93950fb4d6adb46dc"
-    },
-    {
-      "bytes": 9961,
-      "path": "source/results/exploitable_gap.md",
-      "sha256": "2111732ad9bfb477cf8343421118838eb6fc09a308ad240b84703a9fbd778bbf"
-    },
-    {
       "bytes": 30892,
       "path": "source/scripts/audit_interpreter.py",
       "sha256": "af6a2920080ae0532640368bb215ff401e63ac4ba005474359d0f6192f04e612"
@@ -1325,9 +1315,9 @@
       "sha256": "4a4d6687660a32fa5a12cf4d75d1d92e1033d19be16ed90bb8a871ec2db2a1f8"
     },
     {
-      "bytes": 7467,
+      "bytes": 7397,
       "path": "source/scripts/run_interpreter_suite.sh",
-      "sha256": "5b71a13ade22543d9a8672138ed79f97a08258ab315d6e0a9bbcc9f4ea52d679"
+      "sha256": "38ebc463d53004d67c83912ad7f9748499e639938c57a247d2b610e5cf266feb"
     },
     {
       "bytes": 7188,
@@ -1592,5 +1582,5 @@
   ],
   "run_id": "interpreter-final-20260711-02",
   "schema": "weirdmachinebpf.interpreter-provenance/v1",
-  "timestamp_utc": "2026-07-11T08:45:48.190779Z"
+  "timestamp_utc": "2026-07-12T08:30:30.773298Z"
 }

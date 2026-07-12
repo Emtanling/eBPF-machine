@@ -1,1 +1,0 @@
-{"record":"run","circuit":"const_one","kind":"exhaustive","ordinal":0,"run_seq":1,"program_id":1087,"input_count":0,"gate_count":0,"assignment":0,"variant_id":1,"gate_cap":2,"logical_expected":1,"variant_expected":1,"actual":1,"status":0,"executed":0,"failing_gate":4294967295,"gate_error_count":0,"trace_passed":true,"passed":true}

@@ -151,7 +151,7 @@ The current C source uses two independent `Frama_C_interval(0,1)` calls. The
 recorded VM rerun produced `frama_c/out/eva_slevel0.current.log`: modulo NAND
 is `{0;1}`, the different constant mod-7 control is `{1}`, and EVA reports zero
 alarms. `frama_c/out/current.provenance.json` binds that log to the current
-source, runner, tool version, `results/env.json`, and certified eBPF run ID.
+source, runner, checker, tool version, and a self-contained environment record.
 
 ## Residual limitations
 
