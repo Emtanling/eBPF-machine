@@ -7,6 +7,15 @@ report-bound evidence bundle for the bounded eBPF interpreter described in:
 - `PAPER_REPORT.tex` — IEEE/arXiv source; and
 - `output/pdf/PAPER_REPORT.pdf` — compiled paper.
 
+A complete Simplified Chinese reading edition is also provided:
+
+- `PAPER_REPORT_ZH.md` — Chinese manuscript;
+- `PAPER_REPORT_ZH.tex` — standalone CTeX source; and
+- `output/pdf/PAPER_REPORT_ZH.pdf` — compiled Chinese paper.
+
+The English IEEE/arXiv files remain the submission source; the Chinese edition
+is a faithful reading translation and does not replace them.
+
 The accompanying repository is
 <https://github.com/Emtanling/eBPF-machine>.
 
@@ -61,6 +70,18 @@ make circuits
 
 These commands regenerate `src/vmlinux.h`, `build/`, and textual WMC1
 descriptors as needed. Those generated files are ignored by Git.
+
+Compile the Chinese reading edition with XeLaTeX:
+
+```sh
+xelatex -interaction=nonstopmode -halt-on-error \
+  -output-directory=output/pdf PAPER_REPORT_ZH.tex
+xelatex -interaction=nonstopmode -halt-on-error \
+  -output-directory=output/pdf PAPER_REPORT_ZH.tex
+```
+
+This requires `texlive-xetex`, `texlive-lang-chinese`, and a CJK font such as
+`Noto Serif CJK SC`.
 
 ## Verify the report-bound evidence
 

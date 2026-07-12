@@ -27,6 +27,7 @@ __pycache__/
 # Keep the final paper PDF, not LaTeX intermediates.
 /output/pdf/*
 !/output/pdf/PAPER_REPORT.pdf
+!/output/pdf/PAPER_REPORT_ZH.pdf
 
 # Historical/internal documents retained locally only.
 /EDITORIAL_DECISION.md
