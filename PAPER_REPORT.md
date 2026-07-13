@@ -648,7 +648,7 @@ OpenAI Codex assisted drafting, revision, language editing, artifact code/test r
 
 [17] T. Dullien, “Weird Machines, Exploitability, and Provable Unexploitability,” *IEEE Transactions on Emerging Topics in Computing*, vol. 8, no. 2, pp. 391–403, 2020, doi: 10.1109/TETC.2017.2785299.
 
-[18] J. Paykin et al., “Weird Machines as Insecure Compilation,” arXiv:1911.00157, 2019.
+[18] J. Paykin et al., “Weird Machines as Insecure Compilation,” arXiv:1911.00157, 2019, doi: 10.48550/arXiv.1911.00157.
 
 [19] J. Vanegue, “The Weird Machines in Proof-Carrying Code,” in *2014 IEEE Security and Privacy Workshops*, pp. 209–213, 2014, doi: 10.1109/SPW.2014.37.
 
