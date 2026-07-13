@@ -2,6 +2,9 @@
 
 Repository: <https://github.com/Emtanling/eBPF-machine>
 
+Immutable evidence snapshot: commit
+[`4309069a`](https://github.com/Emtanling/eBPF-machine/tree/4309069a1f94d642d5c1402eb710e089c85059b1)
+
 Canonical evidence bundle:
 `results/interpreter/interpreter-final-20260711-02/`
 
@@ -19,10 +22,11 @@ The paper's claim graph separates:
 - **W — policy/threat obligation:** an admitted actor can drive a
   policy-excluded effect.
 
-The Linux case establishes A and C and supports P under the stated
-source-to-object, helper, reset, frame, environment, and serialization premises.
-It does not provide a Linux computed-cell extractor or deployment policy and
-therefore establishes neither R nor W.
+The Linux case records A, gives a conditional C witness under the declared
+map-service/no-interference contract, and supports P under additional source-to-object,
+helper, reset, frame, environment, and serialization premises. It does not
+provide a Linux computed-cell extractor or deployment policy and therefore
+establishes neither R nor W.
 
 ## Implementation boundary
 
@@ -60,8 +64,12 @@ portable errno value.
 The concrete C witness compares inputs `(0,1)` and `(1,1)` immediately before
 the second fresh-key update. The suffix, key, value, map identity and static
 attributes, flags, program point, observer, kernel, object, schedule, and
-no-interference environment are fixed. Only the selected occupied-key set
-differs, and the suffix observations are success and failure.
+no-interference environment are fixed. The selected component is the complete
+helper-relevant dynamic state of `G0`, including occupancy and map-local
+bucket/preallocated-element/free-list metadata; the occupied-key set is only a
+derived proof projection. All suffix-read components outside that selected map
+state are fixed. The suffix observations are success and failure under the
+declared map-service contract.
 
 ## Verify the preserved run
 
@@ -114,7 +122,8 @@ The canonical directory contains:
 - `interpreter_*.jsonl` execution records;
 - four preserved variants with objects, harnesses, verifier logs, translated
   bytecode, and loaded-program metadata;
-- `source/`, the selected source snapshot used by the run;
+- `source/`, the then-current selected source/manuscript snapshot used by the
+  run (not the later final manuscript);
 - `interpreter_audit.txt`; and
 - `interpreter.provenance.json`.
 

@@ -1,11 +1,11 @@
 # After Acceptance: eBPF Post-Acceptance Calibration Artifact
 
 This repository contains the paper, implementation, tests, and one canonical
-report-bound evidence bundle for the bounded eBPF interpreter described in:
+evidence bundle for the bounded eBPF interpreter described in:
 
-- `PAPER_REPORT.md` — readable manuscript;
-- `PAPER_REPORT.tex` — IEEE/arXiv source; and
-- `output/pdf/PAPER_REPORT.pdf` — compiled paper.
+- `PAPER_REPORT.tex` — canonical IEEE/arXiv source;
+- `output/pdf/PAPER_REPORT.pdf` — canonical compiled paper; and
+- `PAPER_REPORT.md` — readable semantic mirror, not an arXiv submission source.
 
 A complete Simplified Chinese reading edition is also provided:
 
@@ -13,19 +13,22 @@ A complete Simplified Chinese reading edition is also provided:
 - `PAPER_REPORT_ZH.tex` — standalone CTeX source; and
 - `output/pdf/PAPER_REPORT_ZH.pdf` — compiled Chinese paper.
 
-The English IEEE/arXiv files remain the submission source; the Chinese edition
-is a faithful reading translation and does not replace them.
+The English TeX/PDF pair is the only submission-normative version. The Chinese
+edition is a claim-synchronized reading aid rather than a line-for-line
+translation and does not replace the English source. If wording differs, the
+canonical English TeX controls.
 
 The accompanying repository is
 <https://github.com/Emtanling/eBPF-machine>.
 
 ## Claim boundary
 
-The artifact records acceptance (**A**) and a same-suffix causal state
-distinction (**C**), and supports bounded programmability (**P**) under the
-paper's explicit source-to-object, reset, frame, environment, and serialization
-premises. It does **not** establish Linux report non-factorization (**R**) or a
-policy/threat obligation (**W**).
+The artifact records acceptance (**A**), gives a conditional same-suffix causal
+state witness (**C**) under the paper's declared map-service/no-interference
+contract, and supports bounded programmability (**P**) under additional
+source-to-object, reset, frame, environment, and serialization premises. It
+does **not** establish Linux report non-factorization (**R**) or a policy/threat
+obligation (**W**).
 
 There is no verifier bypass, privilege escalation, memory-corruption,
 unprivileged-loadability, concurrency, or Turing-completeness claim.
@@ -38,9 +41,10 @@ unprivileged-loadability, concurrency, or Turing-completeness claim.
   writers.
 - `tests/` — logic, parser, audit, provenance, and source-guard tests.
 - `results/interpreter/interpreter-final-20260711-02/` — the only versioned
-  report-bound run, including descriptors, JSONL evidence, four preserved
-  variants, verifier logs, source snapshot, semantic audit, and integrity
-  manifest.
+  canonical run, including descriptors, JSONL evidence, four preserved
+  variants, verifier logs, a then-current source/manuscript snapshot, semantic
+  audit, and integrity manifest. The final manuscript postdates the run and is
+  not covered by that manifest.
 - `witness2/` — a small optional precision-control experiment; it is not a
   second Linux opacity witness.
 
@@ -83,7 +87,7 @@ xelatex -interaction=nonstopmode -halt-on-error \
 This requires `texlive-xetex`, `texlive-lang-chinese`, and a CJK font such as
 `Noto Serif CJK SC`.
 
-## Verify the report-bound evidence
+## Verify the canonical evidence
 
 ```sh
 make verify

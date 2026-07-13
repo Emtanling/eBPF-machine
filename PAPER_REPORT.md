@@ -1,4 +1,4 @@
-# Research Report: After Acceptance: A Claim Graph for Residual-Machine Claims, Calibrated on eBPF
+# After Acceptance: A Claim Graph for Residual-Machine Claims, Calibrated on eBPF
 
 **Author:** Chengao Zhang
 
@@ -8,11 +8,11 @@
 
 ## Abstract
 
-Language-theoretic security asks whether a boundary recognizes the language that downstream machinery actually interprets. At a program-verifier boundary, an accepted artifact may drive stateful runtime operations not described by an intended report relation. We introduce a five-node claim graph separating artifact acceptance (A), a same-suffix causal state distinction (C), bounded programmability (P), computed-report non-factorization (R), and a policy/threat obligation (W). A future-observation quotient and behavioral factorization criterion distinguish the accepted-artifact-indexed causal language from the report-relative residual language.
+Language-theoretic security asks whether a boundary recognizes the language that downstream machinery actually interprets. At a program-verifier boundary, an accepted artifact may drive stateful runtime operations not described by an intended report relation. We introduce a five-node claim graph separating artifact acceptance (A), a same-suffix causal state distinction (C), bounded programmability (P), output-witnessed computed-report non-factorization (R), and a policy/threat obligation (W). A future-observation quotient and behavioral factorization criterion distinguish the accepted-artifact-indexed causal language from the report-relative residual language. The criterion is report-instance-relative, applies only under an explicit unique-cell report map on the chosen context fiber, and does not assert that every safety-sound incomplete verifier hosts a weird machine.
 
 We give proof obligations for a uniformly controlled, observable, resettable gate and one fixed accepted interpreter over a bounded circuit-description domain. Prefix induction yields bounded composition under exact scheduling, admissibility, serialization, and frame-preservation premises. In a Linux eBPF calibration, a dedicated preallocated non-LRU two-entry hash map realizes NAND: reset leaves one sentinel entry; input bits select existing- or fresh-key updates; and the second update’s success predicate supplies the output. One fixed accepted program consumes canonical NAND DAGs with at most 64 inputs, 512 gates, and 578 live wires.
 
-A source-snapshotted Linux/aarch64 run covers named and random circuits, joint bounds, serial reuse, mechanism controls, and malformed descriptors. A separate author-run semantic auditor reconstructs descriptors and circuit semantics, and a self-issued manifest checks bundle integrity. The case establishes A and C and supports P under explicit implementation premises. It does not establish Linux report non-factorization or a policy-level weird machine; that separation is the report’s main result.
+A source-snapshotted Linux/aarch64 run covers named and random circuits, joint bounds, serial reuse, mechanism controls, and malformed descriptors. A separate author-run semantic auditor reconstructs descriptors and circuit semantics, and a self-issued manifest checks bundle integrity. The case records A, gives a conditional C witness under the declared concrete-service/no-interference contract, and supports P under additional implementation premises. It does not establish Linux report non-factorization or a policy-level weird machine; that separation is the main methodological contribution.
 
 **Keywords:** language-theoretic security, recognizers, residual languages, weird machines, program verification, abstract interpretation, eBPF.
 
@@ -29,18 +29,18 @@ The paper organizes the evidentiary burden as a claim graph:
 | Node | Required fact | Status of the eBPF case |
 |---|---|---|
 | A — acceptance | one fixed artifact belongs to $L_V$ | recorded for the preserved object and environment |
-| C — causal state distinction | the same suffix and non-state context expose different observations from different selected runtime states | established for the second map update |
+| C — causal state distinction | the same suffix and non-state context expose different observations from different selected runtime states | conditional witness under the declared map-service/no-interference contract |
 | P — bounded programmability | accepted code uniformly controls, observes, resets, and composes the state under explicit frame and environment premises | source-level construction plus audited regression evidence |
 | R — report-relative residual | witnesses at C are jointly covered by an actual computed report cell that fails the behavioral factorization test | not established for Linux |
-| W — policy/threat obligation | an actor can drive the programmable behavior to an effect excluded by an intended policy | not established by the offline case |
+| W — policy/threat obligation | an actor drives an effect through $P_*$ that the policy excludes | not established by the offline case |
 
-Nodes C and R must not share one name. We call the accepted-artifact-indexed, same-suffix language $L_{\mathrm{causal}}$. A word enters the report-relative residual language $L_{\mathrm{res}}^R$ only with an actual computed-cell collision. P and R branch after C: programmability does not imply report collision, and collision does not imply programmability. A policy-level weird machine requires P together with W; a *contract-shape-induced recognizer-relative* weird machine additionally requires R under documented semantics. The graph turns “weird machine” from a rhetorical label into checkable obligations.
+Nodes C and R must not share one name. We call the accepted-artifact-indexed, same-suffix language $L_{\mathrm{causal}}$. A word enters the report-relative residual language $L_{\mathrm{res}}^R$ only with an actual computed-cell collision under the admissibility conditions below. P and R branch after C. A policy-level weird machine requires P, W, linkage to the same encoded computation, and unintendedness; a *contract-shape-induced recognizer-relative* classification additionally requires R, documented semantics, report conformance, and granularity evidence. The graph turns “weird machine” from a rhetorical label into explicit, auditable obligations.
 
 Programmability is a separate constructive problem. A state distinction may be dead, uncontrolled, one-shot, or impossible to compose. We therefore require a program-visible readout, one uniform input dispatcher, a reset to a canonical class, and one fixed accepted interpreter with exact scheduling and frame preservation over an independently declared bounded descriptor domain. The resulting composition theorem is a proof-obligation decomposition, not a universal necessity theorem.
 
 Our calibration case is Linux eBPF. A fixed artifact uses a dedicated two-entry hash map as a saturating resource. After reset, one sentinel is live. A zero bit updates the sentinel; a one bit inserts a fresh input-specific key. The second input-conditioned update succeeds except on input $(1,1)$, yielding NAND. Ordinary bytecode still validates descriptors, selects keys, routes wires, controls the loop, and stores outputs. A host parser normalizes textual WMC1 into maps, while the verifier accepts only the fixed eBPF artifact.
 
-The case is deliberately diagnostic. It establishes A and C and supports P under the stated implementation premises, even though the same function is easy to express in ordinary bytecode. It also shows why P cannot be silently promoted to R or combined with an absent W obligation. The retained verifier log is not an extractor for computed abstract cells, and the offline run supplies no violated deployment policy.
+The case is deliberately diagnostic. It records A, gives a conditional C witness under the declared service contract, and supports P under stated implementation premises, even though ordinary bytecode easily expresses the same function. It also shows why P cannot be promoted to R or combined with an absent W obligation. The retained verifier log is not a computed-cell extractor, and the offline run supplies no violated policy.
 
 The paper contributes:
 
@@ -58,13 +58,13 @@ The empirical scope is one privileged, offline Linux/aarch64 environment. The ca
 
 ### 2.1 Recognition, execution, and report
 
-Let $V$ be a recognizer over program artifacts and $I$ the concrete execution semantics over concrete-state carrier $\Sigma_I$, including the instruction engine, helpers, stateful services, and relevant environment. The accepted artifact language is
+Let $V$ be a recognizer over program artifacts and $I$ the concrete execution semantics over state carrier $\Sigma_I$ and trace carrier $\mathcal T_I$, including the instruction engine, helpers, stateful services, and relevant environment. Thus $\mathsf{Tr}_I(P)\subseteq\mathcal T_I$. The accepted artifact language is
 
 $$
 L_V = \{P \mid V(P)=\mathsf{accept}\}.
 $$
 
-For an optional concrete trace property $\mathsf{Safe}$, the boundary is safety-sound when
+For an optional set $\mathsf{Safe}\subseteq\mathcal T_I$ of permitted concrete traces, the boundary is safety-sound when
 
 $$
 \forall P\in L_V.\ \mathsf{Tr}_I(P)\subseteq\mathsf{Safe}.
@@ -72,7 +72,7 @@ $$
 
 Safety soundness is a premise, not an inference from one successful load. It is also distinct from completeness of an abstract transformer. Abstract interpretation relates concrete sets and abstract elements through abstraction and concretization maps [5], but a verifier’s accepted language, its computed report, transfer soundness, and completeness are different judgments. In particular, the best abstraction of a singleton need not be the analyzer-computed cell at a joined control frontier.
 
-When a report is in scope, let $\mathsf{Report}_V(P,\ell)$ be the finite set of abstract cells actually computed at frontier $\ell$, with a declared concretization $\gamma_\ell$. Frontier coverage requires
+When a report is in scope, let $\mathsf{Report}_V(P,\ell)\subseteq A_\ell$ be the finite set of abstract cells actually computed at frontier $\ell$, with a declared concretization $\gamma_\ell:A_\ell\to\mathcal P(\Sigma_I)$. Frontier coverage requires
 
 $$
 \mathsf{Reach}_I(P,\ell)
@@ -92,12 +92,19 @@ $$
 K_{\mathrm{obs}}=(\rho_{\mathrm{obs}},\mathsf{Obs},\mathsf{Slice},\mathsf{Env}).
 $$
 
-The projection $\rho_{\mathrm{obs}}$ selects the state candidate; $\mathsf{Obs}$ fixes the complete visible observation trace; $\mathsf{Slice}$ conservatively includes every non-selected component read by the suffix or observer; and $\mathsf{Env}$ fixes the same relevant resource configuration, schedule, nondeterminism, and external-interference choice for both executions. Write $\mathsf{ctx}_w(\sigma)$ for the suffix-read components other than $\rho_{\mathrm{obs}}(\sigma)$. The contract is sound for $w$ only when equality of $\mathsf{ctx}_w$ fixes every non-selected value read by the suffix and observer, including clocks, registers, and service state; without that noninterference condition no C witness is claimed.
+Here $\rho_{\mathrm{obs}}:\Sigma_I\to R_{\mathrm{obs}}$ selects the candidate state, $\mathsf{Obs}:\mathcal T_I\to O_{\mathrm{obs}}$ projects a complete concrete trace, $\mathsf{Slice}$ assigns to each word $w$ a typed context projection $\mathsf{ctx}_w:\Sigma_I\to C_w$, and $\mathsf{Env}$ is the declared set of fixed environment instances. The context conservatively contains every non-selected component read by the suffix or observer; an environment instance fixes the relevant resource configuration, schedule, nondeterminism, and external-interference choice.
 
-When defined, write $\llbracket w\rrbracket_I(\sigma)=(\tau,o,\sigma')$, where $\tau$ is the concrete suffix trace and $\mathsf{Obs}$ projects its declared visible observation.
+Write $\llbracket w\rrbracket_{I,e}(\sigma)=(\tau,\sigma')$ for a defined, terminating suffix execution in environment $e$. The contract is *sound for $w$ on $X\subseteq\Sigma_I$* when, for every $e\in\mathsf{Env}$ and $\sigma,\sigma'\in X$ satisfying
 
-**Definition 1 (causal state-mediated word family).** A word $w$ is causal at $(P,\ell)$ when $P\in L_V$, $w\in W^\ell_{\mathrm{run}}(P)$, and there are $\sigma_0,\sigma_1\in\mathsf{Reach}_I(P,\ell)$ for which
-$\llbracket w\rrbracket_I(\sigma_i)=(\tau_i,o_i,\sigma_i')$ are both defined and terminating in the same $\mathsf{Env}$ instance, and
+$$
+\rho_{\mathrm{obs}}(\sigma)=\rho_{\mathrm{obs}}(\sigma')
+\quad\text{and}\quad
+\mathsf{ctx}_w(\sigma)=\mathsf{ctx}_w(\sigma'),
+$$
+
+the two suffix executions have the same definedness, and, whenever $\llbracket w\rrbracket_{I,e}(\sigma)=(\tau,\sigma_1)$ and $\llbracket w\rrbracket_{I,e}(\sigma')=(\tau',\sigma_1')$, then $\mathsf{Obs}(\tau)=\mathsf{Obs}(\tau')$. Thus $(\rho_{\mathrm{obs}},\mathsf{ctx}_w,e)$ contains every factor that may affect the declared observation. Without this noninterference condition no C witness is admitted.
+
+**Definition 1 (causal state-mediated word family).** A word $w$ is causal at $(P,\ell)$ when $P\in L_V$, $w\in W^\ell_{\mathrm{run}}(P)$, $K_{\mathrm{obs}}$ is sound for $w$ on $\mathsf{Reach}_I(P,\ell)$, and there are $e\in\mathsf{Env}$ and $\sigma_0,\sigma_1\in\mathsf{Reach}_I(P,\ell)$ for which $\llbracket w\rrbracket_{I,e}(\sigma_i)=(\tau_i,\sigma_i')$ are both defined and terminating, and
 
 $$
 \begin{aligned}
@@ -124,10 +131,10 @@ The definition is observer- and slice-relative. Deleting an earlier input from t
 Fix a deterministic discipline
 
 $$
-D=(S_D,A_D,O_D,\delta_D,\lambda_D,s_D)
+D=(X_D,S_D,A_D,O_D,\delta_D,\lambda_D,s_D,\mathsf{Obs}_D)
 $$
 
-with state carrier $S_D$, operation alphabet $A_D$, output alphabet $O_D$, and same-domain partial functions
+with an admissible concrete region $X_D\subseteq\Sigma_I$, state carrier $S_D$, operation alphabet $A_D$, output alphabet $O_D$, observer $\mathsf{Obs}_D:O_D^*\rightharpoonup O_{\mathrm{obs}}$, and same-domain partial functions
 
 $$
 \delta_D:S_D\times A_D\rightharpoonup S_D,
@@ -135,7 +142,13 @@ $$
 \lambda_D:S_D\times A_D\rightharpoonup O_D.
 $$
 
-The projection $s_D:\Sigma_I\to S_D$ is **adequate** for concrete semantics $I$ when, for every concrete state $\sigma$ and operation $a$ admitted by $D$, a concrete $a$-step exists exactly when $\delta_D(s_D(\sigma),a)$ is defined; whenever $\sigma\xrightarrow{a/o}_I\sigma'$, then
+Whenever $D$ is used at $(P,\ell)$, fix an injective operation encoding $\iota_{P,\ell}:A_D\to\Sigma_{\mathrm{op}}(P)$ and extend it homomorphically. The pair $(s_D,\iota_{P,\ell})$ is *operationally adequate on $X_D$* when, for every $\sigma\in X_D$ and $a\in A_D$, concrete execution of $\iota_{P,\ell}(a)$ exists exactly when $\delta_D(s_D(\sigma),a)$ is defined; whenever
+
+$$
+\sigma\xrightarrow{\iota_{P,\ell}(a)/o}_I\sigma',
+$$
+
+where $o\in O_D$ is the complete declared observation of that encoded operation, then $\sigma'\in X_D$ and
 
 $$
 \lambda_D(s_D(\sigma),a)=o,
@@ -143,14 +156,14 @@ $$
 s_D(\sigma')=\delta_D(s_D(\sigma),a).
 $$
 
-Here $o$ is the complete declared step observation and $\mathsf{Obs}$ is a fixed projection of the resulting output word. Thus one projected state cannot hide different definedness or outputs. Every environment choice that affects a transition is fixed by $D$ or included in $S_D$.
+Thus, within $X_D$, the encoding is a semantic renaming rather than an arbitrary map: one projected state cannot hide different definedness, outputs, or successor projections. Every environment choice that affects a transition is fixed by $D$ or included in $S_D$.
 
 Let $\mathsf{Out}_D(r,w)$ be the partial complete output word obtained by iterating $(\delta_D,\lambda_D)$, write $\mathsf{Def}_D(r,w)$ for $\mathsf{Out}_D(r,w)\downarrow$, and take the continuation universe to be $\mathcal W_D=A_D^*$; infeasible words are represented by undefined output. For $r,r'\in S_D$, define
 
 $$
 r\sim_D r'
 \quad\Longleftrightarrow\quad
-\forall w\in\mathcal W_D.\ 
+\forall w\in\mathcal W_D.
 \Bigl(
 [\mathsf{Def}_D(r,w)\iff\mathsf{Def}_D(r',w)]
 \land
@@ -159,7 +172,7 @@ r\sim_D r'
 \Bigr).
 $$
 
-Because $\mathcal W_D=A_D^*$ is closed under left-prefixing by an operation, $\sim_D$ is a right congruence: defined matching $a$-steps lead to equivalent successor states, since every successor continuation $w$ is tested as $aw$. If $Q_D=S_D/{\sim_D}$ is finite, concrete execution induces a partial Mealy transducer over quotient states. This is a semantic quotient, not a verifier abstraction.
+Because $\mathcal W_D=A_D^*$ is closed under left-prefixing by an operation, $\sim_D$ is a right congruence: defined matching $a$-steps lead to equivalent successor states, since every successor continuation $w$ is tested as $aw$. This follows the classical continuation-equivalence lineage of Nerode and Mealy machines [6], [7]; the partial-output setting and observer contract here are paper-specific. If $Q_D=S_D/{\sim_D}$ is finite, execution restricted to $X_D$ induces a partial Mealy transducer over quotient states. Observational completeness and generalized strong preservation likewise ask whether an abstraction preserves a selected observation or specification language [8], [9]. Our test is narrower: it concerns cells actually computed for one accepted artifact at one frontier. It is a semantic quotient test, not a claim to introduce a new general completeness theory.
 
 For a concrete set $F$, define the common enabled continuations
 
@@ -170,17 +183,26 @@ $$
 \forall\sigma\in F.\ \mathsf{Out}_D(s_D(\sigma),w)\downarrow\}.
 $$
 
-**Proposition 1 (behavioral factorization on a context fiber).** Fix accepted $P$, frontier $\ell$, discipline $D$, and observation contract $K_{\mathrm{obs}}$. Let $F\subseteq\mathsf{Reach}_I(P,\ell)$, and assume $K_{\mathrm{obs}}$ is sound for every $w\in\mathcal W_D(F)$ and
+**Proposition 1 (behavioral factorization on a context fiber).** Fix accepted $P$, frontier $\ell$, discipline $D$, and observation contract $K_{\mathrm{obs}}$. Let $\varnothing\ne F\subseteq\mathsf{Reach}_I(P,\ell)\cap X_D$. Fix an injective operation encoding $\iota_{P,\ell}:A_D\to\Sigma_{\mathrm{op}}(P)$ and its homomorphic extension to words. Assume
+
+$$
+\iota_{P,\ell}(\mathcal W_D(F))\subseteq W^\ell_{\mathrm{run}}(P),
+$$
+
+that $K_{\mathrm{obs}}$ is sound on $F$ for every encoded word $\iota_{P,\ell}(w)$ with $w\in\mathcal W_D(F)$, and that
 
 $$
 \forall w\in\mathcal W_D(F).\ \forall\sigma,\sigma'\in F.\quad
-\mathsf{ctx}_w(\sigma)=\mathsf{ctx}_w(\sigma').
+\mathsf{ctx}_{\iota_{P,\ell}(w)}(\sigma)
+=
+\mathsf{ctx}_{\iota_{P,\ell}(w)}(\sigma').
 $$
 
-Also assume
+Require observation compatibility: whenever encoded $w\in\mathcal W_D(F)$ executes from $\sigma\in F$ with concrete trace $\tau$, the right-hand side below is defined and
 
 $$
-\mathcal W_D(F)\subseteq W^\ell_{\mathrm{run}}(P).
+\mathsf{Obs}(\tau)
+=\mathsf{Obs}_D(\mathsf{Out}_D(s_D(\sigma),w)).
 $$
 
 Define
@@ -191,41 +213,53 @@ $$
 F_{a^\#}=F\cap\gamma_\ell(a^\#).
 $$
 
-A computed cell $a^\#$ has a cell-level behavioral collision on $F$ exactly when there are $\sigma_0,\sigma_1\in F_{a^\#}$ with $\beta_D(\sigma_0)\ne\beta_D(\sigma_1)$.
-
-The computed report has no cell-level behavioral collision on $F$ if and only if
+Finally, require the unique-cell condition
 
 $$
-\forall a^\#\in\mathsf{Report}_V(P,\ell).\quad
-|\beta_D(F_{a^\#})|\le 1.
+\forall\sigma\in F.\ \exists!a^\#\in\mathsf{Report}_V(P,\ell).\quad
+\sigma\in\gamma_\ell(a^\#),
 $$
 
-If the family of nonempty intersections
-$\{F\cap\gamma_\ell(a^\#)\mid a^\#\in\mathsf{Report}_V(P,\ell),\ F\cap\gamma_\ell(a^\#)\ne\varnothing\}$
-partitions $F$, let $\pi_R:F\to\mathsf{Report}_V(P,\ell)$ map each state to its unique cell. The cardinality condition is then equivalent to $\beta_D=h\circ\pi_R$ on $F$ for some $h:\pi_R(F)\to Q_D$.
+and let $\pi_R:F\to\mathsf{Report}_V(P,\ell)$ map each state to that unique computed cell. Then the report factors the future-observation quotient on $F$,
 
-*Proof.* A cell is collision-free exactly when all representatives it covers lie in one future-observation class. This is the cardinality condition and defines $h$ on each nonempty cell. Under a partition, equal report labels imply equal quotient classes exactly when $\beta_D$ factors through $\pi_R$. ∎
+$$
+\exists h:\pi_R(F)\to Q_D.\quad
+\beta_D=h\circ\pi_R,
+$$
 
-**Definition 2 (report-relative residual language).** Fix $P,\ell,D,F$, and $K_{\mathrm{obs}}$ satisfying Proposition 1’s hypotheses. A tagged word $(P,\ell,a^\#,w)$ is report-relative residual on this tuple when:
+if and only if
+
+$$
+\forall a^\#\in\pi_R(F).\quad |\beta_D(F_{a^\#})|\le1.
+$$
+
+Consequently, report non-factorization on $F$ is equivalent to a unique computed cell containing two states from different $\sim_D$ classes.
+
+*Proof.* If $\beta_D=h\circ\pi_R$, states with the same unique report label have the same quotient class, giving the cardinality bound. Conversely, the bound makes $h(a^\#)$ the unique element of $\beta_D(F_{a^\#})$ for every $a^\#\in\pi_R(F)$; this is well-defined and yields the factorization. Negating either equivalent condition gives the collision statement. ∎
+
+Write $\mathsf{Adm}(P,\ell,D,F;K_{\mathrm{obs}})$ when all of the following hold: $P\in L_V$; $(s_D,\iota_{P,\ell})$ is operationally adequate on $X_D$; $\varnothing\ne F\subseteq\mathsf{Reach}_I(P,\ell)\cap X_D$; the runtime-word inclusion, observer compatibility, sound observation contract, common-context condition, and unique-cell condition above all hold. The last condition makes the nonempty $F_{a^\#}$ a disjoint cover. Reports with overlapping labels require a separately declared membership-signature map and are outside this criterion.
+
+**Definition 2 (report-relative residual language).** Fix an admissible tuple. A dependent tagged word $(P,\ell,D,F,a^\#,w)$ is *output-witnessed report-relative residual* when:
 
 $$
 \begin{aligned}
-&(P,\ell,w)\in L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}}),\qquad
+&(P,\ell,\iota_{P,\ell}(w))\in L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}}),\qquad
 w\in\mathcal W_D(F),\\
-&\sigma_0,\sigma_1\in F\cap\gamma_\ell(a^\#)
-\text{ are Definition 1 witnesses},\\
-&a^\#\in\mathsf{Report}_V(P,\ell),\qquad
+&\sigma_0,\sigma_1\in F
+\text{ are Definition 1 witnesses for }\iota_{P,\ell}(w),\\
+&\pi_R(\sigma_0)=\pi_R(\sigma_1)=a^\#,
+\qquad
 \beta_D(\sigma_0)\ne\beta_D(\sigma_1).
 \end{aligned}
 $$
 
-Write $\mathsf{Adm}(P,\ell,D,F;K_{\mathrm{obs}})$ when $D$ is adequate and all context, common-continuation, and report-coverage hypotheses above hold. $L_{\mathrm{res}}^R(V,I,\mathsf{Report};K_{\mathrm{obs}})$ is the union of these tagged words over tuples satisfying $\mathsf{Adm}$. Because $\mathsf{Obs}$ projects $\mathsf{Out}_D$, different observations under admitted $w$ imply the displayed quotient-class inequality; writing it explicitly binds the definition to Proposition 1. This is a frontier collision, not a claim that a complete whole-program report can never recover the final function.
+$L_{\mathrm{res}}^R(V,I,\mathsf{Report};K_{\mathrm{obs}})$ is the union of these tagged words over tuples satisfying $\mathsf{Adm}$. Operational adequacy and observer compatibility make different admitted concrete observations imply different quotient classes; the explicit inequality binds the definition to Proposition 1. The quotient also distinguishes definedness, so report non-factorization can arise without a jointly terminating output-distinguishing word. Accordingly, $L_{\mathrm{res}}^R$ is the output-witnessed subset of report-factorization failures, not a converse characterization of all failures. It is a frontier collision, not a claim that a complete whole-program report can never recover the final function.
 
-Instantiating Definition 2 requires an extractor for actual computed cells, a declared concretization, coverage, and a fixed context fiber. The retained Linux log does not provide these objects, so the eBPF case establishes $L_{\mathrm{causal}}$ but not $L_{\mathrm{res}}^R$.
+Instantiating Definition 2 requires an extractor for actual computed cells, a declared concretization, a unique-cell partition on the chosen fiber (or a separately defined alternative report map), and the remaining admissibility premises. The retained Linux log does not provide these objects, so the eBPF case gives only a conditional $L_{\mathrm{causal}}$ witness under its declared service contract and does not establish $L_{\mathrm{res}}^R$.
 
 ### 2.4 Shape, defect, and policy
 
-A defect-induced gap uses behavior that violates the declared recognizer or runtime contract. A contract-shape-induced report gap instead uses documented semantics and preserves the declared safety contract while $L_{\mathrm{res}}^R$ is nonempty for a relation the report intends to certify. A policy-level weird machine additionally needs actor control and a security-relevant behavior excluded by an intended policy. An ordinary stateful API can therefore implement a transducer without satisfying either later classification.
+A defect-induced gap uses behavior that violates the declared recognizer, report, or runtime contract. A documented, safety-preserving witness in $L_{\mathrm{res}}^R$ for a relation the report intends to certify is evidence for a contract-shape gap, not by itself a shape proof: report conformance and granularity must rule out a faulty transformer, join, or extractor. A policy-level weird machine additionally needs linked actor control, a policy-excluded effect, and unintended interpretation. An ordinary stateful API can therefore implement a transducer without satisfying either classification.
 
 ---
 
@@ -233,18 +267,38 @@ A defect-induced gap uses behavior that violates the declared recognizer or runt
 
 ### 3.1 From a distinction to a reusable gate
 
-A causal word can expose one distinction without supporting repeated computation. Fix a deterministic gate discipline $D$, an adequate projection $s_D$, one canonical reset class $q_0\in Q_D$, identified with its subset of $S_D$, and a nonempty admissible concrete-state set $\mathsf{Adm}_G\subseteq\Sigma_I$. A gate basis $(P_G,\mathit{reset},G,\mathit{observe},D,\mathsf{Adm}_G)$ satisfies:
+A causal word can expose one distinction without supporting repeated computation. Fix a deterministic gate discipline $D$, one canonical reset class $q_0\in Q_D$ identified with its subset of $S_D$, and a nonempty admissible set $\mathsf{Adm}_G\subseteq X_D$. A gate basis $(P_G,\mathit{reset},G,\mathit{observe},D,\mathsf{Adm}_G)$ uses one accepted artifact $P_G$, a dispatcher $G$ selecting a complete word $u_G(x)\in A_D^*$ for each $x\in\{0,1\}^2$, and a partial readout $\mathit{observe}:O_D^*\rightharpoonup\{0,1\}$. For this basis, $O_{\mathrm{obs}}=\{0,1\}$ and $\mathsf{Obs}_D=\mathit{observe}$. Its predeclared operation encoding into $\Sigma_{\mathrm{op}}(P_G)$ is operationally adequate on $X_D$. The basis satisfies:
 
-**E1 — causal basis and observation.** At an internal frontier, two reachable, common-context states belong to different future-observation classes, and a common enabled suffix witnesses membership in $L_{\mathrm{causal}}$. Accepted code stores or branches on the resulting bit.
+**E1 — causal basis and observation.** There exist inputs $x_0,x_1$, prefixes $p_0,p_1\in A_D^*$, one common remaining suffix $w\in A_D^*$, reset-class states $\eta_0,\eta_1\in\mathsf{Adm}_G$, and one internal frontier $\ell_G$ such that
 
-**E2 — uniform input control.** One dispatcher $G$ in accepted $P_G$ reads runtime bits $x\in\{0,1\}^2$ and selects the complete gate word $u(x)$. For every $\sigma\in\mathsf{Adm}_G$ with $s_D(\sigma)\in q_0$, the execution defined by $D$ terminates and produces the same bit $g(x)$ for $g:\{0,1\}^2\to\{0,1\}$. The experimenter is not an external oracle choosing a different constant program for each input.
+$$
+u_G(x_i)=p_iw,
+\qquad s_D(\eta_i)\in q_0.
+$$
+
+Executing each $p_i$ reaches a state $\sigma_i$ at $\ell_G$; the two $\sigma_i$ are Definition 1 witnesses for the encoded common suffix $w$. If its traces are $\tau_i$, then the complete gate readout is precisely that causal observation:
+
+$$
+\mathit{observe}(\mathsf{Out}_D(s_D(\eta_i),u_G(x_i)))
+=\mathsf{Obs}(\tau_i),\qquad i\in\{0,1\}.
+$$
+
+Accepted code uses this readout as the gate result that E4-D writes; it is not an unrelated probe.
+
+**E2 — uniform input control.** The dispatcher $G$ in $P_G$ reads runtime bits $x\in\{0,1\}^2$. For every $\sigma\in\mathsf{Adm}_G$ with $s_D(\sigma)\in q_0$, $\mathsf{Out}_D(s_D(\sigma),u_G(x))$ and its readout are defined and
+
+$$
+\mathit{observe}(\mathsf{Out}_D(s_D(\sigma),u_G(x)))=g(x)
+$$
+
+for one fixed $g:\{0,1\}^2\to\{0,1\}$. The experimenter is not an external oracle choosing a different constant program for each input.
 
 **E3 — reset.** The reset word satisfies $\mathit{reset}\in A_D^*$. From every $\sigma\in\mathsf{Adm}_G$, it is defined, preserves declared wire cells, and terminates in $\tau\in\mathsf{Adm}_G$ with $s_D(\tau)\in q_0$. If two pre-states in $\mathsf{Adm}_G$ agree on those wire cells and the fixed context and reset to $\tau_0,\tau_1$, then for every $x\in\{0,1\}^2$,
 
 $$
-\mathsf{Out}_D(s_D(\tau_0),u(x))
+\mathsf{Out}_D(s_D(\tau_0),u_G(x))
 =
-\mathsf{Out}_D(s_D(\tau_1),u(x)).
+\mathsf{Out}_D(s_D(\tau_1),u_G(x)).
 $$
 
 Without E1, a hidden difference has no program-visible effect. Without E2, the experimenter may supply the truth table. Without E3, the channel may be one-shot. A fourth condition below composes the gate without placing circuit semantics in an external oracle.
@@ -271,6 +325,8 @@ $$
 \nu[2+m+i]=g(\nu[s_i^0],\nu[s_i^1]).
 $$
 
+Its result is the complete canonical vector $(\nu[0],\ldots,\nu[1+m(d)+n(d)])$, the same type later returned by $\mathsf{WireObs}_d$.
+
 The host encoding $\mathsf{Enc}_U(d,x)$ writes a normalized descriptor, inputs, and control record into maps. Textual WMC1 is a host serialization. Neither WMC1 nor $d$ is a BPF program accepted by $V$; $\mathsf{Sched}_U(d,x)$ is the operation schedule induced when accepted $P_U$ reads the encoding.
 
 For $c=\mathsf{Enc}_U(d,x)$, let $\mathsf{PhysRun}_U(c)=(s,k,\mu)$ contain final status, completed-iteration count, and physical map state. Define the descriptor-relative canonical observation
@@ -292,10 +348,10 @@ $$
 
 The host may project requested output wires only from an $\mathsf{OK}$ result. This semantic rule does not assert that stale physical cells are erased.
 
-**E4-D — bounded data-parametric interpretation.** One fixed artifact $P_U$ discharges E4-D for $D_{64,512}$ when:
+**E4-D — bounded data-parametric interpretation.** One fixed artifact $P_U$ with a gate basis whose artifact component is the same $P_U$ discharges E4-D for $D_{64,512}$ when:
 
 1. for the fixed map definitions and recorded load environment, $P_U\in L_V$ independently of descriptor contents $d$ and $x$;
-2. every valid $\mathsf{Enc}_U(d,x)$ establishes a pre-callback state $\mu^{(0)}$ with $\mu^{(0)}[0]=0$, $\mu^{(0)}[1]=1$, and $\mu^{(0)}[2+j]=x_j$ for $0\le j<m(d)$, executes exactly callback positions $0,\ldots,n(d)-1$ in order, and terminates with $\mathsf{PhysRun}_U=(\mathsf{OK},n(d),\mu)$;
+2. every valid $c=\mathsf{Enc}_U(d,x)$ establishes a pre-callback state $\mu^{(0)}$ with $\mu^{(0)}[0]=0$, $\mu^{(0)}[1]=1$, and $\mu^{(0)}[2+j]=x_j$ for $0\le j<m(d)$, executes exactly callback positions $0,\ldots,n(d)-1$ in order, and terminates with $\mathsf{PhysRun}_U(c)=(\mathsf{OK},n(d),\mu)$;
 3. one external critical section covers setup, invocation, and readback for every shared map in the footprint;
 4. every iteration $i$ validates canonical form and copies exactly its two earlier source wires; the complete concrete state $\sigma_i$ immediately before reset belongs to $\mathsf{Adm}_G$; the iteration then resets and invokes the E1–E3 gate, writes the resulting $g$ bit only to destination $2+m(d)+i$ and declared audit cells, and preserves the descriptor and all earlier wires; and
 5. no execution performs more than 512 iterations, while malformed core-ABI controls or descriptor configurations covered by the declared validator terminate with non-$\mathsf{OK}$ status, at most 512 completed iterations, and semantic result $(s,\bot)$.
@@ -304,7 +360,7 @@ These clauses are deliberately proof obligations. In particular, E4-D requires t
 
 ### 3.3 Realization theorem
 
-**Theorem 1 (bounded composition under explicit obligations).** Assume the fixed $P_U$ discharges E4-D under its declared deterministic and serialized environment, and its embedded basis satisfies E1–E3 with function $g$. Then, for every $d\in D_{64,512}$ and $x\in\{0,1\}^{m(d)}$,
+**Theorem 1 (bounded composition under explicit obligations).** Assume the fixed $P_U$ discharges E4-D under its declared deterministic and serialized environment, and the gate basis on that same $P_U$ satisfies E1–E3 with function $g$. Then, for every $d\in D_{64,512}$ and $x\in\{0,1\}^{m(d)}$,
 
 $$
 \mathsf{Run}_{U,d}(\mathsf{Enc}_U(d,x))
@@ -313,7 +369,7 @@ $$
 
 after exactly $n(d)$ iterations. If the recognition boundary is additionally safety-sound for $\mathsf{Safe}$, these traces also satisfy $\mathsf{Safe}$.
 
-*Proof sketch.* E4-D initializes the constant/input prefix. At iteration $i$, the descriptor bound makes both sources earlier cells. E3 supplies $q_0$, E2 supplies $g$ from that class, and E4-D writes it only to the canonical destination while preserving the established prefix. Prefix induction yields $\mathsf{Eval}_g$ after $n(d)$ iterations; the exact-schedule clause supplies terminal $\mathsf{OK}$. E1 establishes that the gate uses a causal state distinction but is not needed for the Boolean induction. Safety follows only from the separate soundness premise. ∎
+*Proof sketch.* E4-D initializes the constant/input prefix. At iteration $i$, the descriptor bound makes both sources earlier cells. E3 supplies $q_0$, E2 identifies the readout with $g$ from that class, and E4-D writes that same readout only to the canonical destination while preserving the established prefix. Prefix induction yields $\mathsf{Eval}_g$ after $n(d)$ iterations; the exact-schedule clause supplies terminal $\mathsf{OK}$. E1 binds the bit used by E2 and E4-D to a causal same-suffix state distinction; without E1 the functional induction would show only an ordinary bounded $g$-evaluator, not a state-mediated one. Safety follows only from the separate soundness premise. ∎
 
 The theorem decomposes local gate, reset, scheduling, and frame obligations; it is not a claim that tests enumerate the descriptor domain. It also does not prove E4-A, in which a compiler emits a different accepted BPF object per circuit.
 
@@ -323,7 +379,7 @@ The theorem decomposes local gate, reset, scheduling, and frame obligations; it 
 
 ### 4.1 Execution boundary
 
-The program $P_U=\mathit{wm\_circuit}$ is one fixed eBPF artifact with section $\mathit{SEC}(\text{syscall})$. In the recorded environment the in-kernel verifier accepts it and userspace executes it offline through $\mathit{bpf\_prog\_test\_run\_opts}()$; Linux documents both userspace program execution and the syscall section/program-type mapping [6], [7]. No live hook is involved. The experiment is privileged and local, and its acceptance and resource facts remain specific to the recorded program type, kernel, and architecture.
+The program $P_U=\mathit{wm\_circuit}$ is one fixed eBPF artifact with section $\mathit{SEC}(\text{syscall})$. In the recorded environment the in-kernel verifier accepts it and userspace executes it offline through $\mathit{bpf\_prog\_test\_run\_opts}()$; Linux documents both userspace program execution and the syscall section/program-type mapping [10], [11]. No live hook is involved. The experiment is privileged and local, and its acceptance and resource facts remain specific to the recorded program type, kernel, and architecture.
 
 The carrier boundary is:
 
@@ -331,11 +387,11 @@ The carrier boundary is:
 |---|---|---|
 | textual WMC1 $\rightarrow$ normalized map configuration $\mathsf{Enc}_U(d,x)$ | $V$ accepts the fixed $P_U$, not WMC1 or $d$ | $P_U$ reads maps $\rightarrow\mathsf{Sched}_U(d,x)\rightarrow$ helper returns and wire observations |
 
-The gate map $G0$ is a dedicated $\mathit{BPF\_MAP\_TYPE\_HASH}$ map with $\mathit{max\_entries}=2$. It is non-LRU and retains the default preallocation; Linux documents the entry bound, default preallocation, update flags, and success/negative-error convention for this map type [8]. The discipline requires successful reset and one external critical section over setup, invocation, and readback for every map in the footprint. The serial harness satisfies the no-interleaving use pattern, but the eBPF program implements no concurrency lock.
+The gate map $G0$ is a dedicated $\mathit{BPF\_MAP\_TYPE\_HASH}$ map with $\mathit{max\_entries}=2$. It is non-LRU and retains the default preallocation; Linux documents the entry bound, default preallocation, update flags, and success/negative-error convention for this map type [12]. The discipline requires successful reset and one external critical section over setup, invocation, and readback for every map in the footprint. The serial harness satisfies the no-interleaving use pattern, but the eBPF program implements no concurrency lock.
 
 ### 4.2 Saturating-rank NAND
 
-The gate uses pairwise-distinct keys: sentinel $S$ and input keys $A$ and $B$. Reset deletes all three and inserts $S$, establishing occupancy one. For the first input, zero updates $S$ and one inserts fresh $A$; for the second, zero updates $S$ and one inserts fresh $B$. Proposition 2 states the abstract occupancy law. For the Linux instance, existing-key success, below-capacity fresh-key success, and at-capacity fresh-key failure are explicit premises restricted to valid arguments, default preallocation, successful reset, no interference, and the recorded Linux 6.17 environment. Reference [8] supplies the map interface and return convention; retained raw returns and mechanism controls instantiate the law for this object. The gate observes only the second update’s success predicate, not a portable error number.
+The gate uses pairwise-distinct keys: sentinel $S$ and input keys $A$ and $B$. Reset deletes all three and inserts $S$, establishing occupancy one. For the first input, zero updates $S$ and one inserts fresh $A$; for the second, zero updates $S$ and one inserts fresh $B$. Proposition 2 states the abstract occupancy law. For the Linux instance, existing-key success, below-capacity fresh-key success, and at-capacity fresh-key failure are explicit premises restricted to valid arguments, default preallocation, successful reset, no interference, and the recorded Linux 6.17 environment. Reference [12] supplies the map interface and return convention; retained raw returns and mechanism controls instantiate the law for this object. The gate observes only the second update’s success predicate, not a portable error number.
 
 The four executions are:
 
@@ -346,13 +402,19 @@ The four executions are:
 | 1 | 0 | $\mathit{insA};\mathit{updS}$ | $\{S,A\}$ | success | 1 |
 | 1 | 1 | $\mathit{insA};\mathit{insB}$ | $\{S,A\}$ | failure | 0 |
 
-**Proposition 2 (saturating-rank NAND).** Let rank mean occupied-name count in a resource of capacity $k\ge2$. Reset establishes rank $k-1$ with existing $S$, while pairwise-distinct $A$ and $B$ are fresh. Existing-name update succeeds without changing rank; fresh-name update succeeds and increments rank below $k$, and fails without changing rank at $k$. Dispatch zero to $S$, the first one to $A$, and the second one to $B$. The second update’s success predicate is $\mathsf{NAND}(a,b)$.
+**Proposition 2 (saturating-rank NAND).** Let rank mean occupied-name count in a resource of capacity $k\ge2$. Assume reset establishes rank $k-1$, $S$ is among those occupied names, and pairwise-distinct $A$ and $B$ are fresh. Existing-name update succeeds without changing rank; fresh-name update succeeds and increments rank below $k$, and fails without changing rank at $k$. Dispatch zero to $S$, the first one to $A$, and the second one to $B$. The second update’s success predicate is $\mathsf{NAND}(a,b)$.
 
 *Proof.* When $a=0$, the first update preserves rank $k-1$, so either second update succeeds. When $a=1$, the first update raises the rank to $k$; the second update succeeds for $b=0$ because $S$ already exists and fails for $b=1$ because $B$ is fresh. The outputs are therefore $1,1,1,0$. ∎
 
-For the concrete Definition 1 witness, take $P=\mathit{wm\_circuit}$ and let $\ell$ be the point in $\mathit{circuit\_step\_cb}$ immediately before the second map update, after the first input-conditioned operation. Take $w=\mathit{insB}$ and $\rho_{\mathrm{obs}}(\sigma)=K_{G0}(\sigma)$, the occupied-key set of $G0$. Inputs $(0,1)$ and $(1,1)$ reach states $\sigma_0$ and $\sigma_1$ at $\ell$ with $K_{G0}(\sigma_0)=\{S\}$ and $K_{G0}(\sigma_1)=\{S,A\}$. Define $\mathsf{Obs}(\tau)=[\mathit{ret}(\tau)=0]$ for the suffix update return. The slice and $\mathsf{ctx}_w$ include the common program point, key $B$, value, $G0$ identity and static attributes (map type, capacity, and preallocation), update flags, relevant control and wire values, and the serialized execution environment, but exclude the selected dynamic contents $K_{G0}$. The contract’s $\mathsf{Env}$ fixes the kernel, object, map instances, schedule, and absence of interference. The two $\mathit{insB}$ suffixes terminate with observations 1 and 0. The earlier input $a$ is not read by the suffix, and its only surviving suffix-relevant effect is the selected key set. Hence the contexts agree, the selected states differ, and $\mathit{insB}$ witnesses $(P,\ell,w)\in L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}})$.
+NAND is functionally complete because $\neg x=\mathsf{NAND}(x,x)$ and $x\land y=\neg\mathsf{NAND}(x,y)$; the 512-gate descriptor bound limits circuit size, not the Boolean basis.
 
-Under the gate discipline, take $s_{D_G}(\sigma)=(\mathit{phase}(\sigma),K(\sigma))$, where phase ranges over the reset/sentinel/first/second-operation stages and $K\subseteq\{S,A,B\}$ with $|K|\le2$. The carrier, and hence its future-observation quotient, is finite. The complete reset-plus-gate word need not be causal because reset erases incoming differences; the witness is tagged by the internal frontier after the first operation.
+For the concrete Definition 1 witness, take $P=\mathit{wm\_circuit}$ and let $\ell$ be the point in $\mathit{circuit\_step\_cb}$ immediately before the second map update, after the first input-conditioned operation. Let $R_{G0}(\sigma)$ be the complete helper-relevant dynamic state of the dedicated map $G0$—including key occupancy, buckets, preallocated element/free-list metadata, and any other map-local state read by the update helper—and set $\rho_{\mathrm{obs}}(\sigma)=R_{G0}(\sigma)$. The occupied-key set $K_{G0}(\sigma)$ is only a derived projection of $R_{G0}(\sigma)$. Inputs $(0,1)$ and $(1,1)$ reach states $\sigma_0$ and $\sigma_1$ at $\ell$ with $K_{G0}(\sigma_0)=\{S\}$ and $K_{G0}(\sigma_1)=\{S,A\}$, hence $R_{G0}(\sigma_0)\ne R_{G0}(\sigma_1)$.
+
+Take the common remaining suffix $w$ to be the fresh-$B$ update followed by the uniform capture and store of its success bit, and define $\mathsf{Obs}(\tau)=[\mathit{ret}(\tau)=0]$. The slice and $\mathsf{ctx}_w$ include the common program point, key $B$, value, $G0$ identity and static attributes (map type, capacity, default preallocation, and $\mathit{BPF\_ANY}$ mode), relevant control and wire values, and every suffix-read component outside $R_{G0}$. The contract’s $\mathsf{Env}$ fixes the kernel, object, map instances, schedule, and absence of interference. Under the stated map-update contract, the two suffixes terminate with observations 1 and 0. The earlier input is not read by the suffix, and its persistent suffix-relevant effect is contained in the selected complete $G0$ dynamic state, so the non-selected contexts agree. Thus $w$ is a conditional Definition 1 witness under this declared concrete-service contract. This is stronger than selecting occupancy alone and does not claim that the retained traces expose all internal kernel fields.
+
+Under the gate discipline, take $s_{D_G}(\sigma)=(\mathit{phase}(\sigma),K(\sigma))$ on the invariant region $X_{D_G}$ fixed by valid arguments, the dedicated preallocated map contract, successful reset, serialization, and no interference. Adequacy on this region is an explicit service-contract premise, not a machine-checked model of every kernel field. Phase ranges over the reset/sentinel/first/second-operation stages and $K\subseteq\{S,A,B\}$ with $|K|\le2$. The carrier, and hence its future-observation quotient, is finite. For E1, the two complete gate words for $(0,1)$ and $(1,1)$ have prefixes $\mathit{updS}$ and $\mathit{insA}$ and the common remaining suffix just defined. The complete reset-plus-gate word need not be causal because reset erases incoming differences; the witness is tagged by the internal frontier after the first operation.
+
+For the basis take $P_G=P_U$, $\mathsf{Adm}_G=X_{D_G}$, reset as delete $S,A,B$ then insert $S$, $G$ as the $S/A/B$ selector, and $\mathit{observe}=[\text{second return}=0]$. The witness above discharges E1; Proposition 2 and the reset premises discharge E2–E3.
 
 This mechanism adds no extensional Boolean expressiveness to eBPF. It is a calibration case showing that a documented stateful service can supply a reusable post-acceptance gate; it does not by itself establish report omission.
 
@@ -374,9 +436,9 @@ The verifier’s acceptance unit is the fixed interpreter artifact rather than e
 
 ### 4.4 Source-level invariant and evidence boundary
 
-**Lemma 1 (source-level interpreter prefix invariant).** Assume documented helper semantics, the E4-D serialization environment, valid $\mathsf{Enc}_U(d,x)$, and that the captured translated object preserves the manually inspected source control/data dependencies. For every integer $t$ with $0\le t\le n(d)$, after $t$ successful callbacks, every canonical wire below $2+m(d)+t$ equals the corresponding prefix of $\mathsf{Eval}_{\mathsf{NAND}}(d,x)$.
+**Lemma 1 (source-level interpreter prefix invariant).** Assume the update laws of Proposition 2, successful reset and required map/helper calls, the E4-D serialization environment, valid $\mathsf{Enc}_U(d,x)$, and that the captured translated object preserves the manually inspected source control/data dependencies. For every integer $t$ with $0\le t\le n(d)$, after successful completion of the ordered callback indices $0,\ldots,t-1$, every canonical wire below $2+m(d)+t$ equals the corresponding prefix of $\mathsf{Eval}_{\mathsf{NAND}}(d,x)$.
 
-*Proof sketch.* The outer program initializes constants and preserves host-written inputs. A callback validates the current opcode, destination, and earlier sources, then copies the descriptor and source bits. Proposition 2 gives NAND after reset; success writes only the canonical destination and increments the completed count. The outer loop requests exactly $n(d)$ callbacks and checks both loop return and completed count. Induction on $t$ gives the prefix claim. This is a source-level argument supported by retained translated dumps for manual inspection, not a machine-checked eBPF-semantics proof. ∎
+*Proof sketch.* The outer program initializes constants and preserves host-written inputs. A callback validates the current opcode, destination, and earlier sources, then copies the descriptor and source bits. Proposition 2 gives NAND after reset; success writes only the canonical destination and increments the completed count. The outer program requests $n(d)$ iterations through $\mathit{bpf\_loop}$; under the helper contract, callback return zero continues, return one stops, and the helper reports the number of iterations performed [13]. The interpreter accepts only when both that return and its own completed count equal $n(d)$. Induction on $t$ gives the prefix claim. This is a source-level argument supported by retained translated dumps for manual inspection, not a machine-checked eBPF-semantics proof. ∎
 
 The E4-D implementation argument maps to the artifact as follows:
 
@@ -388,7 +450,7 @@ The E4-D implementation argument maps to the artifact as follows:
 | 4 — gate/frame | $\mathit{circuit\_step\_cb}$ validates/copies sources, resets $G0$, and updates one canonical destination | semantic auditor checks emitted destinations and outputs |
 | 5 — bounds/errors | count guards, callback failure status, host-side status-mask guard | eight negative cases check status/count; masking path is source-guarded only |
 
-Thus A and C are recorded, while P is supported under the stated source-to-object and serialization premises. Nodes R and W are absent: no Linux report-cell extractor or deployment policy is supplied.
+Thus A is recorded, C has a conditional witness under the declared map-service/no-interference contract, and P is supported under additional source-to-object, frame, and serialization premises. Nodes R and W are absent: no Linux report-cell extractor or deployment policy is supplied.
 
 ---
 
@@ -396,8 +458,8 @@ Thus A and C are recorded, while P is supported under the stated source-to-objec
 
 ### 5.1 Recorded environment and primary run
 
-The primary evidence is the report-bound source-snapshotted run
-$\mathit{results/interpreter/interpreter\text{-}final\text{-}20260711\text{-}02/$. It records Ubuntu 24.04, Linux 6.17.0-35-generic on aarch64, and preserves four BPF variants, captured loaded-program metadata, verifier logs, descriptors, JSONL outputs, an author-run semantic audit, selected source including this report, and a self-issued SHA-256 manifest. It is an author-generated run with a separate author-run audit, not a third-party reproduction.
+The primary evidence is the run bundle
+$\mathit{results/interpreter/interpreter\text{-}final\text{-}20260711\text{-}02/$. It records Ubuntu 24.04, Linux 6.17.0-35-generic on aarch64, and preserves four BPF variants, captured loaded-program metadata, verifier logs, descriptors, JSONL outputs, an author-run semantic audit, a then-current selected source/manuscript snapshot, and a self-issued SHA-256 manifest. The final manuscript postdates that run and is not claimed to be covered by its manifest. The bundle is author-generated and separately author-audited, not a third-party reproduction.
 
 The dataset contains exactly
 
@@ -451,7 +513,7 @@ The controls support mechanism attribution: saturation and the second fresh name
 
 ### 5.5 Calibration result
 
-Linux's verifier documentation states its objective in terms of determining program safety and validating paths, arguments, and memory access [9]; it does not specify a complete functional certificate for map-mediated computation. Leaving a helper return unknown may therefore be consistent with that documented objective. The case is a calibration, not evidence of unsound acceptance: it establishes node C and supports node P under its implementation premises, while the absent report extractor blocks node R.
+Linux's verifier documentation states its objective in terms of determining program safety and validating paths, arguments, and memory access [14]; it does not specify a complete functional certificate for map-mediated computation. Without a report extractor we neither test nor infer how precisely it tracks this helper return. The case gives a conditional C witness under the declared service contract and supports P under additional premises; it is not evidence of unsound acceptance, and R remains blocked.
 
 ### 5.6 Threats to validity
 
@@ -463,16 +525,11 @@ Finite testing does not prove all $D_{64,512}$. Theorem 1 instead depends on the
 
 ## 6. Related Work
 
-Language-theoretic security supplies the recognition/interpretation framing [1]–[4]. Palmer, Rogers, and Adams reconstruct low-level interfaces as languages of buffers, calls, flags, references, and state-dependent operations [10]. Bratus et al. and constructive examples frame unintended computation as a programmable machine [11]–[13]; Dullien studies exploitability [14], and Paykin et al. make the source/target policy boundary explicit [15]. Vanegue’s proof-carrying-code work is a close abstraction-side antecedent: computation outside a proof model can act as a shadow execution [16].
+Language-theoretic security supplies the recognition/interpretation framing [1]–[4]; object-centric tracing reconstructs state-dependent low-level operation languages [15]. Weird-machine work studies unintended computation and exploitability [16], [17], insecure compilation makes the policy boundary explicit [18], and proof-carrying-code work identifies shadow execution outside a proof model [19]. Valid-input computation also appears in well-formed RPM metadata, while vulnerability-flow types derive abstract weird machines [20], [21]; neither adopts our actual-report-cell criterion for one accepted artifact.
 
-| Line of work | Primary object | Separation added here |
-|---|---|---|
-| Language-theoretic security [1]–[4] | recognized input language and downstream interpreter | accepted artifact versus its post-acceptance operation words |
-| Object-centric tracing [10] | effective low-level operation stream | accepted-artifact/frontier tags and a predeclared same-suffix causal test |
-| Proof-carrying-code weird machines [16] | computation outside a proof abstraction | actual computed-cell factorization versus mere state-mediated programmability |
-| Insecure compilation [15] | source/target contextual policy | report-relative node R separated from policy/threat node W |
+Abstract interpretation supplies concrete/abstract, soundness, and completeness vocabulary [5], [22]; our criterion is limited to uniquely assigned cells actually computed at one frontier. MOAT isolates post-acceptance BPF effects [23], while mismorphism compares interpretations [24]. For eBPF, range-analysis verification and state embedding target verifier-logic soundness/coverage errors [25], [26]. VEP’s “programmability” means reducing verification-toolchain restrictions, while Rex addresses rejection-side language–verifier mismatch by replacing a separate static verifier with language-based safety and an extralingual runtime [27], [28]; P here instead means one fixed stock-verifier-accepted artifact interpreting a bounded family. DRACO checks functional specifications after verifier acceptance, and bpfverify translates eBPF bytecode to bit- and memory-precise Horn clauses for functional verification [29], [30].
 
-Abstract interpretation provides the vocabulary for concrete states, computed cells, soundness, and completeness [5], [17]. Our criterion concerns actual computed-cell factorization; it does not identify report uncertainty with standard abstract-interpretation incompleteness. PREVAIL is a separate eBPF analyzer with its own soundness argument [18], and tristate-number work proves domain-level properties [19], not end-to-end production-verifier soundness for this kernel. MOAT isolates BPF after acceptance [20], complementing our boundary analysis by limiting the effect of post-acceptance semantics. Anantharaman et al. locate weird instructions in mismorphisms across interpretations [21]; node R here requires the narrower witness that distinct future-observation classes occupy one actual computed report cell.
+Recent preprints further separate the boundary: Heimdall treats higher-level defects surviving compilation and acceptance; Yaksha-Prashna extracts third-party bytecode behavior; bpfix localizes proof loss in rejected programs [31]–[33]. Trust-boundary semantic-gap work studies insufficient assertions after correctly implemented syntactic acceptance [34]. They do not jointly distinguish the obligations in our claim graph; conversely, our Linux case does not establish R or W. These four 2026 works are cited as preprints, not peer-reviewed publications.
 
 ---
 
@@ -481,8 +538,33 @@ Abstract interpretation provides the vocabulary for concrete states, computed ce
 ### 7.1 The claim graph has strict separations
 
 To put all five nodes on one carrier, fix a model
-$M=(V,I,\mathsf{Report},K_{\mathrm{obs}},P_*,\ell_*,D_R,F_R,\mathcal A,\mathcal E,\mathsf{Drive},\mathsf{Pol})$,
-where $\mathcal A$ and $\mathcal E$ are actor and effect sets, $\mathsf{Drive}\subseteq\mathcal A\times\mathcal E$ records effects actors can drive through the designated $P_*$, and $\mathsf{Pol}\subseteq\mathcal E$ is the permitted-effect set. Define $A(M)$ by $P_*\in L_V$; $C(M)$ by $\exists w.\,(P_*,\ell_*,w)\in L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}})$; $P(M)$ when $P_*$ is one fixed accepted bounded interpreter for which there exist an embedded basis $(P_G,\mathit{reset},G,\mathit{observe},D_G,\mathsf{Adm}_G)$ and a nonconstant $g$ satisfying E1–E3, and $P_*$ discharges E4-D using that basis; $R(M)$ when $\mathsf{Adm}(P_*,\ell_*,D_R,F_R;K_{\mathrm{obs}})$ holds and some $(P_*,\ell_*,a^\#,w)$ is report-relative residual on exactly that tuple; and $W(M)$ when $\exists a\in\mathcal A,\exists e\in\mathcal E.\,(a,e)\in\mathsf{Drive}\land e\notin\mathsf{Pol}$.
+
+$$
+\begin{aligned}
+M=(&V,I,\mathsf{Report},K_{\mathrm{obs}},P_*,\ell_*,D_R,F_R,\\
+&\mathcal A,\mathcal E,\mathsf{Drive},\mathsf{Pol}),
+\end{aligned}
+$$
+
+enriched with named intended-semantics, safety, report-abstraction, and granularity contracts against which the evidence predicates below are evaluated. Here $\mathcal A$ and $\mathcal E$ are actor and effect sets, $\mathsf{Drive}\subseteq\mathcal A\times\mathcal E$ records effects actors can drive through the designated $P_*$, and $\mathsf{Pol}\subseteq\mathcal E$ is the permitted-effect set.
+
+Define $A(M)$ by $P_*\in L_V$; $C(M)$ by $\exists\ell,\exists w.\,(P_*,\ell,w)\in L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}})$; $P(M)$ when $P_*$ is one fixed accepted bounded interpreter with a same-artifact basis $(P_*,\mathit{reset},G,\mathit{observe},D_G,\mathsf{Adm}_G)$ satisfying E1–E3, $P_*$ discharges E4-D using that basis, and $g$ together with constants $\{0,1\}$ is functionally complete for Boolean circuits; $R(M)$ when $\mathsf{Adm}(P_*,\ell_*,D_R,F_R;K_{\mathrm{obs}})$ holds and some $(P_*,\ell_*,D_R,F_R,a^\#,w)$ is output-witnessed report-relative residual on exactly that tuple; and $W(M)$ when $\exists a\in\mathcal A,\exists e\in\mathcal E.\,(a,e)\in\mathsf{Drive}\land e\notin\mathsf{Pol}$.
+
+For classification, let $\mathsf{Link}(M)$ require the R witness (when used) to lie in the gate/interpreter execution family establishing P and the W effect to arise by an actor driving that same encoded computation; unrelated co-resident witnesses do not qualify. Let $\mathsf{Unint}(M)$ mean that this programmable interpretation/effect is outside the boundary’s intended semantics. Define
+
+$$
+\mathsf{WM}_{\mathrm{policy}}(M)
+=P(M)\land W(M)\land\mathsf{Link}(M)\land\mathsf{Unint}(M).
+$$
+
+Let $\mathsf{Doc}(M)$ mean that this linked behavior uses documented semantics and preserves the declared safety contract, $\mathsf{Conf}(M)$ mean that the report implementation conforms to its specified abstraction, and $\mathsf{Gran}(M)$ mean that its R collision is forced by the declared report granularity. Define the narrower class by
+
+$$
+\begin{aligned}
+\mathsf{WM}_{\mathrm{shape}}(M)={}&\mathsf{WM}_{\mathrm{policy}}(M)\land R(M)\\
+&{}\land\mathsf{Doc}(M)\land\mathsf{Conf}(M)\land\mathsf{Gran}(M).
+\end{aligned}
+$$
 
 **Proposition 3 (non-implications among claim nodes).** Over this model class, the following implications are invalid:
 
@@ -496,49 +578,37 @@ P\not\Rightarrow W,\quad
 R\not\Rightarrow W.
 $$
 
-Moreover, a policy-level weird machine need not satisfy R; only the shape-induced recognizer-relative subclass requires $P\land R\land W$.
+The definitions validate $R\Rightarrow C\Rightarrow A$ and $P\Rightarrow C\Rightarrow A$: Definition 2 contains a Definition 1 witness, and E1 uses the E4-D artifact.
 
-*Proof by finite countermodels.* For $A\not\Rightarrow C$, accept only $\mathit{skip}$ and reject another safe constant program; the accepted system has no causal operation. For $C\not\Rightarrow P$ and $R\not\Rightarrow P$, use states $\{0,1,\bot\}$, one read that outputs the bit and moves to sink $\bot$, no reset, and one report cell covering 0 and 1. For $C\not\Rightarrow R$, use a resettable two-state transducer whose report has one cell per future-observation class. For $P\not\Rightarrow R$, use any accepted bounded NAND interpreter satisfying E1–E3 and E4-D with the same exact report partition. For $P\not\Rightarrow W$, set $\mathsf{Pol}=\mathcal E$; using the one-cell destructive-read model with the same permissive policy also gives $R\not\Rightarrow W$. Finally, choose a model satisfying P, place one actor-driven effect outside $\mathsf{Pol}$, and let the report separate all relevant future-observation classes; then $P\land W\land\neg R$. Thus policy-level weird-machine status does not generally require R. ∎
+*Proof by finite countermodels.* For $A\not\Rightarrow C$, accept only $\mathit{skip}$. For $C\not\Rightarrow P$ and $R\not\Rightarrow P$, use states $\{0,1,\bot\}$, a one-shot bit read, and one report cell. Exact future-class cells give $C\not\Rightarrow R$; an E1–E4-D NAND interpreter with that exact partition gives $P\not\Rightarrow R$. Setting $\mathsf{Pol}=\mathcal E$ gives $P\not\Rightarrow W$ and, in the one-shot model, $R\not\Rightarrow W$. Finally, an actor-driven, unintended, policy-excluded effect from the same encoded P family with an exact report partition gives $\mathsf{WM}_{\mathrm{policy}}\land\neg R$. ∎
 
-Theorem 1 addresses only the C-to-P construction after its explicit reset and composition premises are supplied. Standard abstract-interpretation or acceptance incompleteness alone does not imply any later node.
+Thus bare C, abstract-interpretation incompleteness, or acceptance incompleteness does not imply P or a weird-machine classification.
 
 ### 7.2 Defensive implications
 
-The model suggests a three-part audit. Declare the recognized property and report separately; enumerate the stateful operation language accepted code can drive, including environment assumptions; then test whether security-relevant quotient classes factor through the selected report. A contract violation calls for an implementation fix. Documented behavior that violates an intended report relation calls for report refinement, runtime restriction, or isolation. If the report never promised that relation and policy permits the behavior, there may be no verifier defect.
+Audit the recognized property and report separately, enumerate actor-driven operations and environment assumptions, then test report factorization. Contract violations call for implementation fixes; documented collisions call for report refinement, restriction, or isolation only when the report intended that relation.
 
 ### 7.3 Weird-machine status and a future shape theorem
 
-Under the source-to-object correspondence and serialization premises, the eBPF case supports node P: accepted code controls, resets, and composes a stateful NAND basis. It does not establish R or W. If documented causal behavior also fails a declared report-factorization contract, that additional gap is contract-shape-induced; the present Linux artifact does not establish this premise. Weird-machine security status further requires an actor and policy-excluded effect, absent from the offline run.
-
-A future shape theorem must derive two closure properties rather than assume them. **Macro closure** must preserve acceptance when local operations are renamed and composed under a budget. **Report embedding** must preserve the relevant collision in actual computed cells after composition. Context-sensitive analysis can invalidate either property, and budgets need not compose additively. Complete-shell theory [17], instantiated with a declared observation semantics, may characterize required report refinement, but it does not create reachability, control, reset, routing, or policy violation.
-
-### 7.4 Remaining limitations
-
-The evidence is one bounded combinational interpreter on one Linux/aarch64 setup. It is not a second-system, concurrency, E4-A compiler, or unbounded result. The report framework and calibration case remain disconnected at node R because no Linux report extractor exists. The final bundle is author-generated and has a separate author-run semantic audit; it is not a third-party reproduction.
+The eBPF case supports P under its source/object and serialization premises but establishes neither R nor W. A shape theorem must derive **macro closure** of acceptance and **report embedding** of the collision; context sensitivity can defeat either. Complete-shell theory [22] may characterize report refinement, but cannot create reachability, reset, routing, linkage, or policy violation.
 
 ---
 
 ## 8. Conclusion
 
-Program verification is a language-theoretic security boundary, but artifact acceptance and post-acceptance interpretation use different languages. We separated the accepted-indexed causal family $L_{\mathrm{causal}}$ from the report-relative $L_{\mathrm{res}}^R$, gave a behavioral factorization criterion, and decomposed the obligations for bounded state-mediated composition.
-
-The eBPF calibration establishes A and C and supports P under explicit source-to-object, environment, and frame premises. A two-entry map’s saturating update algebra implements NAND, and one fixed artifact consumes circuits with at most 64 inputs, 512 gates, and 578 wires. It does not establish Linux report non-factorization or the policy/threat obligation. The claim graph makes that boundary a result rather than an ambiguity: post-acceptance programmability is measurable, but it is not yet a shape-induced recognizer-relative weird machine.
+Artifact acceptance and post-acceptance interpretation use different languages. We separate causal words from output-witnessed report residuals and give factorization and bounded-composition criteria. The eBPF case records A, conditionally witnesses C, and supports P for a fixed 64-input/512-gate NAND interpreter, but establishes neither R nor W; it is not a shape-induced recognizer-relative weird machine.
 
 ---
 
 ## Ethics and Data Availability
 
-All experiments run in an isolated local VM, attach no program to a live network or kernel hook, target no third party, and attempt no memory corruption, verifier bypass, or privilege escalation. The artifact uses legal helper calls and bounded execution.
+Experiments run in an isolated local VM, use no live hook or third-party target, and attempt no corruption, verifier bypass, or privilege escalation.
 
-The accompanying repository is available at https://github.com/Emtanling/eBPF-machine. The report-bound source and evidence are under `results/interpreter/interpreter-final-20260711-02/`; that directory contains preserved BPF variants, environment records, verifier logs, translated disassembly, WMC1 descriptors, JSONL datasets, separate author-run audit code, and an integrity manifest. The manifest is self-issued and protects only against accidental bundle drift.
+The repository is https://github.com/Emtanling/eBPF-machine; immutable evidence is at commit [`4309069a`](https://github.com/Emtanling/eBPF-machine/tree/4309069a1f94d642d5c1402eb710e089c85059b1), under `results/interpreter/interpreter-final-20260711-02/`. It contains variants, environment, logs, disassembly, descriptors, datasets, audit code, and a self-issued integrity manifest. Its source is the then-current run snapshot, not this later manuscript; the manifest protects only against accidental drift.
 
-## Acknowledgment
+## Acknowledgment and AI-Assistance Disclosure
 
-OpenAI Codex was used throughout the manuscript to assist with structural organization, drafting, revision, and language editing, and in the accompanying artifact to assist with code and test revision, documentation synchronization, and execution of author-directed checks. The author independently reviewed and validated all claims, proofs, citations, source changes, and experimental results and takes full responsibility for the work. No conflict of interest is declared.
-
-## Author Contributions
-
-Chengao Zhang: conceptualization, methodology, software, validation, investigation, writing—original draft, and writing—review and editing.
+OpenAI Codex assisted drafting, revision, language editing, artifact code/test revision, and author-directed checks. The author independently reviewed the claims, proofs, citations, changes, and results and takes full responsibility. No conflict of interest is declared.
 
 ---
 
@@ -554,34 +624,60 @@ Chengao Zhang: conceptualization, methodology, software, validation, investigati
 
 [5] P. Cousot and R. Cousot, “Abstract Interpretation: A Unified Lattice Model for Static Analysis of Programs by Construction or Approximation of Fixpoints,” in *Proceedings of the 4th ACM SIGACT-SIGPLAN Symposium on Principles of Programming Languages (POPL ’77)*, pp. 238–252, 1977, doi: 10.1145/512950.512973.
 
-[6] Linux Kernel Documentation, “Running BPF Programs from Userspace,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/bpf_prog_run.html (accessed Jul. 11, 2026).
+[6] A. Nerode, “Linear Automaton Transformations,” *Proceedings of the American Mathematical Society*, vol. 9, no. 4, pp. 541–544, 1958, doi: 10.1090/S0002-9939-1958-0135681-9.
 
-[7] Linux Kernel Documentation, “Program Types and ELF Sections,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/libbpf/program_types.html (accessed Jul. 11, 2026).
+[7] G. H. Mealy, “A Method for Synthesizing Sequential Circuits,” *Bell System Technical Journal*, vol. 34, no. 5, pp. 1045–1079, 1955, doi: 10.1002/j.1538-7305.1955.tb03788.x.
 
-[8] Linux Kernel Documentation, “BPF_MAP_TYPE_HASH, with PERCPU and LRU Variants,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/map_hash.html (accessed Jul. 11, 2026).
+[8] G. Amato and F. Scozzari, “Observational Completeness on Abstract Interpretation,” *Fundamenta Informaticae*, vol. 106, nos. 2–4, pp. 149–173, 2011, doi: 10.3233/FI-2011-381.
 
-[9] Linux Kernel Documentation, “eBPF Verifier,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/verifier.html (accessed Jul. 11, 2026).
+[9] F. Ranzato and F. Tapparo, “Generalized Strong Preservation by Abstract Interpretation,” *Journal of Logic and Computation*, vol. 17, no. 1, pp. 157–197, 2007, doi: 10.1093/logcom/exl035.
 
-[10] I. Palmer, E. Rogers, and R. Adams, “Object-Centric Tracing for Language-Theoretic Security in Low-Level Interfaces,” in *Twelfth Workshop on Language-Theoretic Security (LangSec 2026), IEEE Security and Privacy Workshops*, 2026. [Online]. Available: https://langsec.org/spw26/papers/palmer-object-tracing.pdf (accessed Jul. 12, 2026).
+[10] Linux Kernel Documentation, “Running BPF Programs from Userspace,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/bpf_prog_run.html (accessed Jul. 11, 2026).
 
-[11] S. Bratus, M. E. Locasto, M. L. Patterson, L. Sassaman, and A. Shubina, “Exploit Programming: From Buffer Overflows to Weird Machines and Theory of Computation,” *USENIX ;login:*, vol. 36, no. 6, pp. 13–21, 2011.
+[11] Linux Kernel Documentation, “Program Types and ELF Sections,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/libbpf/program_types.html (accessed Jul. 11, 2026).
 
-[12] J. Bangert, S. Bratus, R. Shapiro, and S. W. Smith, “The Page-Fault Weird Machine: Lessons in Instruction-less Computation,” in *7th USENIX Workshop on Offensive Technologies (WOOT 13)*, 2013.
+[12] Linux Kernel Documentation, “BPF_MAP_TYPE_HASH, with PERCPU and LRU Variants,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/map_hash.html (accessed Jul. 11, 2026).
 
-[13] R. Shapiro, S. Bratus, and S. W. Smith, “‘Weird Machines’ in ELF: A Spotlight on the Underappreciated Metadata,” in *7th USENIX Workshop on Offensive Technologies (WOOT 13)*, 2013.
+[13] Linux Kernel Developers, “bpf_loop Helper API,” *include/uapi/linux/bpf.h*, Linux v6.17. [Online]. Available: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/bpf.h?h=v6.17 (accessed Jul. 13, 2026).
 
-[14] T. Dullien, “Weird Machines, Exploitability, and Provable Unexploitability,” *IEEE Transactions on Emerging Topics in Computing*, vol. 8, no. 2, pp. 391–403, 2020, doi: 10.1109/TETC.2017.2785299.
+[14] Linux Kernel Documentation, “eBPF Verifier,” [Online]. Available: https://www.kernel.org/doc/html/v6.17/bpf/verifier.html (accessed Jul. 11, 2026).
 
-[15] J. Paykin, E. Mertens, M. Tullsen, L. Maurer, B. Razet, A. Bakst, and S. Moore, “Weird Machines as Insecure Compilation,” arXiv:1911.00157, 2019.
+[15] I. Palmer, E. Rogers, and R. Adams, “Object-Centric Tracing for Language-Theoretic Security in Low-Level Interfaces,” in *Twelfth Workshop on Language-Theoretic Security (LangSec 2026)*, 2026. [Online]. Available: https://langsec.org/spw26/papers/palmer-object-tracing.pdf (accessed Jul. 12, 2026).
 
-[16] J. Vanegue, “The Weird Machines in Proof-Carrying Code,” in *2014 IEEE Security and Privacy Workshops*, pp. 209–213, 2014, doi: 10.1109/SPW.2014.37.
+[16] S. Bratus, M. E. Locasto, M. L. Patterson, L. Sassaman, and A. Shubina, “Exploit Programming: From Buffer Overflows to Weird Machines and Theory of Computation,” *USENIX ;login:*, vol. 36, no. 6, pp. 13–21, 2011.
 
-[17] R. Giacobazzi, F. Ranzato, and F. Scozzari, “Making Abstract Interpretations Complete,” *Journal of the ACM*, vol. 47, no. 2, pp. 361–416, 2000, doi: 10.1145/333979.333989.
+[17] T. Dullien, “Weird Machines, Exploitability, and Provable Unexploitability,” *IEEE Transactions on Emerging Topics in Computing*, vol. 8, no. 2, pp. 391–403, 2020, doi: 10.1109/TETC.2017.2785299.
 
-[18] E. Gershuni, N. Amit, A. Gurfinkel, N. Narodytska, J. A. Navas, N. Rinetzky, L. Ryzhyk, and M. Sagiv, “Simple and Precise Static Analysis of Untrusted Linux Kernel Extensions,” in *Proceedings of the 40th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI ’19)*, pp. 1069–1084, 2019, doi: 10.1145/3314221.3314590.
+[18] J. Paykin et al., “Weird Machines as Insecure Compilation,” arXiv:1911.00157, 2019.
 
-[19] H. Vishwanathan, M. Shachnai, S. Narayana, and S. Nagarakatte, “Sound, Precise, and Fast Abstract Interpretation with Tristate Numbers,” in *2022 IEEE/ACM International Symposium on Code Generation and Optimization (CGO)*, pp. 254–265, 2022, doi: 10.1109/CGO53902.2022.9741267.
+[19] J. Vanegue, “The Weird Machines in Proof-Carrying Code,” in *2014 IEEE Security and Privacy Workshops*, pp. 209–213, 2014, doi: 10.1109/SPW.2014.37.
 
-[20] H. Lu, S. Wang, Y. Wu, W. He, and F. Zhang, “MOAT: Towards Safe BPF Kernel Extension,” in *33rd USENIX Security Symposium (USENIX Security 24)*, pp. 1153–1170, 2024. [Online]. Available: https://www.usenix.org/conference/usenixsecurity24/presentation/lu-hongyi (accessed Jul. 11, 2026).
+[20] S. Ali, M. E. Locasto, and S. W. Smith, “Weird Machines in Package Managers: A Case Study of Input Language Complexity and Emergent Execution in Software Systems,” in *2024 IEEE Security and Privacy Workshops (SPW)*, pp. 169–179, 2024, doi: 10.1109/SPW63631.2024.00021.
 
-[21] P. Anantharaman, V. Kothari, J. P. Brady, I. R. Jenkins, S. Ali, M. C. Millian, R. Koppel, J. Blythe, S. Bratus, and S. W. Smith, “Mismorphism: The Heart of the Weird Machine,” in *Security Protocols XXVII*, Lecture Notes in Computer Science, vol. 12287, pp. 113–124, Springer, 2020, doi: 10.1007/978-3-030-57043-9_11.
+[21] M. Lesani, “Vulnerability Flow Type Systems,” in *2024 IEEE Security and Privacy Workshops (SPW)*, pp. 157–168, 2024, doi: 10.1109/SPW63631.2024.00020.
+
+[22] R. Giacobazzi, F. Ranzato, and F. Scozzari, “Making Abstract Interpretations Complete,” *Journal of the ACM*, vol. 47, no. 2, pp. 361–416, 2000, doi: 10.1145/333979.333989.
+
+[23] H. Lu, S. Wang, Y. Wu, W. He, and F. Zhang, “MOAT: Towards Safe BPF Kernel Extension,” in *33rd USEN Security Symposium*, pp. 1153–1170, 2024.
+
+[24] P. Anantharaman et al., “Mismorphism: The Heart of the Weird Machine,” in *Security Protocols XXVII*, LNCS 12287, pp. 113–124, 2020, doi: 10.1007/978-3-030-57043-9_11.
+
+[25] H. Vishwanathan, M. Shachnai, S. Narayana, and S. Nagarakatte, “Verifying the Verifier: eBPF Range Analysis Verification,” in *Computer Aided Verification*, Lecture Notes in Computer Science, vol. 13966, pp. 226–251, 2023, doi: 10.1007/978-3-031-37709-9_12.
+
+[26] H. Sun and Z. Su, “Validating the eBPF Verifier via State Embedding,” in *18th USENIX Symposium on Operating Systems Design and Implementation*, pp. 615–628, 2024.
+
+[27] X. Wu et al., “VEP: A Two-stage Verification Toolchain for Full eBPF Programmability,” in *22nd USENIX Symposium on Networked Systems Design and Implementation*, pp. 277–299, 2025.
+
+[28] J. Jia et al., “Rex: Closing the Language-Verifier Gap with Safe and Usable Kernel Extensions,” in *2025 USENIX Annual Technical Conference*, pp. 325–342, 2025.
+
+[29] D. Lu, B. Tang, M. Paper, and M. Kogias, “Towards Functional Verification of eBPF Programs,” in *Proceedings of the 2024 ACM SIGCOMM Workshop on eBPF and Kernel Extensions (eBPF ’24)*, pp. 37–43, 2024, doi: 10.1145/3672197.3673435.
+
+[30] M. Bromberger, S. Schwarz, and C. Weidenbach, “Automatic Bit- and Memory-Precise Verification of eBPF Code,” in *Proceedings of the 25th Conference on Logic for Programming, Artificial Intelligence and Reasoning*, EPiC Series in Computing, vol. 100, pp. 198–221, 2024, doi: 10.29007/sj4l.
+
+[31] V. A. Dasu, M. Santra, M. R. U. Rashid, A. Kumar, S. Tizpaz-Niari, and G. Tan, “Heimdall: Formally Verified Automated Migration of Legacy eBPF Programs to Rust,” arXiv:2605.25411, 2026, doi: 10.48550/arXiv.2605.25411.
+
+[32] A. Singh et al., “Yaksha-Prashna: Understanding eBPF Bytecode Network Function Behavior,” arXiv:2602.11232, 2026, doi: 10.48550/arXiv.2602.11232.
+
+[33] Y. Zheng et al., “Characterizing and Bridging the Diagnostic Gap in eBPF Verifier Rejections,” arXiv:2607.02748, 2026, doi: 10.48550/arXiv.2607.02748.
+
+[34] D. Kim, J.-Y. Choi, and J. Lee, “Trust Boundary Semantic Gaps: A Multi-dimensional Analysis and Mitigation for Security-by-Design,” arXiv:2607.01711, 2026, doi: 10.48550/arXiv.2607.01711.
