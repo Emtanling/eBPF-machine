@@ -658,7 +658,7 @@ OpenAI Codex assisted drafting, revision, language editing, artifact code/test r
 
 [22] R. Giacobazzi, F. Ranzato, and F. Scozzari, “Making Abstract Interpretations Complete,” *Journal of the ACM*, vol. 47, no. 2, pp. 361–416, 2000, doi: 10.1145/333979.333989.
 
-[23] H. Lu, S. Wang, Y. Wu, W. He, and F. Zhang, “MOAT: Towards Safe BPF Kernel Extension,” in *33rd USEN Security Symposium*, pp. 1153–1170, 2024.
+[23] H. Lu, S. Wang, Y. Wu, W. He, and F. Zhang, “MOAT: Towards Safe BPF Kernel Extension,” in *33rd USENIX Security Symposium*, pp. 1153–1170, 2024.
 
 [24] P. Anantharaman et al., “Mismorphism: The Heart of the Weird Machine,” in *Security Protocols XXVII*, LNCS 12287, pp. 113–124, 2020, doi: 10.1007/978-3-030-57043-9_11.
 
