@@ -553,6 +553,7 @@ class LinuxRBundleAuditTests(unittest.TestCase):
             self.build(bundle)
             manifest_path = bundle / "manifest.json"
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["bindings"]["host"]["system"] = "Linux"
             manifest["bindings"]["host"]["machine"] = "x86_64"
             core = {key: value for key, value in manifest.items()
                     if key != "manifest_hash"}
@@ -575,17 +576,23 @@ class LinuxRBundleAuditTests(unittest.TestCase):
             self.assertTrue(accepted["checks"]["required_executable_modes"])
 
     def test_bound_harness_machine_matches_supported_manifest_host(self) -> None:
-        cases = (("x86_64", 183), ("mips64", 62))
+        cases = (
+            ("Linux", "x86_64", 183),
+            ("Linux", "mips64", 62),
+            ("Darwin", "x86_64", 62),
+        )
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            for index, (host_machine, elf_machine) in enumerate(cases):
-                with self.subTest(host_machine=host_machine):
+            for index, (host_system, host_machine, elf_machine) in enumerate(cases):
+                with self.subTest(host_system=host_system,
+                                  host_machine=host_machine):
                     bundle = root / f"bundle-{index}"
                     self.build(bundle)
                     manifest_path = bundle / "manifest.json"
                     manifest = json.loads(
                         manifest_path.read_text(encoding="utf-8")
                     )
+                    manifest["bindings"]["host"]["system"] = host_system
                     manifest["bindings"]["host"]["machine"] = host_machine
                     core = {key: value for key, value in manifest.items()
                             if key != "manifest_hash"}
@@ -615,9 +622,7 @@ class LinuxRBundleAuditTests(unittest.TestCase):
             manifest_path.symlink_to(target_manifest)
             manifest_result = audit_bundle(manifest_bundle, write=False)
             self.assertEqual(manifest_result["verdict"], "FAIL")
-            self.assertFalse(
-                manifest_result["checks"]["root_entries_regular"]
-            )
+            self.assertFalse(manifest_result["checks"]["bundle_readable"])
 
             audit_bundle_path = root / "audit-bundle"
             self.build(audit_bundle_path)

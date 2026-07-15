@@ -1595,6 +1595,13 @@ def build_bundle(program_path: str | Path, output_dir: str | Path, *,
     if _sha256_file(output / "report.json") != persisted_report_sha256:
         raise AssertionError("persisted report changed during witness construction")
 
+    # Normalize modes before hashing so Git/ZIP extraction and the caller's
+    # umask cannot silently change the executable contract of the snapshot.
+    for path in output.iterdir():
+        if path.is_file():
+            path.chmod(0o755 if path.name in {"wm_vm_user", "run_kernel.sh"}
+                       else 0o644)
+
     bindings: dict[str, Any] = {
         "created_at": created_at or os.environ.get("SOURCE_DATE_EPOCH", "unspecified"),
         "host": platform.uname()._asdict(),

@@ -13,6 +13,7 @@ import copy
 import hashlib
 import json
 import os
+import stat
 import struct
 from pathlib import Path
 from typing import Any
@@ -47,7 +48,19 @@ def _hash_file(path: Path) -> str:
 
 
 def _read_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
+    flags = os.O_RDONLY
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags)
+    try:
+        if not stat.S_ISREG(os.fstat(descriptor).st_mode):
+            raise OSError(f"{path} is not a regular file")
+        with os.fdopen(descriptor, "r", encoding="utf-8") as handle:
+            descriptor = -1
+            return json.load(handle)
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
 
 
 def _program_is_canonical(program: Any) -> bool:
@@ -1223,7 +1236,7 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
         isinstance(path, str) and path in declared_records and
         isinstance(declared_records[path], dict) and
         isinstance(declared_records[path].get("mode"), int) and
-        bool(declared_records[path]["mode"] & 0o111)
+        bool(declared_records[path]["mode"] & 0o100)
         for path in executable_paths
     )
     if "harness_binary" in bindings:
@@ -1248,8 +1261,14 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
             if isinstance(host_binding, dict) and
             isinstance(host_binding.get("machine"), str) else ""
         )
+        host_system = (
+            host_binding.get("system", "").lower()
+            if isinstance(host_binding, dict) and
+            isinstance(host_binding.get("system"), str) else ""
+        )
         checks["harness_host_machine"] = (
             harness_elf is not None and
+            host_system == "linux" and
             host_machines.get(host_machine) == harness_elf.get("machine")
         )
     else:
