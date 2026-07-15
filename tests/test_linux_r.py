@@ -19,10 +19,16 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import sys
 import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from linux_r.audit import audit_bundle
 from linux_r.model import (
@@ -35,7 +41,6 @@ from linux_r.model import (
 )
 
 
-ROOT = Path(__file__).resolve().parents[1]
 PROGRAM = ROOT / "linux_r" / "program.json"
 BASELINE_STATES = {"frontier:S", "frontier:AS"}
 SUFFIX_WORD = ["update-suffix-and-observe"]
