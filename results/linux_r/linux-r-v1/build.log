@@ -1,0 +1,11 @@
+make[1]: Entering directory '/home/parallels/Desktop/weirdmachineBPF'
+make[1]: Nothing to be done for 'circuits'.
+make[1]: Leaving directory '/home/parallels/Desktop/weirdmachineBPF'
+make[1]: Entering directory '/home/parallels/Desktop/weirdmachineBPF'
+mkdir -p /tmp/linux-r.CGZVqt/build
+clang -O2 -g -target bpf -D__TARGET_ARCH_arm64 -DGATE_CAP=2  \
+	-c src/wm.bpf.c -o /tmp/linux-r.CGZVqt/build/wm.bpf.o
+mkdir -p /tmp/linux-r.CGZVqt/build
+cc -O2 -g -Wall -Wextra -I.  src/wm_vm_user.c \
+	-lbpf  -lelf -lz -o /tmp/linux-r.CGZVqt/build/wm_vm_user
+make[1]: Leaving directory '/home/parallels/Desktop/weirdmachineBPF'
