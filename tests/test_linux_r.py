@@ -26,6 +26,8 @@ from pathlib import Path
 
 from linux_r.audit import audit_bundle
 from linux_r.model import (
+    ModelError,
+    _parse_kernel_oracle,
     build_analysis,
     build_bundle,
     canonical_json_bytes,
@@ -53,10 +55,62 @@ def write_canonical(path: Path, value: object) -> None:
     path.write_bytes(canonical_json_bytes(value))
 
 
-def refresh_report_hash(analysis: dict) -> None:
-    report = analysis["report"]
+def refresh_report_hash(report: dict) -> None:
     core = {key: value for key, value in report.items() if key != "report_hash"}
     report["report_hash"] = sha256_bytes(canonical_json_bytes(core))
+
+
+def refresh_derivation_hash(derivation: dict) -> None:
+    core = {key: value for key, value in derivation.items()
+            if key != "derivation_hash"}
+    derivation["derivation_hash"] = sha256_bytes(canonical_json_bytes(core))
+
+
+def persist_resigned_report(bundle: Path, report: dict) -> None:
+    """Persist a self-consistent but potentially dishonest report mutation."""
+
+    refresh_report_hash(report)
+    report_path = bundle / "report.json"
+    write_canonical(report_path, report)
+
+    analysis_path = bundle / "analysis.json"
+    analysis = json.loads(analysis_path.read_text(encoding="utf-8"))
+    analysis["report_ref"] = {
+        "path": "report.json",
+        "report_hash": report["report_hash"],
+        "sha256": sha256_bytes(report_path.read_bytes()),
+    }
+    write_canonical(analysis_path, analysis)
+    refresh_manifest(bundle)
+
+
+def persist_resigned_derivation(bundle: Path, derivation: dict) -> None:
+    """Persist a self-consistent forged derivation and all dependent refs."""
+
+    refresh_derivation_hash(derivation)
+    derivation_path = bundle / "derivation.json"
+    write_canonical(derivation_path, derivation)
+
+    report_path = bundle / "report.json"
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    report["derivation_ref"]["derivation_hash"] = derivation["derivation_hash"]
+    refresh_report_hash(report)
+    write_canonical(report_path, report)
+
+    analysis_path = bundle / "analysis.json"
+    analysis = json.loads(analysis_path.read_text(encoding="utf-8"))
+    analysis["derivation_ref"] = {
+        "derivation_hash": derivation["derivation_hash"],
+        "path": "derivation.json",
+        "sha256": sha256_bytes(derivation_path.read_bytes()),
+    }
+    analysis["report_ref"] = {
+        "path": "report.json",
+        "report_hash": report["report_hash"],
+        "sha256": sha256_bytes(report_path.read_bytes()),
+    }
+    write_canonical(analysis_path, analysis)
+    refresh_manifest(bundle)
 
 
 def refresh_manifest(bundle: Path) -> None:
@@ -77,6 +131,60 @@ def refresh_manifest(bundle: Path) -> None:
             if key != "manifest_hash"}
     manifest["manifest_hash"] = sha256_bytes(canonical_json_bytes(core))
     write_canonical(path, manifest)
+
+
+def write_kernel_oracle(path: Path, *, trace_valid: bool = True) -> None:
+    """Write the minimal fixed-boundary calibration accepted by the model."""
+
+    common = {
+        "circuit": "nand",
+        "kind": "fixed_boundary",
+        "passed": True,
+        "program_id": 17,
+        "program_tag": "0123456789abcdef",
+        "variant_id": 1,
+    }
+    rows = []
+    for ordinal, assignment, actual, raw_return in (
+        (0, 2, 1, 0),
+        (1, 3, 0, -7),
+    ):
+        rows.append({
+            **common,
+            "assignment": assignment,
+            "actual": actual,
+            "executed": 1,
+            "failing_gate": 0xFFFFFFFF,
+            "gate_cap": 2,
+            "gate_count": 1,
+            "gate_error_count": 0,
+            "input_count": 2,
+            "logical_expected": actual,
+            "ordinal": ordinal,
+            "record": "run",
+            "run_seq": ordinal + 1,
+            "status": 0,
+            "trace_passed": True,
+            "variant_expected": actual,
+        })
+        rows.append({
+            **common,
+            "actual": actual,
+            "dst": 4,
+            "expected": actual,
+            "gate": 0,
+            "ordinal": ordinal,
+            "record": "gate",
+            "run_seq": ordinal + 1,
+            "second_update_raw_ret": raw_return,
+            "src0": 2,
+            "src1": 3,
+            "trace_valid": trace_valid,
+        })
+    path.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
 
 
 class LinuxRModelTests(unittest.TestCase):
@@ -117,13 +225,18 @@ class LinuxRModelTests(unittest.TestCase):
     def test_report_is_computed_without_posthoc_witness_output(self) -> None:
         analysis = build_analysis(self.program)
         report = analysis["report"]
+        derivation = analysis["derivation_provenance"]
 
         self.assertEqual(
             report["analysis_order"],
             "computed-before-concrete-witness-enumeration",
         )
         self.assertFalse(report["posthoc_output_data_used"])
-        self.assertGreaterEqual(len(report["computed_trace"]), 3)
+        self.assertNotIn("computed_trace", report)
+        self.assertFalse(
+            report["report_interface"]["computed_trace_is_label_set"]
+        )
+        self.assertGreaterEqual(len(derivation["computed_trace"]), 3)
         self.assertEqual(len(report["report_cells"]), 1)
         self.assertEqual(
             report["report_cells"][0]["operator"],
@@ -135,16 +248,63 @@ class LinuxRModelTests(unittest.TestCase):
             "not-tracked",
         )
 
-    def test_abstract_transfer_is_sound_for_entire_finite_domain(self) -> None:
+    def test_domain_returns_and_report_cell_successors_are_sound(self) -> None:
         analysis = build_analysis(self.program)
         validation = analysis["report"]["transfer_validation"]
 
-        # Seven admissible subsets K of {S,A,B} with |K| <= 2, times the
-        # three update keys, are all checked rather than sampled.
-        self.assertEqual(validation["method"], "exhaustive")
+        # Seven admissible subsets K of {S,A,B} with |K| <= 2, times three
+        # update keys, check return containment.  The two concretizations of
+        # the actual joined cell additionally check post-state containment.
+        self.assertEqual(
+            validation["method"],
+            "symbolic-transform-plus-exhaustive-concretization",
+        )
         self.assertEqual(validation["checked_cases"], 21)
+        self.assertEqual(validation["cell_checked_cases"], 2)
         self.assertEqual(validation["violations"], [])
         self.assertTrue(analysis["checks"]["abstract_transfer_sound"])
+
+    def test_epsilon_and_action_exhaust_all_common_word_obligations(self) -> None:
+        analysis = build_analysis(self.program)
+
+        self.assertEqual(analysis["common_words"], [[], SUFFIX_WORD])
+        self.assertEqual(len(analysis["word_obligations"]), 2)
+        obligations = {
+            tuple(item["word"]): item for item in analysis["word_obligations"]
+        }
+        self.assertEqual(set(obligations), {(), tuple(SUFFIX_WORD)})
+
+        epsilon = obligations[()]
+        self.assertEqual(epsilon["encoded_word"], [])
+        self.assertTrue(epsilon["runtime_included"])
+        self.assertTrue(epsilon["observer_compatible"])
+        self.assertTrue(epsilon["sound_observation_contract"])
+        self.assertTrue(epsilon["common_context"])
+        self.assertEqual(len(epsilon["outcomes"]), 2)
+        for outcome in epsilon["outcomes"]:
+            self.assertTrue(outcome["concrete_defined"])
+            self.assertTrue(outcome["discipline_defined"])
+            self.assertEqual(outcome["concrete_outputs"], [])
+            self.assertEqual(outcome["discipline_outputs"], [])
+
+        action = obligations[tuple(SUFFIX_WORD)]
+        self.assertEqual(len(action["encoded_word"]), 1)
+        self.assertTrue(action["runtime_included"])
+        self.assertTrue(action["observer_compatible"])
+        self.assertTrue(action["sound_observation_contract"])
+        self.assertTrue(action["common_context"])
+        self.assertEqual(
+            [outcome["concrete_outputs"] for outcome in action["outcomes"]],
+            [[1], [0]],
+        )
+        self.assertEqual(
+            [outcome["discipline_outputs"] for outcome in action["outcomes"]],
+            [[1], [0]],
+        )
+        self.assertTrue(analysis["checks"]["runtime_word_inclusion"])
+        self.assertTrue(analysis["checks"]["observation_compatibility"])
+        self.assertTrue(analysis["checks"]["observation_contract_sound"])
+        self.assertTrue(analysis["checks"]["common_context"])
 
     def test_computed_cells_form_a_unique_cover_of_the_context_fiber(self) -> None:
         analysis = build_analysis(self.program)
@@ -247,7 +407,10 @@ class LinuxRBundleAuditTests(unittest.TestCase):
             self.build(first)
             self.build(second)
 
-            required = {"program.json", "analysis.json", "manifest.json"}
+            required = {
+                "program.json", "derivation.json", "report.json",
+                "analysis.json", "manifest.json"
+            }
             self.assertTrue(required.issubset({path.name for path in first.iterdir()}))
             for name in required:
                 self.assertEqual((first / name).read_bytes(),
@@ -260,6 +423,16 @@ class LinuxRBundleAuditTests(unittest.TestCase):
             self.assertTrue((first / "audit.txt").is_file())
 
             analysis = json.loads((first / "analysis.json").read_text())
+            report = json.loads((first / "report.json").read_text())
+            self.assertNotIn("report", analysis)
+            self.assertEqual(analysis["report_ref"]["path"], "report.json")
+            self.assertEqual(
+                analysis["report_ref"]["report_hash"], report["report_hash"]
+            )
+            self.assertEqual(
+                analysis["report_ref"]["sha256"],
+                sha256_bytes((first / "report.json").read_bytes()),
+            )
             self.assertEqual(set(analysis["controls"]), set(CONTROL_PROFILES))
             self.assertTrue(all(
                 control["r_established"] is False
@@ -288,19 +461,27 @@ class LinuxRBundleAuditTests(unittest.TestCase):
             self.assertEqual(result["verdict"], "FAIL")
             self.assertFalse(result["checks"]["manifest_files"])
 
+    def test_unmanifested_directory_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "bundle"
+            self.build(bundle)
+            (bundle / "unmanifested").mkdir()
+
+            result = audit_bundle(bundle)
+            self.assertEqual(result["verdict"], "FAIL")
+            self.assertFalse(result["checks"]["root_entries_regular"])
+
     def test_overlapping_computed_cells_are_semantically_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             bundle = Path(temporary) / "bundle"
             self.build(bundle)
-            analysis_path = bundle / "analysis.json"
-            analysis = json.loads(analysis_path.read_text(encoding="utf-8"))
+            report_path = bundle / "report.json"
+            report = json.loads(report_path.read_text(encoding="utf-8"))
 
-            duplicate = copy.deepcopy(analysis["report"]["report_cells"][0])
+            duplicate = copy.deepcopy(report["report_cells"][0])
             duplicate["cell_id"] += "-overlap"
-            analysis["report"]["report_cells"].append(duplicate)
-            refresh_report_hash(analysis)
-            write_canonical(analysis_path, analysis)
-            refresh_manifest(bundle)
+            report["report_cells"].append(duplicate)
+            persist_resigned_report(bundle, report)
 
             result = audit_bundle(bundle)
             self.assertEqual(result["verdict"], "FAIL")
@@ -310,17 +491,189 @@ class LinuxRBundleAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             bundle = Path(temporary) / "bundle"
             self.build(bundle)
+            report_path = bundle / "report.json"
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+
+            report["report_cells"] = []
+            persist_resigned_report(bundle, report)
+
+            result = audit_bundle(bundle)
+            self.assertEqual(result["verdict"], "FAIL")
+            self.assertFalse(result["checks"]["unique_cell_condition"])
+
+    def test_resigned_computed_trace_or_metadata_mutation_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            trace_bundle = root / "computed-trace"
+            self.build(trace_bundle)
+            derivation = json.loads(
+                (trace_bundle / "derivation.json").read_text(encoding="utf-8")
+            )
+            derivation["computed_trace"][0]["operator"] = "forged-update"
+            persist_resigned_derivation(trace_bundle, derivation)
+            trace_result = audit_bundle(trace_bundle)
+            self.assertEqual(trace_result["verdict"], "FAIL")
+            self.assertTrue(trace_result["checks"]["manifest_files"])
+            self.assertTrue(trace_result["checks"]["derivation_hash"])
+            self.assertFalse(trace_result["checks"]["derivation_exact"])
+
+            domain_bundle = root / "domain-metadata"
+            self.build(domain_bundle)
+            report = json.loads(
+                (domain_bundle / "report.json").read_text(encoding="utf-8")
+            )
+            report["domain"]["version"] = "forged-domain"
+            persist_resigned_report(domain_bundle, report)
+            domain_result = audit_bundle(domain_bundle)
+            self.assertEqual(domain_result["verdict"], "FAIL")
+            self.assertTrue(domain_result["checks"]["manifest_files"])
+            self.assertTrue(domain_result["checks"]["report_hash"])
+            self.assertFalse(domain_result["checks"]["report_exact"])
+
+    def test_empty_discipline_is_rejected_after_manifest_is_refreshed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "bundle"
+            self.build(bundle)
             analysis_path = bundle / "analysis.json"
             analysis = json.loads(analysis_path.read_text(encoding="utf-8"))
-
-            analysis["report"]["report_cells"] = []
-            refresh_report_hash(analysis)
+            analysis["discipline"] = {}
             write_canonical(analysis_path, analysis)
             refresh_manifest(bundle)
 
             result = audit_bundle(bundle)
             self.assertEqual(result["verdict"], "FAIL")
-            self.assertFalse(result["checks"]["unique_cell_condition"])
+            self.assertTrue(result["checks"]["manifest_files"])
+            self.assertFalse(result["checks"]["discipline_exact"])
+
+    def test_omitting_epsilon_or_action_obligation_is_rejected(self) -> None:
+        omitted_words = ([], SUFFIX_WORD)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for index, omitted in enumerate(omitted_words):
+                with self.subTest(omitted=omitted):
+                    bundle = root / f"omitted-{index}"
+                    self.build(bundle)
+                    analysis_path = bundle / "analysis.json"
+                    analysis = json.loads(
+                        analysis_path.read_text(encoding="utf-8")
+                    )
+                    analysis["common_words"] = [
+                        word for word in analysis["common_words"]
+                        if word != omitted
+                    ]
+                    analysis["word_obligations"] = [
+                        item for item in analysis["word_obligations"]
+                        if item["word"] != omitted
+                    ]
+                    write_canonical(analysis_path, analysis)
+                    refresh_manifest(bundle)
+
+                    result = audit_bundle(bundle)
+                    self.assertEqual(result["verdict"], "FAIL")
+                    self.assertTrue(result["checks"]["manifest_files"])
+                    self.assertFalse(
+                        result["checks"]["common_word_obligations"]
+                    )
+
+    def test_false_kernel_trace_and_fake_executables_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            oracle = root / "kernel_oracle.jsonl"
+            write_kernel_oracle(oracle)
+            self.assertEqual(_parse_kernel_oracle(oracle)["row_count"], 4)
+
+            write_kernel_oracle(oracle, trace_valid=False)
+            with self.assertRaises(ModelError):
+                _parse_kernel_oracle(oracle)
+            write_kernel_oracle(oracle)
+
+            bpf_object = root / "wm.bpf.o"
+            bpf_object.write_bytes(b"\x7fELFunit-test-bpf-object\n")
+            descriptor = root / "nand.wmc"
+            descriptor.write_bytes(b"WMC1 nand 2 1 5 1\n1 2 3 4\n4\n")
+            harness_binary = root / "wm_vm_user"
+            harness_binary.write_bytes(b"unit-test-harness\n")
+            kernel_stderr = root / "kernel_oracle.stderr"
+            kernel_stderr.write_bytes(b"")
+            build_log = root / "build.log"
+            build_log.write_text(
+                "clang -target bpf -DGATE_CAP=2 src/wm.bpf.c\n"
+                "cc src/wm_vm_user.c -o wm_vm_user\n",
+                encoding="utf-8",
+            )
+            vmlinux_header = root / "vmlinux.h"
+            vmlinux_header.write_text(
+                "typedef unsigned int __u32; struct task_struct {};\n",
+                encoding="utf-8",
+            )
+            toolchain_log = root / "toolchain.txt"
+            toolchain_log.write_text(
+                "UNAME\nCLANG\nCC\nBPFTOOL\nLIBBPF\n", encoding="utf-8"
+            )
+            bundle = root / "bundle"
+            with self.assertRaises(ModelError):
+                build_bundle(
+                    PROGRAM,
+                    bundle,
+                    kernel_oracle=oracle,
+                    kernel_stderr=kernel_stderr,
+                    build_log=build_log,
+                    bpf_object=bpf_object,
+                    source=ROOT / "src" / "wm.bpf.c",
+                    descriptor=descriptor,
+                    harness_binary=harness_binary,
+                    harness_source=ROOT / "src" / "wm_vm_user.c",
+                    common_header=ROOT / "src" / "wm_common.h",
+                    makefile=ROOT / "Makefile",
+                    vmlinux_header=vmlinux_header,
+                    runner=ROOT / "linux_r" / "run_kernel.sh",
+                    circuit_spec=ROOT / "circuits" / "nand.json",
+                    circuit_compiler=ROOT / "scripts" / "circuit_tool.py",
+                    model_source=ROOT / "linux_r" / "model.py",
+                    auditor_source=ROOT / "linux_r" / "audit.py",
+                    toolchain_log=toolchain_log,
+                    created_at="2026-07-15T00:00:00Z",
+                )
+
+    def test_failed_audit_never_prints_an_established_claim(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "bundle"
+            self.build(bundle)
+            analysis_path = bundle / "analysis.json"
+            analysis_path.write_bytes(analysis_path.read_bytes() + b" ")
+
+            result = audit_bundle(bundle, write=True)
+            self.assertEqual(result["verdict"], "FAIL")
+            text = (bundle / "audit.txt").read_text(encoding="utf-8")
+            self.assertNotIn("CLAIM: R(V_linux_r,I_hash)=ESTABLISHED", text)
+            self.assertIn("VERDICT: FAIL", text)
+
+    def test_malformed_json_returns_fail_instead_of_raising(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "bundle"
+            self.build(bundle)
+            (bundle / "analysis.json").write_bytes(b"{not-json\n")
+
+            result = audit_bundle(bundle, write=True)
+            self.assertEqual(result["verdict"], "FAIL")
+            self.assertFalse(result["checks"]["bundle_readable"])
+            text = (bundle / "audit.txt").read_text(encoding="utf-8")
+            self.assertIn("R(V_linux_r,I_hash)=NOT_ESTABLISHED", text)
+
+    def test_resigned_negative_control_claim_is_independently_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "bundle"
+            self.build(bundle)
+            analysis_path = bundle / "analysis.json"
+            analysis = json.loads(analysis_path.read_text(encoding="utf-8"))
+            analysis["controls"]["cap64"]["r_established"] = True
+            write_canonical(analysis_path, analysis)
+            refresh_manifest(bundle)
+
+            result = audit_bundle(bundle)
+            self.assertEqual(result["verdict"], "FAIL")
+            self.assertTrue(result["checks"]["manifest_files"])
+            self.assertFalse(result["checks"]["negative_controls"])
 
 
 if __name__ == "__main__":

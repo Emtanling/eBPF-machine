@@ -15,6 +15,19 @@ make circuits >"$WORK/build.log" 2>&1
 make BUILD="$WORK/build" GATE_CAP=2 "$WORK/build/wm_vm_user" \
   >>"$WORK/build.log" 2>&1
 
+{
+  echo "UNAME"
+  uname -a
+  echo "CLANG"
+  clang --version
+  echo "CC"
+  cc --version
+  echo "BPFTOOL"
+  bpftool version
+  echo "LIBBPF"
+  pkg-config --modversion libbpf
+} >"$WORK/toolchain.txt" 2>&1
+
 # Loading and executing wm_circuit is the calibration step: a successful run
 # also proves acceptance of this concrete object by the running kernel.  The
 # model uses only return sign/zero, never a kernel-version-specific errno.
@@ -30,5 +43,17 @@ python3 -m linux_r.generate \
   --build-log "$WORK/build.log" \
   --bpf-object "$WORK/build/wm.bpf.o" \
   --source src/wm.bpf.c \
+  --descriptor circuits/nand.wmc \
+  --harness-binary "$WORK/build/wm_vm_user" \
+  --harness-source src/wm_vm_user.c \
+  --common-header src/wm_common.h \
+  --makefile Makefile \
+  --vmlinux-header src/vmlinux.h \
+  --runner linux_r/run_kernel.sh \
+  --circuit-spec circuits/nand.json \
+  --circuit-compiler scripts/circuit_tool.py \
+  --model-source linux_r/model.py \
+  --auditor-source linux_r/audit.py \
+  --toolchain-log "$WORK/toolchain.txt" \
   --created-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 python3 -m linux_r.audit "$OUTPUT" --require-kernel --write
