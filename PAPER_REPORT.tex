@@ -25,7 +25,7 @@ Language-theoretic security asks whether a boundary recognizes the language that
 
 We give proof obligations for a uniformly controlled, observable, resettable gate and one fixed accepted interpreter over a bounded circuit-description domain. Prefix induction yields bounded composition under exact scheduling, admissibility, serialization, and frame-preservation premises. In a Linux eBPF calibration, a dedicated preallocated non-LRU two-entry hash map realizes NAND: reset leaves one sentinel entry; input bits select existing- or fresh-key updates; and the second update's success predicate supplies the output. One fixed accepted program consumes canonical NAND DAGs with at most 64 inputs, 512 gates, and 578 live wires.
 
-A source-snapshotted Linux/aarch64 run covers named and random circuits, joint bounds, serial reuse, mechanism controls, and malformed descriptors. A separate author-run semantic auditor reconstructs descriptors and circuit semantics, and a self-issued manifest checks bundle integrity. The case records A, gives a conditional C witness under the declared concrete-service/no-interference contract, and supports P under additional implementation premises. It does not establish Linux report non-factorization or a policy-level weird machine; that separation is the main methodological contribution.
+A source-snapshotted Linux/aarch64 run covers named and random circuits, joint bounds, serial reuse, mechanism controls, and malformed descriptors. A separate author-run semantic auditor reconstructs descriptors and circuit semantics, and a self-issued manifest checks bundle integrity. The case records A, gives a conditional C witness under the declared concrete-service/no-interference contract, and supports P under additional implementation premises. It does not establish Linux report non-factorization or a policy-level weird machine. Separately, a fixed auxiliary executable instance establishes $R(M_{\mathit{linux\_r\_aux\_v1}})$ for its own computed report; it does not change the stock-Linux result.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -57,6 +57,8 @@ W & \textbf{Policy/threat obligation:} an actor drives an effect through $P_*$ t
 \end{tabularx}
 \end{table*}
 
+Table~\ref{tab:claim-graph} reports the stock eBPF/Linux case. A separate fixed tuple $M_{\mathit{linux\_r\_aux\_v1}}$ establishes R for an auxiliary report-producing recognizer and restricted service semantics; it is not a stock-Linux report-cell result.
+
 Nodes C and R must not share one name. We call the accepted-artifact-indexed, same-suffix language $L_{\mathrm{causal}}$. A word enters the report-relative residual language $L_{\mathrm{res}}^R$ only with an actual computed-cell collision under the admissibility conditions below. P and R branch after C. A policy-level weird machine requires P, W, linkage to the same encoded computation, and unintendedness; a \emph{contract-shape-induced recognizer-relative} classification additionally requires R, documented semantics, report conformance, and granularity evidence. The graph turns ``weird machine'' from a rhetorical label into explicit, auditable obligations.
 
 Programmability is a separate constructive problem. A state distinction may be dead, uncontrolled, one-shot, or impossible to compose. We therefore require a program-visible readout, one uniform input dispatcher, a reset to a canonical class, and one fixed accepted interpreter with exact scheduling and frame preservation over an independently declared bounded descriptor domain. The resulting composition theorem is a proof-obligation decomposition, not a universal necessity theorem.
@@ -73,6 +75,8 @@ The paper contributes:
 \item \textbf{A bounded composition argument.} E1--E3 and the precise E4-D interpreter obligations isolate local gate correctness, reset, scheduling, and global frame conditions. Prefix induction proves the functional result; safety is a separate optional premise.
 
 \item \textbf{An eBPF calibration case.} A saturating-rank NAND basis and fixed interpreter target $D_{64,512}$. The recorded suite covers named and fixed-seed random DAGs, deep and joint boundaries, a zero-gate case, serial reuse, mechanism controls, and malformed descriptors.
+
+\item \textbf{An executable report instance.} A fixed auxiliary recognizer/service tuple emits an actual report, constructs the finite future-observation quotient, and independently checks a report-cell collision and four negative controls. This establishes R only for that named tuple while preserving the stock-Linux boundary.
 \end{enumerate}
 
 The empirical scope is one privileged, offline Linux/aarch64 environment. The case is not a Linux report-opacity result, concurrent deployment result, artifact-parametric compiler, unbounded machine, vulnerability, or policy-level weird machine.
@@ -515,6 +519,25 @@ The controls support mechanism attribution: saturation and the second fresh name
 
 Linux's verifier documentation states its objective in terms of determining program safety and validating paths, arguments, and memory access \cite{ref9}; it does not specify a complete functional certificate for map-mediated computation. Without a report extractor we neither test nor infer how precisely it tracks this helper return. The case gives a conditional C witness under the declared service contract and supports P under additional premises; it is not evidence of unsound acceptance, and R remains blocked.
 
+\subsection{Fixed auxiliary executable report instance}
+
+To exercise the report-relative criterion without relabeling Linux verifier artifacts, we fix
+\begin{equation}
+\begin{aligned}
+M_{\mathit{linux\_r\_aux\_v1}}={}&(V_{\mathit{linux\_r}},I_{\mathit{hash}},P_{\mathit{aux}},\ell,D,F,\\
+&K_{\mathrm{obs}},\mathsf{Report}).
+\end{aligned}
+\end{equation}
+$P_{\mathit{aux}}$ is accepted by the custom report-producing recognizer $V_{\mathit{linux\_r}}$; it is not a BPF object accepted by the stock Linux verifier. $I_{\mathit{hash}}$ is a finite, deterministic, serialized, no-interference semantics restricted to the non-evicting HASH-map update cases in the fixed program. Here $\mathsf{Report}$ means only \texttt{report.json["report\_cells"]}; \texttt{derivation.json} records worklist/computation provenance and is not part of the report-label interface. Accordingly,
+\begin{equation}
+R(M_{\mathit{linux\_r\_aux\_v1}})=\mathsf{established}.
+\end{equation}
+The notation $R(V_{\mathit{linux\_r}},I_{\mathit{hash}})=\mathsf{established}$ is only shorthand for this complete fixed tuple, not a claim quantified over other programs, reports, frontiers, environments, or service semantics.
+
+The context fiber has two reachable frontier states. Its common executable words are exactly $W_D(F)=\{\varepsilon,\mathsf{ACTION}\}$. One actual emitted report cell uniquely covers both frontier states, while the exact finite future-observation quotient assigns two classes to that cell, so its $\beta_D$ cardinality is 2. The common word $\mathsf{ACTION}$ yields observations 1 and 0, respectively; hence $\beta_D$ does not factor through the computed report cell. The evidence records 21 domain/action \emph{return-class containment} checks plus two report-cell \emph{successor-containment} checks, all with zero violations. The former are not 21 full post-state checks. Each of the four negative controls---exact occupancy tracking, capacity 64, forced sentinel, and an unobserved return---removes the R witness.
+
+An independent executable checker reconstructs reachability, unique-cell coverage, the quotient, and the factorization verdict without importing the model implementation. Two complete VM regenerations and audits passed, with the core formal JSON byte-identical. This is executable finite-model evidence, not a machine-checked proof. The retained kernel calibration has four oracle rows for the two assignments $(0,1)$ and $(1,1)$; it calibrates the restricted service cases only. It proves no refinement or bisimulation between $I_{\mathit{hash}}$ and Linux, and extracts no stock-verifier cell. Thus R for stock Linux, W, $\mathsf{WM}_{\mathrm{shape}}$, and any universal necessity conjecture remain unestablished. The bundle is \path{results/linux_r/linux-r-v1/}.
+
 \subsection{Threats to validity}
 
 The experiment uses one kernel build and architecture. The argument relies on a dedicated preallocated non-LRU map, successful reset, distinct keys, the stated update laws, and whole-map-set mutual exclusion. Gate-emitting datasets preserve raw returns; the 10,000-run stress file records run/status/output evidence without per-gate raw rows. The proof uses only success versus failure and promises no portable error number.
@@ -588,17 +611,17 @@ Audit the recognized property and report separately, enumerate actor-driven oper
 
 \subsection{Weird-machine status and a future shape theorem}
 
-The eBPF case supports P under its source/object and serialization premises but establishes neither R nor W. A shape theorem must derive \textbf{macro closure} of acceptance and \textbf{report embedding} of the collision; context sensitivity can defeat either. Complete-shell theory \cite{ref17} may characterize report refinement, but cannot create reachability, reset, routing, linkage, or policy violation.
+The stock eBPF case supports P under its source/object and serialization premises but establishes neither R nor W. The auxiliary $M_{\mathit{linux\_r\_aux\_v1}}$ establishes R only for its fixed custom report and restricted service semantics; it establishes neither W nor $\mathsf{WM}_{\mathrm{shape}}$ and does not discharge the missing stock-report embedding. A shape theorem must derive \textbf{macro closure} of acceptance and \textbf{report embedding} of the collision; context sensitivity can defeat either. Complete-shell theory \cite{ref17} may characterize report refinement, but cannot create reachability, reset, routing, linkage, or policy violation.
 
 \section{Conclusion}
 
-Artifact acceptance and post-acceptance interpretation use different languages. We separate causal words from output-witnessed report residuals and give factorization and bounded-composition criteria. The eBPF case records A, conditionally witnesses C, and supports P for a fixed 64-input/512-gate NAND interpreter, but establishes neither R nor W; it is not a shape-induced recognizer-relative weird machine.
+Artifact acceptance and post-acceptance interpretation use different languages. We separate causal words from output-witnessed report residuals and give factorization and bounded-composition criteria. The stock eBPF case records A, conditionally witnesses C, and supports P for a fixed 64-input/512-gate NAND interpreter, but establishes neither R nor W. A separate fixed auxiliary tuple establishes R by an actual computed-cell collision, without establishing W, $\mathsf{WM}_{\mathrm{shape}}$, a stock-Linux report result, or a universal necessity theorem.
 
 \section*{Ethics and Data Availability}
 
 Experiments run in an isolated local VM, use no live hook or third-party target, and attempt no corruption, verifier bypass, or privilege escalation.
 
-The repository is \url{https://github.com/Emtanling/eBPF-machine}; immutable evidence is at commit \href{https://github.com/Emtanling/eBPF-machine/tree/4309069a1f94d642d5c1402eb710e089c85059b1}{\texttt{4309069a}}, under \path{results/interpreter/interpreter-final-20260711-02/}. It contains variants, environment, logs, disassembly, descriptors, datasets, audit code, and a self-issued integrity manifest. Its source is the then-current run snapshot, not this later manuscript; the manifest protects only against accidental drift.
+The repository is \url{https://github.com/Emtanling/eBPF-machine}; immutable eBPF-interpreter evidence is at commit \href{https://github.com/Emtanling/eBPF-machine/tree/4309069a1f94d642d5c1402eb710e089c85059b1}{\texttt{4309069a}}, under \path{results/interpreter/interpreter-final-20260711-02/}. The auxiliary report-instance evidence is at commit \href{https://github.com/Emtanling/eBPF-machine/tree/f665b1a2f9a772ee9b2c08a73d116ea283aa5efb}{\texttt{f665b1a}}, under \path{results/linux_r/linux-r-v1/}. The bundles contain their relevant model or program inputs, outputs, audit material, and self-issued integrity manifests; those manifests protect against accidental drift, not independent provenance.
 
 \section*{Acknowledgment and AI-Assistance Disclosure}
 
