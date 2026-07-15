@@ -521,25 +521,30 @@ Linux's verifier documentation states its objective in terms of determining prog
 
 ### 5.6 Fixed auxiliary executable report instance
 
-To exercise the report-relative criterion without relabeling Linux verifier artifacts, we fix
+To exercise the report-relative criterion without relabeling Linux verifier artifacts, we embed the auxiliary R instance in the full model carrier of Section 7.1 and fix
 
 $$
 M_{\mathit{linux\_r\_aux\_v1}}
-=(V_{\mathit{linux\_r}},I_{\mathit{hash}},P_{\mathit{aux}},\ell,D,F,
-K_{\mathrm{obs}},\mathsf{Report}).
+=(V_{\mathit{linux\_r}},I_{\mathit{hash}},\mathsf{Report}_{\mathit{aux}},
+K_{\mathrm{obs}},P_{\mathit{aux}},\ell,D,F,
+\varnothing,\varnothing,\varnothing,\varnothing).
 $$
 
-$P_{\mathit{aux}}$ is accepted by the custom report-producing recognizer $V_{\mathit{linux\_r}}$; it is not a BPF object accepted by the stock Linux verifier. $I_{\mathit{hash}}$ is a finite, deterministic, serialized, no-interference semantics restricted to the non-evicting HASH-map update cases in the fixed program. Here $\mathsf{Report}$ means only `report.json["report_cells"]`; `derivation.json` records worklist/computation provenance and is not part of the report-label interface. Accordingly,
+$P_{\mathit{aux}}$ is accepted by the custom report-producing recognizer $V_{\mathit{linux\_r}}$; it is not a BPF object accepted by the stock Linux verifier. $I_{\mathit{hash}}$ is a finite, deterministic, serialized, no-interference semantics restricted to the non-evicting HASH-map update cases in the fixed program. Here $\mathsf{Report}_{\mathit{aux}}$ means only `report.json["report_cells"]`; `derivation.json` records worklist/computation provenance and is not part of the report-label interface. The last four components are the typed empty actor set, effect set, drive relation, and permitted-effect set; they embed the R instance in the common carrier and make no W claim.
 
-$$
-R(M_{\mathit{linux\_r\_aux\_v1}})=\mathsf{established}.
-$$
+**Executable certificate.** $R(M_{\mathit{linux\_r\_aux\_v1}})$ holds (artifact status: established).
 
-The notation $R(V_{\mathit{linux\_r}},I_{\mathit{hash}})=\mathsf{established}$ is only shorthand for this complete fixed tuple, not a claim quantified over other programs, reports, frontiers, environments, or service semantics.
+*Certificate argument.* The recognizer accepts $P_{\mathit{aux}}$. Exhausting $a\in\{0,1\}$ with $b=1$ in the singleton serialized/no-interference environment gives
+$F=\mathsf{Reach}_{I_{\mathit{hash}}}(P_{\mathit{aux}},\ell)
+=\{\texttt{frontier:S},\texttt{frontier:AS}\}\subseteq X_D$.
+Here $X_D$ additionally contains the corresponding two terminal states. Let $a_{\mathrm{obs}}\in A_D$ be the discipline action and set $\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})=$ `update-suffix-and-observe`; this singleton encoding is injective. Concrete execution of $\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})$ is defined on the two frontier states, undefined on the terminal states, and agrees with $D$ on definedness, output, and successor. Thus the checker establishes operational adequacy on all of $X_D$. The observation contract fixes $\rho_{\mathrm{obs}}$ as the occupied-key set, $\mathsf{Obs}$ as the ordered success-bit word, $\mathsf{Slice}$ as the program-phase/service-context pair, and $\mathsf{Env}$ as that singleton environment; in particular, $\rho_{\mathrm{obs}}(\texttt{frontier:S})=\{S\}\ne\{S,A\}=\rho_{\mathrm{obs}}(\texttt{frontier:AS})$. For every ordered pair in $F^2$ and every word in
+$\mathcal W_D(F)=\{\varepsilon,a_{\mathrm{obs}}\}$, the checker establishes the remaining runtime-word, common-context, observer-compatibility, and $K_{\mathrm{obs}}$-soundness obligations. These discharge every admissibility item except unique-cell coverage.
 
-The context fiber has two reachable frontier states. Its common executable words are exactly $W_D(F)=\{\varepsilon,\mathsf{ACTION}\}$. One actual emitted report cell uniquely covers both frontier states, while the exact finite future-observation quotient assigns two classes to that cell, so its $\beta_D$ cardinality is 2. The common word $\mathsf{ACTION}$ yields observations 1 and 0, respectively; hence $\beta_D$ does not factor through the computed report cell. The evidence records 21 domain/action **return-class containment** checks plus two report-cell **successor-containment** checks, all with zero violations. The former are not 21 full post-state checks. Each of the four negative controls---exact occupancy tracking, capacity 64, forced sentinel, and an unobserved return---removes the R witness.
+$\mathsf{Report}_{\mathit{aux}}$ emits one unique cell $a^\#$ that covers both frontier states, completing $\mathsf{Adm}(P_{\mathit{aux}},\ell,D,F;K_{\mathrm{obs}})$. The exact finite future-observation quotient assigns them different classes, so $|\beta_D(F_{a^\#})|=2$; moreover $a_{\mathrm{obs}}$ yields observations 1 and 0. Hence the same suffix first witnesses Definition 1 and the tagged tuple $(P_{\mathit{aux}},\ell,D,F,a^\#,a_{\mathrm{obs}})$ satisfies Definition 2. Therefore $R(M_{\mathit{linux\_r\_aux\_v1}})$ holds. The evidence also records 21 domain/action **return-class containment** checks plus two report-cell **successor-containment** checks, all with zero violations; the former are not 21 full post-state checks. Each of the four negative controls---exact occupancy tracking, capacity 64, forced sentinel, and an unobserved return---removes the R witness. ∎
 
-An independent executable checker reconstructs reachability, unique-cell coverage, the quotient, and the factorization verdict without importing the model implementation. Two complete VM regenerations and audits passed, with the core formal JSON byte-identical. This is executable finite-model evidence, not a machine-checked proof. The retained kernel calibration has four oracle rows for the two assignments $(0,1)$ and $(1,1)$; it calibrates the restricted service cases only. It proves no refinement or bisimulation between $I_{\mathit{hash}}$ and Linux, and extracts no stock-verifier cell. Thus $R$ for stock Linux, W, $\mathsf{WM}_{\mathrm{shape}}$, and any universal necessity conjecture remain unestablished. The bundle is `results/linux_r/linux-r-v1/`.
+The notation $R(V_{\mathit{linux\_r}},I_{\mathit{hash}})=\mathsf{established}$ is artifact-local shorthand for this complete fixed model, not a claim quantified over other programs, reports, frontiers, environments, or service semantics.
+
+An independent executable checker reconstructs reachability, unique-cell coverage, the quotient, and the factorization verdict without importing the model implementation. The archived VM run and audit passed; the unit suite constructs two fixed-input bundles and byte-compares their formal JSON. This is executable finite-model evidence, not a machine-checked proof. The retained kernel calibration has four oracle rows for the two assignments $(0,1)$ and $(1,1)$; it calibrates the restricted service cases only. It proves no refinement or bisimulation between $I_{\mathit{hash}}$ and Linux, and extracts no stock-verifier cell. Thus $R$ for stock Linux, W, $\mathsf{WM}_{\mathrm{shape}}$, and any universal necessity conjecture remain unestablished. The bundle is `results/linux_r/linux-r-v1/`.
 
 ### 5.7 Threats to validity
 

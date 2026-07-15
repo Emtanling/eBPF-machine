@@ -254,23 +254,28 @@ $$38{,}533=26{,}488\text{ 条逐门记录}+12{,}037\text{ 条成功运行记录}
 
 容量 64 与强制哨兵对照均使具名语料 166 个门输出全为 1；算术基线产生预期结果。它们支持“容量饱和和第二个新键共同导致零输出”的机制归因，不证明等价验证器报告。Linux 验证器文档的目标是程序安全、路径、参数和内存访问 [14]，不承诺映射介导计算的完备功能证书；没有报告提取器时，不推断辅助函数返回跟踪粒度。
 
-### 固定辅助可执行报告实例
+### 5.6 固定辅助可执行报告实例
 
-为在不重命名 Linux 验证器制品的前提下执行报告相对判据，固定
+为在不重命名 Linux 验证器制品的前提下执行报告相对判据，将辅助 R 实例嵌入第 7.1 节的完整模型载体并固定
 
 $$M_{\mathit{linux\_r\_aux\_v1}}=
-(V_{\mathit{linux\_r}},I_{\mathit{hash}},P_{\mathit{aux}},\ell,D,F,
-K_{\mathrm{obs}},\mathsf{Report}).$$
+(V_{\mathit{linux\_r}},I_{\mathit{hash}},\mathsf{Report}_{\mathit{aux}},
+K_{\mathrm{obs}},P_{\mathit{aux}},\ell,D,F,
+\varnothing,\varnothing,\varnothing,\varnothing).$$
 
-$P_{\mathit{aux}}$ 由自定义报告生成识别器 $V_{\mathit{linux\_r}}$ 接受；它不是经 stock Linux 验证器接受的 BPF 对象。$I_{\mathit{hash}}$ 是有限、确定、串行且无干扰的受限语义，只覆盖固定程序使用的非驱逐 HASH 映射更新情形。这里 $\mathsf{Report}$ 只指 `report.json["report_cells"]`；`derivation.json` 仅记录工作列表/计算溯源，不属于报告标签接口。因此
+$P_{\mathit{aux}}$ 由自定义报告生成识别器 $V_{\mathit{linux\_r}}$ 接受；它不是经 stock Linux 验证器接受的 BPF 对象。$I_{\mathit{hash}}$ 是有限、确定、串行且无干扰的受限语义，只覆盖固定程序使用的非驱逐 HASH 映射更新情形。这里 $\mathsf{Report}_{\mathit{aux}}$ 只指 `report.json["report_cells"]`；`derivation.json` 仅记录工作列表/计算溯源，不属于报告标签接口。最后四项分别是有类型的空行为主体集、空效果集、空驱动关系和空许可效果集；它们只把 R 实例嵌入共同载体，不提出 W 论断。
 
-$$R(M_{\mathit{linux\_r\_aux\_v1}})=\mathsf{established}.$$
+**可执行证书。** $R(M_{\mathit{linux\_r\_aux\_v1}})$ 成立（制品状态：established）。
 
-$R(V_{\mathit{linux\_r}},I_{\mathit{hash}})=\mathsf{established}$ 仅是上述完整固定元组的简写，不对其他程序、报告、前沿、环境或服务语义量化。
+*证书论证。* 识别器接受 $P_{\mathit{aux}}$。在单一串行无干扰环境中穷尽 $a\in\{0,1\}$、$b=1$，得到
+$F=\mathsf{Reach}_{I_{\mathit{hash}}}(P_{\mathit{aux}},\ell)
+=\{\texttt{frontier:S},\texttt{frontier:AS}\}\subseteq X_D$；$X_D$ 还包含相应的两个终止状态。令 $a_{\mathrm{obs}}\in A_D$ 表示规约动作，并令 $\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})=$ `update-suffix-and-observe`；这个单元素编码是单射。$\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})$ 的具体执行在两个前沿状态上有定义，在终止状态上无定义，并在定义性、输出和后继上与 $D$ 一致，故检查器在整个 $X_D$ 上建立操作充分性。观测契约把 $\rho_{\mathrm{obs}}$ 固定为已占用键集合，把 $\mathsf{Obs}$ 固定为有序成功位词，把 $\mathsf{Slice}$ 固定为程序阶段/服务上下文对，把 $\mathsf{Env}$ 固定为上述单一环境；特别地，$\rho_{\mathrm{obs}}(\texttt{frontier:S})=\{S\}\ne\{S,A\}=\rho_{\mathrm{obs}}(\texttt{frontier:AS})$。对于 $F^2$ 中每个有序状态对和 $\mathcal W_D(F)=\{\varepsilon,a_{\mathrm{obs}}\}$ 中每个词，检查器均建立其余运行时词、共同上下文、观察者兼容性与 $K_{\mathrm{obs}}$ 健全性义务。这些义务履行了除唯一单元覆盖之外的全部可接纳条件。
 
-上下文纤维包含两个可达前沿状态，共同可执行词恰为 $W_D(F)=\{\varepsilon,\mathsf{ACTION}\}$。一个实际发出的报告单元唯一覆盖两个前沿状态，而精确有限未来观测商在该单元中包含两个类，即 $\beta_D$ 基数为 2。公共词 $\mathsf{ACTION}$ 分别输出 1 与 0，故 $\beta_D$ 不能通过该计算报告单元因子分解。证据包含 21 项域/动作的**返回类别包含检查**和 2 项报告单元的**后继包含检查**，均为零违反；前 21 项不是 21 个完整后状态检查。精确占用跟踪、容量 64、强制哨兵、忽略返回四个负对照均消除 R。
+$\mathsf{Report}_{\mathit{aux}}$ 发出一个唯一单元 $a^\#$，共同覆盖两个前沿状态，从而完成 $\mathsf{Adm}(P_{\mathit{aux}},\ell,D,F;K_{\mathrm{obs}})$。精确有限未来观测商把二者分到不同类，故 $|\beta_D(F_{a^\#})|=2$，且 $a_{\mathrm{obs}}$ 分别输出 1 与 0。同一后缀因此先见证定义 1，而带标签元组 $(P_{\mathit{aux}},\ell,D,F,a^\#,a_{\mathrm{obs}})$ 满足定义 2，所以 $R(M_{\mathit{linux\_r\_aux\_v1}})$ 成立。证据另含 21 项域/动作的**返回类别包含检查**和 2 项报告单元的**后继包含检查**，均为零违反；前 21 项不是 21 个完整后状态检查。精确占用跟踪、容量 64、强制哨兵、忽略返回四个负对照均消除 R。∎
 
-独立可执行检查器在不导入模型实现的情况下重构可达性、唯一单元覆盖、商和因子分解判定。两次完整 VM 重新生成与审计均通过，核心形式化 JSON 逐字节相同。这是可执行有限模型证据，不是机器检查证明。保留的内核校准对 $(0,1)$ 与 $(1,1)$ 两个赋值共有 4 行 oracle；它只校准受限服务情形，不证明 $I_{\mathit{hash}}$ 与 Linux 之间的 refinement 或 bisimulation，也不提取 stock 验证器单元。因此 stock Linux 的 R、W、$\mathsf{WM}_{\mathrm{shape}}$ 以及任何普遍必要性猜想仍未建立。证据路径为 `results/linux_r/linux-r-v1/`。
+$R(V_{\mathit{linux\_r}},I_{\mathit{hash}})=\mathsf{established}$ 仅是该完整固定模型的制品内简写，不对其他程序、报告、前沿、环境或服务语义量化。
+
+独立可执行检查器在不导入模型实现的情况下重构可达性、唯一单元覆盖、商和因子分解判定。归档的 VM 运行与审计均通过；单元测试会构造两个固定输入证据包并逐字节比较其形式化 JSON。这是可执行有限模型证据，不是机器检查证明。保留的内核校准对 $(0,1)$ 与 $(1,1)$ 两个赋值共有 4 行 oracle；它只校准受限服务情形，不证明 $I_{\mathit{hash}}$ 与 Linux 之间的 refinement 或 bisimulation，也不提取 stock 验证器单元。因此 stock Linux 的 R、W、$\mathsf{WM}_{\mathrm{shape}}$ 以及任何普遍必要性猜想仍未建立。证据路径为 `results/linux_r/linux-r-v1/`。
 
 ## 6. 相关工作
 
