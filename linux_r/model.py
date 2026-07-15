@@ -1626,7 +1626,12 @@ def build_bundle(program_path: str | Path, output_dir: str | Path, *,
     for path in sorted(output.iterdir()):
         if path.name in {"manifest.json", "audit.txt"} or not path.is_file():
             continue
-        files[path.name] = {"sha256": _sha256_file(path), "size": path.stat().st_size}
+        metadata = path.stat()
+        files[path.name] = {
+            "mode": metadata.st_mode & 0o7777,
+            "sha256": _sha256_file(path),
+            "size": metadata.st_size,
+        }
     manifest_core = {
         "bindings": bindings,
         "files": files,

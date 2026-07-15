@@ -12,6 +12,7 @@ import argparse
 import copy
 import hashlib
 import json
+import os
 import struct
 from pathlib import Path
 from typing import Any
@@ -989,6 +990,17 @@ def _failed(reason: str) -> dict[str, Any]:
     }
 
 
+def _write_audit_file(root: Path, contents: str) -> None:
+    """Write audit.txt without ever following a pre-existing symlink."""
+
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(root / "audit.txt", flags, 0o644)
+    with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+        handle.write(contents)
+
+
 def audit_bundle(path: str | Path, *, require_kernel: bool = False,
                  write: bool = True) -> dict[str, Any]:
     root = Path(path)
@@ -1005,8 +1017,7 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
         failed = _failed(str(exc))
         if write:
             try:
-                (root / "audit.txt").write_text(_format_audit(failed),
-                                                 encoding="utf-8")
+                _write_audit_file(root, _format_audit(failed))
             except OSError:
                 pass
         return failed
@@ -1028,8 +1039,7 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
                                   "manifest.json", "audit.txt"
                               })
         checks["root_entries_regular"] = all(
-            item.name in {"manifest.json", "audit.txt"} or
-            (item.is_file() and not item.is_symlink())
+            item.is_file() and not item.is_symlink()
             for item in entries
         )
     except OSError:
@@ -1039,16 +1049,25 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
         isinstance(declared_files, dict) and sorted(declared_files) == actual_names
     )
     hashes_ok = checks["manifest_file_set"]
-    if hashes_ok:
+    modes_ok = checks["manifest_file_set"]
+    if hashes_ok and modes_ok:
         for name, binding in declared_records.items():
             file_path = root / name
-            if (not isinstance(binding, dict) or
-                    binding.get("sha256") != _hash_file(file_path) or
-                    binding.get("size") != file_path.stat().st_size):
+            if not isinstance(binding, dict):
                 hashes_ok = False
+                modes_ok = False
                 break
+            metadata = file_path.stat()
+            if (binding.get("sha256") != _hash_file(file_path) or
+                    binding.get("size") != metadata.st_size):
+                hashes_ok = False
+            if binding.get("mode") != metadata.st_mode & 0o7777:
+                modes_ok = False
     checks["manifest_file_hashes"] = hashes_ok
-    checks["manifest_files"] = checks["manifest_file_set"] and hashes_ok
+    checks["manifest_file_modes"] = modes_ok
+    checks["manifest_files"] = (
+        checks["manifest_file_set"] and hashes_ok and modes_ok
+    )
     bindings = manifest.get("bindings", {})
     if not isinstance(bindings, dict):
         bindings = {}
@@ -1195,6 +1214,46 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
         _artifact_binding_valid(root, declared_records, bindings, label, name)
         for label, name in optional_bindings.items() if label in bindings
     )
+    executable_paths = [
+        bindings[label].get("path")
+        for label in ("harness_binary", "runner")
+        if isinstance(bindings.get(label), dict)
+    ]
+    checks["required_executable_modes"] = all(
+        isinstance(path, str) and path in declared_records and
+        isinstance(declared_records[path], dict) and
+        isinstance(declared_records[path].get("mode"), int) and
+        bool(declared_records[path]["mode"] & 0o111)
+        for path in executable_paths
+    )
+    if "harness_binary" in bindings:
+        harness_binding = bindings.get("harness_binary")
+        host_binding = bindings.get("host")
+        host_machines = {
+            "amd64": 62,
+            "x86_64": 62,
+            "aarch64": 183,
+            "arm64": 183,
+        }
+        harness_path = (
+            root / harness_binding.get("path", "")
+            if isinstance(harness_binding, dict) else None
+        )
+        harness_elf = (
+            _elf_metadata(harness_path)
+            if isinstance(harness_path, Path) and harness_path.is_file() else None
+        )
+        host_machine = (
+            host_binding.get("machine", "").lower()
+            if isinstance(host_binding, dict) and
+            isinstance(host_binding.get("machine"), str) else ""
+        )
+        checks["harness_host_machine"] = (
+            harness_elf is not None and
+            host_machines.get(host_machine) == harness_elf.get("machine")
+        )
+    else:
+        checks["harness_host_machine"] = True
     if kernel_present:
         checks["artifact_bindings"] = (
             present_bindings_valid and
@@ -1227,7 +1286,7 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
     }
     if write:
         try:
-            (root / "audit.txt").write_text(_format_audit(result), encoding="utf-8")
+            _write_audit_file(root, _format_audit(result))
         except OSError:
             pass
     return result

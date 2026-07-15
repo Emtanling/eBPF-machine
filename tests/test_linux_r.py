@@ -19,6 +19,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import struct
 import sys
 import tempfile
 import unittest
@@ -132,10 +133,61 @@ def refresh_manifest(bundle: Path) -> None:
         candidate = bundle / name
         record["sha256"] = sha256_bytes(candidate.read_bytes())
         record["size"] = candidate.stat().st_size
+        record["mode"] = candidate.stat().st_mode & 0o7777
     core = {key: value for key, value in manifest.items()
             if key != "manifest_hash"}
     manifest["manifest_hash"] = sha256_bytes(canonical_json_bytes(core))
     write_canonical(path, manifest)
+
+
+def write_test_elf(path: Path, machine: int) -> None:
+    """Write the smallest ELF64 section table accepted by the bounded audit."""
+
+    names = b"\0.shstrtab\0.text\0.rodata\0.dynsym\0.dynamic\0"
+    offsets = {
+        name: names.index(name.encode("ascii"))
+        for name in (".shstrtab", ".text", ".rodata", ".dynsym", ".dynamic")
+    }
+    section_offset = (64 + len(names) + 7) & ~7
+    ident = b"\x7fELF\x02\x01\x01" + b"\0" * 9
+    header = struct.pack(
+        "<16sHHIQQQIHHHHHH", ident, 3, machine, 1, 0, 0,
+        section_offset, 0, 64, 0, 0, 64, 6, 1,
+    )
+    sections = [struct.pack("<IIQQQQIIQQ", *([0] * 10))]
+    sections.append(struct.pack(
+        "<IIQQQQIIQQ", offsets[".shstrtab"], 3, 0, 0, 64, len(names),
+        0, 0, 1, 0,
+    ))
+    for name, section_type in (
+        (".text", 1), (".rodata", 1), (".dynsym", 11), (".dynamic", 6)
+    ):
+        sections.append(struct.pack(
+            "<IIQQQQIIQQ", offsets[name], section_type, 0, 0, 0, 0,
+            0, 0, 1, 0,
+        ))
+    path.write_bytes(header + names + b"\0" * (section_offset - 64 - len(names)) +
+                     b"".join(sections))
+
+
+def bind_file(bundle: Path, label: str, name: str, *, mode: int) -> None:
+    candidate = bundle / name
+    candidate.chmod(mode)
+    manifest_path = bundle / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["files"][name] = {
+        "mode": candidate.stat().st_mode & 0o7777,
+        "sha256": sha256_bytes(candidate.read_bytes()),
+        "size": candidate.stat().st_size,
+    }
+    manifest["bindings"][label] = {
+        "path": name,
+        "sha256": sha256_bytes(candidate.read_bytes()),
+    }
+    core = {key: value for key, value in manifest.items()
+            if key != "manifest_hash"}
+    manifest["manifest_hash"] = sha256_bytes(canonical_json_bytes(core))
+    write_canonical(manifest_path, manifest)
 
 
 def write_kernel_oracle(path: Path, *, trace_valid: bool = True) -> None:
@@ -475,6 +527,107 @@ class LinuxRBundleAuditTests(unittest.TestCase):
             result = audit_bundle(bundle)
             self.assertEqual(result["verdict"], "FAIL")
             self.assertFalse(result["checks"]["root_entries_regular"])
+
+    def test_manifest_records_and_audits_exact_posix_modes(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "bundle"
+            self.build(bundle)
+            manifest = json.loads(
+                (bundle / "manifest.json").read_text(encoding="utf-8")
+            )
+            for name, record in manifest["files"].items():
+                self.assertEqual(
+                    record["mode"], (bundle / name).stat().st_mode & 0o7777
+                )
+
+            program = bundle / "program.json"
+            program.chmod((program.stat().st_mode & 0o7777) ^ 0o100)
+            result = audit_bundle(bundle, write=False)
+            self.assertEqual(result["verdict"], "FAIL")
+            self.assertTrue(result["checks"]["manifest_file_hashes"])
+            self.assertFalse(result["checks"]["manifest_file_modes"])
+
+    def test_bound_harness_and_runner_must_be_executable(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "bundle"
+            self.build(bundle)
+            manifest_path = bundle / "manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["bindings"]["host"]["machine"] = "x86_64"
+            core = {key: value for key, value in manifest.items()
+                    if key != "manifest_hash"}
+            manifest["manifest_hash"] = sha256_bytes(canonical_json_bytes(core))
+            write_canonical(manifest_path, manifest)
+
+            write_test_elf(bundle / "wm_vm_user", 62)
+            (bundle / "run_kernel.sh").write_text("#!/bin/sh\n", encoding="utf-8")
+            bind_file(bundle, "harness_binary", "wm_vm_user", mode=0o644)
+            bind_file(bundle, "runner", "run_kernel.sh", mode=0o644)
+            rejected = audit_bundle(bundle, write=False)
+            self.assertEqual(rejected["verdict"], "FAIL")
+            self.assertFalse(rejected["checks"]["required_executable_modes"])
+
+            (bundle / "wm_vm_user").chmod(0o755)
+            (bundle / "run_kernel.sh").chmod(0o755)
+            refresh_manifest(bundle)
+            accepted = audit_bundle(bundle, write=False)
+            self.assertEqual(accepted["verdict"], "PASS")
+            self.assertTrue(accepted["checks"]["required_executable_modes"])
+
+    def test_bound_harness_machine_matches_supported_manifest_host(self) -> None:
+        cases = (("x86_64", 183), ("mips64", 62))
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for index, (host_machine, elf_machine) in enumerate(cases):
+                with self.subTest(host_machine=host_machine):
+                    bundle = root / f"bundle-{index}"
+                    self.build(bundle)
+                    manifest_path = bundle / "manifest.json"
+                    manifest = json.loads(
+                        manifest_path.read_text(encoding="utf-8")
+                    )
+                    manifest["bindings"]["host"]["machine"] = host_machine
+                    core = {key: value for key, value in manifest.items()
+                            if key != "manifest_hash"}
+                    manifest["manifest_hash"] = sha256_bytes(
+                        canonical_json_bytes(core)
+                    )
+                    write_canonical(manifest_path, manifest)
+                    write_test_elf(bundle / "wm_vm_user", elf_machine)
+                    bind_file(
+                        bundle, "harness_binary", "wm_vm_user", mode=0o755
+                    )
+
+                    result = audit_bundle(bundle, write=False)
+                    self.assertEqual(result["verdict"], "FAIL")
+                    self.assertTrue(result["checks"]["manifest_files"])
+                    self.assertFalse(result["checks"]["harness_host_machine"])
+
+    def test_reserved_metadata_symlinks_are_rejected_without_following(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            manifest_bundle = root / "manifest-bundle"
+            self.build(manifest_bundle)
+            target_manifest = root / "manifest-target.json"
+            manifest_path = manifest_bundle / "manifest.json"
+            target_manifest.write_bytes(manifest_path.read_bytes())
+            manifest_path.unlink()
+            manifest_path.symlink_to(target_manifest)
+            manifest_result = audit_bundle(manifest_bundle, write=False)
+            self.assertEqual(manifest_result["verdict"], "FAIL")
+            self.assertFalse(
+                manifest_result["checks"]["root_entries_regular"]
+            )
+
+            audit_bundle_path = root / "audit-bundle"
+            self.build(audit_bundle_path)
+            target_audit = root / "audit-target.txt"
+            target_audit.write_text("sentinel\n", encoding="utf-8")
+            (audit_bundle_path / "audit.txt").symlink_to(target_audit)
+            audit_result = audit_bundle(audit_bundle_path, write=True)
+            self.assertEqual(audit_result["verdict"], "FAIL")
+            self.assertFalse(audit_result["checks"]["root_entries_regular"])
+            self.assertEqual(target_audit.read_text(encoding="utf-8"), "sentinel\n")
 
     def test_overlapping_computed_cells_are_semantically_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

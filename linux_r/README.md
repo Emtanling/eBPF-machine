@@ -158,8 +158,8 @@ $WORK/build.log                            build.log
 
 `program.json`, `derivation.json`, `report.json`, `analysis.json`, and
 `manifest.json` are the model/report evidence generated from those inputs.
-Every archived input must appear in the manifest with its path, byte size, and
-SHA-256 digest; the audit
+Every archived input must appear in the manifest with its path, byte size,
+POSIX mode, and SHA-256 digest; the audit
 must reject missing, extra, or changed files.
 
 The model CLI exposes and `run_kernel.sh` passes the following discoverable
@@ -184,8 +184,10 @@ When `--kernel-oracle` is present, generation rejects an incomplete artifact
 set.  It validates the descriptor and source/build contract, copies all bound
 inputs before manifest construction, and records their SHA-256 bindings.  The
 independent `--require-kernel` audit then requires the calibration and its
-artifact bindings.  It also parses the ELF64 section tables and rejects a
-non-`EM_BPF` object or a non-Linux harness executable.  The snapshot still
+artifact bindings.  It also parses the ELF64 section tables, rejects a
+non-`EM_BPF` object or a non-Linux harness executable, checks the harness
+architecture against the recorded host, and requires executable modes on the
+archived harness and runner.  The snapshot still
 depends on an external kernel, compiler, libbpf, and system libraries, and its
 self-issued hashes do not prove execution provenance; it is therefore not a
 hermetic or independently attested build closure.  This snapshot strengthens
