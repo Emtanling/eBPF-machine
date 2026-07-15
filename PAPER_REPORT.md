@@ -26,15 +26,15 @@ The artifact language and the post-acceptance operation language have different 
 
 The paper organizes the evidentiary burden as a claim graph:
 
-| Node | Required fact | Status of the eBPF case |
+| Node | Required fact | Evidence status |
 |---|---|---|
 | A — acceptance | one fixed artifact belongs to $L_V$ | recorded for the preserved object and environment |
 | C — causal state distinction | the same suffix and non-state context expose different observations from different selected runtime states | conditional witness under the declared map-service/no-interference contract |
 | P — bounded programmability | accepted code uniformly controls, observes, resets, and composes the state under explicit frame and environment premises | source-level construction plus audited regression evidence |
-| R — report-relative residual | witnesses at C are jointly covered by an actual computed report cell that fails the behavioral factorization test | not established for Linux |
+| R — report-relative residual | witnesses at C are jointly covered by an actual computed report cell that fails the behavioral factorization test | auxiliary fixed tuple: established; stock Linux: not established |
 | W — policy/threat obligation | an actor drives an effect through $P_*$ that the policy excludes | not established by the offline case |
 
-The table reports the stock eBPF/Linux case. A separate fixed tuple $M_{\mathit{linux\_r\_aux\_v1}}$ establishes R for an auxiliary report-producing recognizer and restricted service semantics; it is not a stock-Linux report-cell result.
+The A, C, P, and W status cells report the stock eBPF/Linux case. The R cell separates two carriers: $M_{\mathit{linux\_r\_aux\_v1}}$ establishes R for the auxiliary report-producing recognizer and restricted service semantics, while R for the stock Linux verifier remains unestablished.
 
 Nodes C and R must not share one name. We call the accepted-artifact-indexed, same-suffix language $L_{\mathrm{causal}}$. A word enters the report-relative residual language $L_{\mathrm{res}}^R$ only with an actual computed-cell collision under the admissibility conditions below. P and R branch after C. A policy-level weird machine requires P, W, linkage to the same encoded computation, and unintendedness; a *contract-shape-induced recognizer-relative* classification additionally requires R, documented semantics, report conformance, and granularity evidence. The graph turns “weird machine” from a rhetorical label into explicit, auditable obligations.
 
@@ -517,7 +517,7 @@ The controls support mechanism attribution: saturation and the second fresh name
 
 ### 5.5 Calibration result
 
-Linux's verifier documentation states its objective in terms of determining program safety and validating paths, arguments, and memory access [14]; it does not specify a complete functional certificate for map-mediated computation. Without a report extractor we neither test nor infer how precisely it tracks this helper return. The case gives a conditional C witness under the declared service contract and supports P under additional premises; it is not evidence of unsound acceptance, and R remains blocked.
+Linux's verifier documentation states its objective in terms of determining program safety and validating paths, arguments, and memory access [14]; it does not specify a complete functional certificate for map-mediated computation. Without a stock-Linux report extractor we neither test nor infer how precisely it tracks this helper return. The case gives a conditional C witness under the declared service contract and supports P under additional premises; it is not evidence of unsound acceptance, and R remains unestablished for this stock-Linux calibration.
 
 ### 5.6 Fixed auxiliary executable report instance
 
@@ -542,8 +542,6 @@ $\mathcal W_D(F)=\{\varepsilon,a_{\mathrm{obs}}\}$, the checker establishes the 
 
 $\mathsf{Report}_{\mathit{aux}}$ emits one unique cell $a^\#$ that covers both frontier states, completing $\mathsf{Adm}(P_{\mathit{aux}},\ell,D,F;K_{\mathrm{obs}})$. The exact finite future-observation quotient assigns them different classes, so $|\beta_D(F_{a^\#})|=2$; moreover $a_{\mathrm{obs}}$ yields observations 1 and 0. Hence the same suffix first witnesses Definition 1 and the tagged tuple $(P_{\mathit{aux}},\ell,D,F,a^\#,a_{\mathrm{obs}})$ satisfies Definition 2. Therefore $R(M_{\mathit{linux\_r\_aux\_v1}})$ holds. The evidence also records 21 domain/action **return-class containment** checks plus two report-cell **successor-containment** checks, all with zero violations; the former are not 21 full post-state checks. Each of the four negative controls---exact occupancy tracking, capacity 64, forced sentinel, and an unobserved return---removes the R witness. ∎
 
-The notation $R(V_{\mathit{linux\_r}},I_{\mathit{hash}})=\mathsf{established}$ is artifact-local shorthand for this complete fixed model, not a claim quantified over other programs, reports, frontiers, environments, or service semantics.
-
 An independent executable checker reconstructs reachability, unique-cell coverage, the quotient, and the factorization verdict without importing the model implementation. The archived VM run and audit passed; the unit suite constructs two fixed-input bundles and byte-compares their formal JSON. This is executable finite-model evidence, not a machine-checked proof. The retained kernel calibration has four oracle rows for the two assignments $(0,1)$ and $(1,1)$; it calibrates the restricted service cases only. It proves no refinement or bisimulation between $I_{\mathit{hash}}$ and Linux, and extracts no stock-verifier cell. Thus $R$ for stock Linux, W, $\mathsf{WM}_{\mathrm{shape}}$, and any universal necessity conjecture remain unestablished. The bundle is `results/linux_r/linux-r-v1/`.
 
 ### 5.7 Threats to validity
@@ -560,7 +558,7 @@ Language-theoretic security supplies the recognition/interpretation framing [1]�
 
 Abstract interpretation supplies concrete/abstract, soundness, and completeness vocabulary [5], [22]; our criterion is limited to uniquely assigned cells actually computed at one frontier. MOAT isolates post-acceptance BPF effects [23], while mismorphism compares interpretations [24]. For eBPF, range-analysis verification and state embedding target verifier-logic soundness/coverage errors [25], [26]. VEP’s “programmability” means reducing verification-toolchain restrictions, while Rex addresses rejection-side language–verifier mismatch by replacing a separate static verifier with language-based safety and an extralingual runtime [27], [28]; P here instead means one fixed stock-verifier-accepted artifact interpreting a bounded family. DRACO checks functional specifications after verifier acceptance, and bpfverify translates eBPF bytecode to bit- and memory-precise Horn clauses for functional verification [29], [30].
 
-Recent preprints further separate the boundary: Heimdall treats higher-level defects surviving compilation and acceptance; Yaksha-Prashna extracts third-party bytecode behavior; bpfix localizes proof loss in rejected programs [31]–[33]. Trust-boundary semantic-gap work studies insufficient assertions after correctly implemented syntactic acceptance [34]. They do not jointly distinguish the obligations in our claim graph; conversely, our Linux case does not establish R or W. These four 2026 works are cited as preprints, not peer-reviewed publications.
+Recent preprints further separate the boundary: Heimdall treats higher-level defects surviving compilation and acceptance; Yaksha-Prashna extracts third-party bytecode behavior; bpfix localizes proof loss in rejected programs [31]–[33]. Trust-boundary semantic-gap work studies insufficient assertions after correctly implemented syntactic acceptance [34]. They do not jointly distinguish the obligations in our claim graph; conversely, our stock-Linux calibration case does not establish R or W, while the separate auxiliary tuple establishes only its own R. These four 2026 works are cited as preprints, not peer-reviewed publications.
 
 ---
 
