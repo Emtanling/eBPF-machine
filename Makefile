@@ -32,7 +32,7 @@ LIBBPF_LIBS := $(shell pkg-config --libs libbpf 2>/dev/null || echo -lbpf)
 LIBBPF_CFLAGS := $(shell pkg-config --cflags libbpf 2>/dev/null)
 
 .PHONY: all test data clean env verify verify-witness2 verify-framac circuits \
-	interpreter-data verify-interpreter
+	interpreter-data verify-interpreter linux-r verify-linux-r
 
 all: $(BUILD)/wm_user $(BUILD)/wm_vm_user
 
@@ -43,6 +43,7 @@ test: $(SRC)/vmlinux.h $(BUILD)/test_logic_model
 	$(PYTHON) $(TESTS)/test_audit_interpreter.py
 	$(PYTHON) $(TESTS)/test_interpreter_provenance.py
 	$(PYTHON) $(TESTS)/test_status_mask_source.py
+	$(PYTHON) $(TESTS)/test_linux_r.py
 
 CIRCUIT_SPECS := $(wildcard $(CIRCUITS)/*.json)
 CIRCUIT_DESCRIPTORS := $(CIRCUIT_SPECS:.json=.wmc)
@@ -63,6 +64,13 @@ verify-interpreter:
 		{ echo "missing interpreter run: $(INTERPRETER_RUN)" >&2; exit 2; }
 	PYTHONDONTWRITEBYTECODE=1 $(PYTHON) $(INTERPRETER_RUN)/source/scripts/audit_interpreter.py $(INTERPRETER_RUN)
 	PYTHONDONTWRITEBYTECODE=1 $(PYTHON) $(INTERPRETER_RUN)/source/scripts/write_interpreter_provenance.py verify $(INTERPRETER_RUN)
+
+linux-r:
+	bash linux_r/run_kernel.sh results/linux_r/linux-r-v1
+
+verify-linux-r:
+	PYTHONDONTWRITEBYTECODE=1 $(PYTHON) -m linux_r.audit \
+		results/linux_r/linux-r-v1 --require-kernel --write
 
 env:
 	mkdir -p $(RESULTS)

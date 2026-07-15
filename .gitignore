@@ -23,6 +23,10 @@ __pycache__/
 !/results/interpreter/
 /results/interpreter/*
 !/results/interpreter/interpreter-final-20260711-02/
+!/results/linux_r/
+/results/linux_r/*
+!/results/linux_r/linux-r-v1/
+!/results/linux_r/linux-r-v1/**
 
 # Keep the final paper PDF, not LaTeX intermediates.
 /output/pdf/*

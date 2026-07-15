@@ -1,0 +1,60 @@
+{
+  "schema": "linux-r-program-v1",
+  "name": "wm-circuit-nand-gate-slice",
+  "recognizer": "V_linux_r",
+  "runtime": "I_hash",
+  "map": {
+    "capacity": 2,
+    "key_universe": ["S", "A", "B"],
+    "map_type": "BPF_MAP_TYPE_HASH",
+    "non_evicting": true,
+    "update_flag": "BPF_ANY"
+  },
+  "symbolic_inputs": {
+    "a": [0, 1],
+    "b": [1]
+  },
+  "operations": [
+    {
+      "op": "clear",
+      "keys": ["S", "A", "B"]
+    },
+    {
+      "flag": "BPF_NOEXIST",
+      "key": "S",
+      "op": "update"
+    },
+    {
+      "flag": "BPF_ANY",
+      "one_key": "A",
+      "op": "update_selected",
+      "selector": "a",
+      "zero_key": "S"
+    },
+    {
+      "id": "after-first-update-before-second",
+      "op": "frontier"
+    },
+    {
+      "flag": "BPF_ANY",
+      "one_key": "B",
+      "op": "update_selected",
+      "selector": "b",
+      "zero_key": "S"
+    },
+    {
+      "expression": "last_return_is_success",
+      "op": "observe"
+    }
+  ],
+  "scope": {
+    "concurrency": "serialized",
+    "interference": "none",
+    "value": 1
+  },
+  "source_binding": {
+    "artifact": "wm_circuit",
+    "macro": "NAND_GATE_OBS",
+    "source": "src/wm.bpf.c"
+  }
+}
