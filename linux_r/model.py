@@ -757,6 +757,10 @@ def build_bundle(program_path: str | Path, output_dir: str | Path, *,
         shutil.copyfile(Path(kernel_stderr), output / "kernel_oracle.stderr")
     if build_log is not None:
         shutil.copyfile(Path(build_log), output / "build.log")
+    if bpf_object is not None:
+        shutil.copyfile(Path(bpf_object), output / "wm.bpf.o")
+    if source is not None:
+        shutil.copyfile(Path(source), output / "wm.bpf.c")
     _write_json(output / "analysis.json", analysis)
 
     bindings: dict[str, Any] = {
@@ -764,11 +768,12 @@ def build_bundle(program_path: str | Path, output_dir: str | Path, *,
         "host": platform.uname()._asdict(),
         "program_source": str(program_path),
     }
-    for label, optional_path in (("bpf_object", bpf_object), ("source", source)):
-        if optional_path is not None:
-            candidate = Path(optional_path)
+    for label, bundle_name in (("bpf_object", "wm.bpf.o"),
+                               ("source", "wm.bpf.c")):
+        candidate = output / bundle_name
+        if candidate.is_file():
             bindings[label] = {
-                "path": str(candidate),
+                "path": bundle_name,
                 "sha256": _sha256_file(candidate),
             }
     files = {}

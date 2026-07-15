@@ -262,6 +262,19 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
                 break
     checks["manifest_file_hashes"] = hashes_ok
     checks["manifest_files"] = checks["manifest_file_set"] and hashes_ok
+    bindings = manifest.get("bindings", {})
+    object_binding = bindings.get("bpf_object")
+    source_binding = bindings.get("source")
+    bindings_ok = True
+    for binding in (object_binding, source_binding):
+        if binding is None:
+            continue
+        candidate = root / binding.get("path", "")
+        if (not candidate.is_file() or binding.get("sha256") != _hash_file(candidate) or
+                declared_files.get(candidate.name, {}).get("sha256") !=
+                binding.get("sha256")):
+            bindings_ok = False
+    checks["artifact_bindings"] = bindings_ok
     checks["program_canonical"] = _program_is_canonical(program)
     checks["analysis_schema"] = analysis.get("schema") == ANALYSIS_SCHEMA
 
@@ -353,6 +366,11 @@ def audit_bundle(path: str | Path, *, require_kernel: bool = False,
     )
     kernel_valid = _kernel_oracle_valid(root, analysis)
     kernel_present = analysis.get("kernel_calibration") is not None
+    if kernel_present:
+        checks["artifact_bindings"] = (
+            checks["artifact_bindings"] and object_binding is not None and
+            source_binding is not None
+        )
     checks["kernel_calibration"] = kernel_valid and (kernel_present or not require_kernel)
     checks["kernel_required"] = not require_kernel or kernel_present
 
