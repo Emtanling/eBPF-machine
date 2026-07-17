@@ -1,0 +1,27 @@
+{
+  "schema": "rac-linux-contract-v1",
+  "kernel_release": "6.17.0-35-generic",
+  "program_tag": "1122334455667788",
+  "program_name": "rac_prefix",
+  "selected_component": "G0 key set immediately before rac_suffix",
+  "omitted_by_verifier_cell": [
+    "G0 key set immediately before rac_suffix"
+  ],
+  "same_context_fields": [
+    "map_type",
+    "max_entries",
+    "map_flags",
+    "serialized",
+    "prefix_program",
+    "suffix_program"
+  ],
+  "require_distinct_verifier_histories": true,
+  "no_external_interference": true,
+  "serialized_execution": true,
+  "report_contract_in_scope": false,
+  "concretization_reviewed": false,
+  "frontier": {
+    "visit_insn": 31
+  },
+  "path_correspondence_reviewed": true
+}

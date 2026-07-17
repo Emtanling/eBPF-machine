@@ -40,17 +40,30 @@ __pycache__/
 /PAPER_REPORT*.pdf
 /PAPER_REPORT_arxiv.tar.gz
 
-# Keep only the frozen stock-Linux proof and its minimal verifier.
+# Keep the source-only Residuality Auditor toolchain and frozen stock-Linux
+# proof. Native build products and fresh experiment outputs remain local.
 /residuality-auditor/*
 !/residuality-auditor/LICENSE
 !/residuality-auditor/README.md
+!/residuality-auditor/REPRODUCE.md
+!/residuality-auditor/pyproject.toml
+!/residuality-auditor/examples/
+!/residuality-auditor/examples/**
+!/residuality-auditor/linux/
+!/residuality-auditor/linux/**
+!/residuality-auditor/src/
+!/residuality-auditor/src/**
+!/residuality-auditor/tests/
+!/residuality-auditor/tests/**
 !/residuality-auditor/tools/
-!/residuality-auditor/tools/__init__.py
-!/residuality-auditor/tools/proof/
-!/residuality-auditor/tools/proof/__init__.py
-!/residuality-auditor/tools/proof/check_frozen_bundle.py
+!/residuality-auditor/tools/**
 !/residuality-auditor/stock-linux-r-proof/
 !/residuality-auditor/stock-linux-r-proof/**
+/residuality-auditor/linux/build/
+/residuality-auditor/experiments/
+/residuality-auditor/output/
+/residuality-auditor/**/__pycache__/
+/residuality-auditor/**/*.py[cod]
 
 # Historical/internal documents retained locally only.
 /EDITORIAL_DECISION.md

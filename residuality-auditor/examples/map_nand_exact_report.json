@@ -1,0 +1,31 @@
+{
+  "name": "Two-entry saturating map NAND with exact modeled report",
+  "accepted": true,
+  "states": ["empty", "S", "A", "B", "SA", "SB", "AB"],
+  "actions": ["reset", "put_s", "put_a", "put_b"],
+  "transitions": {
+    "empty": {"reset": {"next": "S", "output": "ok"}, "put_s": {"next": "S", "output": "ok"}, "put_a": {"next": "A", "output": "ok"}, "put_b": {"next": "B", "output": "ok"}},
+    "S": {"reset": {"next": "S", "output": "ok"}, "put_s": {"next": "S", "output": "ok"}, "put_a": {"next": "SA", "output": "ok"}, "put_b": {"next": "SB", "output": "ok"}},
+    "A": {"reset": {"next": "S", "output": "ok"}, "put_s": {"next": "SA", "output": "ok"}, "put_a": {"next": "A", "output": "ok"}, "put_b": {"next": "AB", "output": "ok"}},
+    "B": {"reset": {"next": "S", "output": "ok"}, "put_s": {"next": "SB", "output": "ok"}, "put_a": {"next": "AB", "output": "ok"}, "put_b": {"next": "B", "output": "ok"}},
+    "SA": {"reset": {"next": "S", "output": "ok"}, "put_s": {"next": "SA", "output": "ok"}, "put_a": {"next": "SA", "output": "ok"}, "put_b": {"next": "SA", "output": "full"}},
+    "SB": {"reset": {"next": "S", "output": "ok"}, "put_s": {"next": "SB", "output": "ok"}, "put_a": {"next": "SB", "output": "full"}, "put_b": {"next": "SB", "output": "ok"}},
+    "AB": {"reset": {"next": "S", "output": "ok"}, "put_s": {"next": "AB", "output": "full"}, "put_a": {"next": "AB", "output": "ok"}, "put_b": {"next": "AB", "output": "ok"}}
+  },
+  "context_fibers": {"sentinel_frontier": ["S", "SA", "SB"]},
+  "report": {
+    "source": "modeled exact state report; negative control",
+    "fiber_states": ["empty", "S", "A", "B", "SA", "SB", "AB"],
+    "cells": {"c_empty": ["empty"], "c_S": ["S"], "c_A": ["A"], "c_B": ["B"], "c_SA": ["SA"], "c_SB": ["SB"], "c_AB": ["AB"]}
+  },
+  "gate_certificate": {
+    "name": "NAND",
+    "canonical_state": "S",
+    "admissible_states": ["empty", "S", "A", "B", "SA", "SB", "AB"],
+    "reset_word": ["reset"],
+    "input_words": {"00": ["put_s", "put_s"], "01": ["put_s", "put_b"], "10": ["put_a", "put_s"], "11": ["put_a", "put_b"]},
+    "expected_bits": {"00": 1, "01": 1, "10": 1, "11": 0},
+    "output_to_bit": {"ok": 1, "full": 0}
+  },
+  "notes": "The exact partition should factor the behavioral quotient and serves as a P-without-R negative control."
+}

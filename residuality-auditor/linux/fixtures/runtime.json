@@ -1,0 +1,21 @@
+{
+  "schema": "rac-linux-runtime-v1",
+  "kernel_release": "6.17.0-35-generic",
+  "program_tag": "1122334455667788",
+  "runs": [
+    {
+      "case": "a=0",
+      "selected_state": ["S"],
+      "context": {"map_type":"BPF_MAP_TYPE_HASH","max_entries":2,"map_flags":0,"serialized":true,"prefix_program":"rac_prefix","suffix_program":"rac_suffix"},
+      "suffix": {"program":"rac_suffix","operation":"insert fresh key B"},
+      "observation": {"success":true,"retval":1}
+    },
+    {
+      "case": "a=1",
+      "selected_state": ["S","A"],
+      "context": {"map_type":"BPF_MAP_TYPE_HASH","max_entries":2,"map_flags":0,"serialized":true,"prefix_program":"rac_prefix","suffix_program":"rac_suffix"},
+      "suffix": {"program":"rac_suffix","operation":"insert fresh key B"},
+      "observation": {"success":false,"retval":0}
+    }
+  ]
+}

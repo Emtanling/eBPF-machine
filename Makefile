@@ -34,7 +34,8 @@ LIBBPF_LIBS := $(shell pkg-config --libs libbpf 2>/dev/null || echo -lbpf)
 LIBBPF_CFLAGS := $(shell pkg-config --cflags libbpf 2>/dev/null)
 
 .PHONY: all test data clean env verify circuits interpreter-data \
-	verify-interpreter verify-aux-r verify-stock-r
+	verify-interpreter verify-aux-r verify-stock-r stock-r-preflight \
+	stock-r-build test-stock-r-tools
 
 all: $(BUILD)/wm_user $(BUILD)/wm_vm_user
 
@@ -100,6 +101,16 @@ verify-aux-r:
 verify-stock-r:
 	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. \
 		$(PYTHON) -m tools.proof.check_frozen_bundle stock-linux-r-proof
+
+stock-r-preflight:
+	$(MAKE) -C $(STOCK_R_ROOT)/linux preflight
+
+stock-r-build:
+	$(MAKE) -C $(STOCK_R_ROOT)/linux all
+
+test-stock-r-tools:
+	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:. \
+		$(PYTHON) -m unittest discover -s tests -v
 
 verify: verify-interpreter verify-aux-r verify-stock-r
 

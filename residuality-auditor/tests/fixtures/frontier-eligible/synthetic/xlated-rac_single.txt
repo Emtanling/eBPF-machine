@@ -1,0 +1,28 @@
+rac_single:
+0: (bf) r6 = r1
+1: (85) call pc+3#select_branch
+2: (85) call pc+17#shared_suffix
+3: (bf) r0 = r6
+4: (95) exit
+select_branch:
+5: (15) if r1 == 0x0 goto pc+2
+6: (85) call pc+5#select_a
+7: (05) goto pc+2
+8: (85) call pc+5#select_s
+9: (05) goto pc+0
+10: (95) exit
+11: (bf) r0 = r0
+select_a:
+12: (b7) r0 = 0
+13: (95) exit
+select_s:
+14: (b7) r0 = 0
+15: (95) exit
+16: (bf) r0 = r0
+17: (bf) r0 = r0
+18: (bf) r0 = r0
+19: (bf) r0 = r0
+shared_suffix:
+20: (b7) r1 = 0
+21: (85) call 2
+22: (95) exit

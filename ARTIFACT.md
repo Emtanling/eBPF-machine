@@ -24,10 +24,14 @@ Prepublication complete Residuality Auditor archive SHA-256:
 `5fd0a2812c8c8db2fe5508440934817c1cf9293ba0c5df31317e8b38d94a90ec`
 
 The prepublication archive hash records the full development package used to
-prepare the evidence. V1.0 publishes the frozen proof directory, its raw and
-normalized evidence, proof records, manifests, and the minimal offline checker
-directly rather than duplicating that archive in the repository. Any evidence
-change requires a new tag and new checksums. The published bundle emits
+prepare the evidence. The V1.0 tag publishes the frozen proof directory, its raw
+and normalized evidence, proof records, manifests, and the minimal offline
+checker. Current `main` additionally publishes the source-only native capture,
+normalization, certificate-construction, and regression-test toolchain under
+`residuality-auditor/`, including the finite-model positive and negative
+controls consumed by its tests; generated builds, historical intermediate
+outputs, and local caches remain excluded. Any frozen evidence change requires
+a new tag and new checksums. The published bundle emits
 `FROZEN_PROOF_BUNDLE_VERIFIED`.
 
 ## Scope
@@ -282,6 +286,31 @@ manifest.
 
 Fresh result directories are ignored by Git. Replacing the canonical run is a
 deliberate publication action, not a side effect of ordinary testing.
+
+### Regenerate a stock-Linux capture
+
+First perform a non-attaching prerequisite check, compile both tracing backends,
+and run the active regression suite:
+
+```sh
+make stock-r-preflight
+make stock-r-build
+make test-stock-r-tools
+```
+
+Then, on an isolated Linux VM with suitable BPF privileges, follow
+`residuality-auditor/REPRODUCE.md`. The preferred live backend is fexit, with a
+kprobe fallback for kernels where the required BTF tracing attachment is not
+available. The live runner captures raw events and tuple metadata, enriches the
+events, emits an initial fail-closed contract/analysis, and screens candidate
+prunes. The separate frontier, path, state, concretization, report-map,
+subsumption, and proof tools consume the reviewed material needed to construct
+and check a normalized proof bundle.
+
+A fresh execution produces a new kernel/config/BTF/object tuple. Successful
+compilation and offline tests establish tool availability, not repetition of
+the published run; a fresh trace establishes only its new tuple and does not
+silently replace `stock-linux-r-proof/`.
 
 ## Integrity and provenance boundary
 

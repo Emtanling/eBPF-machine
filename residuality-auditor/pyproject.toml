@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "residuality-auditor"
+version = "0.3.0"
+description = "Finite-state and Linux verifier auditor for post-acceptance report-relative residuality claims"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Chengao Zhang"}]
+license = {text = "MIT"}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Security",
+]
+
+[project.scripts]
+residuality-auditor = "residuality_auditor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

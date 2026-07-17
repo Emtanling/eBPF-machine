@@ -1,7 +1,8 @@
-# After Acceptance: eBPF calibration artifact V1.0
+# After Acceptance: eBPF calibration and reproduction artifact
 
-This is the minimal public artifact for *After Acceptance: A Claim Graph for
-Residual Languages and Weird-Machine Claims, Calibrated on eBPF*.
+This is the minimal public evidence and reproduction artifact for *After
+Acceptance: A Claim Graph for Residual Languages and Weird-Machine Claims,
+Calibrated on eBPF*.
 
 ## Canonical paper
 
@@ -43,12 +44,16 @@ functional-report failure.
 - `residuality-auditor/stock-linux-r-proof/` — frozen stock-Linux capture,
   normalized certificates, proof outputs, checker sources, tests, checksums, and
   manifest.
-- `residuality-auditor/tools/proof/check_frozen_bundle.py` — standard-library
-  verifier for the frozen stock-Linux bundle.
+- `residuality-auditor/linux/` — source-only fexit/kprobe collectors, BPF
+  tracers, witness, state schema, preflight checks, and live-capture pipeline.
+- `residuality-auditor/src/`, `tools/`, `tests/`, `examples/`, and
+  `pyproject.toml` — active analysis package, certificate
+  construction/checking tools, finite-model controls, and regression tests used
+  by the stock-Linux experiment.
 - `ARTIFACT.md` and `ETHICS.md` — interpretation, provenance, and safety limits.
 
 Historical drafts, internal reviews, duplicate PDFs, build directories, and
-experiments not used by the paper are intentionally absent from V1.0.
+intermediate experiment outputs not used by the paper are intentionally absent.
 
 ## Verify all frozen evidence
 
@@ -91,6 +96,29 @@ make circuits
 Generated build files, `src/vmlinux.h`, and generated WMC1 descriptors are
 ignored by Git.
 
+## Build and test the stock-Linux reproduction code
+
+Requirements: Linux with kernel BTF, `clang`, `bpftool`, `libbpf`, `pkg-config`,
+`libelf`, `zlib`, Python 3, and a C compiler.
+
+```sh
+make stock-r-preflight
+make stock-r-build
+make test-stock-r-tools
+```
+
+The first two commands inspect prerequisites and compile the fexit/kprobe
+collectors and `rac_single` witness. They do not attach probes. The test command
+exercises the active normalization, report, path, state, subsumption, and proof
+logic. `make verify-stock-r` remains the immutable, offline certificate check.
+
+To perform a fresh native capture on an isolated Linux machine, follow
+`residuality-auditor/REPRODUCE.md`. The live command requires elevated BPF
+privileges, attaches tracing programs, loads and pins the witness temporarily,
+and produces a new tuple-specific output directory. A new run is not the frozen
+V1.0 tuple and must not replace its evidence without new manifests and a new
+version.
+
 ## Rebuild the papers
 
 English:
@@ -115,8 +143,11 @@ The Chinese build requires CTeX and a CJK font such as Noto Serif CJK SC.
 
 ## Version and provenance
 
-`V1.0` is the public tagged snapshot corresponding to this repository layout.
-Earlier interpreter and auxiliary evidence remain addressable at commits
+`V1.0` is the immutable public evidence snapshot cited by the paper. The
+current `main` branch additionally publishes the source-only stock-Linux native
+capture and certificate-construction toolchain; it does not alter any frozen
+V1.0 evidence byte. Earlier interpreter and auxiliary evidence remain
+addressable at commits
 `4309069a` and `f665b1a`. The stock-Linux frozen payload is published directly
 under `residuality-auditor/stock-linux-r-proof/`; changing any frozen byte
 requires a new version, updated checksums, and renewed verification.
