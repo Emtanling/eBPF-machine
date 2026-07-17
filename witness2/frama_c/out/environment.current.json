@@ -1,6 +1,0 @@
-{
-  "frama_c_version": "25.0-beta (Manganese)",
-  "machine": "aarch64",
-  "python_version": "Python 3.12.3",
-  "uname": "Linux ubuntu-gnu-linux-24-04-3 6.17.0-35-generic #35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:14:16 UTC 2 aarch64 aarch64 aarch64 GNU/Linux"
-}

@@ -1,0 +1,19 @@
+{
+  "cases": {
+    "a=0": {
+      "abstract_role": "current",
+      "branch_call": 48,
+      "branch_name": "select_s",
+      "frontier_pc": 41,
+      "history_side": "history_right"
+    },
+    "a=1": {
+      "abstract_role": "retained",
+      "branch_call": 46,
+      "branch_name": "select_a",
+      "frontier_pc": 41,
+      "history_side": "history_left"
+    }
+  },
+  "schema": "rac-concrete-reachability-v1"
+}

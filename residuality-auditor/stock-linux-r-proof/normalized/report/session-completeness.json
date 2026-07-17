@@ -1,0 +1,28 @@
+{
+  "capture_ended_ns": 302241428874900,
+  "capture_started_ns": 302239228460732,
+  "checks": {
+    "capture_complete_present": true,
+    "capture_completed": true,
+    "collector_parse_errors_zero": true,
+    "event_session_consistent": true,
+    "metadata_present": true,
+    "ringbuf_lost_events_zero": true,
+    "session_id_present": true,
+    "target_frontier_events_complete": true,
+    "target_program_events_present": true,
+    "verifier_invocation_completed": true,
+    "verifier_invocation_started": true
+  },
+  "collector_parse_errors": 0,
+  "events_lost": 0,
+  "result": "SESSION_CAPTURE_COMPLETE",
+  "ringbuf_lost_events": 0,
+  "schema": "rac-session-completeness-v1",
+  "session_complete": true,
+  "session_id": "rac-fexit-990386-302239228460732",
+  "target_frontier_events": 1,
+  "target_program_events": 2,
+  "verifier_invocation_completed": true,
+  "verifier_invocation_started": true
+}

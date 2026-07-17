@@ -1,0 +1,18 @@
+{
+  "btf": {
+    "available": true,
+    "path": "/sys/kernel/btf/vmlinux",
+    "sha256": "418da9e2d375fecf6f450fb9569a37bedd0723c32cb2786fd6c2117ef687ebe8",
+    "size": 7955749
+  },
+  "config": {
+    "available": true,
+    "path": "/boot/config-6.17.0-35-generic",
+    "sha256": "0f5f16239053d9e386181c6e4d771fef850f02831fadf5acdfe41c00d1750454",
+    "size": 361132
+  },
+  "host": "Linux-6.17.0-35-generic-aarch64-with-glibc2.39",
+  "kernel_release": "6.17.0-35-generic",
+  "schema": "rac-kernel-identity-v1",
+  "source": "local kernel identity files read without re-running verifier/runtime capture"
+}

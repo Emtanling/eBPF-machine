@@ -1,0 +1,8 @@
+{
+  "errors": [],
+  "file_count": 30,
+  "passed": true,
+  "result": "MANIFEST_VALID",
+  "schema": "rac-proof-manifest-validation-v1",
+  "warnings": []
+}

@@ -1,0 +1,189 @@
+{
+  "bundle_name": "v042-four-checks-operational-prune-cell",
+  "files": {
+    "events.jsonl": {
+      "role": "raw/verifier-events",
+      "sha256": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+      "size": 28522
+    },
+    "events.raw.jsonl": {
+      "role": "raw/verifier-events",
+      "sha256": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+      "size": 27890
+    },
+    "frontier-check.json": {
+      "role": "normalized/frontier",
+      "sha256": "015941b4c5e6be1946bd4142541ceb303f29a10ef7c7ce2f9913928957dd78a5",
+      "size": 8129
+    },
+    "object.sha256": {
+      "role": "raw/object",
+      "sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+      "size": 147
+    },
+    "program-info.json": {
+      "role": "raw/object",
+      "sha256": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+      "size": 248
+    },
+    "program-pin.txt": {
+      "role": "raw/object",
+      "sha256": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+      "size": 31
+    },
+    "proof/concretization/joint-coverage.json": {
+      "role": "normalized/concretization",
+      "sha256": "24f428b434929a4f20ca92887c283945a37d350e142693bf1b56743d908a2dc8",
+      "size": 251
+    },
+    "proof/concretization/membership-a0.json": {
+      "role": "normalized/concretization",
+      "sha256": "8228300f9a645d374562cf199cd65b1fbb1307b72ed6899f32d822581d9b3ee9",
+      "size": 26267
+    },
+    "proof/concretization/membership-a1.json": {
+      "role": "normalized/concretization",
+      "sha256": "41fcf701ec58cf7d5fe94bc6b6f1eb46928ce1362cd05ab9f334289b2b49bf75",
+      "size": 12019
+    },
+    "proof/definition2/kernel-identity.json": {
+      "role": "proof/definition2",
+      "sha256": "d799e343592f961afbe7b4b20a64aa592896fc05eff6fdc4da10876f942c4d37",
+      "size": 603
+    },
+    "proof/definition2/stock-linux-r-check.json": {
+      "role": "proof/definition2",
+      "sha256": "003a765cb287e940817d79ec56df180c6390bd1a3aeedb17f55057e1a774c1bc",
+      "size": 3276
+    },
+    "proof/factorization/behavioral-quotient.json": {
+      "role": "proof/quotient",
+      "sha256": "97889b2982c8a419cc5a811d9fb5903d895ef52f76dd5f24a5d93df17a67be84",
+      "size": 716
+    },
+    "proof/factorization/beta-map.json": {
+      "role": "proof/quotient",
+      "sha256": "3a37d4327bc580d66b99ba6871a3da93882324f2d65b0ada68805d5188760273",
+      "size": 453
+    },
+    "proof/factorization/factorization.json": {
+      "role": "proof/factorization",
+      "sha256": "2dc8981eeab988c0392b2130385d10c1c76fc29be1096d226e92d058b23f337b",
+      "size": 5394
+    },
+    "proof/factorization/suffix-witness.json": {
+      "role": "proof/factorization",
+      "sha256": "2674911c0cde69e736cef53a60e47b33cdbc19332616e48e48d4f513928b3411",
+      "size": 4205
+    },
+    "proof/path/path-correspondence.json": {
+      "role": "normalized/paths",
+      "sha256": "01a556879ea4d1ff271e5c2585bcbb7d7ce0b097a1c736719229bdcc5971ab9f",
+      "size": 14209
+    },
+    "proof/report/membership-matrix.json": {
+      "role": "normalized/report",
+      "sha256": "9e61f840ebbae88e3d0b53d2b850d09edcc9eca65f5bd771324f91ae349224e8",
+      "size": 609
+    },
+    "proof/report/prune-cell-coverage.json": {
+      "role": "normalized/report",
+      "sha256": "6b13b05a35f4abf9c96693a4792e69eaabd915d3fe21b07ba840ddde0d80f543",
+      "size": 2324
+    },
+    "proof/report/prune-cell-definition.json": {
+      "role": "normalized/report",
+      "sha256": "6f04d0420227b1afae1099841afafa71b127a8becc24a0f3a6799abc6d6408e4",
+      "size": 439
+    },
+    "proof/report/report-map.json": {
+      "role": "normalized/report",
+      "sha256": "e3eacaea54e5e84396c2f72f9d92e6086d673a2537fd198dce785e2632bf4639",
+      "size": 3881
+    },
+    "proof/report/session-completeness.json": {
+      "role": "normalized/report",
+      "sha256": "40e357520c6f8b6b30dbadff64220cf325eff2ece57dc4f842b427f9a222fc83",
+      "size": 904
+    },
+    "proof/report/unique-cell-check.json": {
+      "role": "normalized/report",
+      "sha256": "027124d42d667de46af26ac8784c2b4d35c88a693755f4e729546f7f35534ea3",
+      "size": 387
+    },
+    "proof/states/current-state.json": {
+      "role": "normalized/states",
+      "sha256": "22bfe2d3a783d147c6399b143bcafc732debb8a5532a10d1e4bd75c441515209",
+      "size": 15765
+    },
+    "proof/states/retained-state.json": {
+      "role": "normalized/states",
+      "sha256": "01946ad4c99e6a337549d31aa73fe472a273313ba7971789354d4499535f5348",
+      "size": 16446
+    },
+    "proof/states/state-capture-check.json": {
+      "role": "normalized/states",
+      "sha256": "6625ab9126465835e651a6844a8ccbcd1f502b94aed4a8fe27a2f4c80677a048",
+      "size": 2730
+    },
+    "proof/subsumption/kernel-source-map.json": {
+      "role": "normalized/subsumption",
+      "sha256": "198dbe092442d20339ee1fe876a3a5231f3adab9bb1426a434e37ea47ac85b76",
+      "size": 2049
+    },
+    "proof/subsumption/subsumption-check.json": {
+      "role": "normalized/subsumption",
+      "sha256": "27cb724088e803fd08b12e9019e026e7efbe2910881bdca33cb90453d4910661",
+      "size": 6682
+    },
+    "runtime.json": {
+      "role": "raw/runtime",
+      "sha256": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+      "size": 1584
+    },
+    "xlated-rac_single.sha256": {
+      "role": "raw/xlated",
+      "sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+      "size": 88
+    },
+    "xlated-rac_single.txt": {
+      "role": "raw/xlated",
+      "sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+      "size": 16341
+    }
+  },
+  "missing_required_files": [],
+  "required_files": [
+    "events.jsonl",
+    "events.raw.jsonl",
+    "frontier-check.json",
+    "object.sha256",
+    "program-info.json",
+    "program-pin.txt",
+    "proof/concretization/joint-coverage.json",
+    "proof/concretization/membership-a0.json",
+    "proof/concretization/membership-a1.json",
+    "proof/definition2/kernel-identity.json",
+    "proof/definition2/stock-linux-r-check.json",
+    "proof/factorization/behavioral-quotient.json",
+    "proof/factorization/beta-map.json",
+    "proof/factorization/factorization.json",
+    "proof/factorization/suffix-witness.json",
+    "proof/path/path-correspondence.json",
+    "proof/report/membership-matrix.json",
+    "proof/report/prune-cell-coverage.json",
+    "proof/report/prune-cell-definition.json",
+    "proof/report/report-map.json",
+    "proof/report/session-completeness.json",
+    "proof/report/unique-cell-check.json",
+    "proof/states/current-state.json",
+    "proof/states/retained-state.json",
+    "proof/states/state-capture-check.json",
+    "proof/subsumption/kernel-source-map.json",
+    "proof/subsumption/subsumption-check.json",
+    "runtime.json",
+    "xlated-rac_single.sha256",
+    "xlated-rac_single.txt"
+  ],
+  "schema": "rac-proof-manifest-v1"
+}

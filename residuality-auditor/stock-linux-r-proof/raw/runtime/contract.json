@@ -1,0 +1,33 @@
+{
+  "schema": "rac-linux-contract-v1",
+  "kernel_release": "6.17.0-35-generic",
+  "program_tag": "100c248465bce0b0",
+  "program_name": "rac_single",
+  "frontier": {},
+  "path_correspondence_reviewed": false,
+  "selected_component": "G0 key set immediately before the shared post-join suffix in rac_single",
+  "omitted_by_verifier_cell": [
+    "G0 key set immediately before the shared post-join suffix in rac_single"
+  ],
+  "selected_component_omission_reviewed": true,
+  "same_context_fields": [
+    "map_type",
+    "max_entries",
+    "map_flags",
+    "serialized",
+    "prefix_program",
+    "suffix_program",
+    "single_artifact"
+  ],
+  "require_distinct_verifier_histories": true,
+  "require_same_state_hash": false,
+  "no_external_interference": true,
+  "serialized_execution": true,
+  "report_contract_in_scope": false,
+  "concretization_reviewed": false,
+  "notes": [
+    "A states_equal success followed by is_state_visited return 1 is treated as an operational prune-cell event.",
+    "Map contents are intentionally outside the extracted verifier-state schema.",
+    "The two review flags must not be enabled without a written contract/concretization argument."
+  ]
+}

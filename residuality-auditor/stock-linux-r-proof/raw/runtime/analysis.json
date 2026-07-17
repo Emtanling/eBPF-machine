@@ -1,0 +1,217 @@
+{
+  "contract": {
+    "concretization_reviewed": false,
+    "frontier": {},
+    "kernel_release": "6.17.0-35-generic",
+    "no_external_interference": true,
+    "notes": [
+      "A states_equal success followed by is_state_visited return 1 is treated as an operational prune-cell event.",
+      "Map contents are intentionally outside the extracted verifier-state schema.",
+      "The two review flags must not be enabled without a written contract/concretization argument."
+    ],
+    "omitted_by_verifier_cell": [
+      "G0 key set immediately before the shared post-join suffix in rac_single"
+    ],
+    "path_correspondence_reviewed": false,
+    "program_name": "rac_single",
+    "program_tag": "100c248465bce0b0",
+    "report_contract_in_scope": false,
+    "require_distinct_verifier_histories": true,
+    "require_same_state_hash": false,
+    "same_context_fields": [
+      "map_type",
+      "max_entries",
+      "map_flags",
+      "serialized",
+      "prefix_program",
+      "suffix_program",
+      "single_artifact"
+    ],
+    "schema": "rac-linux-contract-v1",
+    "selected_component": "G0 key set immediately before the shared post-join suffix in rac_single",
+    "selected_component_omission_reviewed": true,
+    "serialized_execution": true
+  },
+  "event_candidates": [
+    {
+      "cell_id": 1,
+      "current": {
+        "curframe": 0,
+        "dfs_depth": 5,
+        "first_insn_idx": 49,
+        "history_count": 7,
+        "history_hash": "e8c646b969e1dce2",
+        "insn_idx": 41,
+        "last_insn_idx": 106,
+        "state_hash": "a66d912d58c91de4"
+      },
+      "exact_level": 0,
+      "histories_distinct": true,
+      "in_declared_frontier": true,
+      "old": {
+        "curframe": 0,
+        "dfs_depth": 5,
+        "first_insn_idx": 47,
+        "history_count": 8,
+        "history_hash": "d699fe1aa18d9578",
+        "insn_idx": 41,
+        "last_insn_idx": 106,
+        "state_hash": "516c47f044cc3fc3"
+      },
+      "program_matches": true,
+      "program_name": "rac_single",
+      "qualifies": true,
+      "source": "fexit/states_equal+is_state_visited",
+      "state_hash_equal": false,
+      "visit_insn": 41
+    },
+    {
+      "cell_id": 2,
+      "current": {
+        "curframe": 0,
+        "dfs_depth": 0,
+        "first_insn_idx": 0,
+        "history_count": 2,
+        "history_hash": "fd21788114ab40ea",
+        "insn_idx": 43,
+        "last_insn_idx": 11,
+        "state_hash": "d5e76e9e0b0f9189"
+      },
+      "exact_level": 0,
+      "histories_distinct": true,
+      "in_declared_frontier": true,
+      "old": {
+        "curframe": 0,
+        "dfs_depth": 2,
+        "first_insn_idx": 29,
+        "history_count": 2,
+        "history_hash": "fd214a330dd152ba",
+        "insn_idx": 43,
+        "last_insn_idx": 36,
+        "state_hash": "61995e4c950fa385"
+      },
+      "program_matches": true,
+      "program_name": "rac_single",
+      "qualifies": true,
+      "source": "fexit/states_equal+is_state_visited",
+      "state_hash_equal": false,
+      "visit_insn": 43
+    }
+  ],
+  "evidence_digest_sha256": "90b50d4d0d2d264982db35524f7361f184459f944bfd1a53927c29055d20a75c",
+  "limitations": [
+    "A successful states_equal/is_state_visited prune is treated as an operational computed cell membership event.",
+    "The tool does not infer the verifier's intended functional contract from source code.",
+    "The selected runtime component must be explicitly declared omitted from the extracted cell schema.",
+    "A program-name match alone is insufficient; the contract must select a bytecode frontier and review its correspondence to the concrete prefixes.",
+    "Without reviewed concretization and report-contract scope, the result remains an R candidate, not a final paper claim."
+  ],
+  "metadata": {
+    "backend": "fexit",
+    "capture_started_ns": 302239228460732,
+    "event": "metadata",
+    "kernel_release": "6.17.0-35-generic",
+    "schema": "rac-linux-prune-v1",
+    "session_id": "rac-fexit-990386-302239228460732",
+    "target_comm": "rac-witness",
+    "target_tgid": 0
+  },
+  "prerequisites": {
+    "distinct_verifier_paths": true,
+    "extractor_events_present": true,
+    "extractor_identity_matches_runtime": true,
+    "frontier_declared": false,
+    "joint_operational_prune_cell": true,
+    "no_external_interference_declared": true,
+    "path_correspondence_reviewed": false,
+    "runtime_same_suffix_c_witness": true,
+    "selected_component_omitted_from_cell_schema": true,
+    "serialized_execution_declared": true
+  },
+  "runtime_candidates": [
+    {
+      "context_checks": {
+        "map_flags": true,
+        "map_type": true,
+        "max_entries": true,
+        "prefix_program": true,
+        "serialized": true,
+        "single_artifact": true,
+        "suffix_program": true
+      },
+      "context_equal": true,
+      "left_case": "a=0",
+      "observation_differs": true,
+      "qualifies": true,
+      "right_case": "a=1",
+      "selected_state_differs": true,
+      "suffix_equal": true
+    }
+  ],
+  "runtime_identity": {
+    "btf_sha256": null,
+    "kernel_release": "6.17.0-35-generic",
+    "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "program_tag": "100c248465bce0b0"
+  },
+  "schema": "rac-linux-r-analysis-v1",
+  "selected_operational_cell": {
+    "cell_id": 1,
+    "current": {
+      "curframe": 0,
+      "dfs_depth": 5,
+      "first_insn_idx": 49,
+      "history_count": 7,
+      "history_hash": "e8c646b969e1dce2",
+      "insn_idx": 41,
+      "last_insn_idx": 106,
+      "state_hash": "a66d912d58c91de4"
+    },
+    "exact_level": 0,
+    "histories_distinct": true,
+    "in_declared_frontier": true,
+    "old": {
+      "curframe": 0,
+      "dfs_depth": 5,
+      "first_insn_idx": 47,
+      "history_count": 8,
+      "history_hash": "d699fe1aa18d9578",
+      "insn_idx": 41,
+      "last_insn_idx": 106,
+      "state_hash": "516c47f044cc3fc3"
+    },
+    "program_matches": true,
+    "program_name": "rac_single",
+    "qualifies": true,
+    "source": "fexit/states_equal+is_state_visited",
+    "state_hash_equal": false,
+    "visit_insn": 41
+  },
+  "selected_runtime_witness": {
+    "context_checks": {
+      "map_flags": true,
+      "map_type": true,
+      "max_entries": true,
+      "prefix_program": true,
+      "serialized": true,
+      "single_artifact": true,
+      "suffix_program": true
+    },
+    "context_equal": true,
+    "left_case": "a=0",
+    "observation_differs": true,
+    "qualifies": true,
+    "right_case": "a=1",
+    "selected_state_differs": true,
+    "suffix_equal": true
+  },
+  "summary": {
+    "concretization_reviewed": false,
+    "frontier_declared": false,
+    "linux_R_candidate": false,
+    "linux_R_established": false,
+    "path_correspondence_reviewed": false,
+    "report_contract_in_scope": false
+  },
+  "verdict": "LINUX_R_NOT_ESTABLISHED"
+}

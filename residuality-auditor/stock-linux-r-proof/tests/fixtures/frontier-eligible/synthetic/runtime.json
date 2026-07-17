@@ -1,0 +1,7 @@
+{
+  "object_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "program_id": 101,
+  "program_tag": "0123456789abcdef",
+  "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+  "xlated_sha256": "9d79804795f3d24723f9d26adb40faa1d036873c2f9cc1800dec8cb303a82a27"
+}

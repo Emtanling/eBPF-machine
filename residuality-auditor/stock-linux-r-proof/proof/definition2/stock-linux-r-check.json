@@ -1,0 +1,116 @@
+{
+  "checks": {
+    "coverage": {
+      "checks": {
+        "actual_prune_edge_observed": true,
+        "both_cases_have_representative": true,
+        "membership_a0_direct": true,
+        "membership_a1_direct": true,
+        "path_a0_current": true,
+        "path_a1_retained": true,
+        "raw_event_not_fixture": true
+      },
+      "representative": "516c47f044cc3fc3",
+      "result": "BOTH_CASES_IN_OPERATIONAL_PRUNE_CELL"
+    },
+    "evidence_refs": {
+      "checks": {
+        "membership_a0": true,
+        "membership_a1": true,
+        "membership_matrix": true,
+        "path_correspondence": true,
+        "prune_cell_coverage": true,
+        "prune_cell_definition": true,
+        "session_completeness": true,
+        "unique_cell": true
+      },
+      "mismatches": [],
+      "passed": true
+    },
+    "factorization": {
+      "conditions": {
+        "auditor_R_non_factorization": true,
+        "auditor_R_output_witnessed": true,
+        "beta_D_different": true,
+        "observations_differ": true,
+        "pi_R_equal": true,
+        "preconditions_passed": true
+      },
+      "result": "REPORT_FACTORIZATION_FAILURE_ESTABLISHED"
+    },
+    "membership_a0": {
+      "field_check_count": 74,
+      "field_checks_all_pass": true,
+      "field_checks_present": true,
+      "result": "SIGMA_A0_IN_DIRECT_GAMMA",
+      "unsupported_fields": [],
+      "unsupported_fields_empty": true
+    },
+    "membership_a1": {
+      "field_check_count": 34,
+      "field_checks_all_pass": true,
+      "field_checks_present": true,
+      "result": "SIGMA_A1_IN_DIRECT_GAMMA",
+      "unsupported_fields": [],
+      "unsupported_fields_empty": true
+    },
+    "output_witnessed_r_collision": true,
+    "path": {
+      "a0": {
+        "abstract_role": "current",
+        "direct_state_hash": "a66d912d58c91de4",
+        "history_matches": true,
+        "runtime_selected_state": [
+          "S"
+        ]
+      },
+      "a1": {
+        "abstract_role": "retained",
+        "direct_state_hash": "516c47f044cc3fc3",
+        "history_matches": true,
+        "runtime_selected_state": [
+          "S",
+          "A"
+        ]
+      },
+      "identity_verified": true,
+      "result": "PATH_CORRESPONDENCE_VERIFIED"
+    },
+    "session": {
+      "collector_parse_errors": 0,
+      "result": "SESSION_CAPTURE_COMPLETE",
+      "ringbuf_lost_events": 0,
+      "session_complete": true
+    },
+    "unique": {
+      "collector_parse_errors": 0,
+      "events_lost": 0,
+      "representatives": {
+        "a=0": [
+          "516c47f044cc3fc3"
+        ],
+        "a=1": [
+          "516c47f044cc3fc3"
+        ]
+      },
+      "result": "UNIQUE_SAME_REPORT_CELL",
+      "retained_roots": [
+        "516c47f044cc3fc3"
+      ],
+      "schema": "rac-unique-report-cell-v2",
+      "session_complete": true,
+      "verifier_invocation_completed": true
+    }
+  },
+  "passed": true,
+  "required": {
+    "a0": "SIGMA_A0_IN_DIRECT_GAMMA",
+    "a1": "SIGMA_A1_IN_DIRECT_GAMMA",
+    "coverage": "BOTH_CASES_IN_OPERATIONAL_PRUNE_CELL",
+    "factorization": "REPORT_FACTORIZATION_FAILURE_ESTABLISHED",
+    "path": "PATH_CORRESPONDENCE_VERIFIED",
+    "unique": "UNIQUE_SAME_REPORT_CELL"
+  },
+  "result": "STOCK_LINUX_R_ESTABLISHED_FOR_FROZEN_TUPLE",
+  "schema": "rac-stock-linux-r-four-checks-v1"
+}

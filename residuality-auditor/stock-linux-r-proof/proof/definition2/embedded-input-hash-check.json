@@ -1,0 +1,170 @@
+{
+  "checked": [
+    {
+      "file": "events.jsonl",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "events.raw.jsonl",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "object.sha256",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "program-info.json",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "program-pin.txt",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "runtime.json",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "xlated-rac_single.sha256",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "xlated-rac_single.txt",
+      "source": "frontier-check.json"
+    },
+    {
+      "file": "events.jsonl",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "events.raw.jsonl",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "object.sha256",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "program-info.json",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "program-pin.txt",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "runtime.json",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "xlated-rac_single.sha256",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "xlated-rac_single.txt",
+      "source": "proof/states/state-capture-check.json"
+    },
+    {
+      "file": "events.jsonl",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "events.raw.jsonl",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "object.sha256",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "program-info.json",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "program-pin.txt",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "runtime.json",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "xlated-rac_single.sha256",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "xlated-rac_single.txt",
+      "source": "proof/path/path-correspondence.json"
+    },
+    {
+      "file": "events.jsonl",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "events.raw.jsonl",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "object.sha256",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "program-info.json",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "program-pin.txt",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "runtime.json",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "xlated-rac_single.sha256",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "xlated-rac_single.txt",
+      "source": "proof/report/report-map.json"
+    },
+    {
+      "file": "events.jsonl",
+      "source": "proof/subsumption/kernel-source-map.json"
+    },
+    {
+      "file": "events.raw.jsonl",
+      "source": "proof/subsumption/kernel-source-map.json"
+    },
+    {
+      "file": "object.sha256",
+      "source": "proof/subsumption/kernel-source-map.json"
+    },
+    {
+      "file": "program-info.json",
+      "source": "proof/subsumption/kernel-source-map.json"
+    },
+    {
+      "file": "program-pin.txt",
+      "source": "proof/subsumption/kernel-source-map.json"
+    },
+    {
+      "file": "runtime.json",
+      "source": "proof/subsumption/kernel-source-map.json"
+    },
+    {
+      "file": "xlated-rac_single.sha256",
+      "source": "proof/subsumption/kernel-source-map.json"
+    },
+    {
+      "file": "xlated-rac_single.txt",
+      "source": "proof/subsumption/kernel-source-map.json"
+    }
+  ],
+  "conflicts": [],
+  "mismatches": [],
+  "missing": [],
+  "passed": true,
+  "result": "EMBEDDED_INPUT_HASHES_VERIFIED",
+  "schema": "rac-embedded-input-hash-check-v1"
+}

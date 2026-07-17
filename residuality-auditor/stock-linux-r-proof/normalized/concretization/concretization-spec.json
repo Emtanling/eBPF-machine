@@ -1,0 +1,22 @@
+{
+  "direct_verifier_components": [
+    "pc",
+    "regs",
+    "stack",
+    "frames",
+    "refs"
+  ],
+  "environment_component": "fixed map identity, capacity, flags, serialized scheduling, and no external writes during the frozen runtime witness",
+  "schema": "rac-direct-concretization-spec-v1",
+  "scope": "witness-local direct verifier-state membership only; not a general Linux verifier concretization theorem",
+  "service_component": "svc is intentionally unconstrained by the direct verifier-state component, while its identity and admissibility are constrained by the frozen environment contract.",
+  "state_tuple": [
+    "pc",
+    "regs",
+    "stack",
+    "frames",
+    "refs",
+    "svc",
+    "env"
+  ]
+}

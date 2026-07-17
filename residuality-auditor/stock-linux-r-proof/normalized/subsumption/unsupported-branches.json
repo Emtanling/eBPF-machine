@@ -1,0 +1,13 @@
+{
+  "preconditions": {
+    "exact_level_supported": true,
+    "is_state_visited_prune": true,
+    "membership_a0": true,
+    "membership_a1": true,
+    "path_correspondence": true,
+    "state_v2": true,
+    "states_equal_success": true
+  },
+  "schema": "rac-unsupported-branches-v1",
+  "unsupported": []
+}

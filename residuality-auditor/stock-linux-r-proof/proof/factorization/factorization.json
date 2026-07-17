@@ -1,0 +1,227 @@
+{
+  "auditor_C": {
+    "established": true,
+    "fibers": [
+      {
+        "behaviorally_distinct_pairs": 1,
+        "name": "stock-linux-frontier",
+        "output_witnessed_pairs": 1,
+        "shortest_output_witness": {
+          "distinction": "output",
+          "left_execution": {
+            "defined": true,
+            "final_state": "sigma-a0",
+            "outputs": [
+              {
+                "retval": 1,
+                "success": true
+              }
+            ],
+            "undefined_action": null
+          },
+          "left_state": "sigma-a0",
+          "right_execution": {
+            "defined": true,
+            "final_state": "sigma-a1",
+            "outputs": [
+              {
+                "retval": 0,
+                "success": false
+              }
+            ],
+            "undefined_action": null
+          },
+          "right_state": "sigma-a1",
+          "word": [
+            "shared_suffix_insert_B"
+          ]
+        },
+        "states": [
+          "sigma-a0",
+          "sigma-a1"
+        ]
+      }
+    ],
+    "shortest_output_witness": {
+      "distinction": "output",
+      "left_execution": {
+        "defined": true,
+        "final_state": "sigma-a0",
+        "outputs": [
+          {
+            "retval": 1,
+            "success": true
+          }
+        ],
+        "undefined_action": null
+      },
+      "left_state": "sigma-a0",
+      "right_execution": {
+        "defined": true,
+        "final_state": "sigma-a1",
+        "outputs": [
+          {
+            "retval": 0,
+            "success": false
+          }
+        ],
+        "undefined_action": null
+      },
+      "right_state": "sigma-a1",
+      "word": [
+        "shared_suffix_insert_B"
+      ]
+    }
+  },
+  "auditor_R": {
+    "assessable": true,
+    "collisions": [
+      {
+        "cell": "retained:516c47f044cc3fc3",
+        "states": [
+          "sigma-a0",
+          "sigma-a1"
+        ],
+        "witness": {
+          "distinction": "output",
+          "left_execution": {
+            "defined": true,
+            "final_state": "sigma-a0",
+            "outputs": [
+              {
+                "retval": 1,
+                "success": true
+              }
+            ],
+            "undefined_action": null
+          },
+          "left_state": "sigma-a0",
+          "right_execution": {
+            "defined": true,
+            "final_state": "sigma-a1",
+            "outputs": [
+              {
+                "retval": 0,
+                "success": false
+              }
+            ],
+            "undefined_action": null
+          },
+          "right_state": "sigma-a1",
+          "word": [
+            "shared_suffix_insert_B"
+          ]
+        }
+      }
+    ],
+    "errors": [],
+    "factorizes": false,
+    "fiber_states": [
+      "sigma-a0",
+      "sigma-a1"
+    ],
+    "non_factorization": true,
+    "output_witnessed_R": true,
+    "output_witnessed_collisions": [
+      {
+        "cell": "retained:516c47f044cc3fc3",
+        "states": [
+          "sigma-a0",
+          "sigma-a1"
+        ],
+        "witness": {
+          "distinction": "output",
+          "left_execution": {
+            "defined": true,
+            "final_state": "sigma-a0",
+            "outputs": [
+              {
+                "retval": 1,
+                "success": true
+              }
+            ],
+            "undefined_action": null
+          },
+          "left_state": "sigma-a0",
+          "right_execution": {
+            "defined": true,
+            "final_state": "sigma-a1",
+            "outputs": [
+              {
+                "retval": 0,
+                "success": false
+              }
+            ],
+            "undefined_action": null
+          },
+          "right_state": "sigma-a1",
+          "word": [
+            "shared_suffix_insert_B"
+          ]
+        }
+      }
+    ],
+    "residuality_spectrum": [
+      {
+        "behavior_classes": 1,
+        "classes_per_report_cell": {
+          "retained:516c47f044cc3fc3": 1
+        },
+        "depth": 0,
+        "max_classes_in_one_cell": 1
+      },
+      {
+        "behavior_classes": 2,
+        "classes_per_report_cell": {
+          "retained:516c47f044cc3fc3": 2
+        },
+        "depth": 1,
+        "max_classes_in_one_cell": 2
+      }
+    ],
+    "source": "Linux verifier retained-state representative from proof/report/report-map.json"
+  },
+  "auditor_summary": {
+    "A_acceptance": true,
+    "C_output_witnessed": true,
+    "P_status": "not established",
+    "R_assessable": true,
+    "R_non_factorization": true,
+    "R_output_witnessed": true,
+    "W_candidate": null
+  },
+  "beta_D": {
+    "sigma-a0": "Q0",
+    "sigma-a1": "Q1"
+  },
+  "conditions": {
+    "auditor_R_non_factorization": true,
+    "auditor_R_output_witnessed": true,
+    "beta_D_different": true,
+    "observations_differ": true,
+    "pi_R_equal": true,
+    "preconditions_passed": true
+  },
+  "discipline": "D_stock_linux_frontier_local",
+  "observations": {
+    "sigma-a0": {
+      "retval": 1,
+      "success": true
+    },
+    "sigma-a1": {
+      "retval": 0,
+      "success": false
+    }
+  },
+  "pi_R": {
+    "sigma-a0": "retained:516c47f044cc3fc3",
+    "sigma-a1": "retained:516c47f044cc3fc3"
+  },
+  "precondition_reasons": [],
+  "result": "REPORT_FACTORIZATION_FAILURE_ESTABLISHED",
+  "schema": "rac-stock-linux-factorization-v1",
+  "sigma": {
+    "sigma0": "sigma-a0",
+    "sigma1": "sigma-a1"
+  }
+}

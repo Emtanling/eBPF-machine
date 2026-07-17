@@ -1,0 +1,92 @@
+{
+  "certificate_results": {
+    "membership_a0": "SIGMA_A0_IN_DIRECT_GAMMA",
+    "membership_a1": "SIGMA_A1_IN_DIRECT_GAMMA",
+    "path_correspondence": "PATH_CORRESPONDENCE_VERIFIED",
+    "prune_cell_coverage": "BOTH_CASES_IN_OPERATIONAL_PRUNE_CELL",
+    "representatives": {
+      "a=0": [
+        "516c47f044cc3fc3"
+      ],
+      "a=1": [
+        "516c47f044cc3fc3"
+      ]
+    },
+    "session_completeness": "SESSION_CAPTURE_COMPLETE",
+    "unique_cell": "UNIQUE_SAME_REPORT_CELL"
+  },
+  "evidence_refs": {
+    "membership_a0": {
+      "path": "proof/concretization/membership-a0.json",
+      "sha256": "8228300f9a645d374562cf199cd65b1fbb1307b72ed6899f32d822581d9b3ee9"
+    },
+    "membership_a1": {
+      "path": "proof/concretization/membership-a1.json",
+      "sha256": "41fcf701ec58cf7d5fe94bc6b6f1eb46928ce1362cd05ab9f334289b2b49bf75"
+    },
+    "membership_matrix": {
+      "path": "proof/report/membership-matrix.json",
+      "sha256": "9e61f840ebbae88e3d0b53d2b850d09edcc9eca65f5bd771324f91ae349224e8"
+    },
+    "path_correspondence": {
+      "path": "proof/path/path-correspondence.json",
+      "sha256": "01a556879ea4d1ff271e5c2585bcbb7d7ce0b097a1c736719229bdcc5971ab9f"
+    },
+    "prune_cell_coverage": {
+      "path": "proof/report/prune-cell-coverage.json",
+      "sha256": "6b13b05a35f4abf9c96693a4792e69eaabd915d3fe21b07ba840ddde0d80f543"
+    },
+    "prune_cell_definition": {
+      "path": "proof/report/prune-cell-definition.json",
+      "sha256": "6f04d0420227b1afae1099841afafa71b127a8becc24a0f3a6799abc6d6408e4"
+    },
+    "session_completeness": {
+      "path": "proof/report/session-completeness.json",
+      "sha256": "40e357520c6f8b6b30dbadff64220cf325eff2ece57dc4f842b427f9a222fc83"
+    },
+    "unique_cell": {
+      "path": "proof/report/unique-cell-check.json",
+      "sha256": "027124d42d667de46af26ac8784c2b4d35c88a693755f4e729546f7f35534ea3"
+    }
+  },
+  "frontier": {
+    "branch_calls": [
+      46,
+      48
+    ],
+    "branch_dispatch_call": 39,
+    "first_sensitive_insn": 118,
+    "join_insn": 41,
+    "suffix_entry_insn": 107
+  },
+  "identity": {
+    "input_sha256": {
+      "events.jsonl": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+      "events.raw.jsonl": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+      "object.sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+      "program-info.json": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+      "program-pin.txt": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+      "runtime.json": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+      "xlated-rac_single.sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+      "xlated-rac_single.txt": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+    },
+    "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "program_bytes_xlated": 984,
+    "program_id": 6900,
+    "program_name": "rac_single",
+    "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "program_tag": "100c248465bce0b0",
+    "recorded_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "runtime_object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "runtime_program_id": 6900,
+    "runtime_program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "runtime_program_tag": "100c248465bce0b0",
+    "runtime_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "schema": "rac-frontier-identity-v1",
+    "xlated_instruction_bytes": 984,
+    "xlated_instruction_slots": 123,
+    "xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+  },
+  "report_cell_definition": "operational prune-report cell",
+  "schema": "rac-report-map-v2"
+}

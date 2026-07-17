@@ -1,0 +1,12 @@
+{
+  "passed_memberships": true,
+  "result": "JOINT_COVERAGE_CANDIDATE",
+  "same_frontier": true,
+  "same_suffix": true,
+  "schema": "rac-local-joint-coverage-v1",
+  "selected_masks": {
+    "a=0": 1,
+    "a=1": 3
+  },
+  "selected_masks_differ": true
+}

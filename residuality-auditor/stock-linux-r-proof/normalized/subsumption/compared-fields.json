@@ -1,0 +1,148 @@
+{
+  "direction": "current_to_retained",
+  "registers": [
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 0,
+      "passed": true,
+      "reasons": [],
+      "reg": 0,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 0,
+      "passed": true,
+      "reasons": [],
+      "reg": 1,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 0,
+      "passed": true,
+      "reasons": [],
+      "reg": 2,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 0,
+      "passed": true,
+      "reasons": [],
+      "reg": 3,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 0,
+      "passed": true,
+      "reasons": [],
+      "reg": 4,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 0,
+      "passed": true,
+      "reasons": [],
+      "reg": 5,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 1,
+      "passed": true,
+      "reasons": [],
+      "reg": 6,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 1,
+      "passed": true,
+      "reasons": [],
+      "reg": 7,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 6,
+      "passed": true,
+      "reasons": [],
+      "reg": 8,
+      "retained_type": 0
+    },
+    {
+      "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+      "current_type": 0,
+      "passed": true,
+      "reasons": [],
+      "reg": 9,
+      "retained_type": 0
+    },
+    {
+      "basis": "stack pointer frame/offset/var_off match",
+      "current_type": 6,
+      "passed": true,
+      "reasons": [],
+      "reg": 10,
+      "retained_type": 6
+    }
+  ],
+  "schema": "rac-compared-fields-v1",
+  "stack_slots": [
+    {
+      "basis": "retained stack slot is future-dead/uninitialized in restricted observed comparison",
+      "current_slot_type": [
+        3,
+        3,
+        3,
+        3,
+        1,
+        1,
+        1,
+        1
+      ],
+      "passed": true,
+      "reasons": [],
+      "retained_slot_type": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "slot": 0
+    },
+    {
+      "basis": "retained stack slot is future-dead/uninitialized in restricted observed comparison",
+      "current_slot_type": [
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "passed": true,
+      "reasons": [],
+      "retained_slot_type": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "slot": 1
+    }
+  ]
+}

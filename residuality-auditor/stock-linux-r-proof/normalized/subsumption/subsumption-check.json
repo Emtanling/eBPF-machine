@@ -1,0 +1,214 @@
+{
+  "compared_fields": {
+    "direction": "current_to_retained",
+    "registers": [
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 0,
+        "passed": true,
+        "reasons": [],
+        "reg": 0,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 0,
+        "passed": true,
+        "reasons": [],
+        "reg": 1,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 0,
+        "passed": true,
+        "reasons": [],
+        "reg": 2,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 0,
+        "passed": true,
+        "reasons": [],
+        "reg": 3,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 0,
+        "passed": true,
+        "reasons": [],
+        "reg": 4,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 0,
+        "passed": true,
+        "reasons": [],
+        "reg": 5,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 1,
+        "passed": true,
+        "reasons": [],
+        "reg": 6,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 1,
+        "passed": true,
+        "reasons": [],
+        "reg": 7,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 6,
+        "passed": true,
+        "reasons": [],
+        "reg": 8,
+        "retained_type": 0
+      },
+      {
+        "basis": "retained NOT_INIT is treated as future-dead/top in this restricted observed exact=0 comparison",
+        "current_type": 0,
+        "passed": true,
+        "reasons": [],
+        "reg": 9,
+        "retained_type": 0
+      },
+      {
+        "basis": "stack pointer frame/offset/var_off match",
+        "current_type": 6,
+        "passed": true,
+        "reasons": [],
+        "reg": 10,
+        "retained_type": 6
+      }
+    ],
+    "schema": "rac-compared-fields-v1",
+    "stack_slots": [
+      {
+        "basis": "retained stack slot is future-dead/uninitialized in restricted observed comparison",
+        "current_slot_type": [
+          3,
+          3,
+          3,
+          3,
+          1,
+          1,
+          1,
+          1
+        ],
+        "passed": true,
+        "reasons": [],
+        "retained_slot_type": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "slot": 0
+      },
+      {
+        "basis": "retained stack slot is future-dead/uninitialized in restricted observed comparison",
+        "current_slot_type": [
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "passed": true,
+        "reasons": [],
+        "retained_slot_type": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "slot": 1
+      }
+    ]
+  },
+  "comparison_mode": 0,
+  "frontier": {
+    "branch_calls": [
+      46,
+      48
+    ],
+    "branch_dispatch_call": 39,
+    "first_sensitive_insn": 118,
+    "join_insn": 41,
+    "suffix_entry_insn": 107
+  },
+  "kernel": {
+    "host": "Linux-6.17.0-35-generic-aarch64-with-glibc2.39",
+    "kernel_release": "6.17.0-35-generic",
+    "program_identity": {
+      "input_sha256": {
+        "events.jsonl": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+        "events.raw.jsonl": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+        "object.sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+        "program-info.json": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+        "program-pin.txt": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+        "runtime.json": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+        "xlated-rac_single.sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+        "xlated-rac_single.txt": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+      },
+      "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+      "program_bytes_xlated": 984,
+      "program_id": 6900,
+      "program_name": "rac_single",
+      "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+      "program_tag": "100c248465bce0b0",
+      "recorded_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+      "runtime_object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+      "runtime_program_id": 6900,
+      "runtime_program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+      "runtime_program_tag": "100c248465bce0b0",
+      "runtime_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+      "schema": "rac-frontier-identity-v1",
+      "xlated_instruction_bytes": 984,
+      "xlated_instruction_slots": 123,
+      "xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+    },
+    "source_basis": "local Ubuntu headers expose BTF/types but not kernel/bpf/verifier.c bodies; this checker therefore records a restricted field model and refuses unsupported types/branches",
+    "source_body_available": false
+  },
+  "preconditions": {
+    "exact_level_supported": true,
+    "is_state_visited_prune": true,
+    "membership_a0": true,
+    "membership_a1": true,
+    "path_correspondence": true,
+    "state_v2": true,
+    "states_equal_success": true
+  },
+  "result": "RESTRICTED_SUBSUMPTION_ESTABLISHED",
+  "schema": "rac-restricted-subsumption-v1",
+  "theorem_scope": [
+    "specific kernel build",
+    "exact_level=0",
+    "captured State V2 shape",
+    "frontier join",
+    "local future-observable projection"
+  ],
+  "unsupported": []
+}

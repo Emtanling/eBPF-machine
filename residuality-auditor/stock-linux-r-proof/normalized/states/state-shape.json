@@ -1,0 +1,21 @@
+{
+  "current": {
+    "unsupported_mask": 0,
+    "unsupported_reasons": []
+  },
+  "result": "SUPPORTED_STATE_SHAPE",
+  "retained": {
+    "unsupported_mask": 0,
+    "unsupported_reasons": []
+  },
+  "schema": "rac-state-v2-shape",
+  "scope_constraints": [
+    "single frame",
+    "no dynptr",
+    "no socket/reference ownership",
+    "no iterator/callback",
+    "no packet range",
+    "bounded verifier stack capture"
+  ],
+  "unsupported_reasons": []
+}

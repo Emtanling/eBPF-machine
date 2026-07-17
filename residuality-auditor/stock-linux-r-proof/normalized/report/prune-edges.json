@@ -1,0 +1,34 @@
+{
+  "edges": [
+    {
+      "cell_id": 1,
+      "current_state_hash": "a66d912d58c91de4",
+      "edge": "current_pruned_by_retained",
+      "enriched_event_identity": {
+        "checks": {
+          "object_sha256": true,
+          "program_id": true,
+          "program_name": true,
+          "program_pin": true,
+          "program_tag": true,
+          "xlated_sha256": true
+        },
+        "passed": true,
+        "schema": "rac-event-identity-check-v1"
+      },
+      "exact_level": 0,
+      "from_fixture": false,
+      "observed_at_ns": 302240255369732,
+      "raw_event_ref": {
+        "line": 2,
+        "path": "events.raw.jsonl",
+        "sha256": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3"
+      },
+      "retained_state_hash": "516c47f044cc3fc3",
+      "sequence": 1,
+      "session_id": "rac-fexit-990386-302239228460732",
+      "visit_insn": 41
+    }
+  ],
+  "schema": "rac-prune-edges-v1"
+}

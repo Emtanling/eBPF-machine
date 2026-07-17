@@ -8,6 +8,9 @@ __pycache__/
 /.bak_*/
 /.codex-backup-*/
 /.codex_backups/
+/.revision-backups/
+/.revision-incoming/
+/reviews/
 /.interpreter_suite.lock
 
 # Rebuildable native and generated source artifacts.
@@ -16,7 +19,6 @@ __pycache__/
 /circuits/*.wmc
 /circuits/boundary/
 /circuits/generated/
-/witness2/frama_c/static_check/
 
 # Keep only the report-bound evidence bundle in version control.
 /results/*
@@ -32,6 +34,23 @@ __pycache__/
 /output/pdf/*
 !/output/pdf/PAPER_REPORT.pdf
 !/output/pdf/PAPER_REPORT_ZH.pdf
+/*.aux
+/*.log
+/*.out
+/PAPER_REPORT*.pdf
+/PAPER_REPORT_arxiv.tar.gz
+
+# Keep only the frozen stock-Linux proof and its minimal verifier.
+/residuality-auditor/*
+!/residuality-auditor/LICENSE
+!/residuality-auditor/README.md
+!/residuality-auditor/tools/
+!/residuality-auditor/tools/__init__.py
+!/residuality-auditor/tools/proof/
+!/residuality-auditor/tools/proof/__init__.py
+!/residuality-auditor/tools/proof/check_frozen_bundle.py
+!/residuality-auditor/stock-linux-r-proof/
+!/residuality-auditor/stock-linux-r-proof/**
 
 # Historical/internal documents retained locally only.
 /EDITORIAL_DECISION.md

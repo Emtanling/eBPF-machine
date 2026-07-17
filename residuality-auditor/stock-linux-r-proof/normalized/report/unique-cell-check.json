@@ -1,0 +1,20 @@
+{
+  "collector_parse_errors": 0,
+  "events_lost": 0,
+  "reasons": [],
+  "representatives": {
+    "a=0": [
+      "516c47f044cc3fc3"
+    ],
+    "a=1": [
+      "516c47f044cc3fc3"
+    ]
+  },
+  "result": "UNIQUE_SAME_REPORT_CELL",
+  "retained_roots": [
+    "516c47f044cc3fc3"
+  ],
+  "schema": "rac-unique-report-cell-v2",
+  "session_complete": true,
+  "verifier_invocation_completed": true
+}

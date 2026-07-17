@@ -1,0 +1,86 @@
+{
+  "cases": {
+    "a=0": {
+      "case": "a=0",
+      "direct_abstract_role": "current",
+      "direct_state_hash": "a66d912d58c91de4",
+      "membership_result": "SIGMA_A0_IN_DIRECT_GAMMA",
+      "representatives": [
+        "516c47f044cc3fc3"
+      ],
+      "via": "current_pruned_by_retained"
+    },
+    "a=1": {
+      "case": "a=1",
+      "direct_abstract_role": "retained",
+      "direct_state_hash": "516c47f044cc3fc3",
+      "membership_result": "SIGMA_A1_IN_DIRECT_GAMMA",
+      "representatives": [
+        "516c47f044cc3fc3"
+      ],
+      "via": "direct_retained_member"
+    }
+  },
+  "checks": {
+    "actual_prune_edge_observed": true,
+    "both_cases_have_representative": true,
+    "membership_a0_direct": true,
+    "membership_a1_direct": true,
+    "path_a0_current": true,
+    "path_a1_retained": true,
+    "raw_event_not_fixture": true
+  },
+  "definition": "proof/report/prune-cell-definition.json",
+  "direct_members": [
+    "sigma-a1"
+  ],
+  "identity_check": {
+    "checks": {
+      "object_sha256": true,
+      "program_id": true,
+      "program_name": true,
+      "program_pin": true,
+      "program_tag": true,
+      "xlated_sha256": true
+    },
+    "passed": true,
+    "schema": "rac-event-identity-check-v1"
+  },
+  "members_via_prune_edge": [
+    "sigma-a0"
+  ],
+  "prune_edges": [
+    {
+      "cell_id": 1,
+      "current_state_hash": "a66d912d58c91de4",
+      "edge": "current_pruned_by_retained",
+      "enriched_event_identity": {
+        "checks": {
+          "object_sha256": true,
+          "program_id": true,
+          "program_name": true,
+          "program_pin": true,
+          "program_tag": true,
+          "xlated_sha256": true
+        },
+        "passed": true,
+        "schema": "rac-event-identity-check-v1"
+      },
+      "exact_level": 0,
+      "from_fixture": false,
+      "observed_at_ns": 302240255369732,
+      "raw_event_ref": {
+        "line": 2,
+        "path": "events.raw.jsonl",
+        "sha256": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3"
+      },
+      "retained_state_hash": "516c47f044cc3fc3",
+      "sequence": 1,
+      "session_id": "rac-fexit-990386-302239228460732",
+      "visit_insn": 41
+    }
+  ],
+  "representative": "516c47f044cc3fc3",
+  "result": "BOTH_CASES_IN_OPERATIONAL_PRUNE_CELL",
+  "schema": "rac-prune-cell-coverage-v1"
+}

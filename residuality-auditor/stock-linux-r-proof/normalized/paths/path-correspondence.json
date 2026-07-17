@@ -1,0 +1,549 @@
+{
+  "a0": {
+    "abstract_role": "current",
+    "direct_state_hash": "a66d912d58c91de4",
+    "history_matches": true,
+    "runtime_selected_state": [
+      "S"
+    ]
+  },
+  "a1": {
+    "abstract_role": "retained",
+    "direct_state_hash": "516c47f044cc3fc3",
+    "history_matches": true,
+    "runtime_selected_state": [
+      "S",
+      "A"
+    ]
+  },
+  "common_suffix": {
+    "first_sensitive_insn": 118,
+    "frontier_segment": {
+      "end": "pre(41)",
+      "reason": "v1 accepts the caller-side pre-call state after an optional strict common normalizer; callee PCs require a recorded call stack",
+      "start": "pre(41)"
+    },
+    "join_insn": 41,
+    "same_remaining_xlated_suffix": true,
+    "schema": "rac-common-suffix-v1",
+    "suffix_entry_insn": 107,
+    "suffix_prefix_until_first_sensitive": [
+      {
+        "function": "shared_suffix",
+        "line_number": 261,
+        "pc": 107,
+        "slots": 1,
+        "text": "r1 = 2"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 264,
+        "pc": 108,
+        "slots": 1,
+        "text": "*(u32 *)(r10 -4) = r1"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 266,
+        "pc": 109,
+        "slots": 1,
+        "text": "r6 = 1"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 269,
+        "pc": 110,
+        "slots": 1,
+        "text": "*(u32 *)(r10 -8) = r6"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 271,
+        "pc": 111,
+        "slots": 1,
+        "text": "r2 = r10"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 274,
+        "pc": 112,
+        "slots": 1,
+        "text": "r2 += -4"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 276,
+        "pc": 113,
+        "slots": 1,
+        "text": "r3 = r10"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 278,
+        "pc": 114,
+        "slots": 1,
+        "text": "r3 += -8"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 281,
+        "pc": 115,
+        "slots": 2,
+        "text": "r1 = map[id:2768]"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 283,
+        "pc": 117,
+        "slots": 1,
+        "text": "r4 = 1"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 285,
+        "pc": 118,
+        "slots": 1,
+        "text": "call htab_map_update_elem#409480"
+      }
+    ]
+  },
+  "frontier": {
+    "branch_calls": [
+      46,
+      48
+    ],
+    "branch_dispatch_call": 39,
+    "first_sensitive_insn": 118,
+    "join_insn": 41,
+    "suffix_entry_insn": 107
+  },
+  "history_match": {
+    "case_to_history": {
+      "a=0": {
+        "branch_call": 48,
+        "branch_name": "select_s",
+        "captured_count": 7,
+        "entries": [
+          {
+            "flags": 0,
+            "idx": 49,
+            "insn_idx": 49,
+            "linked_regs": 0,
+            "prev_idx": 96,
+            "prev_insn_idx": 96
+          },
+          {
+            "flags": 0,
+            "idx": 40,
+            "insn_idx": 40,
+            "linked_regs": 0,
+            "prev_idx": 49,
+            "prev_insn_idx": 49
+          },
+          {
+            "flags": 0,
+            "idx": 97,
+            "insn_idx": 97,
+            "linked_regs": 0,
+            "prev_idx": 40,
+            "prev_insn_idx": 40
+          },
+          {
+            "flags": 513,
+            "idx": 99,
+            "insn_idx": 99,
+            "linked_regs": 0,
+            "prev_idx": 98,
+            "prev_insn_idx": 98
+          },
+          {
+            "flags": 521,
+            "idx": 101,
+            "insn_idx": 101,
+            "linked_regs": 0,
+            "prev_idx": 100,
+            "prev_insn_idx": 100
+          },
+          {
+            "flags": 513,
+            "idx": 103,
+            "insn_idx": 103,
+            "linked_regs": 0,
+            "prev_idx": 102,
+            "prev_insn_idx": 102
+          },
+          {
+            "flags": 521,
+            "idx": 105,
+            "insn_idx": 105,
+            "linked_regs": 0,
+            "prev_idx": 104,
+            "prev_insn_idx": 104
+          }
+        ],
+        "history_side": "history_right",
+        "selector_edge": "taken",
+        "total_count": 7,
+        "truncated": false
+      },
+      "a=1": {
+        "branch_call": 46,
+        "branch_name": "select_a",
+        "captured_count": 8,
+        "entries": [
+          {
+            "flags": 0,
+            "idx": 47,
+            "insn_idx": 47,
+            "linked_regs": 0,
+            "prev_idx": 73,
+            "prev_insn_idx": 73
+          },
+          {
+            "flags": 0,
+            "idx": 49,
+            "insn_idx": 49,
+            "linked_regs": 0,
+            "prev_idx": 47,
+            "prev_insn_idx": 47
+          },
+          {
+            "flags": 0,
+            "idx": 40,
+            "insn_idx": 40,
+            "linked_regs": 0,
+            "prev_idx": 49,
+            "prev_insn_idx": 49
+          },
+          {
+            "flags": 0,
+            "idx": 97,
+            "insn_idx": 97,
+            "linked_regs": 0,
+            "prev_idx": 40,
+            "prev_insn_idx": 40
+          },
+          {
+            "flags": 513,
+            "idx": 99,
+            "insn_idx": 99,
+            "linked_regs": 0,
+            "prev_idx": 98,
+            "prev_insn_idx": 98
+          },
+          {
+            "flags": 521,
+            "idx": 101,
+            "insn_idx": 101,
+            "linked_regs": 0,
+            "prev_idx": 100,
+            "prev_insn_idx": 100
+          },
+          {
+            "flags": 513,
+            "idx": 103,
+            "insn_idx": 103,
+            "linked_regs": 0,
+            "prev_idx": 102,
+            "prev_insn_idx": 102
+          },
+          {
+            "flags": 521,
+            "idx": 105,
+            "insn_idx": 105,
+            "linked_regs": 0,
+            "prev_idx": 104,
+            "prev_insn_idx": 104
+          }
+        ],
+        "history_side": "history_left",
+        "selector_edge": "fallthrough",
+        "total_count": 8,
+        "truncated": false
+      }
+    },
+    "schema": "rac-history-path-match-v1",
+    "side_hits": {
+      "history_left": 46,
+      "history_right": 48
+    }
+  },
+  "identity": {
+    "input_sha256": {
+      "events.jsonl": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+      "events.raw.jsonl": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+      "object.sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+      "program-info.json": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+      "program-pin.txt": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+      "runtime.json": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+      "xlated-rac_single.sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+      "xlated-rac_single.txt": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+    },
+    "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "program_bytes_xlated": 984,
+    "program_id": 6900,
+    "program_name": "rac_single",
+    "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "program_tag": "100c248465bce0b0",
+    "recorded_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "runtime_object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "runtime_program_id": 6900,
+    "runtime_program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "runtime_program_tag": "100c248465bce0b0",
+    "runtime_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "schema": "rac-frontier-identity-v1",
+    "xlated_instruction_bytes": 984,
+    "xlated_instruction_slots": 123,
+    "xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+  },
+  "identity_verified": true,
+  "prefixes": {
+    "a=0": {
+      "branch_call": 48,
+      "branch_name": "select_s",
+      "case": "a=0",
+      "history_entries": [
+        {
+          "flags": 0,
+          "idx": 49,
+          "insn_idx": 49,
+          "linked_regs": 0,
+          "prev_idx": 96,
+          "prev_insn_idx": 96
+        },
+        {
+          "flags": 0,
+          "idx": 40,
+          "insn_idx": 40,
+          "linked_regs": 0,
+          "prev_idx": 49,
+          "prev_insn_idx": 49
+        },
+        {
+          "flags": 0,
+          "idx": 97,
+          "insn_idx": 97,
+          "linked_regs": 0,
+          "prev_idx": 40,
+          "prev_insn_idx": 40
+        },
+        {
+          "flags": 513,
+          "idx": 99,
+          "insn_idx": 99,
+          "linked_regs": 0,
+          "prev_idx": 98,
+          "prev_insn_idx": 98
+        },
+        {
+          "flags": 521,
+          "idx": 101,
+          "insn_idx": 101,
+          "linked_regs": 0,
+          "prev_idx": 100,
+          "prev_insn_idx": 100
+        },
+        {
+          "flags": 513,
+          "idx": 103,
+          "insn_idx": 103,
+          "linked_regs": 0,
+          "prev_idx": 102,
+          "prev_insn_idx": 102
+        },
+        {
+          "flags": 521,
+          "idx": 105,
+          "insn_idx": 105,
+          "linked_regs": 0,
+          "prev_idx": 104,
+          "prev_insn_idx": 104
+        }
+      ],
+      "history_side": "history_right",
+      "input_value": 0,
+      "runtime_context": {
+        "map_flags": 0,
+        "map_type": "BPF_MAP_TYPE_HASH",
+        "max_entries": 2,
+        "prefix_program": "rac_single",
+        "serialized": true,
+        "single_artifact": true,
+        "suffix_program": "rac_single"
+      },
+      "runtime_observation_retval": 1,
+      "runtime_observation_success": true,
+      "runtime_selected_mask": 1,
+      "runtime_selected_state": [
+        "S"
+      ],
+      "schema": "rac-prefix-correspondence-v1",
+      "selector_edge": "taken"
+    },
+    "a=1": {
+      "branch_call": 46,
+      "branch_name": "select_a",
+      "case": "a=1",
+      "history_entries": [
+        {
+          "flags": 0,
+          "idx": 47,
+          "insn_idx": 47,
+          "linked_regs": 0,
+          "prev_idx": 73,
+          "prev_insn_idx": 73
+        },
+        {
+          "flags": 0,
+          "idx": 49,
+          "insn_idx": 49,
+          "linked_regs": 0,
+          "prev_idx": 47,
+          "prev_insn_idx": 47
+        },
+        {
+          "flags": 0,
+          "idx": 40,
+          "insn_idx": 40,
+          "linked_regs": 0,
+          "prev_idx": 49,
+          "prev_insn_idx": 49
+        },
+        {
+          "flags": 0,
+          "idx": 97,
+          "insn_idx": 97,
+          "linked_regs": 0,
+          "prev_idx": 40,
+          "prev_insn_idx": 40
+        },
+        {
+          "flags": 513,
+          "idx": 99,
+          "insn_idx": 99,
+          "linked_regs": 0,
+          "prev_idx": 98,
+          "prev_insn_idx": 98
+        },
+        {
+          "flags": 521,
+          "idx": 101,
+          "insn_idx": 101,
+          "linked_regs": 0,
+          "prev_idx": 100,
+          "prev_insn_idx": 100
+        },
+        {
+          "flags": 513,
+          "idx": 103,
+          "insn_idx": 103,
+          "linked_regs": 0,
+          "prev_idx": 102,
+          "prev_insn_idx": 102
+        },
+        {
+          "flags": 521,
+          "idx": 105,
+          "insn_idx": 105,
+          "linked_regs": 0,
+          "prev_idx": 104,
+          "prev_insn_idx": 104
+        }
+      ],
+      "history_side": "history_left",
+      "input_value": 1,
+      "runtime_context": {
+        "map_flags": 0,
+        "map_type": "BPF_MAP_TYPE_HASH",
+        "max_entries": 2,
+        "prefix_program": "rac_single",
+        "serialized": true,
+        "single_artifact": true,
+        "suffix_program": "rac_single"
+      },
+      "runtime_observation_retval": 0,
+      "runtime_observation_success": false,
+      "runtime_selected_mask": 3,
+      "runtime_selected_state": [
+        "S",
+        "A"
+      ],
+      "schema": "rac-prefix-correspondence-v1",
+      "selector_edge": "fallthrough"
+    }
+  },
+  "reasons": [],
+  "result": "PATH_CORRESPONDENCE_VERIFIED",
+  "same_frontier": true,
+  "same_remaining_xlated_suffix": true,
+  "schema": "rac-path-correspondence-v1",
+  "selected_capture_ref": {
+    "line": 2,
+    "path": "events.jsonl"
+  },
+  "selector_semantics": {
+    "cases": {
+      "a=0": {
+        "branch_call": 48,
+        "branch_name": "select_s",
+        "case": "a=0",
+        "input_value": 0,
+        "selector_condition_pc": 45,
+        "selector_edge": "taken"
+      },
+      "a=1": {
+        "branch_call": 46,
+        "branch_name": "select_a",
+        "case": "a=1",
+        "input_value": 1,
+        "selector_condition_pc": 45,
+        "selector_edge": "fallthrough"
+      }
+    },
+    "frontier": {
+      "branch_calls": [
+        46,
+        48
+      ],
+      "branch_dispatch_call": 39,
+      "first_sensitive_insn": 118,
+      "join_insn": 41,
+      "suffix_entry_insn": 107
+    },
+    "frontier_shape": {
+      "canonical_eligible_execution_segment": {
+        "end": "pre(41)",
+        "reason": "v1 accepts the caller-side pre-call state after an optional strict common normalizer; callee PCs require a recorded call stack",
+        "start": "pre(41)"
+      },
+      "rac_single": {
+        "common_continuation": 41,
+        "common_normalization": [
+          {
+            "pc": 40,
+            "target_function": "normalize_join",
+            "text": "call pc+56#bpf_prog_72fb8071683c7169_normalize_join"
+          }
+        ],
+        "post_shared_suffix_return": 42,
+        "select_branch_call": 39,
+        "shared_suffix_call": 41
+      },
+      "schema": "rac-frontier-shape-v1",
+      "select_branch": {
+        "branch_selector_fork": 45,
+        "common_return_exit": 49,
+        "select_a_call": 46,
+        "select_a_return": 47,
+        "select_s_call": 48,
+        "select_s_return": 49
+      },
+      "shared_suffix": {
+        "entry": 107,
+        "first_state_sensitive_helper": 118
+      }
+    },
+    "schema": "rac-xlated-path-semantics-v1"
+  },
+  "sensitive_operation_after_frontier": true
+}

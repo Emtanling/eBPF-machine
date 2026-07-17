@@ -1,0 +1,907 @@
+{
+  "bundle": "/home/parallels/Desktop/residuality-auditor-v0.2.0/experiments/target-prune/v042-four-checks-operational-prune-cell",
+  "checks": {
+    "artifact_accepted": {
+      "details": {
+        "frontier_result": "FRONTIER_ELIGIBLE",
+        "program_id": 6900
+      },
+      "evidence": "frontier-check.json result and program-info.json",
+      "passed": true
+    },
+    "behavioral_quotient_different": {
+      "details": {
+        "beta_D": {
+          "sigma-a0": "Q0",
+          "sigma-a1": "Q1"
+        },
+        "condition": true
+      },
+      "evidence": "proof/factorization beta-map and factorization conditions",
+      "passed": true
+    },
+    "concrete_states_reachable": {
+      "details": {
+        "joint": "JOINT_COVERAGE_CANDIDATE",
+        "membership_a0": "SIGMA_A0_IN_DIRECT_GAMMA",
+        "membership_a1": "SIGMA_A1_IN_DIRECT_GAMMA"
+      },
+      "evidence": "membership-a0/a1.json and joint-coverage.json",
+      "passed": true
+    },
+    "context_same": {
+      "details": {
+        "a=0": {
+          "map_flags": 0,
+          "map_type": "BPF_MAP_TYPE_HASH",
+          "max_entries": 2,
+          "prefix_program": "rac_single",
+          "serialized": true,
+          "single_artifact": true,
+          "suffix_program": "rac_single"
+        },
+        "a=1": {
+          "map_flags": 0,
+          "map_type": "BPF_MAP_TYPE_HASH",
+          "max_entries": 2,
+          "prefix_program": "rac_single",
+          "serialized": true,
+          "single_artifact": true,
+          "suffix_program": "rac_single"
+        }
+      },
+      "evidence": "runtime.json contexts for a=0 and a=1",
+      "passed": true
+    },
+    "evidence_hashes_match": {
+      "details": {
+        "embedded_input_hashes": {
+          "checked": [
+            {
+              "file": "events.jsonl",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "events.raw.jsonl",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "object.sha256",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "program-info.json",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "program-pin.txt",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "runtime.json",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "xlated-rac_single.sha256",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "xlated-rac_single.txt",
+              "source": "frontier-check.json"
+            },
+            {
+              "file": "events.jsonl",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "events.raw.jsonl",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "object.sha256",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "program-info.json",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "program-pin.txt",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "runtime.json",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "xlated-rac_single.sha256",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "xlated-rac_single.txt",
+              "source": "proof/states/state-capture-check.json"
+            },
+            {
+              "file": "events.jsonl",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "events.raw.jsonl",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "object.sha256",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "program-info.json",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "program-pin.txt",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "runtime.json",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "xlated-rac_single.sha256",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "xlated-rac_single.txt",
+              "source": "proof/path/path-correspondence.json"
+            },
+            {
+              "file": "events.jsonl",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "events.raw.jsonl",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "object.sha256",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "program-info.json",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "program-pin.txt",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "runtime.json",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "xlated-rac_single.sha256",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "xlated-rac_single.txt",
+              "source": "proof/report/report-map.json"
+            },
+            {
+              "file": "events.jsonl",
+              "source": "proof/subsumption/kernel-source-map.json"
+            },
+            {
+              "file": "events.raw.jsonl",
+              "source": "proof/subsumption/kernel-source-map.json"
+            },
+            {
+              "file": "object.sha256",
+              "source": "proof/subsumption/kernel-source-map.json"
+            },
+            {
+              "file": "program-info.json",
+              "source": "proof/subsumption/kernel-source-map.json"
+            },
+            {
+              "file": "program-pin.txt",
+              "source": "proof/subsumption/kernel-source-map.json"
+            },
+            {
+              "file": "runtime.json",
+              "source": "proof/subsumption/kernel-source-map.json"
+            },
+            {
+              "file": "xlated-rac_single.sha256",
+              "source": "proof/subsumption/kernel-source-map.json"
+            },
+            {
+              "file": "xlated-rac_single.txt",
+              "source": "proof/subsumption/kernel-source-map.json"
+            }
+          ],
+          "conflicts": [],
+          "mismatches": [],
+          "missing": [],
+          "passed": true,
+          "result": "EMBEDDED_INPUT_HASHES_VERIFIED",
+          "schema": "rac-embedded-input-hash-check-v1"
+        },
+        "manifest_hashes": {
+          "checked": [
+            "events.jsonl",
+            "events.raw.jsonl",
+            "frontier-check.json",
+            "object.sha256",
+            "program-info.json",
+            "program-pin.txt",
+            "proof/concretization/joint-coverage.json",
+            "proof/concretization/membership-a0.json",
+            "proof/concretization/membership-a1.json",
+            "proof/definition2/kernel-identity.json",
+            "proof/definition2/stock-linux-r-check.json",
+            "proof/factorization/behavioral-quotient.json",
+            "proof/factorization/beta-map.json",
+            "proof/factorization/factorization.json",
+            "proof/factorization/suffix-witness.json",
+            "proof/path/path-correspondence.json",
+            "proof/report/membership-matrix.json",
+            "proof/report/prune-cell-coverage.json",
+            "proof/report/prune-cell-definition.json",
+            "proof/report/report-map.json",
+            "proof/report/session-completeness.json",
+            "proof/report/unique-cell-check.json",
+            "proof/states/current-state.json",
+            "proof/states/retained-state.json",
+            "proof/states/state-capture-check.json",
+            "proof/subsumption/kernel-source-map.json",
+            "proof/subsumption/subsumption-check.json",
+            "runtime.json",
+            "xlated-rac_single.sha256",
+            "xlated-rac_single.txt"
+          ],
+          "mismatches": [],
+          "missing": [],
+          "missing_required_files": [],
+          "passed": true,
+          "required_missing_from_manifest": [],
+          "result": "HASHES_VERIFIED",
+          "schema": "rac-proof-hash-check-v1"
+        },
+        "manifest_source": "provided",
+        "manifest_validation": {
+          "errors": [],
+          "file_count": 30,
+          "passed": true,
+          "result": "MANIFEST_VALID",
+          "schema": "rac-proof-manifest-validation-v1",
+          "warnings": []
+        },
+        "passed": true,
+        "result": "EVIDENCE_HASHES_MATCH",
+        "schema": "rac-definition2-hash-gate-v1"
+      },
+      "evidence": "manifest.json plus embedded input_sha256 fields",
+      "passed": true
+    },
+    "factorization_failure": {
+      "details": {
+        "conditions": {
+          "auditor_R_non_factorization": true,
+          "auditor_R_output_witnessed": true,
+          "beta_D_different": true,
+          "observations_differ": true,
+          "pi_R_equal": true,
+          "preconditions_passed": true
+        },
+        "result": "REPORT_FACTORIZATION_FAILURE_ESTABLISHED"
+      },
+      "evidence": "proof/factorization/factorization.json",
+      "passed": true
+    },
+    "identity_consistent": {
+      "details": {
+        "file_checks": {
+          "object_sha_file_matches": true,
+          "xlated_sha_file_matches": true
+        },
+        "kernel_checks": {
+          "btf_identity_present": true,
+          "config_identity_present": true,
+          "kernel_release_consistent": true
+        },
+        "kernel_releases": [
+          "6.17.0-35-generic",
+          "6.17.0-35-generic",
+          "6.17.0-35-generic",
+          "6.17.0-35-generic"
+        ],
+        "mismatches": {},
+        "missing_fields": [],
+        "program_checks": {
+          "id_matches": true,
+          "name_matches": true,
+          "tag_matches": true
+        },
+        "values": {
+          "object_sha256": [
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+            "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5"
+          ],
+          "program_id": [
+            6900,
+            6900,
+            6900,
+            6900,
+            6900,
+            6900,
+            6900,
+            6900,
+            6900,
+            6900,
+            6900
+          ],
+          "program_pin": [
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single",
+            "/sys/fs/bpf/rac-v03/rac_single"
+          ],
+          "program_tag": [
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0",
+            "100c248465bce0b0"
+          ],
+          "xlated_sha256": [
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+            "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+          ]
+        }
+      },
+      "evidence": "frontier/state/path/report/runtime identities plus kernel-identity.json",
+      "passed": true
+    },
+    "same_actual_report_cell": {
+      "details": {
+        "representatives": {
+          "a=0": [
+            "516c47f044cc3fc3"
+          ],
+          "a=1": [
+            "516c47f044cc3fc3"
+          ]
+        },
+        "unique_result": "UNIQUE_SAME_REPORT_CELL"
+      },
+      "evidence": "report-map unique_cell_check representatives",
+      "passed": true
+    },
+    "same_suffix": {
+      "details": {
+        "path_common_suffix": {
+          "first_sensitive_insn": 118,
+          "frontier_segment": {
+            "end": "pre(41)",
+            "reason": "v1 accepts the caller-side pre-call state after an optional strict common normalizer; callee PCs require a recorded call stack",
+            "start": "pre(41)"
+          },
+          "join_insn": 41,
+          "same_remaining_xlated_suffix": true,
+          "schema": "rac-common-suffix-v1",
+          "suffix_entry_insn": 107,
+          "suffix_prefix_until_first_sensitive": [
+            {
+              "function": "shared_suffix",
+              "line_number": 261,
+              "pc": 107,
+              "slots": 1,
+              "text": "r1 = 2"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 264,
+              "pc": 108,
+              "slots": 1,
+              "text": "*(u32 *)(r10 -4) = r1"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 266,
+              "pc": 109,
+              "slots": 1,
+              "text": "r6 = 1"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 269,
+              "pc": 110,
+              "slots": 1,
+              "text": "*(u32 *)(r10 -8) = r6"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 271,
+              "pc": 111,
+              "slots": 1,
+              "text": "r2 = r10"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 274,
+              "pc": 112,
+              "slots": 1,
+              "text": "r2 += -4"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 276,
+              "pc": 113,
+              "slots": 1,
+              "text": "r3 = r10"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 278,
+              "pc": 114,
+              "slots": 1,
+              "text": "r3 += -8"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 281,
+              "pc": 115,
+              "slots": 2,
+              "text": "r1 = map[id:2768]"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 283,
+              "pc": 117,
+              "slots": 1,
+              "text": "r4 = 1"
+            },
+            {
+              "function": "shared_suffix",
+              "line_number": 285,
+              "pc": 118,
+              "slots": 1,
+              "text": "call htab_map_update_elem#409480"
+            }
+          ]
+        },
+        "runtime_suffix_a0": {
+          "operation": "shared post-join insert of fresh key B",
+          "program": "rac_single"
+        },
+        "runtime_suffix_a1": {
+          "operation": "shared post-join insert of fresh key B",
+          "program": "rac_single"
+        }
+      },
+      "evidence": "path-correspondence common_suffix, runtime suffix, suffix-witness.json",
+      "passed": true
+    },
+    "selected_state_different": {
+      "details": {
+        "a=0": [
+          "S"
+        ],
+        "a=1": [
+          "S",
+          "A"
+        ],
+        "selected_masks": {
+          "a=0": 1,
+          "a=1": 3
+        }
+      },
+      "evidence": "runtime selected_state plus joint selected_masks_differ",
+      "passed": true
+    },
+    "stock_linux_four_checks": {
+      "details": {
+        "checks": {
+          "coverage": {
+            "checks": {
+              "actual_prune_edge_observed": true,
+              "both_cases_have_representative": true,
+              "membership_a0_direct": true,
+              "membership_a1_direct": true,
+              "path_a0_current": true,
+              "path_a1_retained": true,
+              "raw_event_not_fixture": true
+            },
+            "representative": "516c47f044cc3fc3",
+            "result": "BOTH_CASES_IN_OPERATIONAL_PRUNE_CELL"
+          },
+          "evidence_refs": {
+            "checks": {
+              "membership_a0": true,
+              "membership_a1": true,
+              "membership_matrix": true,
+              "path_correspondence": true,
+              "prune_cell_coverage": true,
+              "prune_cell_definition": true,
+              "session_completeness": true,
+              "unique_cell": true
+            },
+            "mismatches": [],
+            "passed": true
+          },
+          "factorization": {
+            "conditions": {
+              "auditor_R_non_factorization": true,
+              "auditor_R_output_witnessed": true,
+              "beta_D_different": true,
+              "observations_differ": true,
+              "pi_R_equal": true,
+              "preconditions_passed": true
+            },
+            "result": "REPORT_FACTORIZATION_FAILURE_ESTABLISHED"
+          },
+          "membership_a0": {
+            "field_check_count": 74,
+            "field_checks_all_pass": true,
+            "field_checks_present": true,
+            "result": "SIGMA_A0_IN_DIRECT_GAMMA",
+            "unsupported_fields": [],
+            "unsupported_fields_empty": true
+          },
+          "membership_a1": {
+            "field_check_count": 34,
+            "field_checks_all_pass": true,
+            "field_checks_present": true,
+            "result": "SIGMA_A1_IN_DIRECT_GAMMA",
+            "unsupported_fields": [],
+            "unsupported_fields_empty": true
+          },
+          "output_witnessed_r_collision": true,
+          "path": {
+            "a0": {
+              "abstract_role": "current",
+              "direct_state_hash": "a66d912d58c91de4",
+              "history_matches": true,
+              "runtime_selected_state": [
+                "S"
+              ]
+            },
+            "a1": {
+              "abstract_role": "retained",
+              "direct_state_hash": "516c47f044cc3fc3",
+              "history_matches": true,
+              "runtime_selected_state": [
+                "S",
+                "A"
+              ]
+            },
+            "identity_verified": true,
+            "result": "PATH_CORRESPONDENCE_VERIFIED"
+          },
+          "session": {
+            "collector_parse_errors": 0,
+            "result": "SESSION_CAPTURE_COMPLETE",
+            "ringbuf_lost_events": 0,
+            "session_complete": true
+          },
+          "unique": {
+            "collector_parse_errors": 0,
+            "events_lost": 0,
+            "representatives": {
+              "a=0": [
+                "516c47f044cc3fc3"
+              ],
+              "a=1": [
+                "516c47f044cc3fc3"
+              ]
+            },
+            "result": "UNIQUE_SAME_REPORT_CELL",
+            "retained_roots": [
+              "516c47f044cc3fc3"
+            ],
+            "schema": "rac-unique-report-cell-v2",
+            "session_complete": true,
+            "verifier_invocation_completed": true
+          }
+        },
+        "result": "STOCK_LINUX_R_ESTABLISHED_FOR_FROZEN_TUPLE"
+      },
+      "evidence": "proof/definition2/stock-linux-r-check.json",
+      "passed": true
+    },
+    "suffix_outputs_differ": {
+      "details": {
+        "a=0": {
+          "retval": 1,
+          "success": true
+        },
+        "a=1": {
+          "retval": 0,
+          "success": false
+        }
+      },
+      "evidence": "runtime observations and factorization conditions",
+      "passed": true
+    },
+    "unique_cell_on_chosen_fiber": {
+      "details": {
+        "reasons": [],
+        "representatives": {
+          "a=0": [
+            "516c47f044cc3fc3"
+          ],
+          "a=1": [
+            "516c47f044cc3fc3"
+          ]
+        },
+        "result": "UNIQUE_SAME_REPORT_CELL"
+      },
+      "evidence": "proof/report/unique-cell-check result embedded in report-map.json",
+      "passed": true
+    }
+  },
+  "hash_gate": {
+    "embedded_input_hashes": {
+      "checked": [
+        {
+          "file": "events.jsonl",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "events.raw.jsonl",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "object.sha256",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "program-info.json",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "program-pin.txt",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "runtime.json",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "xlated-rac_single.sha256",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "xlated-rac_single.txt",
+          "source": "frontier-check.json"
+        },
+        {
+          "file": "events.jsonl",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "events.raw.jsonl",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "object.sha256",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "program-info.json",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "program-pin.txt",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "runtime.json",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "xlated-rac_single.sha256",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "xlated-rac_single.txt",
+          "source": "proof/states/state-capture-check.json"
+        },
+        {
+          "file": "events.jsonl",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "events.raw.jsonl",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "object.sha256",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "program-info.json",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "program-pin.txt",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "runtime.json",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "xlated-rac_single.sha256",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "xlated-rac_single.txt",
+          "source": "proof/path/path-correspondence.json"
+        },
+        {
+          "file": "events.jsonl",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "events.raw.jsonl",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "object.sha256",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "program-info.json",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "program-pin.txt",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "runtime.json",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "xlated-rac_single.sha256",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "xlated-rac_single.txt",
+          "source": "proof/report/report-map.json"
+        },
+        {
+          "file": "events.jsonl",
+          "source": "proof/subsumption/kernel-source-map.json"
+        },
+        {
+          "file": "events.raw.jsonl",
+          "source": "proof/subsumption/kernel-source-map.json"
+        },
+        {
+          "file": "object.sha256",
+          "source": "proof/subsumption/kernel-source-map.json"
+        },
+        {
+          "file": "program-info.json",
+          "source": "proof/subsumption/kernel-source-map.json"
+        },
+        {
+          "file": "program-pin.txt",
+          "source": "proof/subsumption/kernel-source-map.json"
+        },
+        {
+          "file": "runtime.json",
+          "source": "proof/subsumption/kernel-source-map.json"
+        },
+        {
+          "file": "xlated-rac_single.sha256",
+          "source": "proof/subsumption/kernel-source-map.json"
+        },
+        {
+          "file": "xlated-rac_single.txt",
+          "source": "proof/subsumption/kernel-source-map.json"
+        }
+      ],
+      "conflicts": [],
+      "mismatches": [],
+      "missing": [],
+      "passed": true,
+      "result": "EMBEDDED_INPUT_HASHES_VERIFIED",
+      "schema": "rac-embedded-input-hash-check-v1"
+    },
+    "manifest_hashes": {
+      "checked": [
+        "events.jsonl",
+        "events.raw.jsonl",
+        "frontier-check.json",
+        "object.sha256",
+        "program-info.json",
+        "program-pin.txt",
+        "proof/concretization/joint-coverage.json",
+        "proof/concretization/membership-a0.json",
+        "proof/concretization/membership-a1.json",
+        "proof/definition2/kernel-identity.json",
+        "proof/definition2/stock-linux-r-check.json",
+        "proof/factorization/behavioral-quotient.json",
+        "proof/factorization/beta-map.json",
+        "proof/factorization/factorization.json",
+        "proof/factorization/suffix-witness.json",
+        "proof/path/path-correspondence.json",
+        "proof/report/membership-matrix.json",
+        "proof/report/prune-cell-coverage.json",
+        "proof/report/prune-cell-definition.json",
+        "proof/report/report-map.json",
+        "proof/report/session-completeness.json",
+        "proof/report/unique-cell-check.json",
+        "proof/states/current-state.json",
+        "proof/states/retained-state.json",
+        "proof/states/state-capture-check.json",
+        "proof/subsumption/kernel-source-map.json",
+        "proof/subsumption/subsumption-check.json",
+        "runtime.json",
+        "xlated-rac_single.sha256",
+        "xlated-rac_single.txt"
+      ],
+      "mismatches": [],
+      "missing": [],
+      "missing_required_files": [],
+      "passed": true,
+      "required_missing_from_manifest": [],
+      "result": "HASHES_VERIFIED",
+      "schema": "rac-proof-hash-check-v1"
+    },
+    "manifest_source": "provided",
+    "manifest_validation": {
+      "errors": [],
+      "file_count": 30,
+      "passed": true,
+      "result": "MANIFEST_VALID",
+      "schema": "rac-proof-manifest-validation-v1",
+      "warnings": []
+    },
+    "passed": true,
+    "result": "EVIDENCE_HASHES_MATCH",
+    "schema": "rac-definition2-hash-gate-v1"
+  },
+  "manifest_source": "provided",
+  "reasons": [],
+  "schema": "rac-definition2-integrated-check-v1",
+  "verdict": "STOCK_LINUX_R_ESTABLISHED_FOR_FROZEN_TUPLE"
+}

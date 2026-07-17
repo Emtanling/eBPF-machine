@@ -1,0 +1,25 @@
+{
+  "cases": {
+    "a=0": {
+      "case": "a=0",
+      "direct_abstract_role": "current",
+      "direct_state_hash": "a66d912d58c91de4",
+      "membership_result": "SIGMA_A0_IN_DIRECT_GAMMA",
+      "representatives": [
+        "516c47f044cc3fc3"
+      ],
+      "via": "current_pruned_by_retained"
+    },
+    "a=1": {
+      "case": "a=1",
+      "direct_abstract_role": "retained",
+      "direct_state_hash": "516c47f044cc3fc3",
+      "membership_result": "SIGMA_A1_IN_DIRECT_GAMMA",
+      "representatives": [
+        "516c47f044cc3fc3"
+      ],
+      "via": "direct_retained_member"
+    }
+  },
+  "schema": "rac-operational-prune-coverage-relation-v1"
+}

@@ -1,0 +1,44 @@
+--- linux/witness/rac_witness.bpf.c
++++ /tmp/rac_witness.bpf.c.packet_scrub_normalizer
+@@ -60,6 +60,16 @@
+     return rc;
+ }
+ 
++static __noinline long normalize_join(void)
++{
++    volatile __u32 scrub0 = 0;
++    volatile __u32 scrub1 = 0;
++    volatile __u32 scrub2 = 0;
++    volatile __u32 scrub3 = 0;
++
++    return scrub0 + scrub1 + scrub2 + scrub3;
++}
++
+ static __noinline int shared_suffix(void)
+ {
+     __u32 kb = KEY_B, one = 1;
+@@ -76,9 +86,11 @@
+     void *data_end = (void *)(long)ctx->data_end;
+     __u32 s = KEY_S, ka = KEY_A, kb = KEY_B, one = 1;
+     long rc;
++    __u8 branch_key;
+ 
+     if (data + 1 > data_end)
+         return 0;
++    branch_key = *(__u8 *)data & 1;
+ 
+     bpf_map_delete_elem(&g0, &s);
+     bpf_map_delete_elem(&g0, &ka);
+@@ -87,9 +99,10 @@
+     if (rc)
+         return 0;
+ 
+-    (void)select_branch(*(__u8 *)data & 1);
++    (void)select_branch(branch_key);
++    (void)normalize_join();
+ 
+-    /* Branch-specific call -> post-call join -> shared suffix. */
++    /* Branch-specific call -> packet/stack-normalized post-call join -> shared suffix. */
+     return shared_suffix();
+ }
+ 

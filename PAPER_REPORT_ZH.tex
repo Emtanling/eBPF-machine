@@ -4,8 +4,9 @@
 \PassOptionsToPackage{space}{xeCJK}
 %
 \documentclass[
+  11pt,
   a4paper,
-  11pt]{ctexart}
+]{ctexart}
 \usepackage{amsmath,amssymb}
 \usepackage{setspace}
 \usepackage{iftex}
@@ -84,13 +85,13 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={接受之后：基于 eBPF 校准的残差机器论断图谱（中文阅读版）},
+  pdftitle={接受之后：基于 eBPF 校准的残差语言与怪异机器论断图谱（中文阅读版）},
   pdfauthor={Chengao Zhang},
   pdflang={zh-CN},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{接受之后：基于 eBPF 校准的残差机器论断图谱}
+\title{接受之后：基于 eBPF 校准的残差语言与怪异机器论断图谱}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -103,1174 +104,892 @@
 
 \begin{document}
 \maketitle
-
 \setstretch{1.15}
+
 \begin{quote}
-\textbf{版本说明（2026-07-13）：}本文件是供作者核对论证的中文阅读版，不是逐句翻译，也不是投稿规范源。唯一投稿规范源是英文 \texttt{PAPER\_REPORT.tex} 及其编译 PDF；如中文表述与英文规范源不一致，以英文为准。
+\textbf{版本说明（2026-07-17）：}
+本文件是供作者核对论证的中文阅读版，不是逐句翻译，也不是投稿规范源。唯一投稿规范源是英文
+\texttt{PAPER\_REPORT.tex} 及其编译
+PDF；如中文表述与英文规范源不一致，以英文为准。
 \end{quote}
+
 \hypertarget{ux6458ux8981}{%
 \section{摘要}\label{ux6458ux8981}}
 
-语言理论安全（language-theoretic
-security）关注的是：一个边界所识别的语言，是否就是下游机制实际解释的语言。在程序验证器边界，已接受制品可能驱动某些有状态的运行时操作，而这些操作并未由预期的报告关系描述。我们引入一个包含五个节点的论断图谱，将制品接受（A）、同后缀因果状态区分（C）、有界可编程性（P）、已计算报告不可因子分解性（R）以及策略/威胁义务（W）区分开来。未来观测商集（future-observation
-quotient）与行为因子分解判据，将以已接受制品为索引的因果语言同相对于报告的残差语言（residual
-language）区分开来。该判据只相对于一个具体报告实例，并且只在选定上下文纤维上的\textbf{唯一单元报告映射}成立时适用；本文不声称每个安全健全但不完备的验证器都必然承载怪异机器。
+语言理论安全把输入边界建模为形式语言识别器，把下游处理建模为解释。在程序验证器边界，验证器是程序制品的外层识别器；已接受制品又可解释数据并驱动运行时操作词，而任何已计算报告都是另行明确声明的抽象。本文提出五节点论断图谱，严格区分制品接受（A）、同后缀因果状态区分（C）、有界可编程性（P）、由输出见证的已计算报告不可因子分解性（R）以及策略/威胁义务（W）。未来观测商与行为因子分解判据区分以已接受制品为索引的因果语言和相对于报告实例的残差语言。该判据只在选定上下文纤维上的\textbf{唯一单元报告映射}成立时适用；本文不声称每个安全健全但不完备的验证器都必然承载怪异机器。
 
-我们给出如下证明义务：一个受到统一控制、可观测且可重置的门，以及一个在有界电路描述域上固定不变的已接受解释器。在精确调度、可接纳性、串行化与帧保持这些前提下，前缀归纳可推出有界组合性。在一项
-Linux eBPF 标定中，一个专用的、预分配的、非 LRU 两项哈希映射实现了
-NAND：重置后保留一个哨兵项；输入比特决定是更新已有键还是新键；第二次更新的成功谓词提供输出。一个固定不变且已接受的程序处理规范化的
-NAND 有向无环图（DAG），其输入不超过 64 个、门不超过 512
-个、活跃导线不超过 578 条。
+本文给出统一可控、可观察、可重置门以及固定已接受解释器的证明义务。在精确调度、可接纳性、串行化、源码到目标对应与帧保持前提下，前缀归纳给出有界组合结果。在
+Linux eBPF 校准案例中，一个专用、预分配、非 LRU、容量为 2 的哈希映射实现
+NAND：重置后保留一个哨兵项，输入比特选择更新已有键或插入新键，第二次更新的成功谓词作为输出。一个固定已接受程序解释输入至多
+64 个、门至多 512 个、活跃规范导线至多 578 条的 NAND DAG。
 
-一次带源码快照的 Linux/aarch64
-运行覆盖了具名电路和随机电路、联合边界、串行复用、机制对照以及畸形描述符。一个由作者另行运行的语义审计器重建描述符与电路语义，另有一份自行签发的清单检查证据包的完整性。该案例记录 A；在声明的具体映射服务与无干扰契约下给出\textbf{条件性} C 见证；并在更多实现前提下支持 P。它没有确立 Linux
-报告不可因子分解性，也没有确立策略层面的怪异机器（weird
-machine）。另有一个固定辅助可执行实例针对自身计算出的报告建立
-\(R(M_{\mathit{linux\_r\_aux\_v1}})\)；该结果不改变 stock Linux 的状态。
+源码快照化的 Linux/aarch64
+运行覆盖具名与随机电路、联合边界、串行复用、机制对照和畸形描述符。作者另行运行的语义审计器重建描述符与电路语义，自行签发的清单检查证据包完整性。这个解释器载体记录
+A；在声明的具体映射服务与无干扰契约下给出条件性 C
+见证；在更多实现前提下支持 P，但不建立 R 或
+W。固定辅助可执行实例针对自身计算出的报告建立
+\(R(M_{\mathit{linux\_r\_aux\_v1}})\)。另一个已接受 XDP 对象上的本地
+stock-Linux/aarch64 实验捕获 exact level 0 的 \texttt{states\_equal}
+成功检查及其后的 \texttt{is\_state\_visited}
+剪枝，把两条已记录前缀绑定到同一个保留状态代表，并在同一后缀下记录不同观测。把这些记录嵌入事后声明、受哈希绑定的两历史载体和作者定义的操作剪枝报告后，该元组满足定义
+2。本文把这一结果表述为``轨迹局部、相对于操作剪枝报告的证书''，而不是
+Linux 已规定完整功能报告的证据，也不是覆盖一般 Linux
+执行的定理。各载体不可合并：两个 R 结果都没有与解释器的 P
+证据链接，也没有任何结果建立 W 或怪异机器。
 
 \textbf{关键词：}
-语言理论安全，识别器（recognizer），残差语言，怪异机器，程序验证，抽象解释（abstract
-interpretation），eBPF。
+语言理论安全，识别器，残差语言，怪异机器，程序验证，抽象解释，eBPF。
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\hypertarget{ux5f15ux8a00}{%
-\section{1. 引言}\label{ux5f15ux8a00}}
+\hypertarget{1-ux5f15ux8a00}{%
+\section{1. 引言}\label{1-ux5f15ux8a00}}
 
-语言理论安全将输入边界视为语言识别边界：下游处理就是解释，而输入提供被解释的程序
-{[}1{]}--{[}4{]}。因此，输入校验（validation）与程序验证（program
-verification）共同承担一种形如识别器的角色。我们的问题从接受之后开始。验证器接受一个程序制品，但这个已接受程序仍可驱动一种由有状态辅助函数与服务操作构成的语言。若要将这种下游语言称为残差的、可编程的、由形状诱导的或怪异机器，需要满足哪些论断？
+语言理论安全把输入边界视为语言识别边界：下游处理是解释，输入提供被解释的程序
+{[}1{]}--{[}4{]}。本文把这一识别器形状用于程序验证。问题从``接受之后''开始：验证器接受一个程序制品，但该程序还可驱动有状态辅助函数与服务操作。若要把这类下游行为称为残差的、可编程的、由形状诱导的或怪异机器，分别需要什么证据？在这一分层视角下，接受、解释和报告抽象分别回答
+\(L_V\) 中的成员关系、\(I\) 中的行为以及 \(\mathsf{Report}_V\)
+如何分组这三个不同问题。
 
-制品语言与接受之后的操作语言具有不同的载体。验证器可以识别有界执行、带类型的辅助函数使用与内存访问规约，却不必认证通过每一项已文档化运行时服务实现的完整关系。已接受程序可以选择操作、保留服务状态、观测返回值、重置状态并组合效果。这些事实本身都不蕴含验证器缺陷。它们首先确立的是一种以下游操作为内容、以已接受制品为索引的语言。
+制品语言和接受后的操作语言具有不同载体。验证器可以认证有界执行、辅助函数类型使用和内存访问纪律，而不必认证通过每个已文档化运行时服务实现的完整关系。已接受程序可以选择操作、保留状态、观察返回、重置和组合效果；这些事实本身既不证明验证器缺陷，也不证明报告遗漏。
 
-本文将证据负担组织为如下论断图谱：
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\begingroup
+\small
+\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}p{0.18\textwidth}p{0.42\textwidth}p{0.32\textwidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-节点
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-必需事实
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-证据状态
-\end{minipage} \\
+载体 & A/C/P/R/W 状态 & 证据解释 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-A --- 接受 & 一个固定制品属于 \(L_V\) &
-已针对保留的目标文件与环境记录 \\
-C --- 因果状态区分 &
-相同后缀与相同非状态上下文，从不同选定运行时状态暴露出不同观测 &
-仅在声明的映射服务/无干扰契约下给出条件性见证 \\
-P --- 有界可编程性 &
-在明确的帧条件与环境前提下，已接受代码统一地控制、观测、重置并组合状态 &
-源码级构造加经审计的回归证据 \\
-R --- 相对于报告的残差 & C
-中的见证由一个实际的已计算报告单元共同覆盖，且该单元未通过行为因子分解测试
-& 固定辅助元组：已建立；stock Linux：未建立 \\
-W --- 策略/威胁义务 &
-行为主体通过 \(P_*\) 驱动预期策略所排除的效果 &
-离线案例尚未确立 \\
+\texttt{wm\_circuit} 解释器 & A 已记录；C 在声明的服务/无干扰契约下有条件成立；P 在源码/对象、串行化与帧前提下得到支持；R、W 未建立 & 构造性论证与经审计回归证据；解释器前沿没有已计算单元提取器 \\
+\(M_{\mathit{linux\_r\_aux\_v1}}\) & A、C、R 在有限自定义元组内成立；P、W 未建立 & 可执行有限模型证书；R 仅针对其计算出的自定义报告，不声称与 stock Linux 存在 refinement 或 bisimulation \\
+\(M_K\)（\texttt{rac\_single}） & A 针对冻结对象/内核元组已记录；C 仅在声明的两历史关系中得到见证；R 针对作者定义的操作剪枝报告得到事后证书；P、W 未建立 & 真实剪枝捕获、规范化哈希绑定检查及论文级一步包装；只属轨迹局部，不是 Linux 功能报告契约 \\
 \end{longtable}
+\endgroup
 
-上表的 A、C、P 与 W 状态报告 stock eBPF/Linux 案例。R 行明确区分两个载体：固定元组
-\(M_{\mathit{linux\_r\_aux\_v1}}\)
-针对辅助报告生成识别器和受限服务语义建立 R，而 stock Linux 验证器的 R 仍未建立。
+每一行都有独立的制品、执行载体、报告接口和证据类型。\texttt{wm\_circuit}
+行承载本文的 A/C/P 构造；辅助行只针对自定义的报告生成识别器提供正面 R
+结果；\(M_K\) 行只针对声明的 \texttt{rac\_single}
+操作剪枝报告元组提供事后、轨迹局部的 R
+证书。不得跨行组合不同节点，任何已评估行都没有建立 W。
 
-节点 C 与 R 不得共用同一个名称。我们将以已接受制品为索引的同后缀语言称为
-\(L_{\mathrm{causal}}\)。只有存在实际的已计算单元碰撞时，一个词才进入相对于报告的残差语言
-\(L_{\mathrm{res}}^R\)。P 与 R 在 C
-之后分叉：可编程性不蕴含报告碰撞，报告碰撞也不蕴含可编程性。策略层面的怪异机器还要求 P、W、同一编码计算上的链接（Link）与非预期性（Unint）；一个更窄的\emph{由契约形状诱导、相对于识别器的}分类还要求 R、已文档化且安全保持的语义（Doc）、报告实现符合声明抽象（Conf）以及碰撞确由声明粒度强制（Gran）。该图谱把``怪异机器''从一种修辞标签转化为可检查的义务。
+节点 C 和 R 不可共用一个名称。以已接受制品为索引的同后缀语言记为
+\(L_{\mathrm{causal}}\)；只有实际计算单元在全部可接纳条件下发生碰撞，词才进入
+\(L_{\mathrm{res}}^R\)。P 与 R 在 C 后分叉。策略级怪异机器还要求
+P、W、同一编码计算上的链接（Link）与非预期性（Unint）；更窄的``由契约形状诱导、相对于识别器''的分类还要求
+R、已文档化且安全保持的语义（Doc）、报告实现符合其声明抽象（Conf）及碰撞确由声明粒度强制（Gran）。该图谱既支持正面证书，也支持有原则的非分类结论。
 
-可编程性是一个独立的构造问题。状态区分可能是无效的、不受控制的、一次性的，或无法组合的。因此，我们要求程序可见的读出、一个统一的输入分派器、向规范类的重置，以及一个固定不变的已接受解释器；该解释器必须在独立声明的有界描述符域上满足精确调度与帧保持。由此得到的组合定理是一种证明义务分解，而不是普遍的必然性定理。
+本文贡献为：（1）带类型的``识别器---解释器---报告''A/C/P/R/W
+论断图谱；（2）包含 E1--E4-D 的有界组合证明义务；（3）一个以
+\(D_{64,512}\) 为域的 eBPF NAND 解释器校准案例；（4）严格分载体的 R
+证据。固定辅助实例针对自定义报告检查有限报告单元碰撞及四个负对照。独立的
+stock-Linux 捕获记录真实 exact-0
+剪枝以及同一后缀下的不同结果；只有在事后嵌入第 5.7 节显式有限的
+\texttt{rac\_single} 载体和作者定义的操作剪枝报告之后，它才构成 R
+实例。因此本文只主张该冻结元组的轨迹局部操作证书，而不主张一般 Linux
+报告结果；两个 R 实例都不与解释器的 P
+证据链接。实证范围限于一个特权、离线 Linux/aarch64
+内核构建、两个承载主张的已接受 eBPF
+制品、三个额外的已接受解释器控制变体以及一个由自定义识别器接受的辅助制品；不是一般
+Linux 报告不透明性定理、并发部署、无界机器、漏洞或策略级怪异机器。
 
-我们的标定案例是 Linux
-eBPF。一个固定制品使用专用的两项哈希映射作为饱和资源。重置后，一个哨兵保持活跃。零比特更新该哨兵；一比特插入一个与输入对应的新键。第二个由输入决定的更新仅在输入为
-\((1,1)\) 时失败，从而得到
-NAND。普通字节码仍负责验证描述符、选择键、路由导线、控制循环并存储输出。宿主解析器把文本
-WMC1 规范化到映射中，而验证器仅接受这个固定的 eBPF 制品。
-
-该案例有意用于诊断。它记录 A，在声明的服务契约下给出条件性 C，并在所述实现前提下支持
-P，尽管相同函数很容易用普通字节码表示。它还表明，为何不能在没有说明的情况下把
-P 提升为 R，也不能把 P 与缺失的 W
-义务合并。所保留的验证器日志不是已计算抽象单元的提取器，而离线运行没有提供任何遭违反的部署策略。
-
-本文贡献如下：
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  \textbf{论断图谱与带类型的语言。}
-  我们区分已接受制品、因果运行时词、相对于报告的残差词、有界可编程性以及策略/威胁义务。未来观测商集与因子分解判据使节点
-  R 可测试，而反模型表明这些分支不会坍缩为一体。
-\item
-  \textbf{有界组合论证。} E1--E3 与精确定义的 E4-D
-  解释器义务，将局部门正确性、重置、调度以及全局帧条件隔离开来。前缀归纳证明功能性结果；安全性是另一个可选前提。
-\item
-  \textbf{eBPF 标定案例。} 一个饱和秩 NAND 基与固定解释器以
-  \(D_{64,512}\) 为目标。所记录的测试套件覆盖具名 DAG
-  与使用固定种子的随机
-  DAG、深度边界与联合边界、零门案例、串行复用、机制对照以及畸形描述符。
-\item
-  \textbf{可执行报告实例。}
-  一个固定辅助识别器/服务元组发出实际报告、构造有限未来观测商，并独立检查报告单元碰撞和四个负对照。它只针对该具名元组建立 R，保持 stock Linux 边界不变。
-\end{enumerate}
-
-实证范围限于一个具备特权的离线 Linux/aarch64 环境。该案例不是 Linux
-报告不透明性结果、并发部署结果、制品参数化编译器、无界机器、漏洞或策略层面的怪异机器。
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\hypertarget{ux76f8ux5bf9ux4e8eux8bc6ux522bux5668ux7684ux6b8bux5deeux8bedux8a00}{%
+\hypertarget{2-ux76f8ux5bf9ux4e8eux8bc6ux522bux5668ux7684ux6b8bux5deeux8bedux8a00}{%
 \section{2.
-相对于识别器的残差语言}\label{ux76f8ux5bf9ux4e8eux8bc6ux522bux5668ux7684ux6b8bux5deeux8bedux8a00}}
+相对于识别器的残差语言}\label{2-ux76f8ux5bf9ux4e8eux8bc6ux522bux5668ux7684ux6b8bux5deeux8bedux8a00}}
 
-\hypertarget{ux8bc6ux522bux6267ux884cux4e0eux62a5ux544a}{%
+\hypertarget{21-ux8bc6ux522bux6267ux884cux4e0eux62a5ux544a}{%
 \subsection{2.1
-识别、执行与报告}\label{ux8bc6ux522bux6267ux884cux4e0eux62a5ux544a}}
+识别、执行与报告}\label{21-ux8bc6ux522bux6267ux884cux4e0eux62a5ux544a}}
 
-设 \(V\) 为程序制品上的识别器，\(I\) 为状态载体 \(\Sigma_I\) 与轨迹载体 \(\mathcal T_I\)
-上的具体执行语义，其中包括指令引擎、辅助函数、有状态服务以及相关环境；因此 \(\mathsf{Tr}_I(P)\subseteq\mathcal T_I\)。已接受制品语言为
+令 \(V\) 为程序制品识别器，\(I\) 为具体执行语义，状态载体为
+\(\Sigma_I\)，轨迹载体为 \(\mathcal T_I\)；\(I\)
+包含指令引擎、辅助函数、有状态服务及相关环境。因此
+\(\mathsf{Tr}_I(P)\subseteq\mathcal T_I\)，且
 
-\[
-L_V = \{P \mid V(P)=\mathsf{accept}\}.
-\]
+\[L_V=\{P\mid V(P)=\mathsf{accept}\}.\]
 
-对于可选的允许具体轨迹集合
-\(\mathsf{Safe}\subseteq\mathcal T_I\)，当下式成立时，该边界在安全性上是健全的：
+对可选的允许轨迹集合
+\(\mathsf{Safe}\subseteq\mathcal T_I\)，安全健全性是
 
-\[
-\forall P\in L_V.\ \mathsf{Tr}_I(P)\subseteq\mathsf{Safe}.
-\]
+\[\forall P\in L_V.\ \mathsf{Tr}_I(P)\subseteq\mathsf{Safe}.\]
 
-安全健全性是一项前提，不能从一次成功加载中推断得出。它也不同于抽象变换器的完备性。抽象解释通过抽象映射与具体化映射关联具体集合和抽象元素
-{[}5{]}，但验证器的已接受语言、它所计算的报告、传递函数的健全性及其完备性属于不同判断。尤其是，单元素集合的最佳抽象未必是分析器在汇合控制前沿实际计算的单元。
+安全健全性是前提，不能由一次成功加载推出；它也不同于抽象变换器的完备性
+{[}5{]}。已接受语言、实际计算报告、传递健全性与完备性是不同判断。
 
-当报告属于讨论范围时，令 \(\mathsf{Report}_V(P,\ell)\subseteq A_\ell\) 表示在前沿
-\(\ell\) 实际计算的有限抽象单元集合，并为其配备已声明的具体化函数
-\(\gamma_\ell:A_\ell\to\mathcal P(\Sigma_I)\)。前沿覆盖要求
+若报告在讨论范围内，令
 
-\[
-\mathsf{Reach}_I(P,\ell)
-\subseteq
-\bigcup_{a^\#\in\mathsf{Report}_V(P,\ell)}\gamma_\ell(a^\#).
-\]
+\[\mathsf{Report}_V(P,\ell)\subseteq A_\ell,
+\qquad \gamma_\ell:A_\ell\to\mathcal P(\Sigma_I)\]
 
-只有当一个已计算单元同时包含两个具体状态时，二者才受到共同覆盖。这一点排除了一种常见但无效的捷径：证明两个值具有相似的日志打印文本，并不能确定一个已计算抽象单元、一项具体化或共同覆盖。
+分别为前沿 \(\ell\) 实际计算的有限单元集及声明的具体化。覆盖要求
 
-\hypertarget{ux56e0ux679cux8bcd}{%
-\subsection{2.2 因果词}\label{ux56e0ux679cux8bcd}}
+\[\mathsf{Reach}_I(P,\ell)\subseteq
+\bigcup_{a^\#\in\mathsf{Report}_V(P,\ell)}\gamma_\ell(a^\#).\]
 
-对于 \(P\in L_V\) 与前沿 \(\ell\)，令 \(\Sigma_{\mathrm{op}}(P)\)
-为程序可控制运行时操作的有限字母表，并令
-\(W^\ell_{\mathrm{run}}(P)\subseteq\Sigma_{\mathrm{op}}(P)^*\)
-为已接受代码能够从 \(\ell\)
-开始执行的词。若将所有此类词都称为残差，就只是为普通轨迹语义改了一个名字；因此，节点
-C 使用同后缀因果测试，暂不主张报告有所遗漏。
+只有同一个实际计算单元同时包含两个状态，二者才是``共同覆盖''；相似日志文本不足以证明单元身份、具体化或共同覆盖。
 
-在比较前固定观测契约
+\hypertarget{22-ux56e0ux679cux8bcdux4e0eux89c2ux6d4bux5951ux7ea6}{%
+\subsection{2.2
+因果词与观测契约}\label{22-ux56e0ux679cux8bcdux4e0eux89c2ux6d4bux5951ux7ea6}}
 
-\[
-K_{\mathrm{obs}}=(\rho_{\mathrm{obs}},\mathsf{Obs},\mathsf{Slice},\mathsf{Env}).
-\]
+对 \(P\in L_V\) 和前沿 \(\ell\)，令 \(\Sigma_{\mathrm{op}}(P)\)
+是程序可控运行时操作的有限字母表，\(W^\ell_{\mathrm{run}}(P)\subseteq\Sigma_{\mathrm{op}}(P)^*\)
+是代码可从该前沿执行的词。节点 C
+使用同后缀测试，不把所有普通运行轨迹重新命名为残差。
 
-其中 \(\rho_{\mathrm{obs}}:\Sigma_I\to R_{\mathrm{obs}}\) 选取候选状态，
-\(\mathsf{Obs}:\mathcal T_I\to O_{\mathrm{obs}}\) 投影完整具体轨迹，
-\(\mathsf{Slice}\) 为每个词 \(w\) 指定带类型的上下文投影
-\(\mathsf{ctx}_w:\Sigma_I\to C_w\)，而 \(\mathsf{Env}\) 是声明的固定环境实例集合。上下文保守地包含后缀或观察者读取的每个非选定分量；环境实例固定资源配置、调度、非确定性以及外部干扰选择。
+比较前固定带类型的观测契约
 
-写 \(\llbracket w\rrbracket_{I,e}(\sigma)=(\tau,\sigma')\)。契约在
-\(X\subseteq\Sigma_I\) 上对 \(w\) 健全，当任意 \(e\in\mathsf{Env}\) 与
+\[K_{\mathrm{obs}}=(\rho_{\mathrm{obs}},\mathsf{Obs},\mathsf{Slice},\mathsf{Env}),\]
+
+其中 \(\rho_{\mathrm{obs}}:\Sigma_I\to R_{\mathrm{obs}}\)
+选择候选状态，\(\mathsf{Obs}:\mathcal T_I\to O_{\mathrm{obs}}\)
+投影完整轨迹，\(\mathsf{Slice}\) 为每个词 \(w\) 指定上下文投影
+\(\mathsf{ctx}_w:\Sigma_I\to C_w\)，\(\mathsf{Env}\)
+是固定环境实例集合。上下文必须包含后缀或观察者读取的全部非选定分量；环境实例固定资源配置、调度、非确定性与外部干扰选择。
+
+写作 \(\llbracket w\rrbracket_{I,e}(\sigma)=(\tau,\sigma')\)。契约在
+\(X\subseteq\Sigma_I\) 上对 \(w\) 健全，当任意 \(e\in\mathsf{Env}\) 和
 \(\sigma,\sigma'\in X\) 若满足
 
-\[
-\rho_{\mathrm{obs}}(\sigma)=\rho_{\mathrm{obs}}(\sigma'),\qquad
-\mathsf{ctx}_w(\sigma)=\mathsf{ctx}_w(\sigma'),
-\]
+\[\rho_{\mathrm{obs}}(\sigma)=\rho_{\mathrm{obs}}(\sigma'),\qquad
+\mathsf{ctx}_w(\sigma)=\mathsf{ctx}_w(\sigma'),\]
 
-则两次后缀执行具有相同的有定义性；若均有定义，则完整轨迹投影相同。也就是说，
-\((\rho_{\mathrm{obs}},\mathsf{ctx}_w,e)\) 必须包含所有可影响声明观测的因素。缺少这一非干扰条件时，不接纳 C 见证。
+则两次执行有相同的有定义性；若均有定义，则
+\(\mathsf{Obs}(\tau)=\mathsf{Obs}(\tau')\)。没有这一非干扰条件，不接纳 C
+见证。
 
-\textbf{定义 1（因果状态介导词族）。} 当
-\(P\in L_V\)、\(w\in W^\ell_{\mathrm{run}}(P)\)，\(K_{\mathrm{obs}}\) 在
-\(\mathsf{Reach}_I(P,\ell)\) 上对 \(w\) 健全，且存在同一个
-\(e\in\mathsf{Env}\) 与
-\(\sigma_0,\sigma_1\in\mathsf{Reach}_I(P,\ell)\)，使得
-\(\llbracket w\rrbracket_{I,e}(\sigma_i)=(\tau_i,\sigma_i')\)
-均有定义并终止且满足下列条件时，称词
-\(w\) 在 \((P,\ell)\) 处是因果的：
+\textbf{定义 1（因果状态介导词族）。} 词 \(w\) 在 \((P,\ell)\)
+处因果，当
+\(P\in L_V\)、\(w\in W^\ell_{\mathrm{run}}(P)\)、\(K_{\mathrm{obs}}\) 在
+\(\mathsf{Reach}_I(P,\ell)\) 上对 \(w\) 健全，并存在同一
+\(e\in\mathsf{Env}\) 及
+\(\sigma_0,\sigma_1\in\mathsf{Reach}_I(P,\ell)\)，使两次后缀执行有定义、终止且
 
 \[
-\begin{aligned}
-\mathsf{ctx}_w(\sigma_0)&=\mathsf{ctx}_w(\sigma_1),\\
-\rho_{\mathrm{obs}}(\sigma_0)&\ne\rho_{\mathrm{obs}}(\sigma_1),\\
-\mathsf{Obs}(\tau_0)&\ne\mathsf{Obs}(\tau_1).
-\end{aligned}
+\mathsf{ctx}_w(\sigma_0)=\mathsf{ctx}_w(\sigma_1),\quad
+\rho_{\mathrm{obs}}(\sigma_0)\ne\rho_{\mathrm{obs}}(\sigma_1),\quad
+\mathsf{Obs}(\tau_0)\ne\mathsf{Obs}(\tau_1).
 \]
 
-定义依赖类型的带标签词族
+定义依赖标签族
 
-\[
-L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}})
-=
-\{(P,\ell,w)\mid w\text{ 在 }(P,\ell)\text{ 处是因果的}\}.
-\]
+\[L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}})=
+\{(P,\ell,w)\mid w\text{ 在 }(P,\ell)\text{ 处因果}\}.\]
 
-制品与前沿标签是该类型的一部分。为制品、前沿与操作符号固定可解码的前缀编码后，该词族可以嵌入一个有限字母表上的普通语言；依赖类型记法则使各载体保持可见。宿主描述符既不是
-\(L_V\)
-的另一个元素，也不会自动成为运行时词。它首先成为配置，已接受解释器据此导出调度，而只有同后缀见证才进入
+制品与前沿是类型标签。宿主描述符不是 \(L_V\)
+的另一个元素，也不会自动成为运行时词；它先成为配置，由固定解释器诱导调度，只有同后缀见证进入
 \(L_{\mathrm{causal}}\)。
 
-该定义相对于观测者与切片。看到结果之后再从上下文中删除较早的输入，会使测试陷入循环论证。因此，eBPF
-案例在比较之前就从源码语义声明其后缀；保留转换后的指令转储供人工检查，而不把它交给自动化切片检查器处理。
-
-\hypertarget{ux884cux4e3aux5546ux96c6ux4e0eux76f8ux5bf9ux4e8eux62a5ux544aux7684ux6b8bux5deeux8bedux8a00}{%
+\hypertarget{23-ux884cux4e3aux5546ux4e0eux62a5ux544aux76f8ux5bf9ux6b8bux5dee}{%
 \subsection{2.3
-行为商集与相对于报告的残差语言}\label{ux884cux4e3aux5546ux96c6ux4e0eux76f8ux5bf9ux4e8eux62a5ux544aux7684ux6b8bux5deeux8bedux8a00}}
+行为商与报告相对残差}\label{23-ux884cux4e3aux5546ux4e0eux62a5ux544aux76f8ux5bf9ux6b8bux5dee}}
 
-固定一个确定性规约
+固定确定性规约
 
-\[
-D=(X_D,S_D,A_D,O_D,\delta_D,\lambda_D,s_D,\mathsf{Obs}_D)
-\]
+\[D=(X_D,S_D,A_D,O_D,\delta_D,\lambda_D,s_D,\mathsf{Obs}_D),\]
 
-其中 \(X_D\subseteq\Sigma_I\) 是可接纳具体区域，\(S_D\) 是状态载体，
-\(A_D\) 是操作字母表，\(O_D\) 是输出字母表，且
-\(\mathsf{Obs}_D:O_D^*\rightharpoonup O_{\mathrm{obs}}\)。转移和输出是同定义域偏函数
+其中 \(X_D\subseteq\Sigma_I\) 是可接纳具体区域，\(S_D\)
+是状态载体，\(A_D\) 是操作字母表，\(O_D\)
+是输出字母表，\(\mathsf{Obs}_D:O_D^*\rightharpoonup O_{\mathrm{obs}}\)，并且
 
-\[
-\delta_D:S_D\times A_D\rightharpoonup S_D,
-\qquad
-\lambda_D:S_D\times A_D\rightharpoonup O_D.
-\]
+\[\delta_D:S_D\times A_D\rightharpoonup S_D,
+\qquad\lambda_D:S_D\times A_D\rightharpoonup O_D\]
 
-每当 \(D\) 用于 \((P,\ell)\) 时，固定单射操作编码
-\(\iota_{P,\ell}:A_D\to\Sigma_{\mathrm{op}}(P)\) 并同态扩展到词。当且仅当对每个
-\(\sigma\in X_D\) 与 \(a\in A_D\)，具体编码步骤存在恰好对应
-\(\delta_D(s_D(\sigma),a)\) 有定义，并且只要
-\(\sigma\xrightarrow{\iota_{P,\ell}(a)/o}_I\sigma'\)，就有
+是同定义域偏函数。对每个使用规约的 \((P,\ell)\)，固定单射操作编码
+\(\iota_{P,\ell}:A_D\to\Sigma_{\mathrm{op}}(P)\) 并同态扩展至词。
 
-\[
-\lambda_D(s_D(\sigma),a)=o,
-\qquad
-s_D(\sigma')=\delta_D(s_D(\sigma),a).
-\]
+当且仅当对每个 \(\sigma\in X_D\) 和
+\(a\in A_D\)，具体编码步骤存在恰好对应 \(\delta_D(s_D(\sigma),a)\)
+有定义，并且每个 \(\sigma\xrightarrow{\iota_{P,\ell}(a)/o}_I\sigma'\)
+满足
 
-并且 \(\sigma'\in X_D\)，称 \((s_D,\iota_{P,\ell})\) 在 \(X_D\) 上\textbf{操作充分}。这里 \(o\) 是该编码操作的完整声明观测。因此编码是语义重命名而不是任意映射：一个投影状态不能隐藏不同的有定义性、完整输出或后继投影。影响转移的每一种环境选择都由 \(D\) 固定，或包含在 \(S_D\) 中。
+\[\lambda_D(s_D(\sigma),a)=o,
+\qquad s_D(\sigma')=\delta_D(s_D(\sigma),a),
+\qquad \sigma'\in X_D,\]
 
-令 \(\mathsf{Out}_D(r,w)\) 表示通过迭代 \((\delta_D,\lambda_D)\)
-得到的、可能无定义但一旦有定义便完整的输出词，以 \(\mathsf{Def}_D(r,w)\)
-表示 \(\mathsf{Out}_D(r,w)\downarrow\)，并取延续全集为
-\(\mathcal W_D=A_D^*\)；不可行词以输出无定义表示。对于
-\(r,r'\in S_D\)，定义
+称 \((s_D,\iota_{P,\ell})\) 在 \(X_D\)
+上\textbf{操作充分}。因此编码是语义重命名，不能让同一投影状态隐藏不同有定义性、完整输出或后继投影；影响转移的环境选择必须被固定或纳入
+\(S_D\)。
+
+令 \(\mathsf{Out}_D(r,w)\) 为迭代 \((\delta_D,\lambda_D)\)
+得到的偏完整输出词，\(\mathsf{Def}_D(r,w)\) 表示其有定义，并取
+\(\mathcal W_D=A_D^*\)。定义
 
 \[
-\begin{aligned}
-r\sim_D r'
-&\quad\Longleftrightarrow\quad
-\forall w\in\mathcal W_D.\\
-&\quad\Bigl(
-[\mathsf{Def}_D(r,w)\iff\mathsf{Def}_D(r',w)]\land\\
-&\qquad
-[\mathsf{Def}_D(r,w)\Rightarrow
-\mathsf{Out}_D(r,w)=\mathsf{Out}_D(r',w)]
-\Bigr).
-\end{aligned}
+r\sim_D r'\Longleftrightarrow
+\forall w\in\mathcal W_D.\bigl[
+\mathsf{Def}_D(r,w)\Leftrightarrow\mathsf{Def}_D(r',w)
+\bigr]\land
+\bigl[
+\mathsf{Def}_D(r,w)\Rightarrow
+\mathsf{Out}_D(r,w)=\mathsf{Out}_D(r',w)
+\bigr].
 \]
 
-由于 \(\mathcal W_D=A_D^*\) 在操作左前缀下闭合，\(\sim_D\)
-是右同余：有定义且匹配的 \(a\) 步将导向等价后继状态，因为每个后继延续
-\(w\) 都会作为 \(aw\) 被测试。若 \(Q_D=S_D/{\sim_D}\)
-有限，限制在 \(X_D\) 的具体执行会在商状态上导出一个偏 Mealy
-转导器。这延续 Nerode 与 Mealy 的继续等价传统，并与观测完备性和广义强保持相关
-{[}6{]}--{[}9{]}；本文只测试一个已接受制品的一个前沿上的实际单元，而不是提出新的通用完备性理论。
+\(\sim_D\) 是右同余；若 \(Q_D=S_D/{\sim_D}\) 有限，则 \(X_D\)
+上执行诱导商状态上的偏 Mealy 转导器
+{[}6{]}--{[}9{]}。本文只测试一个已接受制品、一个前沿上的实际计算单元，不主张提出新的通用完备性理论。
 
-对于具体集合 \(F\)，定义共同启用的延续
+对具体集合 \(F\)，共同启用延续为
 
-\[
-\mathcal W_D(F)
-=
-\{w\in\mathcal W_D\mid
-\forall\sigma\in F.\ \mathsf{Out}_D(s_D(\sigma),w)\downarrow\}.
-\]
+\[\mathcal W_D(F)=\{w\in\mathcal W_D\mid
+\forall\sigma\in F.\ \mathsf{Out}_D(s_D(\sigma),w)\downarrow\}.\]
 
-\textbf{命题 1（上下文纤维上的行为因子分解）。} 固定已接受的 \(P\)、前沿
-\(\ell\)、规约 \(D\)、观测契约 \(K_{\mathrm{obs}}\)，以及非空
-\(F\subseteq\mathsf{Reach}_I(P,\ell)\cap X_D\)。要求
-
-\[
-\iota_{P,\ell}(\mathcal W_D(F))\subseteq W^\ell_{\mathrm{run}}(P),
-\]
-
-观测契约对所有编码共同延续健全，且 \(F\) 上所有对应上下文投影相同。还要求\textbf{观察者兼容性}：若编码词 \(w\) 从 \(\sigma\in F\) 执行产生具体轨迹 \(\tau\)，则右侧有定义且
-
-\[
-\mathsf{Obs}(\tau)=
-\mathsf{Obs}_D(\mathsf{Out}_D(s_D(\sigma),w)).
-\]
-
-定义 \(\beta_D(\sigma)=[s_D(\sigma)]_D\) 与
-\(F_{a^\#}=F\cap\gamma_\ell(a^\#)\)。最后要求\textbf{唯一单元条件}
-
-\[
-\forall\sigma\in F.\ \exists!a^\#\in\mathsf{Report}_V(P,\ell).\quad
-\sigma\in\gamma_\ell(a^\#),
-\]
-
-并令 \(\pi_R:F\to\mathsf{Report}_V(P,\ell)\) 把每个状态映射到其唯一实际计算单元。则报告在 \(F\) 上因子分解未来观测商，
-
-\[
-\exists h:\pi_R(F)\to Q_D.\quad \beta_D=h\circ\pi_R,
-\]
-
-当且仅当
-
-\[
-\forall a^\#\in\pi_R(F).\quad |\beta_D(F_{a^\#})|\le1.
-\]
-
-因此，报告不可因子分解等价于一个唯一实际计算单元包含两个不同
-\(\sim_D\) 类的状态。正向由复合函数立即得到；反向中，每个非空单元的唯一商类定义
-\(h\)。唯一单元条件使 \(\pi_R\) 真正成为函数；报告标签重叠时必须另行声明成员签名映射，不能直接套用本命题。\(\square\)
-
-记 \(\mathsf{Adm}(P,\ell,D,F;K_{\mathrm{obs}})\) 表示下列条件全部成立：
-\(P\in L_V\)；\((s_D,\iota_{P,\ell})\) 在 \(X_D\) 上操作充分；
-\(F\) 是上述可达非空纤维；以及运行词包含、观察者兼容、健全观测契约、共同上下文和唯一单元条件。
-
-\textbf{定义 2（相对于报告的输出见证残差语言）。} 固定一个可接纳元组。当满足下列条件时，依赖标签词
-\((P,\ell,D,F,a^\#,w)\) 是输出见证的报告相对残差：
-
-\[
-\begin{aligned}
-&(P,\ell,\iota_{P,\ell}(w))\in L_{\mathrm{causal}}(V,I;K_{\mathrm{obs}}),\qquad
-w\in\mathcal W_D(F),\\
-&\sigma_0,\sigma_1\in F
-\text{ 是编码词的定义 1 见证},\\
-&\pi_R(\sigma_0)=\pi_R(\sigma_1)=a^\#,
-\qquad
-\beta_D(\sigma_0)\ne\beta_D(\sigma_1).
-\end{aligned}
-\]
-
-\(L_{\mathrm{res}}^R(V,I,\mathsf{Report};K_{\mathrm{obs}})\)
-是在所有满足 \(\mathsf{Adm}\) 的元组上这些带标签词的并集。操作充分与观察者兼容把不同具体观测绑定到不同商类。商关系还区分有定义性，因此报告不可因子分解可能没有一个两边都终止并输出不同值的词；所以
-\(L_{\mathrm{res}}^R\) 只是因子分解失败的\textbf{输出见证子集}，并非所有失败的逆向刻画。它是前沿碰撞，不是声称完整全程序报告永远无法恢复最终函数。
-
-实例化定义 2
-需要实际已计算单元的提取器、已声明的具体化、覆盖以及一个固定的上下文纤维。保留的
-Linux 日志没有提供这些对象，因此 eBPF 案例只在声明的服务契约下给出条件性
-\(L_{\mathrm{causal}}\) 见证，未确立 \(L_{\mathrm{res}}^R\)。
-
-\hypertarget{ux5f62ux72b6ux7f3aux9677ux4e0eux7b56ux7565}{%
-\subsection{2.4
-形状、缺陷与策略}\label{ux5f62ux72b6ux7f3aux9677ux4e0eux7b56ux7565}}
-
-由缺陷诱导的缝隙违反已声明的识别器、报告或运行时契约。一个使用已文档化且安全保持语义、并在报告意图认证的关系上具有
-\(L_{\mathrm{res}}^R\) 见证的案例，只是契约形状缝隙的证据；仍须以报告符合性和粒度证据排除错误变换器、汇合或提取器。策略层面的怪异机器还需要同一计算上的行为主体控制、策略排除效果与非预期解释。因此，普通有状态 API 可以实现转导器，却未必满足任一分类。
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\hypertarget{ux6709ux754cux72b6ux6001ux4ecbux5bfcux7684ux7535ux8defux5b9eux73b0}{%
-\section{3.
-有界状态介导的电路实现}\label{ux6709ux754cux72b6ux6001ux4ecbux5bfcux7684ux7535ux8defux5b9eux73b0}}
-
-\hypertarget{ux4eceux4e00ux79cdux533aux5206ux5230ux53efux590dux7528ux95e8}{%
-\subsection{3.1
-从一种区分到可复用门}\label{ux4eceux4e00ux79cdux533aux5206ux5230ux53efux590dux7528ux95e8}}
-
-一个因果词可以揭示一种区分，却未必支持重复计算。固定一个确定性的门规约
-\(D\)、一个规范重置类 \(q_0\in Q_D\)（将其等同于
-\(S_D\) 中相应的子集），以及一个非空的可容许具体状态集
-\(\mathsf{Adm}_G\subseteq X_D\)。门基
-\((P_G,\mathit{reset},G,\mathit{observe},D,\mathsf{Adm}_G)\) 的预声明操作编码在
-\(X_D\) 上操作充分，并满足：
-
-\textbf{E1 --- 因果基与观测。}
-存在输入 \(x_0,x_1\)、前缀 \(p_0,p_1\)、同一剩余后缀 \(w\) 与内部前沿
-\(\ell_G\)，使 \(u_G(x_i)=p_iw\)。从规范重置类执行前缀后所达的两个状态，是定义 1 对编码后公共后缀的见证；完整门读出恰等于该因果观测，并且就是 E4-D 写入的门结果，而不是无关探针。
-
-\textbf{E2 --- 统一输入控制。} 被接受的 \(P_G\) 中有一个统一的分派器
-\(G\)，读取运行时比特 \(x\in\{0,1\}^2\) 并选择完整的门词
-\(u_G(x)\)。对于每个满足 \(s_D(\sigma)\in q_0\) 的
-\(\sigma\in\mathsf{Adm}_G\)，由 \(D\) 定义的执行均终止，并对函数
-\(g:\{0,1\}^2\to\{0,1\}\) 产生相同的比特
-\(g(x)\)，即
-
-\[
-\mathit{observe}(\mathsf{Out}_D(s_D(\sigma),u_G(x)))=g(x).
-\]
-
-实验者并非一个针对每个输入选择不同常量程序的外部预言机。
-
-\textbf{E3 --- 重置。} 重置词满足 \(\mathit{reset}\in A_D^*\)。对于每个
-\(\sigma\in\mathsf{Adm}_G\)，它均有定义、保持声明的导线单元不变，并终止于满足
-\(s_D(\tau)\in q_0\) 的 \(\tau\in\mathsf{Adm}_G\)。如果
-\(\mathsf{Adm}_G\)
-中的两个重置前状态在这些导线单元及固定上下文上相同，并分别重置到
-\(\tau_0,\tau_1\)，那么对于每个 \(x\in\{0,1\}^2\)，
-
-\[
-\mathsf{Out}_D(s_D(\tau_0),u_G(x))
-=
-\mathsf{Out}_D(s_D(\tau_1),u_G(x)).
-\]
-
-没有 E1，隐藏差异就不会产生程序可见的效果。没有
-E2，实验者可能自行提供真值表。没有
-E3，该通道可能只能使用一次。下面的第四个条件在不把电路语义置于外部预言机中的前提下组合该门。
-
-\hypertarget{ux63cfux8ff0ux7b26ux57df}{%
-\subsection{3.2 描述符域}\label{ux63cfux8ff0ux7b26ux57df}}
-
-本制品使用有界域 \(D_{64,512}\)。一个描述符为
-
-\[
-d=(m,n,(s_i^0,s_i^1)_{0\le i<n}),
-\]
-
-其中 \(0\le m\le64\)、\(0\le n\le512\)，并且对于每个门 \(i\) 和操作数
-\(b\)，
-
-\[
-0\le s_i^b<2+m+i
-\]
-
-记 \(m(d)=m\)、\(n(d)=n\)。导线 0 是常量零，导线 1
-是常量一，主输入占用导线 \(2\) 至 \(2+m-1\)，门 \(i\) 写入规范目标
-\(2+m+i\)。因此，存活的规范导线数最大为
-\(2+64+512=578\)，最高有效导线索引为 577。
-
-对于 \(x\in\{0,1\}^{m(d)}\) 和门函数 \(g\)，\(\mathsf{Eval}_g(d,x)\)
-初始化常量和输入向量，随后按照描述符顺序扩展导线向量：
-
-\[
-\nu[2+m+i]=g(\nu[s_i^0],\nu[s_i^1]).
-\]
-
-宿主编码 \(\mathsf{Enc}_U(d,x)\)
-将规范化描述符、输入和控制记录写入映射。文本格式 WMC1
-是一种宿主序列化。WMC1 和 \(d\) 都不是由 \(V\) 接受的 BPF
-程序；\(\mathsf{Sched}_U(d,x)\) 是被接受的 \(P_U\)
-读取该编码时诱导出的操作调度。
-
-对于 \(c=\mathsf{Enc}_U(d,x)\)，令 \(\mathsf{PhysRun}_U(c)=(s,k,\mu)\)
-包含最终状态码、已完成迭代次数和物理映射状态。定义相对于描述符的规范观测
-
-\[
-\mathsf{WireObs}_d(\mu)
-=(\mu[0],\ldots,\mu[1+m(d)+n(d)])
-\]
-
-以及状态掩蔽接口
-
-\[
-\mathsf{Run}_{U,d}(c)=
-\begin{cases}
-(s,\mathsf{WireObs}_d(\mu)),&s=\mathsf{OK},\\
-(s,\bot),&s\ne\mathsf{OK}.
-\end{cases}
-\]
-
-宿主只能从 \(\mathsf{OK}\)
-结果中投影所请求的输出导线。这条语义规则并未断言过期的物理单元已被擦除。
-
-\textbf{E4-D --- 有界数据参数化解释。} 当下列条件成立时，一个固定制品
-\(P_U\) 在 \(D_{64,512}\) 上履行 E4-D；其门基的制品分量必须是同一个
-\(P_U\)，而不是另一个门程序：
+\textbf{命题 1（上下文纤维上的行为因子分解）。} 固定
+\(P,\ell,D,K_{\mathrm{obs}}\) 和非空
+\(F\subseteq\mathsf{Reach}_I(P,\ell)\cap X_D\)。要求：
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  对于固定的映射定义和所记录的加载环境，\(P_U\in L_V\)，且这一点与描述符内容
-  \(d\) 和 \(x\) 无关；
+  \(\iota_{P,\ell}(\mathcal W_D(F))\subseteq W^\ell_{\mathrm{run}}(P)\)；
 \item
-  每个有效的 \(\mathsf{Enc}_U(d,x)\) 都建立一个回调前状态
-  \(\mu^{(0)}\)，其中 \(\mu^{(0)}[0]=0\)、\(\mu^{(0)}[1]=1\)，且对于
-  \(0\le j<m(d)\) 有 \(\mu^{(0)}[2+j]=x_j\)；它严格按顺序执行回调位置
-  \(0,\ldots,n(d)-1\)，并以
-  \(\mathsf{PhysRun}_U=(\mathsf{OK},n(d),\mu)\) 终止；
+  观测契约对全部编码共同延续健全；
 \item
-  一个外部临界区覆盖足迹中每个共享映射的设置、调用和读回；
+  \(F\) 上全部对应上下文投影相同；
 \item
-  每次迭代 \(i\)
-  都验证规范形式，并恰好复制其两个较早的源导线；紧接重置之前的完整具体状态
-  \(\sigma_i\) 属于 \(\mathsf{Adm}_G\)；随后，该次迭代进行重置并调用
-  E1--E3 门，仅将得到的 \(g\) 比特写入目标 \(2+m(d)+i\)
-  和声明的审计单元，并保持描述符及所有较早导线不变；以及
+  观察者兼容：若编码词 \(w\) 从 \(\sigma\) 执行产生具体轨迹 \(\tau\)，则
+  \[\mathsf{Obs}(\tau)=\mathsf{Obs}_D(\mathsf{Out}_D(s_D(\sigma),w));\]
 \item
-  任何执行都不超过 512
-  次迭代；与此同时，由所声明的描述符校验器覆盖的格式错误核心 ABI
-  控制或描述符配置以非 \(\mathsf{OK}\) 状态终止，完成的迭代次数至多为
-  512，且语义结果为 \((s,\bot)\)。
+  \textbf{唯一单元条件}：
+  \[\forall\sigma\in F.\ \exists!a^\#\in\mathsf{Report}_V(P,\ell).
+  \sigma\in\gamma_\ell(a^\#).\]
 \end{enumerate}
 
-这些条款是有意设定的证明义务。特别是，E4-D
-要求写入门结果，并满足精确的迭代与终止行为；仅仅遍历描述符并不足够。
+令 \(\pi_R:F\to\mathsf{Report}_V(P,\ell)\)
+把状态映射到其唯一实际计算单元，\(\beta_D(\sigma)=[s_D(\sigma)]_D\)，\(F_{a^\#}=F\cap\gamma_\ell(a^\#)\)。则
 
-\hypertarget{ux5b9eux73b0ux5b9aux7406}{%
-\subsection{3.3 实现定理}\label{ux5b9eux73b0ux5b9aux7406}}
+\[\exists h:\pi_R(F)\to Q_D.\ \beta_D=h\circ\pi_R\]
 
-\textbf{定理 1（显式义务下的有界组合）。} 假设固定的 \(P_U\)
-在其声明的确定性且串行化环境下履行 E4-D，并且其嵌入的门基以函数 \(g\)
-满足 E1--E3。那么，对于每个 \(d\in D_{64,512}\) 和
-\(x\in\{0,1\}^{m(d)}\)，
+当且仅当
 
-\[
-\mathsf{Run}_{U,d}(\mathsf{Enc}_U(d,x))
-=(\mathsf{OK},\mathsf{Eval}_g(d,x))
-\]
+\[\forall a^\#\in\pi_R(F).\ |\beta_D(F_{a^\#})|\le1.\]
 
-恰好在 \(n(d)\) 次迭代后成立。如果识别边界还对 \(\mathsf{Safe}\)
-满足安全健全性，那么这些轨迹也满足 \(\mathsf{Safe}\)。
+所以，报告在 \(F\)
+上不可因子分解，当且仅当一个唯一实际计算单元包含来自两个不同 \(\sim_D\)
+类的状态。唯一单元条件是使 \(\pi_R\)
+成为函数的必要前提；若报告标签重叠，必须另行声明成员签名映射，不能沿用本命题。
 
-\emph{证明概要。} E4-D 初始化常量/输入前缀。在迭代 \(i\)
-中，描述符约束保证两个源都是较早的单元。E3 提供 \(q_0\)，E2 从该类提供
-\(g\)，而 E4-D
-仅将其写入规范目标，同时保持已经建立的前缀不变。对前缀进行归纳，可在
-\(n(d)\) 次迭代后得到 \(\mathsf{Eval}_g\)；精确调度条款给出终止状态
-\(\mathsf{OK}\)。E1 将 E2 与 E4-D 使用的同一个功能位绑定到因果同后缀状态区分；没有 E1，归纳只能证明一个普通的有界 \(g\) 求值器，而不是状态介导求值器。安全性仅由单独的健全性前提推出。\(\square\)
+记 \(\mathsf{Adm}(P,\ell,D,F;K_{\mathrm{obs}})\)
+表示接受、操作充分、可达非空纤维、运行词包含、观测者兼容、健全观测契约、共同上下文和唯一单元条件全部成立。唯一单元条件使非空的
+\(F_{a^\#}\)
+构成不交覆盖；单元重叠的报告需要另行声明成员签名映射，不属于本判据。
 
-该定理分解了局部门、重置、调度和帧义务；它并未声称测试枚举了整个描述符域。它也没有证明
-E4-A；在 E4-A 中，编译器会为每个电路生成不同的、被接受的 BPF 对象。
+可接纳性是内部语义定型条件，并不自动排除事后选择。每个正面实例必须声明
+\(D\)、\(F\)、观测者、后缀和报告接口究竟是在看到区分性执行之前预先确定，还是在结果已知后事后选定。若要提出前瞻性或报告层面的一般主张，还须提供独立于见证输出的选择来源，例如预先登记的协议或外部规定的报告契约。事后元组可以严格满足定义
+2，但仅凭这一事实不能刻画识别器意图中的报告、更广的执行域或一类实现。
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{定义 2（相对于报告的输出见证残差语言）。}
+对一个可接纳元组，带标签词 \((P,\ell,D,F,a^\#,w)\)
+属于输出见证的报告相对残差，当：编码词属于
+\(L_{\mathrm{causal}}\)；\(w\in\mathcal W_D(F)\)；定义 1 的两个见证位于
+\(F\)；二者唯一报告标签同为 \(a^\#\)；且其 \(\beta_D\)
+类不同。\(L_{\mathrm{res}}^R\) 是所有可接纳元组上这类带标签词的并集。
 
-\hypertarget{ebpf-ux6821ux51c6ux6848ux4f8b}{%
-\section{4. eBPF 校准案例}\label{ebpf-ux6821ux51c6ux6848ux4f8b}}
+该定义只是报告因子分解失败的\textbf{输出见证子集}。商关系也区分有定义性，因此可能存在不可因子分解，却没有一个两边都终止并产生不同输出的词。保留的
+\texttt{wm\_circuit} Linux
+日志不提供实际计算单元提取器、具体化或唯一单元映射；所以该解释器载体只给出条件性
+\(L_{\mathrm{causal}}\) 见证，不建立 \(L_{\mathrm{res}}^R\)。第 5.7
+节为另一个有限的 \texttt{rac\_single} 载体实例化这些对象。
 
-\hypertarget{ux6267ux884cux8fb9ux754c}{%
-\subsection{4.1 执行边界}\label{ux6267ux884cux8fb9ux754c}}
+\hypertarget{24-ux5f62ux72b6ux7f3aux9677ux4e0eux7b56ux7565}{%
+\subsection{2.4
+形状、缺陷与策略}\label{24-ux5f62ux72b6ux7f3aux9677ux4e0eux7b56ux7565}}
 
-程序 \(P_U=\mathit{wm\_circuit}\) 是一个固定的 eBPF 制品，其节为
-\(\mathit{SEC}(\text{syscall})\)。在所记录的环境中，内核验证器接受该程序，用户空间则通过
-\(\mathit{bpf\_prog\_test\_run\_opts}()\) 离线执行它；Linux
-文档同时说明了用户空间程序执行以及 syscall 节/程序类型映射
-{[}10{]}、{[}11{]}。其中不涉及任何实时钩子。该实验在本地以特权方式运行，其接受与资源事实仍局限于所记录的程序类型、内核和体系结构。
+缺陷诱导缝隙违反声明的识别器、报告或运行时契约。一个使用已文档化且安全保持语义、并在报告意图认证的关系上具有
+\(L_{\mathrm{res}}^R\) 见证的案例，只是契约形状缝隙的证据；仍须以 Conf
+与 Gran
+排除错误变换器、汇合或提取器。策略级怪异机器还需同一计算上的行为主体控制、策略排除效果与非预期解释。普通有状态
+API 即使实现转导器，也未必满足任一分类。
 
-载体边界如下：
+\hypertarget{3-ux6709ux754cux72b6ux6001ux4ecbux5bfcux7684ux7535ux8defux5b9eux73b0}{%
+\section{3.
+有界状态介导的电路实现}\label{3-ux6709ux754cux72b6ux6001ux4ecbux5bfcux7684ux7535ux8defux5b9eux73b0}}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-宿主数据与验证
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-识别单元
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-接受后解释
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-文本 WMC1 \(\rightarrow\) 规范化映射配置 \(\mathsf{Enc}_U(d,x)\) & \(V\)
-接受固定的 \(P_U\)，而非 WMC1 或 \(d\) & \(P_U\) 读取映射
-\(\rightarrow\mathsf{Sched}_U(d,x)\rightarrow\)
-辅助函数返回值和导线观测 \\
-\end{longtable}
+\hypertarget{31-e1e3ux4eceux533aux5206ux5230ux53efux590dux7528ux95e8}{%
+\subsection{3.1
+E1--E3：从区分到可复用门}\label{31-e1e3ux4eceux533aux5206ux5230ux53efux590dux7528ux95e8}}
 
-门映射 \(G0\) 是一个专用的 \(\mathit{BPF\_MAP\_TYPE\_HASH}\) 映射，且
-\(\mathit{max\_entries}=2\)。它不是 LRU 映射，并保留默认预分配；Linux
-文档说明了该映射类型的条目上限、默认预分配、更新标志，以及成功/负错误值约定
-{[}12{]}。该规约要求重置成功，并要求一个外部临界区覆盖足迹中每个映射的设置、调用和读回。串行测试框架满足无交错使用模式，但
-eBPF 程序本身没有实现并发锁。
-
-\hypertarget{ux9971ux548cux79e9-nand}{%
-\subsection{4.2 饱和秩 NAND}\label{ux9971ux548cux79e9-nand}}
-
-该门使用两两不同的键：哨兵 \(S\)、输入键 \(A\) 和输入键
-\(B\)。重置操作删除三者并插入
-\(S\)，从而建立占用数一。对于第一个输入，零会更新 \(S\)，一会插入新的
-\(A\)；对于第二个输入，零会更新 \(S\)，一会插入新的 \(B\)。命题 2
-给出抽象占用规律。对于 Linux
-实例，已有键成功、低于容量时新键成功，以及达到容量时新键失败，均为仅限于有效参数、默认预分配、成功重置、无干扰及所记录
-Linux 6.17 环境的显式前提。参考文献 {[}12{]}
-提供映射接口和返回约定；保留的原始返回值与机制控制在该对象上实例化了这一规律。该门只观测第二次更新的成功谓词，而不观测可移植的错误编号。
-
-四种执行如下：
-
-\begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1905}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1905}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1429}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1905}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedleft
-\(a\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-重置后的操作词
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-第二次操作前的状态
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-第二次结果
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-输出 \([\mathit{ret}=0]\)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-0 & 0 & \(\mathit{updS};\mathit{updS}\) & \(\{S\}\) & 成功 & 1 \\
-0 & 1 & \(\mathit{updS};\mathit{insB}\) & \(\{S\}\) & 成功 & 1 \\
-1 & 0 & \(\mathit{insA};\mathit{updS}\) & \(\{S,A\}\) & 成功 & 1 \\
-1 & 1 & \(\mathit{insA};\mathit{insB}\) & \(\{S,A\}\) & 失败 & 0 \\
-\end{longtable}
-
-\textbf{命题 2（饱和秩 NAND）。} 令秩表示容量为 \(k\ge2\)
-的资源中已占用名称的数量。重置在已有 \(S\) 的情况下建立秩
-\(k-1\)，而两两不同的 \(A\) 和 \(B\)
-是新名称。更新已有名称会成功且不改变秩；当秩低于 \(k\)
-时，更新新名称会成功并增加秩；当秩达到 \(k\)
-时，该操作会失败且不改变秩。将零分派给 \(S\)，将第一个一分派给
-\(A\)，将第二个一分派给 \(B\)。第二次更新的成功谓词为
-\(\mathsf{NAND}(a,b)\)。
-
-\emph{证明。} 当 \(a=0\) 时，第一次更新保持秩
-\(k-1\)，因此无论哪一种第二次更新都会成功。当 \(a=1\)
-时，第一次更新将秩提高到 \(k\)；当 \(b=0\) 时，由于 \(S\)
-已存在，第二次更新成功；当 \(b=1\) 时，由于 \(B\)
-是新名称，第二次更新失败。因此，输出依次为 \(1,1,1,0\)。\(\square\)
-
-NAND 具功能完备性，因为 \(\neg x=\mathsf{NAND}(x,x)\)，且
-\(x\land y=\neg\mathsf{NAND}(x,y)\)。512 门界限制电路规模，不限制布尔基。
-
-对于定义 1 的具体见证，取 \(P=\mathit{wm\_circuit}\)，并令 \(\ell\) 为
-\(\mathit{circuit\_step\_cb}\) 中第一次输入条件操作之后、第二次映射更新之前的点。令
-\(R_{G0}(\sigma)\) 为专用映射 \(G0\) 的\textbf{完整辅助函数相关动态状态}，包括键占用、桶、预分配元素/空闲链元数据，以及更新辅助函数读取的任何其他映射局部状态；取
-\(\rho_{\mathrm{obs}}(\sigma)=R_{G0}(\sigma)\)。已占用键集合
-\(K_{G0}(\sigma)\) 只是 \(R_{G0}(\sigma)\) 的派生投影，不能单独充当完整选定状态。
-
-输入 \((0,1)\) 和 \((1,1)\) 在 \(\ell\) 处分别到达 \(\sigma_0\) 与
-\(\sigma_1\)，其派生占用集合为 \(\{S\}\) 与 \(\{S,A\}\)，故完整动态状态不同。公共剩余后缀 \(w\) 是插入新键 \(B\)，随后统一捕获并存储成功位；定义
-\(\mathsf{Obs}(\tau)=[\mathit{ret}(\tau)=0]\)。切片和 \(\mathsf{ctx}_w\)
-包括共同程序点、键 \(B\)、值、\(G0\) 身份与静态属性（映射类型、容量、默认预分配和 \(\mathit{BPF\_ANY}\) 模式）、相关控制与导线值，以及位于 \(R_{G0}\) 外但被后缀读取的全部分量。\(\mathsf{Env}\) 固定内核、对象、映射实例、调度和无干扰条件。
-
-在声明的映射更新契约下，两次后缀终止并分别观察到 1 和 0。较早输入不被后缀读取，其持续且与后缀相关的效应包含于完整 \(R_{G0}\) 中，所以非选定上下文相同。因而这是声明具体服务契约下的\textbf{条件性}定义 1 见证；它比只选占用集合更强，也不声称保留轨迹暴露了全部内核字段。
-
-在门规约下，取
-\(s_{D_G}(\sigma)=(\mathit{phase}(\sigma),K(\sigma))\)，但只在由有效参数、专用预分配映射契约、成功重置、串行化和无干扰界定的不变区域 \(X_{D_G}\) 上使用。其操作充分性是显式服务契约前提，不是对所有内核字段的机器检查模型。phase
-取值于重置/哨兵/第一次操作/第二次操作阶段，而 \(K\subseteq\{S,A,B\}\) 且
-\(|K|\le2\)。该载体及其未来观测商有限。完整重置加门词未必因果，因为重置会消除传入差异；见证由第一次操作后的内部前沿标记。取 \(P_G=P_U\)、\(\mathsf{Adm}_G=X_{D_G}\)，上述见证支持 E1，命题 2 与重置前提支持 E2--E3。
-
-该机制并未为 eBPF
-增加外延意义上的布尔表达能力。它是一个校准案例，表明有文档记录的有状态服务可以提供一个可复用的接受后阶段逻辑门；它本身并不能确立报告遗漏。
-
-\hypertarget{ux56faux5b9aux89e3ux91caux5668ux4e0eux6620ux5c04-abi}{%
-\subsection{4.3 固定解释器与映射
-ABI}\label{ux56faux5b9aux89e3ux91caux5668ux4e0eux6620ux5c04-abi}}
-
-除 \(G0\) 外，\(\mathit{wm\_circuit}\) 还使用 \(\mathit{TAPE}\)
-和四个解释器映射：
+固定规约 \(D\)、规范重置商类 \(q_0\in Q_D\) 及非空
+\(\mathsf{Adm}_G\subseteq X_D\)。门基
+\((P_G,\mathit{reset},G,\mathit{observe},D,\mathsf{Adm}_G)\)
+的操作编码在 \(X_D\) 上操作充分，并满足：
 
 \begin{itemize}
 \tightlist
 \item
-  \(\mathit{TAPE}\) 记录构建变体、容量、选定的原始返回值和错误计数；
+  \textbf{E1（因果基与观测）}：存在输入 \(x_0,x_1\)、前缀
+  \(p_0,p_1\)、同一剩余后缀 \(w\) 和内部前沿 \(\ell_G\)，使
+  \(u_G(x_i)=p_iw\)；两个前缀所达状态是定义 1 对编码 \(w\)
+  的见证；完整门读出恰等于该因果观测，并正是 E4-D 写入的门结果。
 \item
-  \(\mathit{CIRCUIT}\) 存储规范化记录
-  \((\mathit{op},\mathit{src0},\mathit{src1},\mathit{dst})\)；
+  \textbf{E2（统一输入控制）}：同一 \(P_G\) 中的分派器读取
+  \(x\in\{0,1\}^2\)。从 \(q_0\) 中任意可接纳状态执行 \(u_G(x)\)
+  都有定义，且
+  \[\mathit{observe}(\mathsf{Out}_D(s_D(\sigma),u_G(x)))=g(x).\]
 \item
-  \(\mathit{WIRES}\) 存储常量、主输入和规范的 SSA 风格门输出；
-\item
-  \(\mathit{VM\_CONTROL}\) 提供 ABI 版本和声明的计数；
-\item
-  \(\mathit{VM\_TRACE}\)
-  存储每个门的有效性与输出，并且对于状态介导变体，还存储第二个辅助函数的原始返回值。
+  \textbf{E3（重置）}：重置词对所有可接纳状态有定义，保持导线单元并返回
+  \(q_0\)；固定上下文和导线相同的两个重置结果，对所有输入产生相同完整输出词。
 \end{itemize}
 
-宿主解析器检查并规范化
-WMC1、写入映射单元，并保留所请求的输出列表。只有在
-\(\mathit{status}=\mathsf{OK}\) 后才会投影该列表，且 BPF
-从不读取该列表。源代码层面的掩蔽由宿主控制流保护；负向测试套件测试拒绝状态和执行计数，而非注入的运行时掩蔽路径。在内核内部，一个有界循环处理至多
-512 个描述符。每次迭代在调用辅助函数之前复制描述符和源值，重置
-\(G0\)，调用该门，并按键更新规范目标，从而避免在这些调用之间保留映射值指针。
+E1 防止读出与状态区分无关；E2 防止实验者从外部提供真值表；E3
+防止通道只能使用一次。
 
-规范目标防止源/目标别名和前向引用。所覆盖的格式错误版本、计数、操作码、目标或源会得到非
-\(\mathsf{OK}\)
-状态。对于有效描述符，拓扑限制保证每个源都位于更早位置。外部的全事务串行化防止并发混合配置；连续的串行调用会覆盖共享单元，而过期的物理单元可能仍然保留。
+\hypertarget{32-ux63cfux8ff0ux7b26ux57dfux4e0e-e4-d}{%
+\subsection{3.2 描述符域与
+E4-D}\label{32-ux63cfux8ff0ux7b26ux57dfux4e0e-e4-d}}
 
-验证器的接受单元是固定的解释器制品，而非每个描述符，尽管测试框架可能针对不同数据集重新加载同一个对象。改变映射配置会改变被解释的电路。这是
-E4-D 的载体区分，而不是编译器为每个电路生成新的被接受 BPF 对象的证据。
+域 \(D_{64,512}\) 的描述符为
 
-\hypertarget{ux6e90ux4ee3ux7801ux5c42ux9762ux7684ux4e0dux53d8ux5f0fux4e0eux8bc1ux636eux8fb9ux754c}{%
-\subsection{4.4
-源代码层面的不变式与证据边界}\label{ux6e90ux4ee3ux7801ux5c42ux9762ux7684ux4e0dux53d8ux5f0fux4e0eux8bc1ux636eux8fb9ux754c}}
+\[d=(m,n,(s_i^0,s_i^1)_{0\le i<n}),\]
 
-\textbf{引理 1（源代码层面的解释器前缀不变式）。}
-假设命题 2 的更新律、成功重置和必需的映射/辅助函数调用、E4-D 串行化环境、有效的
-\(\mathsf{Enc}_U(d,x)\)，并且所捕获的转换后对象保留了经人工检查的源代码控制/数据依赖。对于每个满足
-\(0\le t\le n(d)\) 的整数 \(t\)，在 \(t\) 次成功回调之后，索引低于
-\(2+m(d)+t\) 的规范导线所构成的序列等于
-\(\mathsf{Eval}_{\mathsf{NAND}}(d,x)\) 的对应前缀。
+其中 \(0\le m\le64\)、\(0\le n\le512\) 且 \(0\le s_i^b<2+m+i\)。导线
+0、1 为常量，输入位于 2 至 \(2+m-1\)，门 \(i\) 写规范目的
+\(2+m+i\)；最多 578 条活跃规范导线，最高索引 577。
 
-\emph{证明概要。}
-外层程序初始化常量，并保留宿主写入的输入。回调验证当前操作码、目标和较早的源，随后复制描述符和源比特。命题
-2 给出重置后的
-NAND；成功时仅写入规范目标，并增加完成计数。外层程序通过
-\(\mathit{bpf\_loop}\) 请求 \(n(d)\) 次迭代；辅助函数契约规定回调返回 0 继续、返回 1 停止，并报告实际迭代次数 {[}13{]}。解释器只有在该返回值与自身完成计数都等于 \(n(d)\) 时才接受。对 \(t\)
-进行归纳即可得到前缀结论。这是由保留的转换后转储支持人工检查的源代码层面论证，而非经过机器检查的
-eBPF 语义证明。\(\square\)
+\(\mathsf{Eval}_g(d,x)\) 按描述符顺序扩展完整规范导线向量：
 
-E4-D 实现论证与制品的对应关系如下：
+\[\nu[2+m+i]=g(\nu[s_i^0],\nu[s_i^1]).\]
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-条款
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-源代码/捕获证据
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-实证检查或剩余前提
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-1 --- 固定接受单元 & 保留的正常对象、验证器元数据、捕获的已加载程序标签
-& 描述符变化不会产生新的 BPF 制品 \\
-2 --- 初始状态与精确调度 & \(\mathit{wm\_circuit}\) 初始化常量、调用
-\(\mathit{bpf\_loop}\)，并检查循环返回值/完成计数 &
-命名、随机、零、深度和联合边界运行 \\
-3 --- 串行化 & 运行器串行调用各项配置；程序不含锁 &
-覆盖整个映射集合的临界区仍是外部前提 \\
-4 --- 门/帧条件 & \(\mathit{circuit\_step\_cb}\) 验证/复制源、重置
-\(G0\)，并更新一个规范目标 & 语义审计器检查所发出的目标与输出 \\
-5 --- 边界/错误 & 计数防护、回调失败状态、宿主侧状态掩蔽防护 &
-八个负向案例检查状态/计数；掩蔽路径仅由源代码防护 \\
-\end{longtable}
+\(\mathsf{Enc}_U(d,x)\) 把规范描述符、输入和控制写入映射；WMC1
+只是宿主序列化，不是 \(V\) 接受的 BPF 程序。固定解释器 \(P_U\)
+读取配置并诱导 \(\mathsf{Sched}_U(d,x)\)。状态屏蔽接口只在状态为
+\(\mathsf{OK}\) 时返回规范导线观察；这不声称物理陈旧单元被擦除。
 
-因此，A 已记录；C 只在声明的具体服务/无干扰契约下有条件性见证；P 在额外的源到对象、帧保持及串行化前提下得到支持。节点 R
-和 W 缺失：未提供 Linux 报告单元提取器或部署策略。
+\textbf{E4-D（有界数据参数化解释）：}要求同一个 \(P_U\) 与 E1--E3
+门基共享制品，并满足：固定映射定义与记录环境中的接受独立于
+\(d,x\)；有效配置初始化常量和输入，恰按 \(0,\ldots,n-1\)
+执行并成功终止；一个外部临界区覆盖全部共享映射的设置、调用和回读；每次迭代验证规范形式、复制两个较早源、重置并调用门，只写规范目的与审计单元并保持描述符和既有导线；畸形配置在至多
+512 次内以非 \(\mathsf{OK}\) 终止并返回语义结果 \((s,\bot)\)。
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\hypertarget{33-ux5b9eux73b0ux5b9aux7406}{%
+\subsection{3.3 实现定理}\label{33-ux5b9eux73b0ux5b9aux7406}}
 
-\hypertarget{ux8bc4ux4f30}{%
-\section{5. 评估}\label{ux8bc4ux4f30}}
+\textbf{定理 1（显式义务下的有界组合）。} 若同一固定 \(P_U\)
+在声明的确定、串行化环境下履行 E4-D，且其门基以函数 \(g\) 履行
+E1--E3，则对所有 \(d\in D_{64,512}\) 和 \(x\in\{0,1\}^{m(d)}\)，
 
-\hypertarget{ux8bb0ux5f55ux7684ux73afux5883ux4e0eux4e3bux8981ux8fd0ux884c}{%
-\subsection{5.1
-记录的环境与主要运行}\label{ux8bb0ux5f55ux7684ux73afux5883ux4e0eux4e3bux8981ux8fd0ux884c}}
+\[\mathsf{Run}_{U,d}(\mathsf{Enc}_U(d,x))
+=(\mathsf{OK},\mathsf{Eval}_g(d,x))\]
 
-主要证据是包含源码快照的运行证据包
-\(\mathit{results/interpreter/interpreter\text{-}final\text{-}20260711\text{-}02/}\)。它记录了
-Ubuntu 24.04、aarch64 上的 Linux 6.17.0-35-generic，并保存了四个 BPF
-变体、所捕获的已加载程序元数据、验证器日志、描述符、JSONL
-输出、由作者执行的语义审计、当时选定的源码/手稿快照，以及一份自行签发的
-SHA-256 清单。最终手稿晚于该运行，不受该清单覆盖。这是一次由作者生成的运行，并带有一项单独由作者执行的审计，而非第三方复现。
+并恰执行 \(n(d)\) 次迭代。若识别边界另有 \(\mathsf{Safe}\)
+的安全健全性前提，这些轨迹才可额外推出属于 \(\mathsf{Safe}\)。
 
-该数据集恰好包含
+证明由规范前缀归纳给出：E4-D
+初始化前缀与精确调度，描述符界保证源均已建立，E3 回到 \(q_0\)，E2 给出
+\(g\)，E4-D 只写新目的并保持前缀；E1
+只负责把该功能位绑定到同后缀因果区分。定理分解证明义务，不声称测试枚举了描述符域，也不证明``每个电路生成一个新
+BPF 对象''的 E4-A。
+
+\hypertarget{4-ebpf-ux6821ux51c6ux6848ux4f8b}{%
+\section{4. eBPF 校准案例}\label{4-ebpf-ux6821ux51c6ux6848ux4f8b}}
+
+\hypertarget{41-ux6267ux884cux4e0eux8f7dux4f53ux8fb9ux754c}{%
+\subsection{4.1
+执行与载体边界}\label{41-ux6267ux884cux4e0eux8f7dux4f53ux8fb9ux754c}}
+
+固定程序 \(P_U=\mathit{wm\_circuit}\) 的节为
+\texttt{SEC("syscall")}。记录环境中，内核验证器接受该对象，用户态通过
+\texttt{bpf\_prog\_test\_run\_opts()} 离线执行；该解释器运行没有实时钩子
+{[}10{]}, {[}11{]}。验证单元是固定 \(P_U\)，不是 WMC1
+或描述符；接受后，\(P_U\) 读取映射并生成辅助函数操作与导线观察。
+
+门映射 G0 是 \texttt{BPF\_MAP\_TYPE\_HASH}，\texttt{max\_entries=2}，非
+LRU，保持默认预分配
+{[}12{]}。规约要求重置成功，并由外部临界区覆盖设置、调用与回读；程序本身没有并发锁。
+
+\hypertarget{42-ux9971ux548cux79e9-nand-ux4e0eux6761ux4ef6ux6027-c}{%
+\subsection{4.2 饱和秩 NAND 与条件性
+C}\label{42-ux9971ux548cux79e9-nand-ux4e0eux6761ux4ef6ux6027-c}}
+
+使用互异的哨兵键 \(S\) 与输入键 \(A,B\)。重置删除三键后插入
+\(S\)。零更新 \(S\)，第一个一插入 \(A\)，第二个一插入
+\(B\)。在有效参数、默认预分配、成功重置、无干扰和记录 Linux 6.17
+环境前提下，已有键更新成功且不增占用，新键在容量以下成功并增占用，容量已满时失败；只观察第二次更新是否成功，不依赖具体错误码
+{[}12{]}。四种输出为 \(1,1,1,0\)，即 NAND。NAND 具功能完备性，因为
+\(\neg x=\mathsf{NAND}(x,x)\) 且 \(x\land y=\neg\mathsf{NAND}(x,y)\)。
+
+定义 1 的具体见证取内部前沿为第一次输入条件操作之后、第二次更新之前。令
+\(R_{G0}(\sigma)\) 为专用映射 G0
+的\textbf{完整辅助函数相关动态状态}，包括键占用、桶、预分配元素/空闲链元数据以及更新辅助函数读取的任何其他映射局部状态，并取
+\(\rho_{\mathrm{obs}}(\sigma)=R_{G0}(\sigma)\)。占用键集合 \(K_{G0}\)
+只是 \(R_{G0}\) 的派生投影，不能单独充当完整选定状态。
+
+输入 \((0,1)\) 与 \((1,1)\) 在该前沿的派生占用分别为 \(\{S\}\) 与
+\(\{S,A\}\)，所以完整状态不同。公共后缀 \(w\) 是插入新键
+\(B\)，随后统一捕获并存储成功位；\(\mathsf{Obs}(\tau)=[\mathit{ret}(\tau)=0]\)。\(\mathsf{ctx}_w\)
+包含程序点、键和值、G0
+身份与静态属性、模式、相关控制/导线值，以及所有位于 \(R_{G0}\)
+之外但被后缀读取的分量；\(\mathsf{Env}\)
+固定内核、对象、映射实例、调度及无干扰。在声明的映射更新契约下，两次观察为
+1 与 0。较早输入不被后缀读取，其持续且与后缀相关的效应包含于完整
+\(R_{G0}\) 中。因此这是\textbf{依赖具体服务契约的条件性 C
+见证}，不是内核内部状态已被轨迹完整暴露的主张。
+
+门规约的 \(s_{D_G}(\sigma)=(\mathit{phase}(\sigma),K(\sigma))\)
+只在由有效参数、专用预分配映射契约、成功重置、串行化与无干扰界定的
+\(X_{D_G}\)
+上使用。其操作充分性是显式服务契约前提，不是对所有内核字段的机器检查模型。E1
+由上述内部前沿见证支持；命题 2 与重置前提支持 E2--E3。该机制不增加 eBPF
+的外延布尔表达能力，也不单独证明报告遗漏。
+
+\hypertarget{43-ux56faux5b9aux89e3ux91caux5668ux524dux7f00ux4e0dux53d8ux5f0fux4e0eux8bc1ux636eux8fb9ux754c}{%
+\subsection{4.3
+固定解释器、前缀不变式与证据边界}\label{43-ux56faux5b9aux89e3ux91caux5668ux524dux7f00ux4e0dux53d8ux5f0fux4e0eux8bc1ux636eux8fb9ux754c}}
+
+解释器还使用
+TAPE、CIRCUIT、WIRES、VM\_CONTROL、VM\_TRACE。宿主解析并规范化
+WMC1，写映射，只在 \texttt{status=OK} 后投影请求输出；输出列表不由 BPF
+读取。内核中有界循环处理至多 512
+个描述符；每次迭代先复制描述符和源值，再调用辅助函数、重置
+G0、执行门并按键更新规范目的，避免跨辅助函数保留映射值指针。
+
+源码级前缀不变式在下列前提下成立：命题 2
+更新律、成功重置及必需调用、E4-D
+串行化、有效编码，以及捕获目标保留人工检查的源码控制/数据依赖。\texttt{bpf\_loop}
+请求 \(n(d)\) 次迭代；回调返回 0 继续、1 停止，辅助函数返回执行次数
+{[}13{]}；解释器只有在该返回值与自身完成计数均为 \(n(d)\)
+时接受。归纳得到每个规范前缀等于
+\(\mathsf{Eval}_{\mathsf{NAND}}\)。这是源码级论证加人工检查转储，不是机器检查的
+eBPF 语义证明。
+
+因此：A 已记录；C 仅在声明的映射服务/无干扰契约下为条件性；P
+还依赖源码到对象、帧保持和串行化前提。对这个 \texttt{wm\_circuit}
+载体，没有解释器前沿的 Linux 报告单元提取器或部署策略，故其 R 与 W
+均未建立。
+
+\hypertarget{5-ux8bc4ux4f30}{%
+\section{5. 评估}\label{5-ux8bc4ux4f30}}
+
+主要证据位于
+\texttt{results/interpreter/interpreter-final-20260711-02/}，环境为
+Ubuntu 24.04、Linux 6.17.0-35-generic、aarch64。证据包保留四个 BPF
+变体、已加载程序元数据、验证器日志、描述符、JSONL、作者运行的语义审计、当时选择的源码/手稿快照及自行签发的
+SHA-256
+清单。最终手稿晚于该运行，不受该清单覆盖；证据由作者生成并由作者另行审计，不是第三方复现。
+
+证据行总数为
+
+\[38{,}533=26{,}488\text{ 条逐门记录}+12{,}037\text{ 条成功运行记录}+8\text{ 条负对照记录},\]
+
+它们是异构证据行，不是``38,533 个测试''。覆盖包括：9 个具名电路（39
+次成功、166 门记录）；100 个固定种子随机 DAG（1,876 次、23,776
+门记录）；512 门深度与 64 输入/512 门/578 线联合边界（4 次、2,048
+门记录）；零门与 10,000 次串行调用（10,001 次）；三种机制/基线对照（117
+次、498 门记录）；8 个畸形案例。联合 64 输入边界只测试全零和全一，不是
+\(2^{64}\) 穷举；整个语料库是回归证据，不是 \(D_{64,512}\) 的枚举证明。
+
+独立语义审计重建具名和边界描述符、再生成随机语料、独立计算完整导线向量、检查目的与畸形案例并匹配运行标签；审计报告成功。清单验证也成功，但清单不是签名、时间戳、认证或独立复现。
+
+容量 64 与强制哨兵对照均使具名语料 166 个门输出全为
+1；算术基线产生预期结果。它们支持``容量饱和和第二个新键共同导致零输出''的机制归因，不证明等价验证器报告。Linux
+验证器文档的目标是程序安全、路径、参数和内存访问
+{[}14{]}，不承诺映射介导计算的完备功能证书。保留的 \texttt{wm\_circuit}
+证据在解释器前沿没有报告提取器，因此不推断验证器单元跟踪该程序辅助函数返回值的精度。该载体用于校准
+LangSec 中``已识别安全性''与``被解释功能''之间的边界：其 R
+仍未建立，但这不影响第 5.7
+节以专用已接受对象和显式操作剪枝报告契约评估另一个 stock-Linux 载体。
+
+\hypertarget{56-ux56faux5b9aux8f85ux52a9ux53efux6267ux884cux62a5ux544aux5b9eux4f8b}{%
+\subsection{5.6
+固定辅助可执行报告实例}\label{56-ux56faux5b9aux8f85ux52a9ux53efux6267ux884cux62a5ux544aux5b9eux4f8b}}
+
+为在不重命名 Linux 验证器制品的前提下执行报告相对判据，将辅助 R
+实例嵌入第 7.1 节的完整模型载体并固定
+
+\[M_{\mathit{linux\_r\_aux\_v1}}=
+(V_{\mathit{linux\_r}},I_{\mathit{hash}},\mathsf{Report}_{\mathit{aux}},
+K_{\mathrm{obs}},P_{\mathit{aux}},\ell,D,F,
+\varnothing,\varnothing,\varnothing,\varnothing).\]
+
+\(P_{\mathit{aux}}\) 由自定义报告生成识别器 \(V_{\mathit{linux\_r}}\)
+接受；它不是经 stock Linux 验证器接受的 BPF 对象。\(I_{\mathit{hash}}\)
+是有限、确定、串行且无干扰的受限语义，只覆盖固定程序使用的非驱逐 HASH
+映射更新情形。这里 \(\mathsf{Report}_{\mathit{aux}}\) 只指
+\texttt{report.json{[}"report\_cells"{]}}；\texttt{derivation.json}
+仅记录工作列表/计算溯源，不属于报告标签接口。最后四项分别是有类型的空行为主体集、空效果集、空驱动关系和空许可效果集；它们只把
+R 实例嵌入共同载体，不提出 W 论断。
+
+\textbf{可执行证书。} \(R(M_{\mathit{linux\_r\_aux\_v1}})\)
+成立（制品状态：established）。
+
+\emph{证书论证。} 识别器接受
+\(P_{\mathit{aux}}\)。在单一串行无干扰环境中穷尽
+\(a\in\{0,1\}\)、\(b=1\)，得到
+\(F=\mathsf{Reach}_{I_{\mathit{hash}}}(P_{\mathit{aux}},\ell)
+=\{\texttt{frontier:S},\texttt{frontier:AS}\}\subseteq X_D\)；\(X_D\)
+还包含相应的两个终止状态。令 \(a_{\mathrm{obs}}\in A_D\) 表示名为
+\texttt{update-suffix-and-observe} 的规约动作，以 \(c_{\mathrm{obs}}\)
+表示精确编码的运行时操作符号
+\texttt{bpf\_map\_update\_elem(G0,suffix\_key,one,BPF\_ANY);observe(ret==0)}，并令
+\(\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})=c_{\mathrm{obs}}\)；这个单元素编码是单射。\(\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})\)
+的具体执行在两个前沿状态上有定义，在终止状态上无定义，并在定义性、输出和后继上与
+\(D\) 一致，故检查器在整个 \(X_D\) 上建立操作充分性。观测契约把
+\(\rho_{\mathrm{obs}}\) 固定为已占用键集合，把 \(\mathsf{Obs}\)
+固定为有序成功位词，把 \(\mathsf{Slice}\)
+固定为程序阶段/服务上下文对，把 \(\mathsf{Env}\)
+固定为上述单一环境；特别地，\(\rho_{\mathrm{obs}}(\texttt{frontier:S})=\{S\}\ne\{S,A\}=\rho_{\mathrm{obs}}(\texttt{frontier:AS})\)。对于
+\(F^2\) 中每个有序状态对和
+\(\mathcal W_D(F)=\{\varepsilon,a_{\mathrm{obs}}\}\)
+中每个词，检查器均建立其余运行时词、共同上下文、观察者兼容性与
+\(K_{\mathrm{obs}}\)
+健全性义务。这些义务履行了除唯一单元覆盖之外的全部可接纳条件。
+
+\(\mathsf{Report}_{\mathit{aux}}\) 发出一个唯一单元
+\(a^\#\)，共同覆盖两个前沿状态，从而完成
+\(\mathsf{Adm}(P_{\mathit{aux}},\ell,D,F;K_{\mathrm{obs}})\)。精确有限未来观测商把二者分到不同类，故
+\(|\beta_D(F_{a^\#})|=2\)，且 \(a_{\mathrm{obs}}\) 分别输出 1 与
+0。同一后缀因此先见证定义 1，而带标签元组
+\((P_{\mathit{aux}},\ell,D,F,a^\#,a_{\mathrm{obs}})\) 满足定义 2，所以
+\(R(M_{\mathit{linux\_r\_aux\_v1}})\) 成立。证据另含 21
+项域/动作的\textbf{返回类别包含检查}和 2
+项报告单元的\textbf{后继包含检查}，均为零违反；前 21 项不是 21
+个完整后状态检查。精确占用跟踪、容量
+64、强制哨兵、忽略返回四个负对照均消除 R。\(\square\)
+
+在归档证据包上，另行实现且由作者运行的检查器不导入模型实现，重构可达性、唯一单元覆盖、商和因子分解判定，并给出辅助
+R
+已建立的判定。另一个回归测试仅把同一确定性模型证据包构建两次并逐字节比较五个形式化
+JSON
+文件；它是确定性测试，不是实验性证据。该证书属于可执行有限模型证据，不是机器检查证明。保留的内核校准对
+\((0,1)\) 与 \((1,1)\) 两个赋值共有 4 行
+oracle；它只校准这两个受限服务结果，不证明 \(I_{\mathit{hash}}\) 与
+Linux 之间的 refinement 或 bisimulation，也不提取 stock
+验证器单元。因此辅助证书与下节 stock-Linux 证书彼此独立。其证据路径为
+\texttt{results/linux\_r/linux-r-v1/}。
+
+\hypertarget{57-ux51bbux7ed3-stock-linux-ux64cdux4f5cux526aux679dux62a5ux544aux5b9eux4f8b}{%
+\subsection{5.7 事后 stock-Linux
+轨迹证书}\label{57-ux51bbux7ed3-stock-linux-ux64cdux4f5cux526aux679dux62a5ux544aux5b9eux4f8b}}
+
+本节把已经完成的本地 stock-Linux
+实验作为事后轨迹证书分析。内核捕获是一手证据，证明冻结元组上发生了一个剪枝事件及两个运行结果。集成检查器与冻结包检查器离线验证声明的证据关系；其回归测试不能替代该捕获，也不能把作者定义的操作剪枝报告转化为
+Linux 文档规定的功能报告契约。
+
+为在不复用辅助语义的前提下执行定义
+2，固定如下受哈希绑定、仅限证据范围的载体：
+
+\[M_K=(V_K,I_K,\mathsf{Report}^{\mathit{prune}}_K,K^K_{\mathrm{obs}},
+P_R,\ell_K,D_K,F_K,\varnothing,\varnothing,\varnothing,\varnothing).\]
+
+\(P_R\) 是固定且经验证器接受的 XDP 对象 \texttt{rac\_single}，不是解释器
+\(P_U=\mathit{wm\_circuit}\)。\(V_K\) 是记录中的 stock Linux
+6.17.0-35-generic 验证器，精确比较级别为
+0；\(\ell_K=\operatorname{pre}(41)\) 是共同 \texttt{shared\_suffix}
+调用前的调用者侧翻译后前沿。对这个事后命题，\(I_K\)
+是在捕获完成后，由论文把证据包中的两次已记录执行限制并加阶段标签而构造的有限串行关系。它既不是证据包适配器的自环转移系统，也不是所有
+Linux
+执行的集合。其声明的输入/环境域只含两条已捕获选择器历史，所以下面的可达性等式是受限分析载体的定义，而不是关于
+Linux 全部可达状态的经验完备性主张：
+
+\[\mathsf{Reach}_{I_K}(P_R,\ell_K)=F_K=\{\sigma_0,\sigma_1\}.\]
+
+令
+\(X_{D_K}=\{\sigma_0,\sigma_1,\sigma_0^+,\sigma_1^+\}\)；这些符号表示针对两个前缀案例及其后缀后记录构造的阶段化具体化见证，并非完整运行时寄存器、栈和辅助函数内部映射状态的直接快照。两个
+\texttt{runtime.json} 最终状态记录只绑定派生的 G0 键集合投影
+\(\{S,B\}\)、\(\{S,A\}\) 及程序级结果；验证器捕获另行绑定选定的 State V2
+记录。令 \(a_B\) 为抽象插入 B 动作，并定义宏符号
+\(c_B\in\Sigma_{\mathrm{op}}(P_R)\)，其声明的具体解释执行完全相同的剩余翻译后后缀；置
+\(\iota_{P_R,\ell_K}(a_B)=c_B\)。一步规约为
 
 \[
-38{,}533
-=26{,}488\ \text{条逐门记录}
-+12{,}037\ \text{条成功运行记录}
-+8\ \text{条负对照记录}.
+\begin{gathered}
+S_{D_K}=\{p_0,p_1,q^{\mathrm{term}}_0,q^{\mathrm{term}}_1\},\\
+A_{D_K}=\{a_B\},\qquad O_{D_K}=\{0,1\},\\
+O^K_{\mathrm{obs}}=\{\varepsilon,0,1\},\\
+s_{D_K}(\sigma_i)=p_i,\quad s_{D_K}(\sigma_i^+)=q^{\mathrm{term}}_i,\quad
+\delta_{D_K}(p_i,a_B)=q^{\mathrm{term}}_i,\\
+\lambda_{D_K}(p_0,a_B)=1,\qquad \lambda_{D_K}(p_1,a_B)=0.
+\end{gathered}
 \]
 
-这些是异构的证据行，而不是``38,533
-个测试''。特别是，显式算术基线的门记录不包含由状态介导的辅助函数返回值轨迹。
+在具体层面，声明的关系对该动作恰好包含
 
-\hypertarget{ux8986ux76d6ux8303ux56f4}{%
-\subsection{5.2 覆盖范围}\label{ux8986ux76d6ux8303ux56f4}}
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1667}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-数据集
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-输入覆盖
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-成功运行次数
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-逐门记录数
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-目的
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-9 个具名电路 & 对每个电路穷举 & 39 & 166 & 典型组合函数，包括
-NAND、多路复用器和加法器 \\
-100 个随机 DAG & 对每个 DAG 穷举；至多 6 个输入和 24 个门；种子
-3235823838 & 1,876 & 23,776 & 固定种子的结构与语义回归测试 \\
-深度边界 & 对一条 512 门链的单个输入取两种赋值 & 2 & 1,024 &
-门数量与深度边界 \\
-联合边界 & 全零向量和全一向量 & 2 & 1,024 & 64 个输入、512 个门、578
-条导线，包括导线 577 \\
-零门边界 & 对 0 输入/0 门常量描述符的专门重复测试 & 1 & 0 &
-空电路执行 \\
-串行交替 & NAND/全加器/多路复用器交替 & 10,000 & 0 &
-重置与跨调用污染回归测试 \\
-容量 64 对照 & 具名电路的输入 & 39 & 166 & 消除容量饱和 \\
-强制哨兵对照 & 具名电路的输入 & 39 & 166 & 消除第二次新键插入 \\
-显式基线 & 具名电路的输入 & 39 & 166 & 普通算术 NAND 的接受性与语义 \\
-畸形核心 & 8 个 ABI/计数/操作/目标/引用案例 & --- & --- & 预期得到非
-\(\mathsf{OK}\) 状态与执行计数 \\
-\end{longtable}
-
-每个具名电路和随机电路都穷举其自身的有限输入域。64
-输入联合边界必然使用两个选定向量，而不是全部 \(2^{64}\)
-个输入。因此，该语料库是针对实现的回归证据，也是对证明前提的检查；它既不是对所有
-\(D_{64,512}\) 描述符的枚举，也不是实证证明。
-
-串行交替数据集复用同一个已加载的测试框架，连续调用 10,000
-次。它可检测串行使用下常见的重置或陈旧状态回归。它不是并发压力测试，因而无法确立全局临界区前提；该前提仍位于
-eBPF 程序之外。
-
-\hypertarget{ux5355ux72ecux7684ux8bedux4e49ux5ba1ux8ba1ux4e0eux5b8cux6574ux6027ux68c0ux67e5}{%
-\subsection{5.3
-单独的语义审计与完整性检查}\label{ux5355ux72ecux7684ux8bedux4e49ux5ba1ux8ba1ux4e0eux5b8cux6574ux6027ux68c0ux67e5}}
-
-由作者执行的语义审计器不信任运行器的通过标志。其另一套实现：
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  重构每一个具名源描述符以及两个生成的边界描述符；
-\item
-  根据固定种子逐字节重新生成 100-DAG 语料库；
-\item
-  解码
-  WMC1，重新计算预期的完整线向量，并比较每个发出的门目标值和投影输出；
-\item
-  检查每条边界门记录以及全部八个畸形核心案例；
-\item
-  将每个 JSONL 运行时标签与所捕获的已加载程序元数据进行交叉核对。
-\end{enumerate}
-
-语义审计报告成功。完成该审计后，运行脚本写入并验证一份自行签发的 SHA-256
-清单，作为单独的完整性检查；其验证器同样报告成功。该清单能检测证据包的意外偏离，但不构成强来源证明、签名、时间戳、认证或独立复现。所捕获的标签是一项防混淆检查，而源代码快照仅覆盖测试框架选定的文件。
-
-\hypertarget{ux673aux5236ux5f52ux56e0}{%
-\subsection{5.4 机制归因}\label{ux673aux5236ux5f52ux56e0}}
-
-三个变体将容量机制与真值表及制品接受性区分开来。
-
-第一，将容量从 2 增加到
-64，可消除被测调度中的饱和；具名语料库对照中的全部 166 个门输出均变为
-1。第二，强制第二个一位输入更新 \(S\)，可消除新 \(B\) 的插入；全部 166
-个输出同样变为 1。第三，一个算术基线在不使用容量机制的情况下计算
-NAND，并产生预期的具名电路结果。全部四个变体------状态介导的门、两个对照以及基线------都能在记录的环境中加载并执行。
-
-这些对照支持机制归因：饱和和第二个新名称对于门输出零都是必要的。它们并未显示等价的验证器报告。基线确认，该机制没有获得普通字节码无法实现的新布尔函数。
-
-\hypertarget{ux6821ux51c6ux7ed3ux679c}{%
-\subsection{5.5 校准结果}\label{ux6821ux51c6ux7ed3ux679c}}
-
-Linux 的验证器文档将其目标表述为判定程序安全性并验证路径、参数和内存访问
-{[}14{]}；它并未规定对由映射介导的计算给出完备的功能证书。没有 stock-Linux 报告提取器时，本文既不测试也不推断它跟踪辅助函数返回值的精度。本案例是一项校准，而非不健全接受的证据：它在声明的服务契约下给出条件性 C 见证，并在额外实现前提下支持节点 P；该 stock-Linux 校准的 R 仍未建立，离线案例也没有建立 W。
-
-\hypertarget{fixed-auxiliary-report-instance}{%
-\subsection{5.6 固定辅助可执行报告实例}\label{fixed-auxiliary-report-instance}}
-
-为在不重命名 Linux 验证器制品的前提下执行报告相对判据，将辅助 R 实例嵌入第 7.1 节的完整模型载体并固定
 \[
-\begin{aligned}
-M_{\mathit{linux\_r\_aux\_v1}}={}&
-(V_{\mathit{linux\_r}},I_{\mathit{hash}},\mathsf{Report}_{\mathit{aux}},K_{\mathrm{obs}},\\
-&P_{\mathit{aux}},\ell,D,F,\varnothing,\varnothing,\varnothing,\varnothing).
-\end{aligned}
+\sigma_i\mathrel{\overset{c_B/b_i}{\longrightarrow}_{I_K}}\sigma_i^+,
+\qquad (b_0,b_1)=(1,0),
 \]
 
-\(P_{\mathit{aux}}\) 由自定义报告生成识别器
-\(V_{\mathit{linux\_r}}\) 接受；它不是经 stock Linux 验证器接受的 BPF 对象。
-\(I_{\mathit{hash}}\) 是有限、确定、串行且无干扰的受限语义，只覆盖固定程序使用的非驱逐 HASH 映射更新情形。这里
-\(\mathsf{Report}_{\mathit{aux}}\) 只指 \texttt{report.json["report\_cells"]}；
-\texttt{derivation.json} 仅记录工作列表/计算溯源，不属于报告标签接口。最后四项分别是有类型的空行为主体集、空效果集、空驱动关系和空许可效果集；它们只把 R 实例嵌入共同载体，不提出 W 论断。
+且从 \(\sigma_0^+,\sigma_1^+\) 均无 \(c_B\)
+转移。这些转移属于论文定义的包装；证据包中的 \texttt{runtime.json}
+记录只绑定键集合投影与程序级结果，不绑定完整具体端点。从
+\(q^{\mathrm{term}}_0,q^{\mathrm{term}}_1\) 没有出边。两个观测者均返回
+\(O^K_{\mathrm{obs}}\)
+中的位词：\(\mathsf{Obs}_{D_K}(\varepsilon)=\varepsilon\) 且
+\(\mathsf{Obs}_{D_K}(b_i)=b_i\)；在相应的声明具体侧，\(\mathsf{Obs}\)
+把空迹映为 \(\varepsilon\)，把每条已记录 \(c_B\) 迹映为
+\(b_i\)。因此观测兼容性覆盖
+\(\mathcal W_{D_K}(F_K)=\{\varepsilon,a_B\}\)
+中两个词。阶段标签和所列转移使操作充分及运行词包含在这个受限关系中按构造成立；它们并未独立验证更大的
+Linux 转移语义。
 
-\textbf{可执行证书。} \(R(M_{\mathit{linux\_r\_aux\_v1}})\) 成立（制品状态：established）。
+stock 专用契约 \(K^K_{\mathrm{obs}}\) 置
+\(\rho^K_{\mathrm{obs}}(\sigma)=R_{G0}(\sigma)\)，即第 4.2
+节定义的完整辅助函数相关 G0
+动态状态，并观察程序级成功位词。记录的键集合只是派生投影
+\(K_{G0}\)：\(K_{G0}(\sigma_0)=\{S\}\) 且
+\(K_{G0}(\sigma_1)=\{S,A\}\)，所以即使记录没有暴露每个内部字段，也有
+\(R_{G0}(\sigma_0)\ne R_{G0}(\sigma_1)\)。上下文固定调用方阶段与后缀、内核/对象/程序及映射身份、键值常量、映射类型/容量/标志、串行化、单制品条件以及
+\(R_{G0}\)
+之外所有被后缀读取的分量。检查器比较声明的七个规范化运行时上下文字段；另由论文审查翻译后
+PC 41-\/-44 的调用方调用/返回路径及 PC 107-\/-122 的
+\texttt{shared\_suffix}
+被调用函数读集。被调用函数会覆盖键/值工作寄存器和栈槽；在辅助函数之外，它除此之外只读取固定常量与固定的
+G0
+映射身份，而调用方仅调用该函数并返回其结果。映射局部桶、元素/空闲链元数据及辅助函数读取的其他
+G0 状态属于 \(R_{G0}\)；哈希绑定的单元素 \(\mathsf{Env}\)
+固定内核、对象、精确映射实例、服务/分配选择、调度与无干扰。因此两条记录具有相同的非选定后缀读取上下文。由于选定状态的投影已不同，契约在
+\(F_K\) 上``\(R_{G0}\)
+相等''的前提只会把一个状态与自身配对；声明的一步服务关系具有确定性，故契约健全。记录的成功位等于
+\(\mathsf{Obs}_{D_K}\)，故观察者兼容。这样，运行词、共同上下文、操作充分、观察者兼容和健全性义务只在这个显式有限载体上得到履行，而非在一般
+Linux 执行上得到履行。该读集论证以及 \(I_K,D_K,K^K_{\mathrm{obs}}\)
+的定型是论文审查的义务，不是对检查器机器验证范围的扩大表述。
 
-\emph{证书论证。} 识别器接受 \(P_{\mathit{aux}}\)。在单一串行无干扰环境中穷尽 \(a\in\{0,1\}\)、\(b=1\)，得到
-\(F=\mathsf{Reach}_{I_{\mathit{hash}}}(P_{\mathit{aux}},\ell)=\{\texttt{frontier:S},\texttt{frontier:AS}\}\subseteq X_D\)；\(X_D\) 还包含相应的两个终止状态。令 \(a_{\mathrm{obs}}\in A_D\) 表示名为 \path{update-suffix-and-observe} 的规约动作，以 \(c_{\mathrm{obs}}\) 表示精确编码的运行时操作符号 \path{bpf_map_update_elem(G0,suffix_key,one,BPF_ANY);observe(ret==0)}，并令 \(\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})=c_{\mathrm{obs}}\)；这个单元素编码是单射。\(\iota_{P_{\mathit{aux}},\ell}(a_{\mathrm{obs}})\) 的具体执行在两个前沿状态上有定义，在终止状态上无定义，并在定义性、输出和后继上与 \(D\) 一致，故检查器在整个 \(X_D\) 上建立操作充分性。观测契约把 \(\rho_{\mathrm{obs}}\) 固定为已占用键集合，把 \(\mathsf{Obs}\) 固定为有序成功位词，把 \(\mathsf{Slice}\) 固定为程序阶段/服务上下文对，把 \(\mathsf{Env}\) 固定为上述单一环境；特别地，\(\rho_{\mathrm{obs}}(\texttt{frontier:S})=\{S\}\ne\{S,A\}=\rho_{\mathrm{obs}}(\texttt{frontier:AS})\)。对于 \(F^2\) 中每个有序状态对和 \(\mathcal W_D(F)=\{\varepsilon,a_{\mathrm{obs}}\}\) 中每个词，检查器均建立其余运行时词、共同上下文、观察者兼容性与 \(K_{\mathrm{obs}}\) 健全性义务。这些义务履行了除唯一单元覆盖之外的全部可接纳条件。
+\(\mathsf{Report}^{\mathit{prune}}_K\)
+是作者为分析该捕获事件而显式选定的\textbf{操作剪枝报告}：\texttt{states\_equal}
+成功检查实际导致 \texttt{is\_state\_visited} 剪除 current state
+时，它把可接纳前缀见证分配给 retained verifier-state
+representative。有向剪枝边就是成员关系；本文不把 \texttt{states\_equal}
+重释为完整具体状态上的对称数学等价。Linux
+把验证器文档化为安全机制，而没有把这一接口规定为覆盖运行时映射占用的完备功能报告。因此这个报告是从具体剪枝事件提取的分析投影，不是已被实验推翻的
+Linux 指定证书。
 
-\(\mathsf{Report}_{\mathit{aux}}\) 发出一个唯一单元 \(a^\#\)，共同覆盖两个前沿状态，从而完成 \(\mathsf{Adm}(P_{\mathit{aux}},\ell,D,F;K_{\mathrm{obs}})\)。精确有限未来观测商把二者分到不同类，故 \(|\beta_D(F_{a^\#})|=2\)，且 \(a_{\mathrm{obs}}\) 分别输出 1 与 0。同一后缀因此先见证定义 1，而带标签元组 \((P_{\mathit{aux}},\ell,D,F,a^\#,a_{\mathrm{obs}})\) 满足定义 2，所以 \(R(M_{\mathit{linux\_r\_aux\_v1}})\) 成立。证据另含 21 项域/动作的\textbf{返回类别包含检查}和 2 项报告单元的\textbf{后继包含检查}，均为零违反；前 21 项不是 21 个完整后状态检查。精确占用跟踪、容量 64、强制哨兵、忽略返回四个负对照均消除 R。\hfill$\square$
+冻结清单绑定内核版本、BTF 与配置哈希、对象 SHA-256、已加载程序
+id/tag/pin 以及翻译后字节码 SHA-256。选定 fexit 事件在指令 41 同时记录
+\path{states_equal_success=true} 与
+\path{is_state_visited_prune=true}。retained 与 current
+的历史不同，分别经过 \(a=1\) 与 \(a=0\)
+对应的翻译后分支调用，再到达同一前沿；二者状态哈希也不同（\path{516c47f044cc3fc3}
+与
+\path{a66d912d58c91de4}），成员关系来自观测到的有向剪枝边，而非哈希相等。经审查的路径相关检查器把两条历史绑定到该前沿和同一剩余字节码后缀；捕获完成记录显示丢失事件与解析错误均为
+0。
 
-独立可执行检查器在不导入模型实现的情况下重构可达性、唯一单元覆盖、商和因子分解判定。归档的 VM 运行与审计均通过；单元测试会构造两个固定输入证据包并逐字节比较其形式化 JSON。这是可执行有限模型证据，不是机器检查证明。保留的内核校准对
-\((0,1)\) 与 \((1,1)\) 两个赋值共有 4 行 oracle；它只校准受限服务情形，不证明
-\(I_{\mathit{hash}}\) 与 Linux 之间的 refinement 或 bisimulation，也不提取 stock 验证器单元。因此 stock Linux 的 R、W、
-\(\mathsf{WM}_{\mathrm{shape}}\) 以及任何普遍必要性猜想仍未建立。证据路径为
-\path{results/linux_r/linux-r-v1/}。
+规范化成员检查把构造见证 \(\sigma_0\) 与捕获的 current verifier state
+关联，把 \(\sigma_1\) 与捕获的 retained verifier state
+关联；这些检查并未捕获完整运行时前沿状态。运行记录把见证的派生 G0
+键集合投影分别绑定为 \(\{S\}\) 与 \(\{S,A\}\)。记
+\(a_K^\#=\mathtt{retained{:}516c47f044cc3fc3}\)。在受限 exact-0 State V2
+形状和声明的操作报告内，形状检查器与唯一单元检查器建立
 
-\hypertarget{ux6709ux6548ux6027ux5a01ux80c1}{%
-\subsection{5.7 有效性威胁}\label{ux6709ux6548ux6027ux5a01ux80c1}}
+\[\gamma^K_{\ell_K}(a_K^\#)\cap F_K
+=\{\sigma_0,\sigma_1\}.\]
 
-实验使用了一个内核构建版本和一种体系结构。论证依赖于一个专用的预分配非
-LRU
+而且在 \(F_K\) 上，两状态都不属于任何其他已提取报告单元。因此
+
+\[\pi_R(\sigma_0)=\pi_R(\sigma_1)=a_K^\#.\]
+
+在共同定义的词 \(a_B\) 下，记录的\textbf{程序级成功位}从 \(\sigma_0\) 与
+\(\sigma_1\) 出发分别为 1 与 0；这两个位由 \texttt{observe(ret==0)}
+派生，不是映射更新辅助函数的原始返回值（成功为 0、失败为负值）。根据 \(\sim_{D_K}\)
+的定义，输出不同直接蕴含 \(p_0\not\sim_{D_K}p_1\)，故
+\(\beta_{D_K}(\sigma_0)=Q_0\ne Q_1=\beta_{D_K}(\sigma_1)\)，而操作报告把两个具体状态分配给同一单元。接受与身份、可达路径、直接成员、会话完整性、唯一单元、商、因子分解和哈希门均通过；结合上面显式定型的一步构造，这些事实建立
+\(\mathsf{Adm}(P_R,\ell_K,D_K,F_K;K^K_{\mathrm{obs}})\) 并满足定义
+2。因此
+
+\[R(M_K)\]
+
+只对该声明的有限冻结载体成立。本文把它报告为\textbf{事后、轨迹局部、相对于操作剪枝报告的证书}。集成检查器输出
+\texttt{STOCK\_LINUX\_R\_ESTABLISHED\_FOR\_FROZEN\_TUPLE}，但该标识只表示为此元组编码的哈希绑定证据门均已通过；它不表示
+Linux 暴露或违反了文档规定的完备功能报告。\(I_K,D_K,K^K_{\mathrm{obs}}\)
+的定型和上述健全性论证是把一步记录置于定义 2
+下的论文级形式包装，不是覆盖完整 Linux
+执行空间的机器检查定理。证据包适配器在重算稳定商时把每个前缀案例表示为自环；第一次
+\(a_B\) 输出已不同，故细化在深度 1
+即分开两状态。用上述终止转移替换自环仍保留该划分及独立提取的操作报告映射，但本文不把两个商模型视为相同。所需
+\(\beta\) 不等式与输出见证子句由 \(a_B\) 证明，不导入任何长词结果。
+
+该证书同时相对于载体、元组、观测者、后缀和报告。由于这些选择在区分性捕获出现后才最终确定，它支持声明的事后元组上的存在性结论，但不支持独立预承诺或总体层面的
+Linux 主张。它不把 \(I_K\)
+推广到未捕获的输入、续延或可达状态，不推广到其他内核、配置、BTF、编译输出或
+eBPF 对象，不刻画一般 \texttt{states\_equal}
+语义，也不证明验证器不健全、漏洞、P、W
+或怪异机器；它也不证明映射占用属于 Linux
+指定的完备功能报告。具体化论证只涉及与捕获的 State V2
+记录及局部未来可观测字段兼容的构造见证。由于
+\(P_R\ne P_U\)，该证书不能与解释器的 P 证书组合以满足
+\(\mathsf{Link}\)。冻结证据位于
+\texttt{residuality-auditor/stock-linux-r-proof/}。
+
+\hypertarget{58-ux6709ux6548ux6027ux5a01ux80c1}{%
+\subsection{5.8 有效性威胁}\label{58-ux6709ux6548ux6027ux5a01ux80c1}}
+
+实验只使用一个内核构建版本和一种体系结构。论证依赖专用的预分配非 LRU
 映射、成功重置、互异的键、所述更新律，以及整个映射集合上的互斥。会发出门记录的数据集保留原始返回值；10,000
 次运行的压力测试文件记录运行/状态/输出证据，但不包含逐门原始行。证明只使用成功与失败之分，并不承诺可移植的错误码。
 
-有限测试不能证明所有 \(D_{64,512}\)。相反，定理 1
-依赖于所陈述的源代码级初始化、验证、有序迭代、门和帧义务；语料库旨在寻找反例。转换后的转储和验证器日志被保留下来以供人工检查及清单哈希使用，而未被自动化数据流检查器消费。状态掩蔽具有源代码顺序保护，而负面测试套件测试的是拒绝/状态，并非注入的掩蔽路径。不存在机器检查的
+有限测试不能证明所有 \(D_{64,512}\)。定理 1
+转而依赖所陈述的源代码级初始化、验证、有序迭代、门和帧义务；语料库旨在寻找反例。翻译后转储和验证器日志被保留下来以供人工检查及清单哈希使用，而未被自动化数据流检查器消费。状态掩蔽具有源代码顺序保护，而负面测试套件测试的是拒绝/状态，并非注入的掩蔽路径。不存在机器检查的
 eBPF 语义证明，且只有在可选的 \(\mathsf{Safe}\)
 结论中才假定生产验证器的安全健全性。
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+stock-Linux
+实验是在一个冻结内核/对象元组上由作者生成并审查，尚未得到第三方独立复现。操作报告、两历史载体、观测者和后缀都是事后最终确定，因此即使内部检查全部通过，结果仍受选择效应威胁。证据包绑定
+BTF、配置与源码映射元数据，但没有保存目标 \texttt{verifier.c}
+函数正文；受限形状引理不是 Linux 一般 \texttt{states\_equal}
+语义的源码级定理。
 
-\hypertarget{ux76f8ux5173ux5de5ux4f5c}{%
-\section{6. 相关工作}\label{ux76f8ux5173ux5de5ux4f5c}}
+原始捕获阶段分析器有意保持
+fail-closed：在字节码前沿、路径对应、报告契约和具体化关系尚未审查时，它仍输出
+\texttt{LINUX\_R\_NOT\_ESTABLISHED\_FROM\_RAW\_CAPTURE}。受哈希绑定的集成检查器随后消费这些经审查证书并给出元组特定的证据判定；正式
+R 结论还依赖第 5.7
+节有限定型包装。仅凭原始事件、状态哈希或类似验证器日志文本不能满足定义
+2。
 
-语言理论安全提供识别/解释框架 {[}1{]}--{[}4{]}；对象中心追踪重建状态依赖的底层操作语言 {[}15{]}。怪异机器工作研究非预期计算与可利用性 {[}16{]}, {[}17{]}，不安全编译明确策略边界 {[}18{]}，携带证明代码工作识别证明模型之外的影子执行 {[}19{]}。合法 RPM 元数据也可产生计算，漏洞流类型可导出抽象怪异机器 {[}20{]}, {[}21{]}；这些工作没有采用本文针对一个已接受制品的实际报告单元判据。
+\hypertarget{6-ux76f8ux5173ux5de5ux4f5c}{%
+\section{6. 相关工作}\label{6-ux76f8ux5173ux5de5ux4f5c}}
 
-抽象解释提供具体/抽象、健全性和完备性词汇 {[}5{]}, {[}22{]}；本文只讨论一个前沿上唯一分配的实际计算单元。MOAT 隔离接受后的 BPF 效果 {[}23{]}，mismorphism 比较不同解释 {[}24{]}。eBPF 范围分析验证与状态嵌入针对验证器逻辑的健全性或覆盖错误 {[}25{]}, {[}26{]}。VEP 的 ``programmability'' 是减少验证工具链限制；Rex 则通过语言级安全与语言外运行时替代独立静态验证器，处理拒绝侧的语言--验证器失配 {[}27{]}, {[}28{]}。本文 P 不同：它要求一个经原生验证器接受的固定制品解释有界族。DRACO 在验证器接受后检查功能规范；\textsc{bpfverify} 把 eBPF 字节码翻译为位与内存精确的 Horn 子句以进行功能验证 {[}29{]}, {[}30{]}。
+语言理论安全提供识别/解释框架
+{[}1{]}--{[}4{]}；对象中心追踪重建状态依赖的底层操作语言
+{[}15{]}。怪异机器研究非预期计算与可利用性 {[}16{]},
+{[}17{]}，不安全编译显式引入策略边界
+{[}18{]}，携带证明代码工作识别证明模型之外的影子执行 {[}19{]}。有效 RPM
+元数据也可产生计算，漏洞流类型可导出抽象怪异机器 {[}20{]},
+{[}21{]}。不同于只展示丰富行为的工作，本文判据追问的是：在一个已接受制品的前沿上，已声明的实际计算报告是否真的因子分解未来观测商。
 
-2026 年预印本进一步界定边界：Heimdall 处理编译与接受后仍存的高层缺陷；Yaksha-Prashna 提取第三方 eBPF 字节码行为；bpfix 定位被拒程序中的证明丢失 {[}31{]}--{[}33{]}。信任边界语义缝隙工作分析正确语法接受后仍不足的断言 {[}34{]}。这些工作没有联合区分本文图谱的全部义务；反过来，本文 stock-Linux 校准案例也未建立 R 或 W，而独立的辅助元组只建立其自身的 R。四项 2026 工作均按预印本引用，而非声称已经同行评审。
+抽象解释提供具体/抽象、健全性和完备性词汇 {[}5{]},
+{[}22{]}；本文只讨论一个前沿上唯一分配的实际计算单元。MOAT 隔离接受后的
+BPF 效果 {[}23{]}，mismorphism 比较不同解释 {[}24{]}。eBPF
+范围分析验证与状态嵌入针对验证器逻辑的健全性或覆盖错误 {[}25{]},
+{[}26{]}。VEP 所谓``programmability''是减少验证工具链限制；Rex
+通过语言级安全与语言外运行时替代独立静态验证器，处理拒绝侧的语言---验证器失配
+{[}27{]}, {[}28{]}。本文 P
+不同：它要求一个经原生验证器接受的固定制品解释有界族。DRACO
+在验证器接受后检查功能规范；bpfverify 把 eBPF 字节码翻译为位与内存精确的
+Horn 子句以进行功能验证 {[}29{]}, {[}30{]}。
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+2026 年预印本进一步界定边界：Heimdall
+处理编译和接受后仍存的高层缺陷；Yaksha-Prashna 提取第三方 eBPF
+字节码行为；bpfix
+定位被拒程序中的证明丢失；信任边界语义缝隙工作分析正确语法接受后仍不足的断言
+{[}31{]}--{[}34{]}。它们都未联合区分本文论断图谱的全部义务。反过来，本文
+\texttt{wm\_circuit} 解释器载体也未建立 R 或 W；显式有限的冻结
+stock-Linux 载体与辅助元组只在各自载体上建立 R，都不提供 P 或 W。四项
+2026 工作均按预印本引用，而非声称已经同行评审。
 
-\hypertarget{ux5c40ux9650ux542fux793aux4e0eux5c55ux671b}{%
+\hypertarget{7-ux5c40ux9650ux542fux793aux4e0eux5c55ux671b}{%
 \section{7.
-局限、启示与展望}\label{ux5c40ux9650ux542fux793aux4e0eux5c55ux671b}}
+局限、启示与展望}\label{7-ux5c40ux9650ux542fux793aux4e0eux5c55ux671b}}
 
-\hypertarget{ux8bbaux65adux56feux8c31ux5177ux6709ux4e25ux683cux533aux5206}{%
+\hypertarget{71-ux4e25ux683cux533aux5206ux4e0eux5206ux7c7bux8c13ux8bcd}{%
 \subsection{7.1
-论断图谱具有严格区分}\label{ux8bbaux65adux56feux8c31ux5177ux6709ux4e25ux683cux533aux5206}}
+严格区分与分类谓词}\label{71-ux4e25ux683cux533aux5206ux4e0eux5206ux7c7bux8c13ux8bcd}}
 
-为将全部五个节点置于同一载体上，固定模型
-\(M=(V,I,\mathsf{Report},K_{\mathrm{obs}},P_*,\ell_*,D_R,F_R,\mathcal A,\mathcal E,\mathsf{Drive},\mathsf{Pol})\)，
-并附加具名的预期语义、安全、报告抽象和粒度契约。\(\mathcal A\) 与 \(\mathcal E\) 是行为主体和效果集合，\(\mathsf{Drive}\) 记录主体可通过指定 \(P_*\) 驱动的效果，\(\mathsf{Pol}\subseteq\mathcal E\) 是允许效果集。
+令模型
 
-定义：\(A(M)\) 当 \(P_*\in L_V\)；\(C(M)\) 当存在
-\((P_*,\ell,w)\in L_{\mathrm{causal}}\)；\(P(M)\) 当 \(P_*\) 是同一个固定已接受有界解释器，其同制品门基满足 E1--E3，\(P_*\) 用该基履行 E4-D，且 \(g\) 与常量 \(\{0,1\}\) 构成功能完备布尔基；\(R(M)\) 当
-\(\mathsf{Adm}(P_*,\ell_*,D_R,F_R;K_{\mathrm{obs}})\) 成立且某个
-\((P_*,\ell_*,D_R,F_R,a^\#,w)\) 恰在该元组上为输出见证残差；\(W(M)\) 当存在主体驱动 \(e\notin\mathsf{Pol}\)。
+\[M=(V,I,\mathsf{Report},K_{\mathrm{obs}},P_*,\ell_*,D_R,F_R,
+\mathcal A,\mathcal E,\mathsf{Drive},\mathsf{Pol})\]
 
-令 \(\mathsf{Link}(M)\) 要求 R 见证属于建立 P 的门/解释器执行族，且 W 效果来自主体驱动同一编码计算；\(\mathsf{Unint}(M)\) 表示该解释/效果在预期语义之外。定义
+还带有具名的预期语义、安全、报告抽象与粒度契约。A、C、P、R、W
+分别按前文定义；P 还要求同制品门基满足 E1--E3、\(P_*\) 履行 E4-D，且
+\(g\) 与常量 \(\{0,1\}\) 构成功能完备的布尔基；R
+的带标签见证必须使用同一个可接纳元组。
 
-\[
-\mathsf{WM}_{\mathrm{policy}}(M)=P(M)\land W(M)\land
-\mathsf{Link}(M)\land\mathsf{Unint}(M).
-\]
+\(\mathsf{Link}(M)\) 要求用于分类的 R 见证属于建立 P
+的门/解释器执行族，并且 W
+效果来自行为主体驱动同一编码计算；\(\mathsf{Unint}(M)\)
+表示该解释或效果在边界预期语义之外。定义
 
-令 \(\mathsf{Doc}(M)\) 表示链接行为使用已文档化语义且维持声明安全契约，\(\mathsf{Conf}(M)\) 表示报告实现符合指定抽象，\(\mathsf{Gran}(M)\) 表示 R 碰撞由声明报告粒度强制。更窄的分类为
+\[\mathsf{WM}_{\mathrm{policy}}(M)=P(M)\land W(M)\land
+\mathsf{Link}(M)\land\mathsf{Unint}(M).\]
 
-\[
-\mathsf{WM}_{\mathrm{shape}}(M)=
+\(\mathsf{Doc}(M)\)
+表示同一链接行为使用已文档化语义且维持声明的安全契约；\(\mathsf{Conf}(M)\)
+表示报告实现符合指定抽象；\(\mathsf{Gran}(M)\) 表示 R
+碰撞由声明的报告粒度强制。更窄分类为
+
+\[\mathsf{WM}_{\mathrm{shape}}(M)=
 \mathsf{WM}_{\mathrm{policy}}(M)\land R(M)\land
-\mathsf{Doc}(M)\land\mathsf{Conf}(M)\land\mathsf{Gran}(M).
-\]
-
-\textbf{命题 3（论断节点之间的非蕴含关系）。}
-在此模型类上，下列蕴含均不成立：
-
-\[
-A\not\Rightarrow C,\quad
-C\not\Rightarrow P,\quad
-C\not\Rightarrow R,\quad
-P\not\Rightarrow R,\quad
-R\not\Rightarrow P,\quad
-P\not\Rightarrow W,\quad
-R\not\Rightarrow W.
-\]
+\mathsf{Doc}(M)\land\mathsf{Conf}(M)\land\mathsf{Gran}(M).\]
 
 定义直接给出 \(R\Rightarrow C\Rightarrow A\) 与
-\(P\Rightarrow C\Rightarrow A\)：定义 2 内含定义 1 见证，而 E1 使用 E4-D 的同一个制品。策略层面的怪异机器不一定满足 R；更窄的形状分类必须满足上式中的 Link、Unint、Doc、Conf 与 Gran，不能简化为裸 \(P\land R\land W\)。
+\(P\Rightarrow C\Rightarrow A\)。有限反模型表明
 
-\emph{由有限反模型给出的证明。} 对于 \(A\not\Rightarrow C\)，仅接受
-\(\mathit{skip}\)
-并拒绝另一个安全的常量程序；该被接受系统不存在因果操作。对于
-\(C\not\Rightarrow P\) 和 \(R\not\Rightarrow P\)，使用状态
-\(\{0,1,\bot\}\)、一次输出该位并转移至汇点 \(\bot\)
-的读取操作、不设重置，并使用一个同时覆盖 0 和 1 的报告单元。对于
-\(C\not\Rightarrow R\)，使用一个可重置的双状态转导器，其报告对每个未来观测类各有一个单元。对于
-\(P\not\Rightarrow R\)，使用任意满足 E1--E3 和 E4-D 的、被接受的有界
-NAND 解释器，并采用相同的精确报告划分。对于 \(P\not\Rightarrow W\)，令
-\(\mathsf{Pol}=\mathcal E\)；采用具有同样宽松策略的单报告单元破坏性读取模型，也可得到
-\(R\not\Rightarrow W\)。最后，选择一个满足 P 的模型，使主体从同一编码 P 执行族驱动一个非预期且被策略排除的效果，并令报告精确区分全部相关未来观测类；于是
-\(\mathsf{WM}_{\mathrm{policy}}\land\neg R\)。因此，策略层面的怪异机器分类一般不要求 R。\(\square\)
+\[A\not\Rightarrow C,
+C\not\Rightarrow P,
+C\not\Rightarrow R,
+P\not\Rightarrow R,
+R\not\Rightarrow P,
+P\not\Rightarrow W,
+R\not\Rightarrow W.\]
 
-定理 1 仅处理在给定显式重置与组合前提后从 C 到 P
-的构造。裸 C、标准抽象解释的不完备性或接受不完备性，都不蕴含 P 或怪异机器分类。
+因此裸 C、抽象解释不完备或接受不完备都不推出 P
+或怪异机器分类；策略级怪异机器也可能在报告精确时成立，故一般不要求 R。
 
-\hypertarget{ux9632ux5fa1ux542fux793a}{%
-\subsection{7.2 防御启示}\label{ux9632ux5fa1ux542fux793a}}
+\hypertarget{72-ux9632ux5fa1ux542fux793aux4e0eux672aux6765ux5f62ux72b6ux5b9aux7406}{%
+\subsection{7.2
+防御启示与未来形状定理}\label{72-ux9632ux5fa1ux542fux793aux4e0eux672aux6765ux5f62ux72b6ux5b9aux7406}}
 
-该模型提出一种三部分审计。分别声明被识别的属性和报告；枚举已接受代码可以驱动的有状态操作语言，包括环境假设；随后测试与安全相关的商类是否可通过所选报告进行因子分解。违反契约需要修复实现。符合文档的行为若违反预期的报告关系，则需要细化报告、限制运行时或进行隔离。如果报告从未承诺该关系，且策略允许该行为，那么可能不存在验证器缺陷。
+审计时应分别声明识别属性和报告，枚举行为主体可驱动的操作与环境假设，再测试报告因子分解。契约违反需要修实现；已文档化碰撞只在报告确实意图认证该关系时，才要求细化、限制或隔离。
 
-\hypertarget{ux602aux5f02ux673aux5668ux5730ux4f4dux4e0eux672aux6765ux7684ux5f62ux72b6ux5b9aux7406}{%
-\subsection{7.3
-怪异机器地位与未来的形状定理}\label{ux602aux5f02ux673aux5668ux5730ux4f4dux4e0eux672aux6765ux7684ux5f62ux72b6ux5b9aux7406}}
+\texttt{wm\_circuit} 载体在源码/对象和串行化前提下支持 P，但没有建立 R
+或 W。显式有限的 \(M_K\) 元组针对事后声明的一步 \texttt{rac\_single}
+关系和操作剪枝报告满足本文形式 R
+谓词；其证据标签是轨迹局部证书，而不是一般 stock-Linux
+报告结果。辅助模型 \(M_{\mathit{linux\_r\_aux\_v1}}\)
+也只针对固定自定义报告和受限服务语义建立
+R。由于制品与报告载体不同，\(\mathsf{Link}\) 禁止把任一 R 与解释器 P
+合并。故没有已评估模型建立 \(\mathsf{WM}_{\mathrm{policy}}\) 或
+\(\mathsf{WM}_{\mathrm{shape}}\)。未来形状定理必须在同一载体上推出接受的宏闭包与碰撞的报告嵌入；上下文敏感性可能破坏任一条件。
 
-在源到对象对应关系与串行化前提下，stock eBPF 案例支持节点
-P：被接受的代码控制、重置并组合一个有状态 NAND 基底。它并未确立 R 或 W。辅助实例
-\(M_{\mathit{linux\_r\_aux\_v1}}\)
-只针对固定自定义报告和受限服务语义建立 R；它不建立 W 或
-\(\mathsf{WM}_{\mathrm{shape}}\)，也不补足缺失的 stock 报告嵌入。即使得到一个已文档化碰撞，也还须证明报告实现符合其声明抽象且碰撞由报告粒度强制；当前 Linux 制品未提供这些证据。怪异机器分类还要求行为主体、同一编码计算上的链接、非预期性和被策略排除的效果，而离线运行没有建立这些义务。
+\hypertarget{8-ux7ed3ux8bba}{%
+\section{8. 结论}\label{8-ux7ed3ux8bba}}
 
-未来的形状定理必须推导而非假定两个闭包性质。\textbf{宏闭包}必须在预算内重命名并组合局部操作时保持接受性。\textbf{报告嵌入}必须在组合之后保留实际已计算单元中的相关碰撞。上下文敏感分析可以使任一性质失效，且预算不一定具有可加组合性。以声明的观测语义实例化的完备壳理论
-{[}22{]}，或许可以刻画所需的报告细化，但它不会凭空产生可达性、控制、重置、路由、同计算链接或策略违反。
-
-\hypertarget{ux5176ux4f59ux5c40ux9650}{%
-\subsection{7.4 其余局限}\label{ux5176ux4f59ux5c40ux9650}}
-
-证据是在一个 Linux/aarch64
-设置上的一个有界组合电路解释器。它不是第二套系统的结果、并发结果、E4-A
-编译器结果或无界结果。由于不存在 Linux
-报告提取器，报告框架与校准案例在节点 R
-处仍然断开。最终证据包由作者生成，并带有一项单独由作者执行的语义审计；它不是第三方复现。
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\hypertarget{ux7ed3ux8bba}{%
-\section{8. 结论}\label{ux7ed3ux8bba}}
-
-程序验证是一道语言理论安全边界，但制品接受与接受后解释使用不同的语言。我们将以已接受制品为索引的因果族
-\(L_{\mathrm{causal}}\) 与相对于报告的 \(L_{\mathrm{res}}^R\)
-分离，给出了行为因子分解判据，并分解了有界状态介导组合的各项义务。
-
-stock eBPF 校准记录 A，在声明的具体服务/无干扰契约下条件性见证 C，并在显式的源到对象、环境和帧条件前提下支持
-P。一个双条目映射的饱和更新代数实现了 NAND，而一个固定制品可处理至多具有
-64 个输入、512 个门和 578 条导线的电路。它并未确立 Linux
-报告的不可因子分解性，也未确立策略/威胁义务。另一个固定辅助元组通过一个实际计算单元碰撞建立 R，却不建立 W、
-\(\mathsf{WM}_{\mathrm{shape}}\)、stock Linux 报告结论或普遍必要性定理。
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+在分层的 LangSec
+边界上，制品识别、接受后解释、报告因子分解、有界可编程性和策略级怪异机器状态是不同的安全判断：\(R\Rightarrow C\Rightarrow A\)
+且 \(P\Rightarrow C\Rightarrow A\)；命题 3
+用有限反模型否定其余列出的蕴含。\texttt{wm\_circuit} 载体记录
+A，条件性见证 C，并在额外前提下支持固定 64 输入/512 门 NAND 解释器的
+P，但不建立 R 或 W。辅助元组独立针对自定义报告建立 R。另一个 stock-Linux
+捕获提供真实 exact-level-0
+剪枝事件以及共同后缀下的不同结果；把它事后嵌入声明的有限
+\texttt{rac\_single}
+载体后，可得到该元组的轨迹局部、相对于操作剪枝报告的 R
+证书，但不建立一般或 Linux 指定的功能报告失效。两个 R 载体都不提供 P 或
+W，也不与解释器链接，故证据不建立
+\(\mathsf{WM}_{\mathrm{shape}}\)、策略级怪异机器、验证器不健全、漏洞或普遍必要性定理。
 
 \hypertarget{ux4f26ux7406ux4e0eux6570ux636eux53efux7528ux6027}{%
 \section{伦理与数据可用性}\label{ux4f26ux7406ux4e0eux6570ux636eux53efux7528ux6027}}
 
-所有实验均在隔离的本地虚拟机中运行，不将任何程序附加到实际运行中的网络或内核钩子，不以任何第三方为目标，也不尝试内存破坏、验证器绕过或权限提升。该制品仅使用合法的辅助函数调用和有界执行。
+实验在隔离本地 VM
+中运行，不涉及第三方目标或生产数据路径。解释器运行没有实时内核钩子；stock-Linux
+R 捕获只在隔离程序加载期间短暂把 fexit
+观察器附着到验证器内部函数，观察验证器决定而不改变已接受程序的执行。任何实验都没有尝试破坏、验证器绕过或提权。
 
-配套仓库位于
-\url{https://github.com/Emtanling/eBPF-machine}。不可变证据位于提交
+仓库为 \url{https://github.com/Emtanling/eBPF-machine}；不可变 eBPF
+解释器证据位于提交
 \href{https://github.com/Emtanling/eBPF-machine/tree/4309069a1f94d642d5c1402eb710e089c85059b1}{\texttt{4309069a}}
-下的 \texttt{results/interpreter/interpreter-final-20260711-02/}；辅助报告实例证据位于提交
+下的
+\texttt{results/interpreter/interpreter-final-20260711-02/}，辅助报告实例证据位于提交
 \href{https://github.com/Emtanling/eBPF-machine/tree/f665b1a2f9a772ee9b2c08a73d116ea283aa5efb}{\texttt{f665b1a}}
-下的 \texttt{results/linux\_r/linux-r-v1/}。两个证据包分别包含相关模型或程序输入、输出、审计材料及自行签发的完整性清单；清单只防止意外漂移，不构成独立来源证明。
+下的 \texttt{results/linux\_r/linux-r-v1/}。stock-Linux 轨迹证据发布在带标签的
+\href{https://github.com/Emtanling/eBPF-machine/tree/V1.0/residuality-auditor/stock-linux-r-proof}{\texttt{V1.0}}
+快照中，路径为
+\path{residuality-auditor/stock-linux-r-proof/}。其 \texttt{MANIFEST.json}、\texttt{CHECKSUMS.sha256}、嵌入输入哈希、原始捕获、规范化证书、证明输出和检查器源码共同纳入该公开快照。随附的标准库校验器输出
+\texttt{FROZEN\_PROOF\_BUNDLE\_VERIFIED}。发布前归档
+\path{residuality-auditor-v0.3.0-full.tar.gz} 的 SHA-256 为
+\path{5fd0a2812c8c8db2fe5508440934817c1cf9293ba0c5df31317e8b38d94a90ec}；V1.0 直接发布冻结证明载荷，不重复存储该归档。任何冻结字节变化都需要新版本、更新校验和并重新验证。
 
 \hypertarget{ux81f4ux8c22ux4e0e-ai-ux4f7fux7528ux58f0ux660e}{%
 \section{致谢与 AI
 使用声明}\label{ux81f4ux8c22ux4e0e-ai-ux4f7fux7528ux58f0ux660e}}
 
-OpenAI Codex
-协助起草、修订、语言编辑、制品代码/测试修订以及作者指导的检查。作者独立审查主张、证明、引用、更改与结果并承担全部责任。作者声明不存在利益冲突。
+OpenAI Codex 协助全文起草与语言修订，并在作者指导下对摘要、引言、第
+5.6-\/-5.8
+节和结论进行实质修订，同时协助制品代码/测试修订及检查。作者独立审查主张、证明、引用、更改与结果并承担全部责任。作者声明不存在利益冲突。
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\hypertarget{ux53c2ux8003ux6587ux732e}{%
+\section{参考文献}\label{ux53c2ux8003ux6587ux732e}}
 
-\begin{thebibliography}{34}
-
-\bibitem{ref1}
-L. Sassaman, M. L. Patterson, S. Bratus, and M. E. Locasto, ``Security Applications of Formal Language Theory,'' \emph{IEEE Systems Journal}, vol. 7, no. 3, pp. 489--500, 2013, doi: 10.1109/JSYST.2012.2222000.
-
-\bibitem{ref2}
-F. Momot, S. Bratus, S. M. Hallberg, and M. L. Patterson, ``The Seven Turrets of Babel: A Taxonomy of LangSec Errors and How to Expunge Them,'' in \emph{2016 IEEE Cybersecurity Development (SecDev)}, pp. 45--52, 2016, doi: 10.1109/SecDev.2016.019.
-
-\bibitem{ref3}
-L. Sassaman, M. L. Patterson, and S. Bratus, ``A Patch for Postel's Robustness Principle,'' \emph{IEEE Security \& Privacy}, vol. 10, no. 2, pp. 87--91, 2012, doi: 10.1109/MSP.2012.31.
-
-\bibitem{ref4}
-S. Ali, P. Anantharaman, Z. Lucas, and S. W. Smith, ``What We Have Here Is Failure to Validate: Summer of LangSec,'' \emph{IEEE Security \& Privacy}, vol. 19, no. 3, pp. 17--23, 2021, doi: 10.1109/MSEC.2021.3059167.
-
-\bibitem{ref5}
-P. Cousot and R. Cousot, ``Abstract Interpretation: A Unified Lattice Model for Static Analysis of Programs by Construction or Approximation of Fixpoints,'' in \emph{Proceedings of the 4th ACM SIGACT-SIGPLAN Symposium on Principles of Programming Languages (POPL '77)}, pp. 238--252, 1977, doi: 10.1145/512950.512973.
-
-\bibitem{ref22}
-A. Nerode, ``Linear Automaton Transformations,'' \emph{Proceedings of the American Mathematical Society}, vol. 9, no. 4, pp. 541--544, 1958, doi: 10.1090/S0002-9939-1958-0135681-9.
-
-\bibitem{ref23}
-G. H. Mealy, ``A Method for Synthesizing Sequential Circuits,'' \emph{Bell System Technical Journal}, vol. 34, no. 5, pp. 1045--1079, 1955, doi: 10.1002/j.1538-7305.1955.tb03788.x.
-
-\bibitem{ref24}
-G. Amato and F. Scozzari, ``Observational Completeness on Abstract Interpretation,'' \emph{Fundamenta Informaticae}, vol. 106, nos. 2--4, pp. 149--173, 2011, doi: 10.3233/FI-2011-381.
-
-\bibitem{ref25}
-F. Ranzato and F. Tapparo, ``Generalized Strong Preservation by Abstract Interpretation,'' \emph{Journal of Logic and Computation}, vol. 17, no. 1, pp. 157--197, 2007, doi: 10.1093/logcom/exl035.
-
-\bibitem{ref6}
-Linux Kernel Documentation, ``Running BPF Programs from Userspace,'' [Online]. Available: \href{https://www.kernel.org/doc/html/v6.17/bpf/bpf_prog_run.html}{Linux v6.17 BPF documentation} (accessed Jul. 11, 2026).
-
-\bibitem{ref7}
-Linux Kernel Documentation, ``Program Types and ELF Sections,'' [Online]. Available: \href{https://www.kernel.org/doc/html/v6.17/bpf/libbpf/program_types.html}{Linux v6.17 libbpf documentation} (accessed Jul. 11, 2026).
-
-\bibitem{ref8}
-Linux Kernel Documentation, ``BPF\_MAP\_TYPE\_HASH, with PERCPU and LRU Variants,'' [Online]. Available: \href{https://www.kernel.org/doc/html/v6.17/bpf/map_hash.html}{Linux v6.17 map documentation} (accessed Jul. 11, 2026).
-
-\bibitem{ref26}
-Linux Kernel Developers, ``bpf\_loop Helper API,'' \emph{include/uapi/linux/bpf.h}, Linux v6.17. [Online]. Available: \href{https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/bpf.h?h=v6.17}{Linux v6.17 source} (accessed Jul. 13, 2026).
-
-\bibitem{ref9}
-Linux Kernel Documentation, ``eBPF Verifier,'' [Online]. Available: \href{https://www.kernel.org/doc/html/v6.17/bpf/verifier.html}{Linux v6.17 verifier documentation} (accessed Jul. 11, 2026).
-
-\bibitem{ref10}
-I. Palmer, E. Rogers, and R. Adams, ``Object-Centric Tracing for Language-Theoretic Security in Low-Level Interfaces,'' in \emph{Twelfth Workshop on Language-Theoretic Security (LangSec 2026)}, 2026. [Online]. Available: \href{https://langsec.org/spw26/papers/palmer-object-tracing.pdf}{langsec.org} (accessed Jul. 12, 2026).
-
-\bibitem{ref11}
-S. Bratus, M. E. Locasto, M. L. Patterson, L. Sassaman, and A. Shubina, ``Exploit Programming: From Buffer Overflows to Weird Machines and Theory of Computation,'' \emph{USENIX ;login:}, vol. 36, no. 6, pp. 13--21, 2011.
-
-\bibitem{ref14}
-T. Dullien, ``Weird Machines, Exploitability, and Provable Unexploitability,'' \emph{IEEE Transactions on Emerging Topics in Computing}, vol. 8, no. 2, pp. 391--403, 2020, doi: 10.1109/TETC.2017.2785299.
-
-\bibitem{ref15}
-J. Paykin et al., ``Weird Machines as Insecure Compilation,'' arXiv:1911.00157, 2019, doi: 10.48550/arXiv.1911.00157.
-
-\bibitem{ref16}
-J. Vanegue, ``The Weird Machines in Proof-Carrying Code,'' in \emph{2014 IEEE Security and Privacy Workshops}, pp. 209--213, 2014, doi: 10.1109/SPW.2014.37.
-
-\bibitem{ref27}
-S. Ali, M. E. Locasto, and S. W. Smith, ``Weird Machines in Package Managers: A Case Study of Input Language Complexity and Emergent Execution in Software Systems,'' in \emph{2024 IEEE Security and Privacy Workshops (SPW)}, pp. 169--179, 2024, doi: 10.1109/SPW63631.2024.00021.
-
-\bibitem{ref28}
-M. Lesani, ``Vulnerability Flow Type Systems,'' in \emph{2024 IEEE Security and Privacy Workshops (SPW)}, pp. 157--168, 2024, doi: 10.1109/SPW63631.2024.00020.
-
-\bibitem{ref17}
-R. Giacobazzi, F. Ranzato, and F. Scozzari, ``Making Abstract Interpretations Complete,'' \emph{Journal of the ACM}, vol. 47, no. 2, pp. 361--416, 2000, doi: 10.1145/333979.333989.
-
-\bibitem{ref20}
-H. Lu, S. Wang, Y. Wu, W. He, and F. Zhang, ``MOAT: Towards Safe BPF Kernel Extension,'' in \emph{33rd USENIX Security Symposium}, pp. 1153--1170, 2024.
-
-\bibitem{ref21}
-P. Anantharaman et al., ``Mismorphism: The Heart of the Weird Machine,'' in \emph{Security Protocols XXVII}, LNCS 12287, pp. 113--124, 2020, doi: 10.1007/978-3-030-57043-9\_11.
-
-\bibitem{ref29}
-H. Vishwanathan, M. Shachnai, S. Narayana, and S. Nagarakatte, ``Verifying the Verifier: eBPF Range Analysis Verification,'' in \emph{Computer Aided Verification}, Lecture Notes in Computer Science, vol. 13966, pp. 226--251, 2023, doi: 10.1007/978-3-031-37709-9\_12.
-
-\bibitem{ref30}
-H. Sun and Z. Su, ``Validating the eBPF Verifier via State Embedding,'' in \emph{18th USENIX Symposium on Operating Systems Design and Implementation}, pp. 615--628, 2024.
-
-\bibitem{ref31}
-X. Wu et al., ``VEP: A Two-stage Verification Toolchain for Full eBPF Programmability,'' in \emph{22nd USENIX Symposium on Networked Systems Design and Implementation}, pp. 277--299, 2025.
-
-\bibitem{ref37}
-J. Jia et al., ``Rex: Closing the Language-Verifier Gap with Safe and Usable Kernel Extensions,'' in \emph{2025 USENIX Annual Technical Conference}, pp. 325--342, 2025.
-
-\bibitem{ref32}
-D. Lu, B. Tang, M. Paper, and M. Kogias, ``Towards Functional Verification of eBPF Programs,'' in \emph{Proceedings of the 2024 ACM SIGCOMM Workshop on eBPF and Kernel Extensions (eBPF '24)}, pp. 37--43, 2024, doi: 10.1145/3672197.3673435.
-
-\bibitem{ref38}
-M. Bromberger, S. Schwarz, and C. Weidenbach, ``Automatic Bit- and Memory-Precise Verification of eBPF Code,'' in \emph{Proceedings of the 25th Conference on Logic for Programming, Artificial Intelligence and Reasoning}, EPiC Series in Computing, vol. 100, pp. 198--221, 2024, doi: 10.29007/sj4l.
-
-\bibitem{ref33}
-V. A. Dasu, M. Santra, M. R. U. Rashid, A. Kumar, S. Tizpaz-Niari, and G. Tan, ``Heimdall: Formally Verified Automated Migration of Legacy eBPF Programs to Rust,'' arXiv:2605.25411, 2026, doi: 10.48550/arXiv.2605.25411.
-
-\bibitem{ref34}
-A. Singh et al., ``Yaksha-Prashna: Understanding eBPF Bytecode Network Function Behavior,'' arXiv:2602.11232, 2026, doi: 10.48550/arXiv.2602.11232.
-
-\bibitem{ref35}
-Y. Zheng et al., ``Characterizing and Bridging the Diagnostic Gap in eBPF Verifier Rejections,'' arXiv:2607.02748, 2026, doi: 10.48550/arXiv.2607.02748.
-
-\bibitem{ref36}
-D. Kim, J.-Y. Choi, and J. Lee, ``Trust Boundary Semantic Gaps: A Multi-dimensional Analysis and Mitigation for Security-by-Design,'' arXiv:2607.01711, 2026, doi: 10.48550/arXiv.2607.01711.
-
-\end{thebibliography}
+为避免中文阅读版在最终投稿修订中形成第二套书目真源，本文件不重复排印完整书目；文内采用最终英文
+bibliography 的 34 项显示序号，完整、投稿规范的书目信息与顺序以英文
+\texttt{PAPER\_REPORT.tex} 的 \texttt{thebibliography}
+为准。{[}6{]}--{[}9{]} 为
+Nerode、Mealy、观测完备性与强保持理论；{[}13{]} 为 Linux v6.17
+\texttt{bpf\_loop} API；{[}20{]}--{[}30{]} 为 RPM/漏洞流及 eBPF
+相邻工作，其中 Rex 为 {[}28{]}、bpfverify 为
+{[}30{]}；{[}31{]}--{[}34{]} 为明确标注为预印本的 2026 工作。
 
 \end{document}

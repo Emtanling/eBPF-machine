@@ -1,0 +1,66 @@
+{
+  "schema": "rac-linux-runtime-v1",
+  "kernel_release": "6.17.0-35-generic",
+  "program_tag": "100c248465bce0b0",
+  "program_id": 6900,
+  "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+  "runs": [
+    {
+      "case": "a=0",
+      "selected_state": [
+        "S"
+      ],
+      "final_state": [
+        "S",
+        "B"
+      ],
+      "context": {
+        "map_type": "BPF_MAP_TYPE_HASH",
+        "max_entries": 2,
+        "map_flags": 0,
+        "serialized": true,
+        "single_artifact": true,
+        "prefix_program": "rac_single",
+        "suffix_program": "rac_single"
+      },
+      "suffix": {
+        "program": "rac_single",
+        "operation": "shared post-join insert of fresh key B"
+      },
+      "observation": {
+        "success": true,
+        "retval": 1
+      }
+    },
+    {
+      "case": "a=1",
+      "selected_state": [
+        "S",
+        "A"
+      ],
+      "final_state": [
+        "S",
+        "A"
+      ],
+      "context": {
+        "map_type": "BPF_MAP_TYPE_HASH",
+        "max_entries": 2,
+        "map_flags": 0,
+        "serialized": true,
+        "single_artifact": true,
+        "prefix_program": "rac_single",
+        "suffix_program": "rac_single"
+      },
+      "suffix": {
+        "program": "rac_single",
+        "operation": "shared post-join insert of fresh key B"
+      },
+      "observation": {
+        "success": false,
+        "retval": 0
+      }
+    }
+  ],
+  "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+  "xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+}

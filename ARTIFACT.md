@@ -2,11 +2,33 @@
 
 Repository: <https://github.com/Emtanling/eBPF-machine>
 
-Immutable evidence snapshot: commit
+Interpreter evidence snapshot: commit
 [`4309069a`](https://github.com/Emtanling/eBPF-machine/tree/4309069a1f94d642d5c1402eb710e089c85059b1)
 
 Canonical evidence bundle:
 `results/interpreter/interpreter-final-20260711-02/`
+
+Auxiliary report-instance evidence snapshot: commit
+[`f665b1a`](https://github.com/Emtanling/eBPF-machine/tree/f665b1a2f9a772ee9b2c08a73d116ea283aa5efb)
+
+Auxiliary report-instance evidence bundle:
+`results/linux_r/linux-r-v1/`
+
+Frozen stock-Linux R evidence bundle:
+`residuality-auditor/stock-linux-r-proof/`
+
+Public stock-Linux evidence snapshot:
+[`V1.0`](https://github.com/Emtanling/eBPF-machine/tree/V1.0/residuality-auditor/stock-linux-r-proof)
+
+Prepublication complete Residuality Auditor archive SHA-256:
+`5fd0a2812c8c8db2fe5508440934817c1cf9293ba0c5df31317e8b38d94a90ec`
+
+The prepublication archive hash records the full development package used to
+prepare the evidence. V1.0 publishes the frozen proof directory, its raw and
+normalized evidence, proof records, manifests, and the minimal offline checker
+directly rather than duplicating that archive in the repository. Any evidence
+change requires a new tag and new checksums. The published bundle emits
+`FROZEN_PROOF_BUNDLE_VERIFIED`.
 
 ## Scope
 
@@ -22,11 +44,25 @@ The paper's claim graph separates:
 - **W — policy/threat obligation:** an admitted actor can drive a
   policy-excluded effect.
 
-The Linux case records A, gives a conditional C witness under the declared
-map-service/no-interference contract, and supports P under additional source-to-object,
-helper, reset, frame, environment, and serialization premises. It does not
-provide a Linux computed-cell extractor or deployment policy and therefore
-establishes neither R nor W.
+The `wm_circuit` interpreter case records A, gives a conditional C witness under
+the declared map-service/no-interference contract, and supports P under
+additional source-to-object, helper, reset, frame, environment, and
+serialization premises. It does not provide an interpreter-frontier
+computed-cell extractor or deployment policy and therefore establishes neither
+R nor W for that carrier.
+
+A completed real local stock-Linux experiment on the separate verifier-accepted
+XDP object `rac_single` has a frozen operational prune-report evidence bundle.
+Its kernel capture is primary evidence; the integrated and frozen-bundle
+checkers are offline validation layers. For the exact kernel/config/BTF/object/
+translated-bytecode tuple, the evidence supports R only after the paper embeds
+the two captured histories in an explicitly finite, phase-tagged, one-step
+execution carrier and observation contract. Those choices were finalized
+retrospectively, so the result is a trace-local certificate for an author-declared
+analysis projection, not a general or Linux-specified functional-report claim. The
+auxiliary finite report tuple under `results/linux_r/` independently establishes
+R for its custom report. Neither R carrier establishes P or W, and neither is
+combined with `wm_circuit`.
 
 ## Implementation boundary
 
@@ -71,10 +107,98 @@ derived proof projection. All suffix-read components outside that selected map
 state are fixed. The suffix observations are success and failure under the
 declared map-service contract.
 
+## Frozen stock-Linux R carrier
+
+The stock-Linux result comes from a completed local experiment using a different
+accepted artifact from the interpreter: the XDP program `rac_single` on Linux
+`6.17.0-35-generic`. The manifest binds the kernel release, BTF/config hashes,
+object SHA-256, program id/tag/pin, and translated-bytecode SHA-256.
+
+The paper does not take the carrier's execution relation to be all possible
+Linux executions. It defines `I_K` by restricting the two captured serialized
+histories at the selected frontier and adding phase tags; this terminal-state
+relation is manuscript-defined, not the bundle adapter's self-loop model. Its
+sole macro-action executes the reviewed common suffix, and the two terminal
+states have no outgoing action. This gives only the empty word and the one-step
+suffix in the common future language.
+
+At translated instruction 41, an fexit capture records a successful
+exact-level-0 `states_equal` check followed by an `is_state_visited` prune. The
+operational report cell is the retained-state representative reached by that
+directed prune edge; `states_equal` is not treated as a symmetric equivalence
+over complete concrete states. Reviewed path correspondence maps the `a=0` and
+`a=1` histories to the same caller-side frontier and remaining suffix. Normalized
+membership checks associate two constructed concretization witnesses, whose
+recorded key-set projections are `{S}` and `{S,A}`, with the current and retained
+captured verifier states and assign both to the unique representative
+`516c47f044cc3fc3`.
+
+The same translated suffix attempts a fresh-`B` insertion. Its recorded
+program-level success bits are 1 and 0---not raw helper returns---so the two
+concrete states occupy different finite
+future-observation classes while the operational report map assigns them to the
+same representative. The integrated evidence checker reports:
+
+```text
+STOCK_LINUX_R_ESTABLISHED_FOR_FROZEN_TUPLE
+```
+
+This string denotes passage of the bundle's tuple-specific evidence gates. It
+does not certify a Linux-documented complete functional report or a theorem over
+the full Linux execution space.
+
+The raw capture-stage analyzer remains fail-closed and says R is not yet
+established because frontier, report-contract, path, and concretization review
+are not raw-event facts. Its evidence verdict is emitted only after the
+normalized path, direct-membership, operational-report, session-completeness,
+uniqueness, factorization, and hash gates pass.
+
+The executable checker does not independently type-check the paper's `I_K`,
+`D_K`, and `K_obs^K` wrapper or prove observation soundness for the full Linux
+execution space. The formal R conclusion combines the checked evidence with the
+paper's explicitly finite one-step construction; it is not a general Linux
+semantics theorem. The checker compares the seven context fields declared in
+the runtime contract. The manuscript instead selects the complete
+helper-relevant dynamic G0 state (with key sets only as derived projections),
+reviews the caller call/return path at translated PCs 41--44 and the
+`shared_suffix` callee at PCs 107--122, and fixes helper/service choices in its
+environment. The bundled adapter uses self-loops
+only to recompute its stable quotient; the manuscript consumes the identical
+depth-one split and does not treat repeated suffix execution as captured
+evidence.
+
+Verify the frozen package from the Residuality Auditor checkout:
+
+```sh
+PYTHONPATH=. python3 -m tools.proof.check_frozen_bundle \
+  stock-linux-r-proof
+```
+
+Expected output is `FROZEN_PROOF_BUNDLE_VERIFIED`. This is author-generated and
+author-reviewed evidence for one purpose-built existence witness on a real
+frozen kernel/object tuple, not an independent reproduction or a
+frequency/generalization study.
+
+## Verify the auxiliary R certificate
+
+Rerun the separately implemented, author-run checker on the archived auxiliary
+bundle:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 \
+  results/linux_r/linux-r-v1/linux_r_audit.py \
+  results/linux_r/linux-r-v1 --require-kernel
+```
+
+The expected audit establishes `R(M_linux_r_aux_v1)` while explicitly leaving
+`R(stock Linux verifier,I_Linux)` unestablished for that auxiliary carrier. Its
+four VM-oracle rows calibrate only two service outcomes. Parser/CLI regression
+tests are secondary and do not replace this checker or the archived bundle.
+
 ## Verify the preserved run
 
 ```sh
-make verify
+make verify-interpreter
 ```
 
 Equivalent explicit command:
@@ -89,6 +213,14 @@ semantics, regenerates the fixed-seed corpus and both boundary descriptors,
 checks gate traces and negative controls, and matches each runtime program tag
 to the preserved variant. The provenance verifier checks the bundle against its
 self-issued SHA-256 manifest.
+
+Run every published evidence checker with:
+
+```sh
+make verify
+```
+
+This invokes the interpreter, auxiliary R, and frozen stock-Linux R verifiers.
 
 Expected canonical totals:
 
@@ -164,23 +296,10 @@ this run. Source-to-object correspondence beyond the captured build and manual
 translated-code inspection remains an explicit premise; there is no
 machine-checked eBPF-semantics proof.
 
-## Optional precision control
-
-`witness2/` contains a small range-versus-relation experiment and an optional
-Frama-C EVA model:
-
-```sh
-make verify-witness2
-make verify-framac
-```
-
-The Boolean output range `[0,1]` is exact for every nonconstant Boolean
-function, so it is not by itself evidence of relational opacity or a second
-Linux witness. The directory is retained only as a precision control.
-
 ## Not claimed
 
 The artifact does not claim verifier bypass, unsound acceptance, privilege
-escalation, memory corruption, live-hook deployment, concurrent safety,
-artifact-parametric compilation, Linux report non-factorization, a policy-level
-weird machine, or unbounded universality.
+escalation, memory corruption, production-data-path deployment, concurrent
+safety, artifact-parametric compilation, report non-factorization for
+`wm_circuit` or any kernel/object tuple beyond the frozen `rac_single` case, P
+or W for the R carrier, a policy-level weird machine, or unbounded universality.

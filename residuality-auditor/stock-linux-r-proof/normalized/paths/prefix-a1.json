@@ -1,0 +1,91 @@
+{
+  "branch_call": 46,
+  "branch_name": "select_a",
+  "case": "a=1",
+  "history_entries": [
+    {
+      "flags": 0,
+      "idx": 47,
+      "insn_idx": 47,
+      "linked_regs": 0,
+      "prev_idx": 73,
+      "prev_insn_idx": 73
+    },
+    {
+      "flags": 0,
+      "idx": 49,
+      "insn_idx": 49,
+      "linked_regs": 0,
+      "prev_idx": 47,
+      "prev_insn_idx": 47
+    },
+    {
+      "flags": 0,
+      "idx": 40,
+      "insn_idx": 40,
+      "linked_regs": 0,
+      "prev_idx": 49,
+      "prev_insn_idx": 49
+    },
+    {
+      "flags": 0,
+      "idx": 97,
+      "insn_idx": 97,
+      "linked_regs": 0,
+      "prev_idx": 40,
+      "prev_insn_idx": 40
+    },
+    {
+      "flags": 513,
+      "idx": 99,
+      "insn_idx": 99,
+      "linked_regs": 0,
+      "prev_idx": 98,
+      "prev_insn_idx": 98
+    },
+    {
+      "flags": 521,
+      "idx": 101,
+      "insn_idx": 101,
+      "linked_regs": 0,
+      "prev_idx": 100,
+      "prev_insn_idx": 100
+    },
+    {
+      "flags": 513,
+      "idx": 103,
+      "insn_idx": 103,
+      "linked_regs": 0,
+      "prev_idx": 102,
+      "prev_insn_idx": 102
+    },
+    {
+      "flags": 521,
+      "idx": 105,
+      "insn_idx": 105,
+      "linked_regs": 0,
+      "prev_idx": 104,
+      "prev_insn_idx": 104
+    }
+  ],
+  "history_side": "history_left",
+  "input_value": 1,
+  "runtime_context": {
+    "map_flags": 0,
+    "map_type": "BPF_MAP_TYPE_HASH",
+    "max_entries": 2,
+    "prefix_program": "rac_single",
+    "serialized": true,
+    "single_artifact": true,
+    "suffix_program": "rac_single"
+  },
+  "runtime_observation_retval": 0,
+  "runtime_observation_success": false,
+  "runtime_selected_mask": 3,
+  "runtime_selected_state": [
+    "S",
+    "A"
+  ],
+  "schema": "rac-prefix-correspondence-v1",
+  "selector_edge": "fallthrough"
+}

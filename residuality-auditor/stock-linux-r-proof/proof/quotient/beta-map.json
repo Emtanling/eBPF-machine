@@ -1,0 +1,21 @@
+{
+  "beta_D": {
+    "sigma-a0": "Q0",
+    "sigma-a1": "Q1"
+  },
+  "pi_R": {
+    "sigma-a0": "retained:516c47f044cc3fc3",
+    "sigma-a1": "retained:516c47f044cc3fc3"
+  },
+  "report_cell": "retained:516c47f044cc3fc3",
+  "representatives": {
+    "a=0": [
+      "516c47f044cc3fc3"
+    ],
+    "a=1": [
+      "516c47f044cc3fc3"
+    ]
+  },
+  "schema": "rac-stock-linux-beta-map-v1",
+  "source_algorithm": "residuality_auditor.analysis.behavioral_partitions"
+}

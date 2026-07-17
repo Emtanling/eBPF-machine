@@ -1,0 +1,90 @@
+{
+  "schema": "rac-verifier-state-v2-schema",
+  "version": 1,
+  "scope": "witness-scoped verifier state capture for a FRONTIER_ELIGIBLE prune event",
+  "limits": {
+    "max_supported_frames": 1,
+    "max_supported_registers_per_frame": 11,
+    "max_supported_stack_slots": 32,
+    "max_history_entries": 40
+  },
+  "captured": {
+    "state": [
+      "insn_idx",
+      "first_insn_idx",
+      "last_insn_idx",
+      "curframe",
+      "dfs_depth",
+      "branches",
+      "acquired_refs",
+      "active_locks",
+      "active_preempt_locks",
+      "active_irq_id",
+      "active_lock_id",
+      "active_rcu_lock",
+      "speculative",
+      "in_sleepable",
+      "callback_unroll_depth",
+      "may_goto_depth",
+      "parent_present",
+      "equal_state_present",
+      "refs_present",
+      "frame_count"
+    ],
+    "frame": [
+      "frameno",
+      "callsite",
+      "subprogno",
+      "async_entry_cnt",
+      "callback_ret_range",
+      "callback flags/depth",
+      "allocated_stack",
+      "stack slots"
+    ],
+    "register": [
+      "type",
+      "off",
+      "var_off.value",
+      "var_off.mask",
+      "signed/unsigned 64-bit min/max",
+      "signed/unsigned 32-bit min/max",
+      "id",
+      "ref_obj_id",
+      "frameno",
+      "subreg_def",
+      "liveness",
+      "precise",
+      "raw union words",
+      "parent_present"
+    ],
+    "stack_slot": [
+      "slot_type[8]",
+      "initialized",
+      "spilled_ptr register state"
+    ],
+    "path": [
+      "branch/call history entries from rac_snapshot.history_entries"
+    ],
+    "identity": [
+      "object_sha256",
+      "program_id",
+      "program_tag",
+      "program_pin",
+      "xlated_sha256"
+    ]
+  },
+  "unsupported_shape_bits": {
+    "0": "multi_frame",
+    "1": "refs_or_ref_obj_id",
+    "2": "locks",
+    "3": "callback",
+    "4": "stack_truncated",
+    "5": "dynptr",
+    "6": "iterator",
+    "7": "socket_ref",
+    "8": "packet_range",
+    "9": "sleepable_or_rcu",
+    "10": "reserved_reg_parent_chain"
+  },
+  "pass_condition": "unsupported_mask must be zero for both retained and current states; parent_present is captured as metadata and is not by itself an unsupported shape for this witness-scoped equality check."
+}

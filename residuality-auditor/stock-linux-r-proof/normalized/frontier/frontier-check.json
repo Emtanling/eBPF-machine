@@ -1,0 +1,279 @@
+{
+  "candidate_event_count": 2,
+  "checker": {
+    "name": "rac-frontier-checker",
+    "version": "0.3.2"
+  },
+  "eligible_event_count": 1,
+  "events": [
+    {
+      "current_state_insn_idx": 41,
+      "history_left": {
+        "branch_call_hits": [
+          46
+        ],
+        "captured_count": 8,
+        "entries": [
+          {
+            "flags": 0,
+            "idx": 47,
+            "insn_idx": 47,
+            "linked_regs": 0,
+            "prev_idx": 73,
+            "prev_insn_idx": 73
+          },
+          {
+            "flags": 0,
+            "idx": 49,
+            "insn_idx": 49,
+            "linked_regs": 0,
+            "prev_idx": 47,
+            "prev_insn_idx": 47
+          },
+          {
+            "flags": 0,
+            "idx": 40,
+            "insn_idx": 40,
+            "linked_regs": 0,
+            "prev_idx": 49,
+            "prev_insn_idx": 49
+          },
+          {
+            "flags": 0,
+            "idx": 97,
+            "insn_idx": 97,
+            "linked_regs": 0,
+            "prev_idx": 40,
+            "prev_insn_idx": 40
+          },
+          {
+            "flags": 513,
+            "idx": 99,
+            "insn_idx": 99,
+            "linked_regs": 0,
+            "prev_idx": 98,
+            "prev_insn_idx": 98
+          },
+          {
+            "flags": 521,
+            "idx": 101,
+            "insn_idx": 101,
+            "linked_regs": 0,
+            "prev_idx": 100,
+            "prev_insn_idx": 100
+          },
+          {
+            "flags": 513,
+            "idx": 103,
+            "insn_idx": 103,
+            "linked_regs": 0,
+            "prev_idx": 102,
+            "prev_insn_idx": 102
+          },
+          {
+            "flags": 521,
+            "idx": 105,
+            "insn_idx": 105,
+            "linked_regs": 0,
+            "prev_idx": 104,
+            "prev_insn_idx": 104
+          }
+        ],
+        "entry_reasons": [],
+        "total_count": 8,
+        "truncated": false
+      },
+      "history_right": {
+        "branch_call_hits": [
+          48
+        ],
+        "captured_count": 7,
+        "entries": [
+          {
+            "flags": 0,
+            "idx": 49,
+            "insn_idx": 49,
+            "linked_regs": 0,
+            "prev_idx": 96,
+            "prev_insn_idx": 96
+          },
+          {
+            "flags": 0,
+            "idx": 40,
+            "insn_idx": 40,
+            "linked_regs": 0,
+            "prev_idx": 49,
+            "prev_insn_idx": 49
+          },
+          {
+            "flags": 0,
+            "idx": 97,
+            "insn_idx": 97,
+            "linked_regs": 0,
+            "prev_idx": 40,
+            "prev_insn_idx": 40
+          },
+          {
+            "flags": 513,
+            "idx": 99,
+            "insn_idx": 99,
+            "linked_regs": 0,
+            "prev_idx": 98,
+            "prev_insn_idx": 98
+          },
+          {
+            "flags": 521,
+            "idx": 101,
+            "insn_idx": 101,
+            "linked_regs": 0,
+            "prev_idx": 100,
+            "prev_insn_idx": 100
+          },
+          {
+            "flags": 513,
+            "idx": 103,
+            "insn_idx": 103,
+            "linked_regs": 0,
+            "prev_idx": 102,
+            "prev_insn_idx": 102
+          },
+          {
+            "flags": 521,
+            "idx": 105,
+            "insn_idx": 105,
+            "linked_regs": 0,
+            "prev_idx": 104,
+            "prev_insn_idx": 104
+          }
+        ],
+        "entry_reasons": [],
+        "total_count": 7,
+        "truncated": false
+      },
+      "is_state_visited_prune": true,
+      "line": 2,
+      "old_state_insn_idx": 41,
+      "passed": true,
+      "reasons": [],
+      "same_remaining_xlated_suffix": true,
+      "states_equal_success": true,
+      "visit_insn": 41
+    },
+    {
+      "current_state_insn_idx": 43,
+      "history_left": {
+        "branch_call_hits": [],
+        "captured_count": 2,
+        "entries": [
+          {
+            "flags": 0,
+            "idx": 29,
+            "insn_idx": 29,
+            "linked_regs": 0,
+            "prev_idx": 28,
+            "prev_insn_idx": 28
+          },
+          {
+            "flags": 0,
+            "idx": 36,
+            "insn_idx": 36,
+            "linked_regs": 0,
+            "prev_idx": 35,
+            "prev_insn_idx": 35
+          }
+        ],
+        "entry_reasons": [],
+        "total_count": 2,
+        "truncated": false
+      },
+      "history_right": {
+        "branch_call_hits": [],
+        "captured_count": 2,
+        "entries": [
+          {
+            "flags": 512,
+            "idx": 5,
+            "insn_idx": 5,
+            "linked_regs": 0,
+            "prev_idx": 4,
+            "prev_insn_idx": 4
+          },
+          {
+            "flags": 520,
+            "idx": 8,
+            "insn_idx": 8,
+            "linked_regs": 0,
+            "prev_idx": 7,
+            "prev_insn_idx": 7
+          }
+        ],
+        "entry_reasons": [],
+        "total_count": 2,
+        "truncated": false
+      },
+      "is_state_visited_prune": true,
+      "line": 3,
+      "old_state_insn_idx": 43,
+      "passed": false,
+      "reasons": [
+        "HISTORY_BRANCH_PROVENANCE_AMBIGUOUS",
+        "VISIT_AFTER_FIRST_SENSITIVE"
+      ],
+      "same_remaining_xlated_suffix": false,
+      "states_equal_success": true,
+      "visit_insn": 43
+    }
+  ],
+  "frontier": {
+    "branch_calls": [
+      46,
+      48
+    ],
+    "branch_dispatch_call": 39,
+    "first_sensitive_insn": 118,
+    "join_insn": 41,
+    "suffix_entry_insn": 107
+  },
+  "global_reasons": [],
+  "identity": {
+    "input_sha256": {
+      "events.jsonl": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+      "events.raw.jsonl": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+      "object.sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+      "program-info.json": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+      "program-pin.txt": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+      "runtime.json": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+      "xlated-rac_single.sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+      "xlated-rac_single.txt": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+    },
+    "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "program_bytes_xlated": 984,
+    "program_id": 6900,
+    "program_name": "rac_single",
+    "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "program_tag": "100c248465bce0b0",
+    "recorded_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "runtime_object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "runtime_program_id": 6900,
+    "runtime_program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "runtime_program_tag": "100c248465bce0b0",
+    "runtime_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "schema": "rac-frontier-identity-v1",
+    "xlated_instruction_bytes": 984,
+    "xlated_instruction_slots": 123,
+    "xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+  },
+  "input_sha256": {
+    "events.jsonl": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+    "events.raw.jsonl": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+    "object.sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+    "program-info.json": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+    "program-pin.txt": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+    "runtime.json": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+    "xlated-rac_single.sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+    "xlated-rac_single.txt": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+  },
+  "result": "FRONTIER_ELIGIBLE",
+  "schema": "rac-frontier-check-v1",
+  "search_outcome": "FRONTIER_ELIGIBLE"
+}

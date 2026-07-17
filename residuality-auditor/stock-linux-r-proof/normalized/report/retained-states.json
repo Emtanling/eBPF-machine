@@ -1,0 +1,27 @@
+{
+  "frontier": {
+    "branch_calls": [
+      46,
+      48
+    ],
+    "branch_dispatch_call": 39,
+    "first_sensitive_insn": 118,
+    "join_insn": 41,
+    "suffix_entry_insn": 107
+  },
+  "schema": "rac-retained-states-v1",
+  "states": [
+    {
+      "insn_idx": 41,
+      "role": "retained",
+      "source": "frontier_event.old",
+      "state_hash": "516c47f044cc3fc3"
+    },
+    {
+      "insn_idx": 41,
+      "role": "current",
+      "source": "frontier_event.current",
+      "state_hash": "a66d912d58c91de4"
+    }
+  ]
+}

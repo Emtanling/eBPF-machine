@@ -1,0 +1,296 @@
+int rac_single(struct xdp_md * ctx):
+; void *data_end = (void *)(long)ctx->data_end; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:86 line_col:41]
+   0: (79) r2 = *(u64 *)(r1 +8)
+       79 12 08 00 00 00 00 00
+; void *data = (void *)(long)ctx->data; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:85 line_col:37]
+   1: (79) r1 = *(u64 *)(r1 +0)
+       79 11 00 00 00 00 00 00
+   2: (b7) r6 = 0
+       b7 06 00 00 00 00 00 00
+; __u32 s = KEY_S, ka = KEY_A, kb = KEY_B, one = 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:87 line_col:11]
+   3: (63) *(u32 *)(r10 -4) = r6
+       63 6a fc ff 00 00 00 00
+   4: (b7) r3 = 1
+       b7 03 00 00 01 00 00 00
+; __u32 s = KEY_S, ka = KEY_A, kb = KEY_B, one = 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:87 line_col:22]
+   5: (63) *(u32 *)(r10 -8) = r3
+       63 3a f8 ff 00 00 00 00
+   6: (b7) r4 = 2
+       b7 04 00 00 02 00 00 00
+; __u32 s = KEY_S, ka = KEY_A, kb = KEY_B, one = 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:87 line_col:34]
+   7: (63) *(u32 *)(r10 -12) = r4
+       63 4a f4 ff 00 00 00 00
+; __u32 s = KEY_S, ka = KEY_A, kb = KEY_B, one = 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:87 line_col:46]
+   8: (63) *(u32 *)(r10 -16) = r3
+       63 3a f0 ff 00 00 00 00
+; if (data + 1 > data_end) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:91 line_col:14]
+   9: (bf) r3 = r1
+       bf 13 00 00 00 00 00 00
+  10: (07) r3 += 1
+       07 03 00 00 01 00 00 00
+; if (data + 1 > data_end) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:91 line_col:9]
+  11: (2d) if r3 > r2 goto pc+31
+       2d 23 1f 00 00 00 00 00
+; branch_key = *(__u8 *)data & 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:93 line_col:18]
+  12: (71) r7 = *(u8 *)(r1 +0)
+       71 17 00 00 00 00 00 00
+  13: (bf) r8 = r10
+       bf a8 00 00 00 00 00 00
+  14: (07) r8 += -4
+       07 08 00 00 fc ff ff ff
+; bpf_map_delete_elem(&g0, &s); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:95 line_col:5]
+  15: (18) r1 = map[id:2768]
+       18 11 00 00 d0 0a 00 00 00 00 00 00 00 00 00 00
+  17: (bf) r2 = r8
+       bf 82 00 00 00 00 00 00
+  18: (85) call htab_map_delete_elem#404352
+       85 00 00 00 80 2b 06 00
+  19: (bf) r2 = r10
+       bf a2 00 00 00 00 00 00
+; branch_key = *(__u8 *)data & 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:93 line_col:18]
+  20: (07) r2 += -8
+       07 02 00 00 f8 ff ff ff
+; bpf_map_delete_elem(&g0, &ka); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:96 line_col:5]
+  21: (18) r1 = map[id:2768]
+       18 11 00 00 d0 0a 00 00 00 00 00 00 00 00 00 00
+  23: (85) call htab_map_delete_elem#404352
+       85 00 00 00 80 2b 06 00
+  24: (bf) r2 = r10
+       bf a2 00 00 00 00 00 00
+; branch_key = *(__u8 *)data & 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:93 line_col:18]
+  25: (07) r2 += -12
+       07 02 00 00 f4 ff ff ff
+; bpf_map_delete_elem(&g0, &kb); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:97 line_col:5]
+  26: (18) r1 = map[id:2768]
+       18 11 00 00 d0 0a 00 00 00 00 00 00 00 00 00 00
+  28: (85) call htab_map_delete_elem#404352
+       85 00 00 00 80 2b 06 00
+  29: (bf) r3 = r10
+       bf a3 00 00 00 00 00 00
+; branch_key = *(__u8 *)data & 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:93 line_col:18]
+  30: (07) r3 += -16
+       07 03 00 00 f0 ff ff ff
+; rc = bpf_map_update_elem(&g0, &s, &one, BPF_NOEXIST); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:98 line_col:10]
+  31: (18) r1 = map[id:2768]
+       18 11 00 00 d0 0a 00 00 00 00 00 00 00 00 00 00
+  33: (bf) r2 = r8
+       bf 82 00 00 00 00 00 00
+  34: (b7) r4 = 1
+       b7 04 00 00 01 00 00 00
+  35: (85) call htab_map_update_elem#409480
+       85 00 00 00 88 3f 06 00
+; if (rc) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:99 line_col:9]
+  36: (55) if r0 != 0x0 goto pc+6
+       55 00 06 00 00 00 00 00
+; (void)select_branch(branch_key); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:102 line_col:11]
+  37: (57) r7 &= 1
+       57 07 00 00 01 00 00 00
+  38: (bf) r1 = r7
+       bf 71 00 00 00 00 00 00
+  39: (85) call pc+5#bpf_prog_66cd17f05b3510d4_select_branch
+       85 10 05 00 01 00 00 00
+; (void)normalize_join(); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:103 line_col:11]
+  40: (85) call pc+56#bpf_prog_72fb8071683c7169_normalize_join
+       85 10 38 00 04 00 00 00
+; return shared_suffix(); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:106 line_col:12]
+  41: (85) call pc+65#bpf_prog_a49bfe356f0e597d_shared_suffix
+       85 10 41 00 05 00 00 00
+  42: (bf) r6 = r0
+       bf 06 00 00 00 00 00 00
+; } [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:107 line_col:1]
+  43: (bf) r0 = r6
+       bf 60 00 00 00 00 00 00
+  44: (95) exit
+       95 00 00 00 00 00 00 00
+long select_branch(__u8 a):
+; if (a) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:56 line_col:9]
+  45: (15) if r1 == 0x0 goto pc+2
+       15 01 02 00 00 00 00 00
+; rc = select_a(); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:57 line_col:14]
+  46: (85) call pc+3#bpf_prog_7444db62bb7a84a3_select_a
+       85 10 03 00 02 00 00 00
+  47: (05) goto pc+1
+       05 00 01 00 00 00 00 00
+; rc = select_s(); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:59 line_col:14]
+  48: (85) call pc+25#bpf_prog_6bc1ebc63f21d74a_select_s
+       85 10 19 00 03 00 00 00
+; return rc; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:60 line_col:5]
+  49: (95) exit
+       95 00 00 00 00 00 00 00
+long select_a():
+; static __noinline long select_a(void) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:32 line_col:0]
+  50: (b7) r1 = 1
+       b7 01 00 00 01 00 00 00
+; __u32 ka = KEY_A, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:34 line_col:11]
+  51: (63) *(u32 *)(r10 -4) = r1
+       63 1a fc ff 00 00 00 00
+; __u32 ka = KEY_A, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:34 line_col:23]
+  52: (63) *(u32 *)(r10 -8) = r1
+       63 1a f8 ff 00 00 00 00
+  53: (b7) r1 = 0
+       b7 01 00 00 00 00 00 00
+; __u32 ka = KEY_A, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:34 line_col:32]
+  54: (63) *(u32 *)(r10 -12) = r1
+       63 1a f4 ff 00 00 00 00
+  55: (b7) r1 = 3
+       b7 01 00 00 03 00 00 00
+; __u32 mask = MASK_S | MASK_A; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:35 line_col:11]
+  56: (63) *(u32 *)(r10 -16) = r1
+       63 1a f0 ff 00 00 00 00
+  57: (bf) r2 = r10
+       bf a2 00 00 00 00 00 00
+; __u32 ka = KEY_A, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:34 line_col:11]
+  58: (07) r2 += -4
+       07 02 00 00 fc ff ff ff
+  59: (bf) r3 = r10
+       bf a3 00 00 00 00 00 00
+  60: (07) r3 += -8
+       07 03 00 00 f8 ff ff ff
+; (void)bpf_map_update_elem(&g0, &ka, &one, BPF_NOEXIST); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:37 line_col:11]
+  61: (18) r1 = map[id:2768]
+       18 11 00 00 d0 0a 00 00 00 00 00 00 00 00 00 00
+  63: (b7) r4 = 1
+       b7 04 00 00 01 00 00 00
+  64: (85) call htab_map_update_elem#409480
+       85 00 00 00 88 3f 06 00
+  65: (bf) r2 = r10
+       bf a2 00 00 00 00 00 00
+; __u32 ka = KEY_A, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:34 line_col:11]
+  66: (07) r2 += -12
+       07 02 00 00 f4 ff ff ff
+  67: (bf) r3 = r10
+       bf a3 00 00 00 00 00 00
+  68: (07) r3 += -16
+       07 03 00 00 f0 ff ff ff
+; (void)bpf_map_update_elem(&audit, &slot, &mask, BPF_ANY); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:38 line_col:11]
+  69: (18) r1 = map[id:2769]
+       18 11 00 00 d1 0a 00 00 00 00 00 00 00 00 00 00
+  71: (b7) r4 = 0
+       b7 04 00 00 00 00 00 00
+  72: (85) call array_map_update_elem#428528
+       85 00 00 00 f0 89 06 00
+; return 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:39 line_col:5]
+  73: (95) exit
+       95 00 00 00 00 00 00 00
+long select_s():
+; static __noinline long select_s(void) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:42 line_col:0]
+  74: (b7) r1 = 0
+       b7 01 00 00 00 00 00 00
+; __u32 s = KEY_S, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:44 line_col:11]
+  75: (63) *(u32 *)(r10 -4) = r1
+       63 1a fc ff 00 00 00 00
+  76: (b7) r2 = 1
+       b7 02 00 00 01 00 00 00
+; __u32 s = KEY_S, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:44 line_col:22]
+  77: (63) *(u32 *)(r10 -8) = r2
+       63 2a f8 ff 00 00 00 00
+; __u32 s = KEY_S, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:44 line_col:31]
+  78: (63) *(u32 *)(r10 -12) = r1
+       63 1a f4 ff 00 00 00 00
+; __u32 mask = MASK_S; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:45 line_col:11]
+  79: (63) *(u32 *)(r10 -16) = r2
+       63 2a f0 ff 00 00 00 00
+  80: (bf) r2 = r10
+       bf a2 00 00 00 00 00 00
+; __u32 s = KEY_S, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:44 line_col:11]
+  81: (07) r2 += -4
+       07 02 00 00 fc ff ff ff
+  82: (bf) r3 = r10
+       bf a3 00 00 00 00 00 00
+  83: (07) r3 += -8
+       07 03 00 00 f8 ff ff ff
+; (void)bpf_map_update_elem(&g0, &s, &one, BPF_EXIST); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:47 line_col:11]
+  84: (18) r1 = map[id:2768]
+       18 11 00 00 d0 0a 00 00 00 00 00 00 00 00 00 00
+  86: (b7) r4 = 2
+       b7 04 00 00 02 00 00 00
+  87: (85) call htab_map_update_elem#409480
+       85 00 00 00 88 3f 06 00
+  88: (bf) r2 = r10
+       bf a2 00 00 00 00 00 00
+; __u32 s = KEY_S, one = 1, slot = AUDIT_SLOT; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:44 line_col:11]
+  89: (07) r2 += -12
+       07 02 00 00 f4 ff ff ff
+  90: (bf) r3 = r10
+       bf a3 00 00 00 00 00 00
+  91: (07) r3 += -16
+       07 03 00 00 f0 ff ff ff
+; (void)bpf_map_update_elem(&audit, &slot, &mask, BPF_ANY); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:48 line_col:11]
+  92: (18) r1 = map[id:2769]
+       18 11 00 00 d1 0a 00 00 00 00 00 00 00 00 00 00
+  94: (b7) r4 = 0
+       b7 04 00 00 00 00 00 00
+  95: (85) call array_map_update_elem#428528
+       85 00 00 00 f0 89 06 00
+; return 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:49 line_col:5]
+  96: (95) exit
+       95 00 00 00 00 00 00 00
+long normalize_join():
+; static __noinline long normalize_join(void) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:63 line_col:0]
+  97: (b7) r1 = 0
+       b7 01 00 00 00 00 00 00
+; volatile __u32 scrub0 = 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:65 line_col:20]
+  98: (63) *(u32 *)(r10 -4) = r1
+       63 1a fc ff 00 00 00 00
+; volatile __u32 scrub1 = 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:66 line_col:20]
+  99: (63) *(u32 *)(r10 -8) = r1
+       63 1a f8 ff 00 00 00 00
+; volatile __u32 scrub2 = 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:67 line_col:20]
+ 100: (63) *(u32 *)(r10 -12) = r1
+       63 1a f4 ff 00 00 00 00
+; volatile __u32 scrub3 = 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:68 line_col:20]
+ 101: (63) *(u32 *)(r10 -16) = r1
+       63 1a f0 ff 00 00 00 00
+; return scrub0 + scrub1 + scrub2 + scrub3; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:70 line_col:12]
+ 102: (61) r1 = *(u32 *)(r10 -4)
+       61 a1 fc ff 00 00 00 00
+; return scrub0 + scrub1 + scrub2 + scrub3; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:70 line_col:21]
+ 103: (61) r1 = *(u32 *)(r10 -8)
+       61 a1 f8 ff 00 00 00 00
+; return scrub0 + scrub1 + scrub2 + scrub3; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:70 line_col:30]
+ 104: (61) r1 = *(u32 *)(r10 -12)
+       61 a1 f4 ff 00 00 00 00
+; return scrub0 + scrub1 + scrub2 + scrub3; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:70 line_col:39]
+ 105: (61) r1 = *(u32 *)(r10 -16)
+       61 a1 f0 ff 00 00 00 00
+; return scrub0 + scrub1 + scrub2 + scrub3; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:70 line_col:5]
+ 106: (95) exit
+       95 00 00 00 00 00 00 00
+int shared_suffix():
+; static __noinline int shared_suffix(void) [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:73 line_col:0]
+ 107: (b7) r1 = 2
+       b7 01 00 00 02 00 00 00
+; __u32 kb = KEY_B, one = 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:75 line_col:11]
+ 108: (63) *(u32 *)(r10 -4) = r1
+       63 1a fc ff 00 00 00 00
+ 109: (b7) r6 = 1
+       b7 06 00 00 01 00 00 00
+; __u32 kb = KEY_B, one = 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:75 line_col:23]
+ 110: (63) *(u32 *)(r10 -8) = r6
+       63 6a f8 ff 00 00 00 00
+ 111: (bf) r2 = r10
+       bf a2 00 00 00 00 00 00
+; __u32 kb = KEY_B, one = 1; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:75 line_col:11]
+ 112: (07) r2 += -4
+       07 02 00 00 fc ff ff ff
+ 113: (bf) r3 = r10
+       bf a3 00 00 00 00 00 00
+ 114: (07) r3 += -8
+       07 03 00 00 f8 ff ff ff
+; rc = bpf_map_update_elem(&g0, &kb, &one, BPF_NOEXIST); [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:78 line_col:10]
+ 115: (18) r1 = map[id:2768]
+       18 11 00 00 d0 0a 00 00 00 00 00 00 00 00 00 00
+ 117: (b7) r4 = 1
+       b7 04 00 00 01 00 00 00
+ 118: (85) call htab_map_update_elem#409480
+       85 00 00 00 88 3f 06 00
+; return rc == 0 ? 1 : 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:79 line_col:15]
+ 119: (15) if r0 == 0x0 goto pc+1
+       15 00 01 00 00 00 00 00
+ 120: (b7) r6 = 0
+       b7 06 00 00 00 00 00 00
+; return rc == 0 ? 1 : 0; [file:/home/parallels/Desktop/residuality-auditor-v0.2.0/linux/witness/rac_witness.bpf.c line_num:79 line_col:5]
+ 121: (bf) r0 = r6
+       bf 60 00 00 00 00 00 00
+ 122: (95) exit
+       95 00 00 00 00 00 00 00

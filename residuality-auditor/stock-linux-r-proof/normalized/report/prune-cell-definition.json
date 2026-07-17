@@ -1,0 +1,11 @@
+{
+  "behavior_independent": true,
+  "cell_carrier": "retained verifier-state representatives",
+  "membership_rule": [
+    "direct membership in retained representative",
+    "direct membership in a current state actually pruned by that representative"
+  ],
+  "name": "operational prune-report cell",
+  "schema": "rac-prune-cell-definition-v1",
+  "scope": "frozen verifier session, target program, target frontier, and chosen fiber only"
+}

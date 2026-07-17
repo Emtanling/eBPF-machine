@@ -1,0 +1,48 @@
+{
+  "actions": [
+    "shared_suffix_insert_B"
+  ],
+  "classes": [
+    {
+      "class": "Q0",
+      "states": [
+        "sigma-a0"
+      ]
+    },
+    {
+      "class": "Q1",
+      "states": [
+        "sigma-a1"
+      ]
+    }
+  ],
+  "partitions_by_depth": [
+    {
+      "classes": [
+        [
+          "sigma-a0",
+          "sigma-a1"
+        ]
+      ],
+      "depth": 0
+    },
+    {
+      "classes": [
+        [
+          "sigma-a0"
+        ],
+        [
+          "sigma-a1"
+        ]
+      ],
+      "depth": 1
+    }
+  ],
+  "refinement_rounds": 1,
+  "schema": "rac-behavioral-quotient-v1",
+  "source_algorithm": "residuality_auditor.analysis.behavioral_partitions",
+  "states": [
+    "sigma-a0",
+    "sigma-a1"
+  ]
+}

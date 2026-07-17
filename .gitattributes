@@ -1,3 +1,4 @@
 results/*.verifier.log -text -diff
 results/verifier.log -text -diff
 results/*.wm_nand.xlated.txt -text -diff
+residuality-auditor/stock-linux-r-proof/raw/object/source.diff -text -diff

@@ -1,0 +1,539 @@
+{
+  "identity": {
+    "input_sha256": {
+      "events.jsonl": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+      "events.raw.jsonl": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+      "object.sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+      "program-info.json": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+      "program-pin.txt": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+      "runtime.json": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+      "xlated-rac_single.sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+      "xlated-rac_single.txt": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+    },
+    "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "program_bytes_xlated": 984,
+    "program_id": 6900,
+    "program_name": "rac_single",
+    "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "program_tag": "100c248465bce0b0",
+    "recorded_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "runtime_object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+    "runtime_program_id": 6900,
+    "runtime_program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+    "runtime_program_tag": "100c248465bce0b0",
+    "runtime_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+    "schema": "rac-frontier-identity-v1",
+    "xlated_instruction_bytes": 984,
+    "xlated_instruction_slots": 123,
+    "xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+  },
+  "role": "current",
+  "schema": "rac-current-state-v2-proof",
+  "snapshot": {
+    "curframe": 0,
+    "dfs_depth": 5,
+    "first_insn_idx": 49,
+    "history_captured_count": 7,
+    "history_count": 7,
+    "history_entries": [
+      {
+        "flags": 0,
+        "idx": 49,
+        "insn_idx": 49,
+        "linked_regs": 0,
+        "prev_idx": 96,
+        "prev_insn_idx": 96
+      },
+      {
+        "flags": 0,
+        "idx": 40,
+        "insn_idx": 40,
+        "linked_regs": 0,
+        "prev_idx": 49,
+        "prev_insn_idx": 49
+      },
+      {
+        "flags": 0,
+        "idx": 97,
+        "insn_idx": 97,
+        "linked_regs": 0,
+        "prev_idx": 40,
+        "prev_insn_idx": 40
+      },
+      {
+        "flags": 513,
+        "idx": 99,
+        "insn_idx": 99,
+        "linked_regs": 0,
+        "prev_idx": 98,
+        "prev_insn_idx": 98
+      },
+      {
+        "flags": 521,
+        "idx": 101,
+        "insn_idx": 101,
+        "linked_regs": 0,
+        "prev_idx": 100,
+        "prev_insn_idx": 100
+      },
+      {
+        "flags": 513,
+        "idx": 103,
+        "insn_idx": 103,
+        "linked_regs": 0,
+        "prev_idx": 102,
+        "prev_insn_idx": 102
+      },
+      {
+        "flags": 521,
+        "idx": 105,
+        "insn_idx": 105,
+        "linked_regs": 0,
+        "prev_idx": 104,
+        "prev_insn_idx": 104
+      }
+    ],
+    "history_hash": "e8c646b969e1dce2",
+    "history_total_count": 7,
+    "history_truncated": false,
+    "insn_idx": 41,
+    "last_insn_idx": 106,
+    "state_hash": "a66d912d58c91de4",
+    "state_v2": {
+      "acquired_refs": 0,
+      "active_irq_id": 0,
+      "active_lock_id": 0,
+      "active_locks": 0,
+      "active_preempt_locks": 0,
+      "active_rcu_lock": false,
+      "branches": 1,
+      "callback_unroll_depth": 0,
+      "captured_frame_count": 1,
+      "curframe": 0,
+      "dfs_depth": 5,
+      "equal_state_present": false,
+      "first_insn_idx": 49,
+      "frame_count": 1,
+      "frames": [
+        {
+          "allocated_stack": 16,
+          "async_entry_cnt": 0,
+          "callback_depth": 0,
+          "callback_ret_range": {
+            "max": 0,
+            "min": 0
+          },
+          "callsite": -1,
+          "frameno": 0,
+          "in_async_callback_fn": false,
+          "in_callback_fn": false,
+          "in_exception_callback_fn": false,
+          "present": true,
+          "regs": [
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 0,
+              "off": 0,
+              "parent_present": false,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 2147483647,
+              "s32_min_value": -2147483648,
+              "smax_value": 9223372036854775807,
+              "smin_value": -9223372036854775808,
+              "subreg_def": 0,
+              "type": 0,
+              "u32_max_value": 4294967295,
+              "u32_min_value": 0,
+              "umax_value": 18446744073709551615,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 18446744073709551615,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 4,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 2147483647,
+              "s32_min_value": -2147483648,
+              "smax_value": 9223372036854775807,
+              "smin_value": -9223372036854775808,
+              "subreg_def": 41,
+              "type": 0,
+              "u32_max_value": 4294967295,
+              "u32_min_value": 0,
+              "umax_value": 18446744073709551615,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 18446744073709551615,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 4,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 2147483647,
+              "s32_min_value": -2147483648,
+              "smax_value": 9223372036854775807,
+              "smin_value": -9223372036854775808,
+              "subreg_def": 41,
+              "type": 0,
+              "u32_max_value": 4294967295,
+              "u32_min_value": 0,
+              "umax_value": 18446744073709551615,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 18446744073709551615,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 4,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 2147483647,
+              "s32_min_value": -2147483648,
+              "smax_value": 9223372036854775807,
+              "smin_value": -9223372036854775808,
+              "subreg_def": 41,
+              "type": 0,
+              "u32_max_value": 4294967295,
+              "u32_min_value": 0,
+              "umax_value": 18446744073709551615,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 18446744073709551615,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 4,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 2147483647,
+              "s32_min_value": -2147483648,
+              "smax_value": 9223372036854775807,
+              "smin_value": -9223372036854775808,
+              "subreg_def": 41,
+              "type": 0,
+              "u32_max_value": 4294967295,
+              "u32_min_value": 0,
+              "umax_value": 18446744073709551615,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 18446744073709551615,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 4,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 2147483647,
+              "s32_min_value": -2147483648,
+              "smax_value": 9223372036854775807,
+              "smin_value": -9223372036854775808,
+              "subreg_def": 41,
+              "type": 0,
+              "u32_max_value": 4294967295,
+              "u32_min_value": 0,
+              "umax_value": 18446744073709551615,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 18446744073709551615,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 0,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 0,
+              "s32_min_value": 0,
+              "smax_value": 0,
+              "smin_value": 0,
+              "subreg_def": 0,
+              "type": 1,
+              "u32_max_value": 0,
+              "u32_min_value": 0,
+              "umax_value": 0,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 0,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 1,
+              "live": 0,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 0,
+              "s32_min_value": 0,
+              "smax_value": 0,
+              "smin_value": 0,
+              "subreg_def": 0,
+              "type": 1,
+              "u32_max_value": 0,
+              "u32_min_value": 0,
+              "umax_value": 0,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 0,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 0,
+              "off": -4,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 0,
+              "s32_min_value": 0,
+              "smax_value": 0,
+              "smin_value": 0,
+              "subreg_def": 0,
+              "type": 6,
+              "u32_max_value": 0,
+              "u32_min_value": 0,
+              "umax_value": 0,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 0,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 0,
+              "off": 0,
+              "parent_present": true,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 2147483647,
+              "s32_min_value": -2147483648,
+              "smax_value": 9223372036854775807,
+              "smin_value": -9223372036854775808,
+              "subreg_def": 0,
+              "type": 0,
+              "u32_max_value": 4294967295,
+              "u32_min_value": 0,
+              "umax_value": 18446744073709551615,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 18446744073709551615,
+                "value": 0
+              }
+            },
+            {
+              "frameno": 0,
+              "id": 0,
+              "live": 0,
+              "off": 0,
+              "parent_present": false,
+              "precise": false,
+              "raw": {
+                "raw1": 0,
+                "raw2": 0
+              },
+              "ref_obj_id": 0,
+              "s32_max_value": 0,
+              "s32_min_value": 0,
+              "smax_value": 0,
+              "smin_value": 0,
+              "subreg_def": 0,
+              "type": 6,
+              "u32_max_value": 0,
+              "u32_min_value": 0,
+              "umax_value": 0,
+              "umin_value": 0,
+              "var_off": {
+                "mask": 0,
+                "value": 0
+              }
+            }
+          ],
+          "stack_nonzero_slot_count": 2,
+          "stack_slot_count": 2,
+          "stack_slots": [
+            {
+              "initialized": true,
+              "slot": 0,
+              "slot_type": [
+                3,
+                3,
+                3,
+                3,
+                1,
+                1,
+                1,
+                1
+              ],
+              "spilled_ptr": {
+                "frameno": 0,
+                "id": 0,
+                "live": 0,
+                "off": 0,
+                "parent_present": true,
+                "precise": false,
+                "raw": {
+                  "raw1": 0,
+                  "raw2": 0
+                },
+                "ref_obj_id": 0,
+                "s32_max_value": 1,
+                "s32_min_value": 1,
+                "smax_value": 1,
+                "smin_value": 1,
+                "subreg_def": 0,
+                "type": 1,
+                "u32_max_value": 1,
+                "u32_min_value": 1,
+                "umax_value": 1,
+                "umin_value": 1,
+                "var_off": {
+                  "mask": 0,
+                  "value": 1
+                }
+              }
+            },
+            {
+              "initialized": true,
+              "slot": 1,
+              "slot_type": [
+                2,
+                2,
+                2,
+                2,
+                1,
+                1,
+                1,
+                1
+              ],
+              "spilled_ptr": {
+                "frameno": 0,
+                "id": 0,
+                "live": 0,
+                "off": 0,
+                "parent_present": true,
+                "precise": false,
+                "raw": {
+                  "raw1": 0,
+                  "raw2": 0
+                },
+                "ref_obj_id": 0,
+                "s32_max_value": 1,
+                "s32_min_value": 1,
+                "smax_value": 1,
+                "smin_value": 1,
+                "subreg_def": 0,
+                "type": 1,
+                "u32_max_value": 1,
+                "u32_min_value": 1,
+                "umax_value": 1,
+                "umin_value": 1,
+                "var_off": {
+                  "mask": 0,
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "stack_truncated": false,
+          "subprogno": 0
+        }
+      ],
+      "in_sleepable": false,
+      "insn_idx": 41,
+      "last_insn_idx": 106,
+      "limits": {
+        "max_supported_frames": 1,
+        "max_supported_stack_slots": 32
+      },
+      "may_goto_depth": 0,
+      "parent_present": true,
+      "refs_present": true,
+      "schema": "rac-verifier-state-v2",
+      "schema_version": 1,
+      "speculative": false,
+      "unsupported_mask": 0,
+      "unsupported_mask_hex": "0x0",
+      "valid": true
+    }
+  }
+}

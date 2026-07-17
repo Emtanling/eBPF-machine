@@ -1,0 +1,1171 @@
+{
+  "abstract_role": "current",
+  "abstract_state": "proof/states/current-state.json",
+  "case": "a=0",
+  "checks": [
+    {
+      "abstract": 41,
+      "concrete": 41,
+      "field": "frontier_pc",
+      "passed": true
+    },
+    {
+      "field": "environment.same_suffix",
+      "passed": true
+    },
+    {
+      "field": "environment.serialized_execution",
+      "passed": true
+    },
+    {
+      "field": "omitted_map_occupancy_recorded",
+      "passed": true
+    }
+  ],
+  "concrete_state": "proof/concrete/sigma-a0.json",
+  "field_checks": [
+    {
+      "abstract": 41,
+      "concrete": 41,
+      "field": "frontier_pc",
+      "passed": true,
+      "result": "PASS",
+      "rule": "frontier-pc-match"
+    },
+    {
+      "field": "environment.same_suffix",
+      "passed": true,
+      "result": "PASS",
+      "rule": "environment-contract"
+    },
+    {
+      "field": "environment.serialized_execution",
+      "passed": true,
+      "result": "PASS",
+      "rule": "environment-contract"
+    },
+    {
+      "field": "omitted_map_occupancy_recorded",
+      "passed": true,
+      "result": "PASS",
+      "rule": "omitted-runtime-component-recorded"
+    },
+    {
+      "field": "frame.frameno",
+      "passed": true,
+      "result": "PASS",
+      "rule": "frame-shape"
+    },
+    {
+      "field": "frame.allocated_stack",
+      "passed": true,
+      "result": "PASS",
+      "rule": "frame-shape"
+    },
+    {
+      "abstract": "NOT_INIT",
+      "concrete_kind": "uninitialized",
+      "field": "regs.r0.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r0.uninitialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "not-init"
+    },
+    {
+      "abstract": "NOT_INIT",
+      "concrete_kind": "uninitialized",
+      "field": "regs.r1.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r1.uninitialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "not-init"
+    },
+    {
+      "abstract": "NOT_INIT",
+      "concrete_kind": "uninitialized",
+      "field": "regs.r2.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r2.uninitialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "not-init"
+    },
+    {
+      "abstract": "NOT_INIT",
+      "concrete_kind": "uninitialized",
+      "field": "regs.r3.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r3.uninitialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "not-init"
+    },
+    {
+      "abstract": "NOT_INIT",
+      "concrete_kind": "uninitialized",
+      "field": "regs.r4.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r4.uninitialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "not-init"
+    },
+    {
+      "abstract": "NOT_INIT",
+      "concrete_kind": "uninitialized",
+      "field": "regs.r5.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r5.uninitialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "not-init"
+    },
+    {
+      "abstract": "SCALAR_VALUE",
+      "concrete_kind": "scalar",
+      "field": "regs.r6.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "concrete": 0,
+      "field": "regs.r6.var_off",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-tnum",
+      "tnum": {
+        "mask": 0,
+        "value": 0
+      }
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.umin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.umax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.smin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.smax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.u32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.u32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.s32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r6.s32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "abstract": "SCALAR_VALUE",
+      "concrete_kind": "scalar",
+      "field": "regs.r7.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "concrete": 0,
+      "field": "regs.r7.var_off",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-tnum",
+      "tnum": {
+        "mask": 0,
+        "value": 0
+      }
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.umin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.umax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.smin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.smax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.u32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.u32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.s32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 0,
+      "concrete": 0,
+      "field": "regs.r7.s32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "abstract": "PTR_TO_STACK",
+      "concrete_kind": "ptr_to_stack",
+      "field": "regs.r8.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r8.ptr_kind",
+      "passed": true,
+      "result": "PASS",
+      "rule": "pointer-kind-and-offset"
+    },
+    {
+      "abstract": -4,
+      "concrete": -4,
+      "field": "regs.r8.offset",
+      "passed": true,
+      "result": "PASS",
+      "rule": "pointer-kind-and-offset"
+    },
+    {
+      "field": "regs.r8.var_off",
+      "passed": true,
+      "result": "PASS",
+      "rule": "ptr-tnum",
+      "tnum": {
+        "mask": 0,
+        "value": 0
+      }
+    },
+    {
+      "abstract": "NOT_INIT",
+      "concrete_kind": "uninitialized",
+      "field": "regs.r9.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r9.uninitialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "not-init"
+    },
+    {
+      "abstract": "PTR_TO_STACK",
+      "concrete_kind": "ptr_to_stack",
+      "field": "regs.r10.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "field": "regs.r10.ptr_kind",
+      "passed": true,
+      "result": "PASS",
+      "rule": "pointer-kind-and-offset"
+    },
+    {
+      "abstract": 0,
+      "concrete": 0,
+      "field": "regs.r10.offset",
+      "passed": true,
+      "result": "PASS",
+      "rule": "pointer-kind-and-offset"
+    },
+    {
+      "field": "regs.r10.var_off",
+      "passed": true,
+      "result": "PASS",
+      "rule": "ptr-tnum",
+      "tnum": {
+        "mask": 0,
+        "value": 0
+      }
+    },
+    {
+      "field": "stack.slot0.initialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "stack-slot-shape"
+    },
+    {
+      "abstract": [
+        3,
+        3,
+        3,
+        3,
+        1,
+        1,
+        1,
+        1
+      ],
+      "field": "stack.slot0.slot_type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "stack-slot-shape"
+    },
+    {
+      "field": "stack.slot0.spilled_ptr",
+      "passed": true,
+      "result": "PASS",
+      "rule": "stack-slot-shape"
+    },
+    {
+      "abstract": "SCALAR_VALUE",
+      "concrete_kind": "scalar",
+      "field": "stack.slot0.spilled_ptr.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.var_off",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-tnum",
+      "tnum": {
+        "mask": 0,
+        "value": 1
+      }
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.umin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.umax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.smin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.smax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.u32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.u32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.s32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot0.spilled_ptr.s32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "field": "stack.slot1.initialized",
+      "passed": true,
+      "result": "PASS",
+      "rule": "stack-slot-shape"
+    },
+    {
+      "abstract": [
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "field": "stack.slot1.slot_type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "stack-slot-shape"
+    },
+    {
+      "field": "stack.slot1.spilled_ptr",
+      "passed": true,
+      "result": "PASS",
+      "rule": "stack-slot-shape"
+    },
+    {
+      "abstract": "SCALAR_VALUE",
+      "concrete_kind": "scalar",
+      "field": "stack.slot1.spilled_ptr.type",
+      "passed": true,
+      "result": "PASS",
+      "rule": "register-type-kind"
+    },
+    {
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.var_off",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-tnum",
+      "tnum": {
+        "mask": 0,
+        "value": 1
+      }
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.umin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.umax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.smin_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.smax_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.u32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.u32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.s32_min_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    },
+    {
+      "bound": 1,
+      "concrete": 1,
+      "field": "stack.slot1.spilled_ptr.s32_max_value",
+      "passed": true,
+      "result": "PASS",
+      "rule": "scalar-range"
+    }
+  ],
+  "frame": {
+    "checks": [
+      {
+        "field": "frameno",
+        "passed": true
+      },
+      {
+        "field": "allocated_stack",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "reasons": [],
+    "registers": [
+      {
+        "checks": [
+          {
+            "abstract": "NOT_INIT",
+            "concrete_kind": "uninitialized",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "uninitialized",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 0,
+        "type": "NOT_INIT"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "NOT_INIT",
+            "concrete_kind": "uninitialized",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "uninitialized",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 1,
+        "type": "NOT_INIT"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "NOT_INIT",
+            "concrete_kind": "uninitialized",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "uninitialized",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 2,
+        "type": "NOT_INIT"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "NOT_INIT",
+            "concrete_kind": "uninitialized",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "uninitialized",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 3,
+        "type": "NOT_INIT"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "NOT_INIT",
+            "concrete_kind": "uninitialized",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "uninitialized",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 4,
+        "type": "NOT_INIT"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "NOT_INIT",
+            "concrete_kind": "uninitialized",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "uninitialized",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 5,
+        "type": "NOT_INIT"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "SCALAR_VALUE",
+            "concrete_kind": "scalar",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "concrete": 0,
+            "field": "var_off",
+            "passed": true,
+            "tnum": {
+              "mask": 0,
+              "value": 0
+            }
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "umin_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "umax_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "smin_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "smax_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "u32_min_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "u32_max_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "s32_min_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "s32_max_value",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 6,
+        "type": "SCALAR_VALUE"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "SCALAR_VALUE",
+            "concrete_kind": "scalar",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "concrete": 0,
+            "field": "var_off",
+            "passed": true,
+            "tnum": {
+              "mask": 0,
+              "value": 0
+            }
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "umin_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "umax_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "smin_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "smax_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "u32_min_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "u32_max_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "s32_min_value",
+            "passed": true
+          },
+          {
+            "bound": 0,
+            "concrete": 0,
+            "field": "s32_max_value",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 7,
+        "type": "SCALAR_VALUE"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "PTR_TO_STACK",
+            "concrete_kind": "ptr_to_stack",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "ptr_kind",
+            "passed": true
+          },
+          {
+            "abstract": -4,
+            "concrete": -4,
+            "field": "offset",
+            "passed": true
+          },
+          {
+            "field": "var_off",
+            "passed": true,
+            "tnum": {
+              "mask": 0,
+              "value": 0
+            }
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 8,
+        "type": "PTR_TO_STACK"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "NOT_INIT",
+            "concrete_kind": "uninitialized",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "uninitialized",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 9,
+        "type": "NOT_INIT"
+      },
+      {
+        "checks": [
+          {
+            "abstract": "PTR_TO_STACK",
+            "concrete_kind": "ptr_to_stack",
+            "field": "type",
+            "passed": true
+          },
+          {
+            "field": "ptr_kind",
+            "passed": true
+          },
+          {
+            "abstract": 0,
+            "concrete": 0,
+            "field": "offset",
+            "passed": true
+          },
+          {
+            "field": "var_off",
+            "passed": true,
+            "tnum": {
+              "mask": 0,
+              "value": 0
+            }
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "reg": 10,
+        "type": "PTR_TO_STACK"
+      }
+    ],
+    "stack_slots": [
+      {
+        "checks": [
+          {
+            "field": "initialized",
+            "passed": true
+          },
+          {
+            "abstract": [
+              3,
+              3,
+              3,
+              3,
+              1,
+              1,
+              1,
+              1
+            ],
+            "field": "slot_type",
+            "passed": true
+          },
+          {
+            "detail": {
+              "checks": [
+                {
+                  "abstract": "SCALAR_VALUE",
+                  "concrete_kind": "scalar",
+                  "field": "type",
+                  "passed": true
+                },
+                {
+                  "concrete": 1,
+                  "field": "var_off",
+                  "passed": true,
+                  "tnum": {
+                    "mask": 0,
+                    "value": 1
+                  }
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "umin_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "umax_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "smin_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "smax_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "u32_min_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "u32_max_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "s32_min_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "s32_max_value",
+                  "passed": true
+                }
+              ],
+              "passed": true,
+              "reasons": [],
+              "reg": -1,
+              "type": "SCALAR_VALUE"
+            },
+            "field": "spilled_ptr",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "slot": 0
+      },
+      {
+        "checks": [
+          {
+            "field": "initialized",
+            "passed": true
+          },
+          {
+            "abstract": [
+              2,
+              2,
+              2,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            "field": "slot_type",
+            "passed": true
+          },
+          {
+            "detail": {
+              "checks": [
+                {
+                  "abstract": "SCALAR_VALUE",
+                  "concrete_kind": "scalar",
+                  "field": "type",
+                  "passed": true
+                },
+                {
+                  "concrete": 1,
+                  "field": "var_off",
+                  "passed": true,
+                  "tnum": {
+                    "mask": 0,
+                    "value": 1
+                  }
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "umin_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "umax_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "smin_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "smax_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "u32_min_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "u32_max_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "s32_min_value",
+                  "passed": true
+                },
+                {
+                  "bound": 1,
+                  "concrete": 1,
+                  "field": "s32_max_value",
+                  "passed": true
+                }
+              ],
+              "passed": true,
+              "reasons": [],
+              "reg": -1,
+              "type": "SCALAR_VALUE"
+            },
+            "field": "spilled_ptr",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "reasons": [],
+        "slot": 1
+      }
+    ]
+  },
+  "passed": true,
+  "reasons": [],
+  "result": "SIGMA_A0_IN_DIRECT_GAMMA",
+  "schema": "rac-direct-membership-v1",
+  "unsupported_fields": []
+}

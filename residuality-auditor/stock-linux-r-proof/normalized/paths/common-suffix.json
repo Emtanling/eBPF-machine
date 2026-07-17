@@ -1,0 +1,91 @@
+{
+  "first_sensitive_insn": 118,
+  "frontier_segment": {
+    "end": "pre(41)",
+    "reason": "v1 accepts the caller-side pre-call state after an optional strict common normalizer; callee PCs require a recorded call stack",
+    "start": "pre(41)"
+  },
+  "join_insn": 41,
+  "same_remaining_xlated_suffix": true,
+  "schema": "rac-common-suffix-v1",
+  "suffix_entry_insn": 107,
+  "suffix_prefix_until_first_sensitive": [
+    {
+      "function": "shared_suffix",
+      "line_number": 261,
+      "pc": 107,
+      "slots": 1,
+      "text": "r1 = 2"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 264,
+      "pc": 108,
+      "slots": 1,
+      "text": "*(u32 *)(r10 -4) = r1"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 266,
+      "pc": 109,
+      "slots": 1,
+      "text": "r6 = 1"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 269,
+      "pc": 110,
+      "slots": 1,
+      "text": "*(u32 *)(r10 -8) = r6"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 271,
+      "pc": 111,
+      "slots": 1,
+      "text": "r2 = r10"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 274,
+      "pc": 112,
+      "slots": 1,
+      "text": "r2 += -4"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 276,
+      "pc": 113,
+      "slots": 1,
+      "text": "r3 = r10"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 278,
+      "pc": 114,
+      "slots": 1,
+      "text": "r3 += -8"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 281,
+      "pc": 115,
+      "slots": 2,
+      "text": "r1 = map[id:2768]"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 283,
+      "pc": 117,
+      "slots": 1,
+      "text": "r4 = 1"
+    },
+    {
+      "function": "shared_suffix",
+      "line_number": 285,
+      "pc": 118,
+      "slots": 1,
+      "text": "call htab_map_update_elem#409480"
+    }
+  ]
+}

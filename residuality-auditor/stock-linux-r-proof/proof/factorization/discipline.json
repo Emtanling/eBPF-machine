@@ -1,0 +1,203 @@
+{
+  "action_alphabet": [
+    "shared_suffix_insert_B"
+  ],
+  "bundle": "/home/parallels/Desktop/residuality-auditor-v0.2.0/experiments/target-prune/v042-four-checks-operational-prune-cell",
+  "constraints": [
+    "single eBPF object/program identity across verifier and runtime evidence",
+    "path correspondence verified from xlated selector semantics and raw verifier histories",
+    "both cases share the same remaining xlated suffix from the frontier",
+    "local direct concretization memberships place each concrete case in its captured verifier state",
+    "operational prune-cell coverage ties sigma-a0 to the retained representative via the observed current-pruned-by-retained edge",
+    "report partition is the Linux retained-state representative emitted by is_state_visited pruning",
+    "runtime observations are serialized within the supplied single-artifact harness"
+  ],
+  "frontier": {
+    "branch_calls": [
+      46,
+      48
+    ],
+    "branch_dispatch_call": 39,
+    "first_sensitive_insn": 118,
+    "join_insn": 41,
+    "suffix_entry_insn": 107
+  },
+  "identity": {
+    "consistent": true,
+    "fields": {
+      "object_sha256": [
+        "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+        "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+        "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5"
+      ],
+      "program_id": [
+        6900,
+        6900,
+        6900
+      ],
+      "program_pin": [
+        "/sys/fs/bpf/rac-v03/rac_single",
+        "/sys/fs/bpf/rac-v03/rac_single",
+        "/sys/fs/bpf/rac-v03/rac_single"
+      ],
+      "program_tag": [
+        "100c248465bce0b0",
+        "100c248465bce0b0",
+        "100c248465bce0b0"
+      ],
+      "xlated_sha256": [
+        "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+        "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+        "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+      ]
+    },
+    "mismatches": {}
+  },
+  "kernel": {
+    "host": "Linux-6.17.0-35-generic-aarch64-with-glibc2.39",
+    "kernel_release": "6.17.0-35-generic",
+    "program_identity": {
+      "input_sha256": {
+        "events.jsonl": "df53241f3bd8695098b64ebb7030496c438f822f941ab9d47d62200c58a1d5c1",
+        "events.raw.jsonl": "6a902d80fc01cbb51cc3fbc1ba0e533183c2aa5066aa6e728a34e541c4e831b3",
+        "object.sha256": "d8289d0adf89b122515e8bb8c6660c3d10dc44d684e6d1a98d9d74b38f3c6863",
+        "program-info.json": "cd34cb12412821a766b277afd782a59c2abea8a5ff62cd182b0a2c27e4c361c3",
+        "program-pin.txt": "59b35f8be1abe047bfb9004785f065db1fe454c71a656c49bb06ec2a6335d87b",
+        "runtime.json": "ba1cc355757fa20bdd88346f1447e46d78757d0b000d09b46b78fe3881cddeb2",
+        "xlated-rac_single.sha256": "2e1aeabea4ec50f48bb6474db6c38de277cc65f65c9a889652843c634c9ec31d",
+        "xlated-rac_single.txt": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+      },
+      "object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+      "program_bytes_xlated": 984,
+      "program_id": 6900,
+      "program_name": "rac_single",
+      "program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+      "program_tag": "100c248465bce0b0",
+      "recorded_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+      "runtime_object_sha256": "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+      "runtime_program_id": 6900,
+      "runtime_program_pin": "/sys/fs/bpf/rac-v03/rac_single",
+      "runtime_program_tag": "100c248465bce0b0",
+      "runtime_xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+      "schema": "rac-frontier-identity-v1",
+      "xlated_instruction_bytes": 984,
+      "xlated_instruction_slots": 123,
+      "xlated_sha256": "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+    },
+    "source_basis": "local Ubuntu headers expose BTF/types but not kernel/bpf/verifier.c bodies; this checker therefore records a restricted field model and refuses unsupported types/branches",
+    "source_body_available": false
+  },
+  "name": "D_stock_linux_frontier_local",
+  "preconditions": {
+    "checks": {
+      "coverage_representative_matches": true,
+      "identity_consistent": true,
+      "joint_coverage_candidate": true,
+      "membership_a0": true,
+      "membership_a1": true,
+      "operational_prune_cell_coverage": true,
+      "path_correspondence": true,
+      "runtime_observations_differ": true,
+      "same_remaining_xlated_suffix": true,
+      "same_retained_representative": true,
+      "same_suffix_operation": true,
+      "same_suffix_program": true,
+      "serialized_runtime": true,
+      "session_capture_complete": true,
+      "single_artifact_runtime": true,
+      "unique_same_report_cell": true
+    },
+    "identity": {
+      "consistent": true,
+      "fields": {
+        "object_sha256": [
+          "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+          "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5",
+          "9e4ed906402c834eec061b9d2ed1407255b0ed44ee086a365638ee3c95e54fe5"
+        ],
+        "program_id": [
+          6900,
+          6900,
+          6900
+        ],
+        "program_pin": [
+          "/sys/fs/bpf/rac-v03/rac_single",
+          "/sys/fs/bpf/rac-v03/rac_single",
+          "/sys/fs/bpf/rac-v03/rac_single"
+        ],
+        "program_tag": [
+          "100c248465bce0b0",
+          "100c248465bce0b0",
+          "100c248465bce0b0"
+        ],
+        "xlated_sha256": [
+          "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+          "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76",
+          "ba5ea57aaf912b7bf5f0aea2939397a8d198126a27ebafceddd273164f526d76"
+        ]
+      },
+      "mismatches": {}
+    },
+    "passed": true,
+    "reasons": [],
+    "representatives": {
+      "a=0": [
+        "516c47f044cc3fc3"
+      ],
+      "a=1": [
+        "516c47f044cc3fc3"
+      ]
+    },
+    "runtime_contexts": {
+      "a=0": {
+        "map_flags": 0,
+        "map_type": "BPF_MAP_TYPE_HASH",
+        "max_entries": 2,
+        "prefix_program": "rac_single",
+        "serialized": true,
+        "single_artifact": true,
+        "suffix_program": "rac_single"
+      },
+      "a=1": {
+        "map_flags": 0,
+        "map_type": "BPF_MAP_TYPE_HASH",
+        "max_entries": 2,
+        "prefix_program": "rac_single",
+        "serialized": true,
+        "single_artifact": true,
+        "suffix_program": "rac_single"
+      }
+    },
+    "schema": "rac-stock-linux-preconditions-v1",
+    "suffix": {
+      "operation": "shared post-join insert of fresh key B",
+      "per_case": {
+        "a=0": {
+          "operation": "shared post-join insert of fresh key B",
+          "program": "rac_single"
+        },
+        "a=1": {
+          "operation": "shared post-join insert of fresh key B",
+          "program": "rac_single"
+        }
+      },
+      "program": "rac_single",
+      "same_operation": true,
+      "same_program": true
+    }
+  },
+  "schema": "rac-stock-linux-discipline-v1",
+  "scope_note": "This discipline is intentionally local to the captured stock-Linux verifier frontier and the observed common suffix. It is not a global theorem about all verifier states or all programs.",
+  "states": {
+    "meaning": "runtime prefix cases at the same verifier frontier before the common suffix",
+    "sigma0": "sigma-a0",
+    "sigma1": "sigma-a1"
+  },
+  "subsumption_scope": [
+    "specific kernel build",
+    "exact_level=0",
+    "captured State V2 shape",
+    "frontier join",
+    "local future-observable projection"
+  ]
+}

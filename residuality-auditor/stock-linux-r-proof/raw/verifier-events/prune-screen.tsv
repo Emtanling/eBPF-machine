@@ -1,0 +1,3 @@
+program	visit_insn	histories_distinct	old_count	current_count	old_history	current_history	source
+rac_single	41	true	8	7	d699fe1aa18d9578	e8c646b969e1dce2	fexit/states_equal+is_state_visited
+rac_single	43	true	2	2	fd214a330dd152ba	fd21788114ab40ea	fexit/states_equal+is_state_visited

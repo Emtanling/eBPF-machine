@@ -1,0 +1,196 @@
+{
+  "common_suffix": {
+    "first_sensitive_insn": 118,
+    "frontier_segment": {
+      "end": "pre(41)",
+      "reason": "v1 accepts the caller-side pre-call state after an optional strict common normalizer; callee PCs require a recorded call stack",
+      "start": "pre(41)"
+    },
+    "join_insn": 41,
+    "same_remaining_xlated_suffix": true,
+    "schema": "rac-common-suffix-v1",
+    "suffix_entry_insn": 107,
+    "suffix_prefix_until_first_sensitive": [
+      {
+        "function": "shared_suffix",
+        "line_number": 261,
+        "pc": 107,
+        "slots": 1,
+        "text": "r1 = 2"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 264,
+        "pc": 108,
+        "slots": 1,
+        "text": "*(u32 *)(r10 -4) = r1"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 266,
+        "pc": 109,
+        "slots": 1,
+        "text": "r6 = 1"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 269,
+        "pc": 110,
+        "slots": 1,
+        "text": "*(u32 *)(r10 -8) = r6"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 271,
+        "pc": 111,
+        "slots": 1,
+        "text": "r2 = r10"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 274,
+        "pc": 112,
+        "slots": 1,
+        "text": "r2 += -4"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 276,
+        "pc": 113,
+        "slots": 1,
+        "text": "r3 = r10"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 278,
+        "pc": 114,
+        "slots": 1,
+        "text": "r3 += -8"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 281,
+        "pc": 115,
+        "slots": 2,
+        "text": "r1 = map[id:2768]"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 283,
+        "pc": 117,
+        "slots": 1,
+        "text": "r4 = 1"
+      },
+      {
+        "function": "shared_suffix",
+        "line_number": 285,
+        "pc": 118,
+        "slots": 1,
+        "text": "call htab_map_update_elem#409480"
+      }
+    ]
+  },
+  "frontier": {
+    "branch_calls": [
+      46,
+      48
+    ],
+    "branch_dispatch_call": 39,
+    "first_sensitive_insn": 118,
+    "join_insn": 41,
+    "suffix_entry_insn": 107
+  },
+  "model_executions": {
+    "sigma-a0": {
+      "defined": true,
+      "final_state": "sigma-a0",
+      "outputs": [
+        {
+          "retval": 1,
+          "success": true
+        }
+      ],
+      "undefined_action": null
+    },
+    "sigma-a1": {
+      "defined": true,
+      "final_state": "sigma-a1",
+      "outputs": [
+        {
+          "retval": 0,
+          "success": false
+        }
+      ],
+      "undefined_action": null
+    }
+  },
+  "runtime_observations": {
+    "sigma-a0": {
+      "retval": 1,
+      "success": true
+    },
+    "sigma-a1": {
+      "retval": 0,
+      "success": false
+    }
+  },
+  "runtime_selected_states": {
+    "sigma-a0": [
+      "S"
+    ],
+    "sigma-a1": [
+      "S",
+      "A"
+    ]
+  },
+  "runtime_suffix": {
+    "operation": "shared post-join insert of fresh key B",
+    "per_case": {
+      "a=0": {
+        "operation": "shared post-join insert of fresh key B",
+        "program": "rac_single"
+      },
+      "a=1": {
+        "operation": "shared post-join insert of fresh key B",
+        "program": "rac_single"
+      }
+    },
+    "program": "rac_single",
+    "same_operation": true,
+    "same_program": true
+  },
+  "schema": "rac-stock-linux-suffix-witness-v1",
+  "shortest_output_witness": {
+    "distinction": "output",
+    "left_execution": {
+      "defined": true,
+      "final_state": "sigma-a0",
+      "outputs": [
+        {
+          "retval": 1,
+          "success": true
+        }
+      ],
+      "undefined_action": null
+    },
+    "left_state": "sigma-a0",
+    "right_execution": {
+      "defined": true,
+      "final_state": "sigma-a1",
+      "outputs": [
+        {
+          "retval": 0,
+          "success": false
+        }
+      ],
+      "undefined_action": null
+    },
+    "right_state": "sigma-a1",
+    "word": [
+      "shared_suffix_insert_B"
+    ]
+  },
+  "suffix_word": [
+    "shared_suffix_insert_B"
+  ]
+}
