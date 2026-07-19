@@ -14,7 +14,8 @@ Auxiliary report-instance evidence snapshot: commit
 Auxiliary report-instance evidence bundle:
 `results/linux_r/linux-r-v1/`
 
-Frozen stock-Linux R evidence bundle:
+Frozen stock-Linux V1 evidence bundle (legacy-adapter output; current semantic
+query `UNKNOWN`):
 `residuality-auditor/stock-linux-r-proof/`
 
 Public stock-Linux evidence snapshot:
@@ -56,17 +57,15 @@ computed-cell extractor or deployment policy and therefore establishes neither
 R nor W for that carrier.
 
 A completed real local stock-Linux experiment on the separate verifier-accepted
-XDP object `rac_single` has a frozen operational prune-report evidence bundle.
-Its kernel capture is primary evidence; the integrated and frozen-bundle
-checkers are offline validation layers. For the exact kernel/config/BTF/object/
-translated-bytecode tuple, the evidence supports R only after the paper embeds
-the two captured histories in an explicitly finite, phase-tagged, one-step
-execution carrier and observation contract. Those choices were finalized
-retrospectively, so the result is a trace-local certificate for an author-declared
-analysis projection, not a general or Linux-specified functional-report claim. The
-auxiliary finite report tuple under `results/linux_r/` independently establishes
-R for its custom report. Neither R carrier establishes P or W, and neither is
-combined with `wm_circuit`.
+XDP object `rac_single` has a frozen operational-prune evidence bundle. Its
+kernel capture is primary evidence of one prune event and two same-suffix
+samples; the integrated and frozen-bundle checkers replay a **legacy adapter**
+that embeds those samples in a deterministic two-state model. Under the current
+evidence-bounded contract, the exact real-system operational-prune query is
+`UNKNOWN`: V1 does not establish stable must outcomes. The auxiliary finite
+report tuple under `results/linux_r/` independently establishes R for its
+custom report. The stock-Linux observations do not establish R, P, or W and
+are not combined with `wm_circuit`.
 
 ## Implementation boundary
 
@@ -111,65 +110,36 @@ derived proof projection. All suffix-read components outside that selected map
 state are fixed. The suffix observations are success and failure under the
 declared map-service contract.
 
-## Frozen stock-Linux R carrier
+## Frozen stock-Linux V1 evidence (superseded semantic interpretation)
 
-The stock-Linux result comes from a completed local experiment using a different
-accepted artifact from the interpreter: the XDP program `rac_single` on Linux
-`6.17.0-35-generic`. The manifest binds the kernel release, BTF/config hashes,
-object SHA-256, program id/tag/pin, and translated-bytecode SHA-256.
+The stock-Linux bundle comes from a completed local experiment using the XDP
+program `rac_single` on Linux `6.17.0-35-generic`. The manifest binds the kernel
+release, BTF/config hashes, object SHA-256, program id/tag/pin, and
+translated-bytecode SHA-256. At translated instruction 41, the capture records
+a successful exact-level-0 `states_equal` check followed by an
+`is_state_visited` prune. Reviewed path correspondence binds the `a=0` and
+`a=1` histories to one remaining suffix, and the two samples record program
+success bits 1 and 0.
 
-The paper does not take the carrier's execution relation to be all possible
-Linux executions. It defines `I_K` by restricting the two captured serialized
-histories at the selected frontier and adding phase tags; this terminal-state
-relation is manuscript-defined, not the bundle adapter's self-loop model. Its
-sole macro-action executes the reviewed common suffix, and the two terminal
-states have no outgoing action. This gives only the empty word and the one-step
-suffix in the common future language.
-
-At translated instruction 41, an fexit capture records a successful
-exact-level-0 `states_equal` check followed by an `is_state_visited` prune. The
-operational report cell is the retained-state representative reached by that
-directed prune edge; `states_equal` is not treated as a symmetric equivalence
-over complete concrete states. Reviewed path correspondence maps the `a=0` and
-`a=1` histories to the same caller-side frontier and remaining suffix. Normalized
-membership checks associate two constructed concretization witnesses, whose
-recorded key-set projections are `{S}` and `{S,A}`, with the current and retained
-captured verifier states and assign both to the unique representative
-`516c47f044cc3fc3`.
-
-The same translated suffix attempts a fresh-`B` insertion. Its recorded
-program-level success bits are 1 and 0---not raw helper returns---so the two
-concrete states occupy different finite
-future-observation classes while the operational report map assigns them to the
-same representative. The integrated evidence checker reports:
+The frozen adapter makes a stronger historical claim by copying those samples
+into a deterministic two-state/one-action model and emitting:
 
 ```text
 STOCK_LINUX_R_ESTABLISHED_FOR_FROZEN_TUPLE
 ```
 
-This string denotes passage of the bundle's tuple-specific evidence gates. It
-does not certify a Linux-documented complete functional report or a theorem over
-the full Linux execution space.
+That string is retained as an immutable legacy-artifact result. It does **not**
+establish that the sampled outcomes are real Linux must outcomes. The U1
+evidence-contract regression imports only V1 identity/runtime/prune premises,
+excludes the legacy factorization and verdict outputs, and classifies the exact
+operational-prune query as `UNKNOWN`; a broader-runs query is also `UNKNOWN`,
+and a Linux-functional-report query is `OUT_OF_SCOPE`. Therefore this artifact
+must not be described as an R certificate or as a proof of real Linux report
+non-factorization.
 
-The raw capture-stage analyzer remains fail-closed and says R is not yet
-established because frontier, report-contract, path, and concretization review
-are not raw-event facts. Its evidence verdict is emitted only after the
-normalized path, direct-membership, operational-report, session-completeness,
-uniqueness, factorization, and hash gates pass.
-
-The executable checker does not independently type-check the paper's `I_K`,
-`D_K`, and `K_obs^K` wrapper or prove observation soundness for the full Linux
-execution space. The formal R conclusion combines the checked evidence with the
-paper's explicitly finite one-step construction; it is not a general Linux
-semantics theorem. The checker compares the seven context fields declared in
-the runtime contract. The manuscript instead selects the complete
-helper-relevant dynamic G0 state (with key sets only as derived projections),
-reviews the caller call/return path at translated PCs 41--44 and the
-`shared_suffix` callee at PCs 107--122, and fixes helper/service choices in its
-environment. The bundled adapter uses self-loops
-only to recompute its stable quotient; the manuscript consumes the identical
-depth-one split and does not treat repeated suffix execution as captured
-evidence.
+The retained V1 bytes remain valuable for provenance and for testing the
+fail-closed reassessment. The active boundary is intentionally narrow: V1 is
+legacy-adapter provenance, not a current semantic R verdict for real Linux.
 
 Verify the frozen package from the Residuality Auditor checkout:
 
@@ -178,10 +148,117 @@ PYTHONPATH=. python3 -m tools.proof.check_frozen_bundle \
   stock-linux-r-proof
 ```
 
-Expected output is `FROZEN_PROOF_BUNDLE_VERIFIED`. This is author-generated and
-author-reviewed evidence for one purpose-built existence witness on a real
-frozen kernel/object tuple, not an independent reproduction or a
-frequency/generalization study.
+Expected output is `FROZEN_PROOF_BUNDLE_VERIFIED`. This verifies the immutable
+legacy package, not a current semantic R verdict. It is author-generated and
+author-reviewed provenance for one frozen kernel/object tuple, not an
+independent reproduction or a frequency/generalization study.
+
+## Prospective Stock-R V2 and generic EBRC U4
+
+V2 is a separate accepted `rac_v2` witness and exact query; it does not modify
+or supersede the immutable V1 bytes. Its runner precommits an outcome-free
+query and selection policy, captures one qualifying operational prune, repeats
+both runtime cases, checks a V2-local must-outcome proof, and checks a
+history-case binding that joins the selected histories to proof cases 0/1 at
+one frontier, report cell, observer, suffix, and exact scope.
+
+One fresh privileged run on stock Ubuntu kernel `6.17.0-35-generic` reports:
+
+```text
+outcome_eligibility.status = ESTABLISHED
+outcome_eligibility.method = MUST_OUTCOME_PROOF_WITH_HISTORY_CASE_BINDING
+assessment.status = NONFACTORING
+assessment.scope = EXACT_STOCK_R_V2_QUERY
+assessment.certificate = NONFACTORING@1d5f86d80494575c23f539248614105559dd15380c580d0d2388c24941b6d255
+```
+
+The U4 layer compiles source-validated V1/V2 evidence to a typed claim,
+evidence graph, and proof DAG. Its generic checker ignores stored terminal
+verdict labels: V1 becomes `BLOCKED/INCONCLUSIVE`, while the complete V2
+control becomes exact `CERTIFIED/NONFACTORING`. A hostile matrix blocks five
+unsupported claim lifts and rejects seven proof-wide or integrity/dependency
+attacks. The focused EBRC suite passes 11 tests, the context-runner suite passes
+8 tests, and the complete Stock-R suite currently passes 172 tests after the
+replay additions.
+
+The public replay capsule now contains the retained V2 source bundle and two
+selected contextual target bundles. It is stored at:
+
+```text
+residuality-auditor/artifact/evidence/replay-capsule.tar.xz
+sha256 = 3df6b96e3dded26e9f876db8f607278bc0a65a6df31b297cb6bd3043f44151f7
+size = 2,208,232 bytes
+members = 58
+```
+
+Run the release-grade offline replay with:
+
+```sh
+python3 -m pip install -e './residuality-auditor[test]'
+make reproduce-paper
+```
+
+Expected output is `all_expected=true` and `unexpected_results=0`. The replay
+verifies the capsule hash and manifest, safely extracts only manifested regular
+files, recompiles the V1/V2/CRL certificates with the current checkers, reruns
+the V2 and contextual hostile matrices, and compares the normalized summary to
+`residuality-auditor/artifact/expected-results.json`. After dependency
+installation, the replay requires no network access and does not run privileged
+BPF code.
+
+To rerun the bounded contextual VM matrix, use a supported Linux VM, the
+retained V2 source bundle, and a fresh output directory:
+
+```sh
+make contextual-matrix-live \
+  STOCK_R_V2_BUNDLE=residuality-auditor/output/stock-r-v2-u3-live-20260719-01 \
+  CONTEXT_MATRIX_OUT=residuality-auditor/output/contextual-matrix-live-YYYYMMDD-NN
+```
+
+The published matrix summary is
+`residuality-auditor/artifact/evidence/contextual-matrix-live-20260720-03.json`.
+It uses `BOUNDED_CONTEXT_SUITE_ONLY` and reports 12 expected cases: six
+certified transparent targets and six fail-closed hostile or
+missing-obligation targets. These artifacts establish no Linux-specified
+functional report, cross-kernel transport, family-wide claim,
+source-to-bytecode correctness, vulnerability, general Linux R, or new
+foundational theorem.
+
+## Contextual Residual Lifting U5/U6
+
+CRL is a guarded transport layer over the exact V2 source certificate.  Its
+abstract proof obligations and hostile countermodels are encoded directly in
+the CRL checker, schemas, tests, and retained matrix. The executable checker
+requires a `DERIVED_CONTEXTUAL` chain that binds the source claim digest,
+transform digest, and target claim digest before it can emit a target
+`TRANSPORTED` certificate.
+
+The two contextual target bundles selected for the replay capsule are:
+
+```text
+transparent.xor.depth1
+transparent.add-mul.depth2
+```
+
+They derive:
+
+```text
+status = CERTIFIED
+assessment = NONFACTORING
+evidence_grade = TRANSPORTED
+derivation_kind = DERIVED_CONTEXTUAL
+certificate = NONFACTORING@23b72c129e12520df1b05580f4ab74582f49b4e4f442db3e05e207a7deffc1e2
+certificate = NONFACTORING@1d19c14f69a186648acaeee58c57c68faf7b9719a51b2e870e53bafb81efc663
+```
+
+Both target translated-bytecode digests differ from the source V2 digest and
+from each other, each runtime bridge is `VERIFIED` for four trials, and each
+contextual hostile matrix reports `all_expected = true` with three blocked
+unsupported claims and nine invalid graphs. These are generated target-bound
+transport instances. They are
+not a `FORALL` context theorem, compiler-correctness proof, Linux functional
+report, verifier unsoundness result, vulnerability, P, W, or weird-machine
+claim.
 
 ## Verify the auxiliary R certificate
 
@@ -224,7 +301,8 @@ Run every published evidence checker with:
 make verify
 ```
 
-This invokes the interpreter, auxiliary R, and frozen stock-Linux R verifiers.
+This invokes the interpreter verifier, the auxiliary R verifier, and the
+frozen stock-Linux legacy-bundle verifier.
 
 Expected canonical totals:
 
@@ -329,6 +407,7 @@ machine-checked eBPF-semantics proof.
 
 The artifact does not claim verifier bypass, unsound acceptance, privilege
 escalation, memory corruption, production-data-path deployment, concurrent
-safety, artifact-parametric compilation, report non-factorization for
-`wm_circuit` or any kernel/object tuple beyond the frozen `rac_single` case, P
-or W for the R carrier, a policy-level weird machine, or unbounded universality.
+safety, artifact-parametric compilation, or report non-factorization for
+`wm_circuit` or for any real Linux kernel/object tuple, including the frozen
+`rac_single` case. It also does not claim P or W for the R carrier, a
+policy-level weird machine, or unbounded universality.

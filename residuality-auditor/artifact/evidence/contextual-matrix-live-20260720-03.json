@@ -1,0 +1,363 @@
+{
+  "all_expected": true,
+  "case_results": [
+    {
+      "case_id": "transparent.xor.depth1",
+      "child_exit_status": 0,
+      "classification": "TRANSPARENT",
+      "duration_ns": 1837410918,
+      "expected": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reason": null,
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reasons": [],
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "output": "cases/00-transparent.xor.depth1",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-00-transparent.xor.depth1"
+    },
+    {
+      "case_id": "transparent.add.depth1",
+      "child_exit_status": 0,
+      "classification": "TRANSPARENT",
+      "duration_ns": 1850272709,
+      "expected": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reason": null,
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reasons": [],
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "output": "cases/01-transparent.add.depth1",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-01-transparent.add.depth1"
+    },
+    {
+      "case_id": "transparent.mul-odd.depth1",
+      "child_exit_status": 0,
+      "classification": "TRANSPARENT",
+      "duration_ns": 1854645168,
+      "expected": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reason": null,
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reasons": [],
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "output": "cases/02-transparent.mul-odd.depth1",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-02-transparent.mul-odd.depth1"
+    },
+    {
+      "case_id": "transparent.xor-add.depth2",
+      "child_exit_status": 0,
+      "classification": "TRANSPARENT",
+      "duration_ns": 1830437459,
+      "expected": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reason": null,
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reasons": [],
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "output": "cases/03-transparent.xor-add.depth2",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-03-transparent.xor-add.depth2"
+    },
+    {
+      "case_id": "transparent.add-mul.depth2",
+      "child_exit_status": 0,
+      "classification": "TRANSPARENT",
+      "duration_ns": 1880364542,
+      "expected": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reason": null,
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reasons": [],
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "output": "cases/04-transparent.add-mul.depth2",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-04-transparent.add-mul.depth2"
+    },
+    {
+      "case_id": "transparent.two-map.depth2",
+      "child_exit_status": 0,
+      "classification": "TRANSPARENT",
+      "duration_ns": 1846571876,
+      "expected": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reason": null,
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": "NONFACTORING",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reasons": [],
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED"
+      },
+      "output": "cases/05-transparent.two-map.depth2",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-05-transparent.two-map.depth2"
+    },
+    {
+      "case_id": "reject.footprint-overlap",
+      "child_exit_status": 0,
+      "classification": "NONTRANSPARENT",
+      "duration_ns": 1833145293,
+      "expected": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reason": "CONTEXT_FOOTPRINT_EFFECT_CONFLICT",
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reasons": [
+          "CONTEXT_FOOTPRINT_EFFECT_CONFLICT"
+        ],
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "output": "cases/06-reject.footprint-overlap",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-06-reject.footprint-overlap"
+    },
+    {
+      "case_id": "reject.observer-change",
+      "child_exit_status": 0,
+      "classification": "NONTRANSPARENT",
+      "duration_ns": 1773293209,
+      "expected": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reason": "RETVAL_CASE_MISMATCH",
+        "stage": "TARGET_RUNTIME_VALIDATION",
+        "status": "INVALID"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reasons": [
+          "RETVAL_CASE_MISMATCH"
+        ],
+        "stage": "TARGET_RUNTIME_VALIDATION",
+        "status": "INVALID"
+      },
+      "output": "cases/07-reject.observer-change",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-07-reject.observer-change"
+    },
+    {
+      "case_id": "reject.suffix-change",
+      "child_exit_status": 0,
+      "classification": "NONTRANSPARENT",
+      "duration_ns": 1835285001,
+      "expected": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reason": "CONTEXT_OBLIGATION_FAILED",
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reasons": [
+          "CONTEXT_OBLIGATION_FAILED"
+        ],
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "output": "cases/08-reject.suffix-change",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-08-reject.suffix-change"
+    },
+    {
+      "case_id": "reject.correspondence-gap",
+      "child_exit_status": 0,
+      "classification": "NONTRANSPARENT",
+      "duration_ns": 1863965626,
+      "expected": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reason": "CONTEXT_INSTRUCTION_MAP_INCOMPLETE",
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reasons": [
+          "CONTEXT_INSTRUCTION_MAP_INCOMPLETE"
+        ],
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "output": "cases/09-reject.correspondence-gap",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-09-reject.correspondence-gap"
+    },
+    {
+      "case_id": "reject.missing-bridge",
+      "child_exit_status": 0,
+      "classification": "NONTRANSPARENT",
+      "duration_ns": 1809949417,
+      "expected": {
+        "assessment": "INCONCLUSIVE",
+        "evidence_grade": null,
+        "quantifier": null,
+        "reason": "TARGET_CONFORMANCE_BRIDGE",
+        "stage": "CRL_CHECK",
+        "status": "BLOCKED"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": "INCONCLUSIVE",
+        "evidence_grade": "TRANSPORTED",
+        "quantifier": "AT",
+        "reasons": [
+          "PROOF_FOR_REQUESTED_CLAIM",
+          "TARGET_CONFORMANCE_BRIDGE"
+        ],
+        "stage": "CRL_CHECK",
+        "status": "BLOCKED"
+      },
+      "output": "cases/10-reject.missing-bridge",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-10-reject.missing-bridge"
+    },
+    {
+      "case_id": "reject.outcome-dependent-selection",
+      "child_exit_status": 0,
+      "classification": "NONTRANSPARENT",
+      "duration_ns": 1806140709,
+      "expected": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reason": "CONTEXT_OUTCOME_DEPENDENCY",
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "expected_match": true,
+      "field_match": true,
+      "observed": {
+        "assessment": null,
+        "evidence_grade": null,
+        "quantifier": null,
+        "reasons": [
+          "CONTEXT_OUTCOME_DEPENDENCY"
+        ],
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH"
+      },
+      "output": "cases/11-reject.outcome-dependent-selection",
+      "reason_match": true,
+      "retained_case_id_match": true,
+      "run_id": "stock-r-v2-crl-bounded-v1-11-reject.outcome-dependent-selection"
+    }
+  ],
+  "claim_boundary": "BOUNDED_CONTEXT_SUITE_ONLY",
+  "counts": {
+    "expected": 12,
+    "total": 12,
+    "unexpected": 0
+  },
+  "schema": "rac-stock-r-contextual-matrix-v1",
+  "suite_id": "stock-r-v2-crl-bounded-v1",
+  "unexpected_results": []
+}

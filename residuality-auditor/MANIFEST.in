@@ -1,0 +1,11 @@
+include LICENSE
+include README.md
+include pyproject.toml
+recursive-include src *.py
+recursive-include schemas *.schema.json
+prune tests
+prune tools
+prune linux
+prune examples
+prune stock-linux-r-proof
+global-exclude __pycache__ *.py[cod]

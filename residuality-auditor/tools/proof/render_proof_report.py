@@ -1,4 +1,4 @@
-"""Markdown renderer for Definition 2 proof reports."""
+"""Markdown renderer for legacy-adapter Definition 2 proof reports."""
 from __future__ import annotations
 
 from typing import Any
@@ -12,7 +12,7 @@ def _fmt(value: bool) -> str:
 
 def render(report: dict[str, Any]) -> str:
     lines = [
-        "# Definition 2 Integrated Stock-Linux R Check",
+        "# Legacy-Adapter Definition 2 Check for a Frozen Stock-Linux Tuple",
         "",
         f"Verdict: `{report['verdict']}`",
         "",
@@ -31,7 +31,7 @@ def render(report: dict[str, Any]) -> str:
         "unique_cell_on_chosen_fiber": "unique-cell on chosen fiber",
         "behavioral_quotient_different": "behavioral quotient different",
         "factorization_failure": "factorization failure",
-        "stock_linux_four_checks": "four independent stock-Linux R certificates",
+        "stock_linux_four_checks": "four legacy-adapter factorization checks (not real-Linux R certificates)",
         "evidence_hashes_match": "all evidence hashes match",
     }
     for index, name in enumerate(DEFINITION2_CHECKS, start=1):
@@ -47,6 +47,6 @@ def render(report: dict[str, Any]) -> str:
         "",
         "## Scope",
         "",
-        "This report checks the frozen tuple represented by the supplied evidence bundle only. It does not claim a verifier unsoundness, a vulnerability, W, or a full weird machine.",
+        "This report replays a legacy adapter on the frozen tuple represented by the supplied evidence bundle only. It is not a verdict about real Linux behavior or a real-Linux R verdict, and it does not establish stable must outcomes, a documented Linux functional-report contract, verifier unsoundness, a vulnerability, W, or a full weird machine.",
     ])
     return "\n".join(lines) + "\n"

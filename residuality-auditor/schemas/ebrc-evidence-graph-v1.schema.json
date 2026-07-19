@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rac:ebrc:evidence-graph:v1",
+  "title": "EBRC evidence graph v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "graph_id", "scope_digest_sha256", "nodes", "edges"],
+  "properties": {
+    "schema": {"const": "rac-ebrc-evidence-graph-v1"},
+    "graph_id": {"$ref": "#/$defs/id"},
+    "scope_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "edges": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/edge"}
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "role", "payload", "payload_digest_sha256"],
+      "properties": {
+        "node_id": {"$ref": "#/$defs/id"},
+        "role": {
+          "enum": [
+            "QUERY",
+            "SELECTION_POLICY",
+            "PRECOMMITMENT",
+            "RAW_EVENT",
+            "RUNTIME_OBSERVATION",
+            "IDENTITY_RECEIPT",
+            "SOURCE_CLOSURE",
+            "BUILD_CLOSURE",
+            "TRANSFORMATION",
+            "SEMANTIC_PROOF",
+            "TRANSPORT_PROOF",
+            "CHECKER",
+            "TRUST_ASSUMPTION",
+            "CLAIM",
+            "ASSESSMENT"
+          ]
+        },
+        "payload": {"type": "object"},
+        "payload_digest_sha256": {"$ref": "#/$defs/sha256"},
+        "recorded_at_ns": {"type": "integer", "minimum": 0}
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge_id", "role", "source", "target"],
+      "properties": {
+        "edge_id": {"$ref": "#/$defs/id"},
+        "role": {
+          "enum": [
+            "BINDS",
+            "DERIVES_FROM",
+            "CHECKED_BY",
+            "CONSUMED_BY",
+            "SELECTED_BY",
+            "PRECEDES",
+            "IMPLEMENTS",
+            "TRANSPORTS_TO"
+          ]
+        },
+        "source": {"$ref": "#/$defs/id"},
+        "target": {"$ref": "#/$defs/id"}
+      }
+    }
+  }
+}

@@ -233,7 +233,12 @@ class Definition2Tests(unittest.TestCase):
 
         self.assertEqual(STOCK_LINUX_R_ESTABLISHED_FOR_FROZEN_TUPLE, report["verdict"])
         self.assertFalse(report["reasons"])
-        self.assertTrue((bundle / "proof" / "definition2" / "definition2-report.md").exists())
+        report_path = bundle / "proof" / "definition2" / "definition2-report.md"
+        self.assertTrue(report_path.exists())
+        rendered = report_path.read_text(encoding="utf-8")
+        self.assertIn("# Legacy-Adapter Definition 2 Check for a Frozen Stock-Linux Tuple", rendered)
+        self.assertIn("not a verdict about real Linux behavior or a real-Linux R verdict", rendered)
+        self.assertNotIn("four independent stock-Linux R certificates", rendered)
 
     def test_factorization_without_uniqueness_is_not_final_r(self):
         bundle = self._bundle(unique=False)

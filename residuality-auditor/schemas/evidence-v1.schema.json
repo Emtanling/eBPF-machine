@@ -1,0 +1,982 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rac:evidence-audit:evidence:v1",
+  "title": "Residuality Auditor evidence v1",
+  "description": "Partial, provenance-bound evidence for one canonical query. Structural validity does not imply semantic closure or outcome eligibility.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "evidence_id",
+    "query_ref",
+    "scope_identity",
+    "selection_provenance",
+    "provenance",
+    "facts",
+    "coverage",
+    "outcome_eligibility_summaries",
+    "trust_assumptions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "rac-evidence-v1"
+    },
+    "evidence_id": {
+      "$ref": "#/$defs/id"
+    },
+    "query_ref": {
+      "$ref": "#/$defs/queryRef"
+    },
+    "scope_identity": {
+      "$ref": "#/$defs/scopeIdentity"
+    },
+    "selection_provenance": {
+      "$ref": "#/$defs/selectionProvenance"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "facts": {
+      "$ref": "#/$defs/facts"
+    },
+    "coverage": {
+      "$ref": "#/$defs/coverage"
+    },
+    "outcome_eligibility_summaries": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "$ref": "#/$defs/outcomeEligibility"
+      }
+    },
+    "trust_assumptions": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/trustAssumption"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*(/[A-Za-z0-9][A-Za-z0-9._-]*)*$",
+      "not": {
+        "pattern": "(^|/)\\.\\.(/|$)"
+      }
+    },
+    "jsonValue": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "string",
+          "maxLength": 4096
+        },
+        {
+          "type": "array",
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "maxProperties": 256,
+          "propertyNames": {
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "queryRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "query_digest_sha256",
+        "path",
+        "file_sha256"
+      ],
+      "properties": {
+        "query_id": {
+          "$ref": "#/$defs/id"
+        },
+        "query_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "file_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "scopeIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_id",
+        "scope_digest_sha256",
+        "artifact_id",
+        "artifact_sha256",
+        "target_system_identity_sha256",
+        "frontier_id",
+        "context_id"
+      ],
+      "properties": {
+        "scope_id": {
+          "$ref": "#/$defs/id"
+        },
+        "scope_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "artifact_id": {
+          "$ref": "#/$defs/id"
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "target_system_identity_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "frontier_id": {
+          "$ref": "#/$defs/id"
+        },
+        "context_id": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "selectionProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection_timing",
+        "contract_precommitted",
+        "query_digest_consumed",
+        "outcome_free_definition"
+      ],
+      "properties": {
+        "selection_timing": {
+          "enum": [
+            "PROSPECTIVE",
+            "RETROSPECTIVE"
+          ]
+        },
+        "contract_precommitted": {
+          "type": "boolean"
+        },
+        "query_digest_consumed": {
+          "$ref": "#/$defs/sha256"
+        },
+        "outcome_free_definition": {
+          "type": "boolean"
+        },
+        "selection_policy_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "policy_id",
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "policy_id": {
+              "$ref": "#/$defs/id"
+            },
+            "path": {
+              "$ref": "#/$defs/relativePath"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "precommit_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "file_sha256",
+            "recorded_query_digest_sha256",
+            "recorded_selection_policy_sha256"
+          ],
+          "properties": {
+            "path": {
+              "$ref": "#/$defs/relativePath"
+            },
+            "file_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "recorded_query_digest_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "recorded_selection_policy_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "contract_precommitted": {
+                "const": true
+              }
+            },
+            "required": [
+              "contract_precommitted"
+            ]
+          },
+          "then": {
+            "required": [
+              "selection_policy_ref",
+              "precommit_ref"
+            ],
+            "properties": {
+              "selection_timing": {
+                "const": "PROSPECTIVE"
+              },
+              "outcome_free_definition": {
+                "const": true
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "selection_timing": {
+                "const": "RETROSPECTIVE"
+              },
+              "outcome_free_definition": {
+                "const": false
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "selection_policy_ref"
+                  ]
+                },
+                {
+                  "required": [
+                    "precommit_ref"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_root_id",
+        "source_bundle_digest_sha256",
+        "immutable_input",
+        "manifest",
+        "transformations"
+      ],
+      "properties": {
+        "bundle_root_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_bundle_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "immutable_input": {
+          "type": "boolean"
+        },
+        "manifest": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10000,
+          "x-rac-unique-by": "source_ref",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source_ref",
+              "path",
+              "role",
+              "sha256",
+              "size"
+            ],
+            "properties": {
+              "source_ref": {
+                "$ref": "#/$defs/id"
+              },
+              "path": {
+                "$ref": "#/$defs/relativePath"
+              },
+              "role": {
+                "enum": [
+                  "RAW_FACT",
+                  "NORMALIZED_FACT",
+                  "IDENTITY",
+                  "CAPTURE_ACCOUNTING",
+                  "OUTCOME_ELIGIBILITY_PROOF",
+                  "FACTORIZATION_PROOF",
+                  "CHECKER",
+                  "PRECOMMITMENT",
+                  "SELECTION_POLICY",
+                  "TRANSFORM_TOOL",
+                  "QUERY",
+                  "OTHER"
+                ]
+              },
+              "sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1073741824
+              }
+            }
+          }
+        },
+        "transformations": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "transformation_id",
+              "tool_ref",
+              "input_refs",
+              "output_refs",
+              "deterministic"
+            ],
+            "properties": {
+              "transformation_id": {
+                "$ref": "#/$defs/id"
+              },
+              "tool_ref": {
+                "$ref": "#/$defs/id"
+              },
+              "input_refs": {
+                "$ref": "#/$defs/sourceRefs"
+              },
+              "output_refs": {
+                "$ref": "#/$defs/sourceRefs"
+              },
+              "deterministic": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "histories",
+        "path_constraints",
+        "report_memberships",
+        "observations"
+      ],
+      "properties": {
+        "histories": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "history_id",
+              "context_id",
+              "source_refs"
+            ],
+            "properties": {
+              "history_id": {
+                "$ref": "#/$defs/id"
+              },
+              "context_id": {
+                "$ref": "#/$defs/id"
+              },
+              "attributes": {
+                "type": "object",
+                "maxProperties": 128,
+                "propertyNames": {
+                  "$ref": "#/$defs/id"
+                },
+                "additionalProperties": {
+                  "$ref": "#/$defs/jsonValue"
+                }
+              },
+              "source_refs": {
+                "$ref": "#/$defs/sourceRefs"
+              }
+            }
+          }
+        },
+        "path_constraints": {
+          "type": "array",
+          "maxItems": 8192,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "constraint_id",
+              "history_id",
+              "kind",
+              "value",
+              "source_refs"
+            ],
+            "properties": {
+              "constraint_id": {
+                "$ref": "#/$defs/id"
+              },
+              "history_id": {
+                "$ref": "#/$defs/id"
+              },
+              "kind": {
+                "enum": [
+                  "FRONTIER",
+                  "PREFIX_HISTORY",
+                  "COMMON_SUFFIX",
+                  "STATE_MEMBERSHIP",
+                  "ENVIRONMENT"
+                ]
+              },
+              "value": {
+                "$ref": "#/$defs/jsonValue"
+              },
+              "source_refs": {
+                "$ref": "#/$defs/sourceRefs"
+              }
+            }
+          }
+        },
+        "report_memberships": {
+          "type": "array",
+          "maxItems": 8192,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "history_id",
+              "report_cell_id",
+              "membership",
+              "source_refs"
+            ],
+            "properties": {
+              "history_id": {
+                "$ref": "#/$defs/id"
+              },
+              "report_cell_id": {
+                "$ref": "#/$defs/id"
+              },
+              "membership": {
+                "enum": [
+                  "MEMBER",
+                  "NON_MEMBER"
+                ]
+              },
+              "source_refs": {
+                "$ref": "#/$defs/sourceRefs"
+              }
+            }
+          }
+        },
+        "observations": {
+          "type": "array",
+          "maxItems": 8192,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "observation_id",
+              "history_id",
+              "context_id",
+              "suffix_id",
+              "outcome_id",
+              "trial_id",
+              "mode",
+              "source_refs"
+            ],
+            "properties": {
+              "observation_id": {
+                "$ref": "#/$defs/id"
+              },
+              "history_id": {
+                "$ref": "#/$defs/id"
+              },
+              "context_id": {
+                "$ref": "#/$defs/id"
+              },
+              "suffix_id": {
+                "$ref": "#/$defs/id"
+              },
+              "outcome_id": {
+                "$ref": "#/$defs/id"
+              },
+              "trial_id": {
+                "$ref": "#/$defs/id"
+              },
+              "mode": {
+                "const": "OBSERVED_SAMPLE"
+              },
+              "source_refs": {
+                "$ref": "#/$defs/sourceRefs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capture_accounting",
+        "history",
+        "report",
+        "transition_outcome",
+        "continuation",
+        "environment_determinism"
+      ],
+      "properties": {
+        "capture_accounting": {
+          "$ref": "#/$defs/captureCoverage"
+        },
+        "history": {
+          "$ref": "#/$defs/semanticCoverage"
+        },
+        "report": {
+          "$ref": "#/$defs/semanticCoverage"
+        },
+        "transition_outcome": {
+          "$ref": "#/$defs/semanticCoverage"
+        },
+        "continuation": {
+          "$ref": "#/$defs/semanticCoverage"
+        },
+        "environment_determinism": {
+          "$ref": "#/$defs/semanticCoverage"
+        }
+      }
+    },
+    "captureCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "basis_refs",
+        "missing_obligations"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "COMPLETE",
+            "INCOMPLETE",
+            "UNKNOWN"
+          ]
+        },
+        "basis_refs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "missing_obligations": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "COMPLETE"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "basis_refs": {
+                "minItems": 1
+              },
+              "missing_obligations": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "missing_obligations": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "semanticCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "basis_refs",
+        "missing_obligations"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "CLOSED",
+            "OPEN",
+            "UNKNOWN"
+          ]
+        },
+        "basis_refs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "missing_obligations": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "CLOSED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "basis_refs": {
+                "minItems": 1
+              },
+              "missing_obligations": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "missing_obligations": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "outcomeEligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligibility_id",
+        "status",
+        "method",
+        "history_outcomes",
+        "context_id",
+        "suffix_id",
+        "observer_id",
+        "basis_refs",
+        "trust_assumption_refs",
+        "unmet_obligations"
+      ],
+      "properties": {
+        "eligibility_id": {
+          "$ref": "#/$defs/id"
+        },
+        "status": {
+          "enum": [
+            "ESTABLISHED",
+            "NOT_ESTABLISHED"
+          ]
+        },
+        "method": {
+          "enum": [
+            "FIXED_ENVIRONMENT_DETERMINISM",
+            "MUST_OUTCOME_PROOF",
+            "NONE"
+          ]
+        },
+        "history_outcomes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4096,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "history_id",
+              "outcome_ids"
+            ],
+            "properties": {
+              "history_id": {
+                "$ref": "#/$defs/id"
+              },
+              "outcome_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 4096,
+                "uniqueItems": true,
+                "items": {
+                  "$ref": "#/$defs/id"
+                }
+              }
+            }
+          }
+        },
+        "context_id": {
+          "$ref": "#/$defs/id"
+        },
+        "suffix_id": {
+          "$ref": "#/$defs/id"
+        },
+        "observer_id": {
+          "$ref": "#/$defs/id"
+        },
+        "basis_refs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "trust_assumption_refs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "unmet_obligations": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "eligibility_proof": {
+          "$ref": "#/$defs/eligibilityProof"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ESTABLISHED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "eligibility_proof"
+            ],
+            "properties": {
+              "method": {
+                "enum": [
+                  "FIXED_ENVIRONMENT_DETERMINISM",
+                  "MUST_OUTCOME_PROOF"
+                ]
+              },
+              "history_outcomes": {
+                "items": {
+                  "properties": {
+                    "outcome_ids": {
+                      "maxItems": 1
+                    }
+                  }
+                }
+              },
+              "basis_refs": {
+                "minItems": 1
+              },
+              "unmet_obligations": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "not": {
+              "required": [
+                "eligibility_proof"
+              ]
+            },
+            "properties": {
+              "unmet_obligations": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "eligibilityProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "x-rac-bound-input-projection": [
+        "query and exact scope/environment",
+        "eligibility method, context, suffix, observer, and history outcomes",
+        "relevant history, path-constraint, and observation facts plus their manifested sources",
+        "basis_refs resolved to complete manifest descriptors",
+        "trust_assumption_refs resolved to complete assumptions and manifested bases"
+      ],
+      "required": [
+        "proof_ref",
+        "proof_digest_sha256",
+        "checker_ref",
+        "checker_digest_sha256",
+        "bound_input_digest_sha256"
+      ],
+      "properties": {
+        "proof_ref": {
+          "$ref": "#/$defs/id"
+        },
+        "proof_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "checker_ref": {
+          "$ref": "#/$defs/id"
+        },
+        "checker_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bound_input_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "trustAssumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assumption_id",
+        "kind",
+        "status",
+        "basis_refs"
+      ],
+      "properties": {
+        "assumption_id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "CAPTURE_FIDELITY",
+            "IDENTITY_FIDELITY",
+            "HARNESS_CORRECTNESS",
+            "RESET_SUCCESS",
+            "NO_EXTERNAL_INTERFERENCE",
+            "KERNEL_SEMANTICS",
+            "NORMALIZER_CORRECTNESS",
+            "REPORT_RULE_INTERPRETATION"
+          ]
+        },
+        "status": {
+          "enum": [
+            "SUPPORTED",
+            "DECLARED_NOT_PROVED"
+          ]
+        },
+        "basis_refs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "SUPPORTED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "basis_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

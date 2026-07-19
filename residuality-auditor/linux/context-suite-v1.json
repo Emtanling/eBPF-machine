@@ -1,0 +1,324 @@
+{
+  "schema": "rac-stock-r-context-suite-v1",
+  "suite_id": "stock-r-v2-crl-bounded-v1",
+  "claim_boundary": "BOUNDED_CONTEXT_SUITE_ONLY",
+  "bounds": {
+    "max_expression_depth": 2,
+    "max_sequence_length": 2
+  },
+  "cases": [
+    {
+      "case_id": "transparent.xor.depth1",
+      "classification": "TRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_xor",
+          "resource": "map:ctx_xor.0",
+          "expression": [
+            {"op": "xor", "value": 1515870810}
+          ]
+        }
+      ],
+      "behavior_mutation": null,
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED",
+        "assessment": "NONFACTORING",
+        "quantifier": "AT",
+        "evidence_grade": "TRANSPORTED",
+        "reason": null
+      }
+    },
+    {
+      "case_id": "transparent.add.depth1",
+      "classification": "TRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_add",
+          "resource": "map:ctx_add.0",
+          "expression": [
+            {"op": "add", "value": 17}
+          ]
+        }
+      ],
+      "behavior_mutation": null,
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED",
+        "assessment": "NONFACTORING",
+        "quantifier": "AT",
+        "evidence_grade": "TRANSPORTED",
+        "reason": null
+      }
+    },
+    {
+      "case_id": "transparent.mul-odd.depth1",
+      "classification": "TRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_mul",
+          "resource": "map:ctx_mul.0",
+          "expression": [
+            {"op": "mul_odd", "value": 2654435761}
+          ]
+        }
+      ],
+      "behavior_mutation": null,
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED",
+        "assessment": "NONFACTORING",
+        "quantifier": "AT",
+        "evidence_grade": "TRANSPORTED",
+        "reason": null
+      }
+    },
+    {
+      "case_id": "transparent.xor-add.depth2",
+      "classification": "TRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_xor_add",
+          "resource": "map:ctx_xor_add.0",
+          "expression": [
+            {"op": "xor", "value": 1515870810},
+            {"op": "add", "value": 17}
+          ]
+        }
+      ],
+      "behavior_mutation": null,
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED",
+        "assessment": "NONFACTORING",
+        "quantifier": "AT",
+        "evidence_grade": "TRANSPORTED",
+        "reason": null
+      }
+    },
+    {
+      "case_id": "transparent.add-mul.depth2",
+      "classification": "TRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_add_mul",
+          "resource": "map:ctx_add_mul.0",
+          "expression": [
+            {"op": "add", "value": 17},
+            {"op": "mul_odd", "value": 2654435761}
+          ]
+        }
+      ],
+      "behavior_mutation": null,
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED",
+        "assessment": "NONFACTORING",
+        "quantifier": "AT",
+        "evidence_grade": "TRANSPORTED",
+        "reason": null
+      }
+    },
+    {
+      "case_id": "transparent.two-map.depth2",
+      "classification": "TRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_pair_a",
+          "resource": "map:ctx_pair_a.0",
+          "expression": [
+            {"op": "xor", "value": 1515870810}
+          ]
+        },
+        {
+          "map_name": "ctx_pair_b",
+          "resource": "map:ctx_pair_b.0",
+          "expression": [
+            {"op": "add", "value": 17}
+          ]
+        }
+      ],
+      "behavior_mutation": null,
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "CERTIFIED",
+        "assessment": "NONFACTORING",
+        "quantifier": "AT",
+        "evidence_grade": "TRANSPORTED",
+        "reason": null
+      }
+    },
+    {
+      "case_id": "reject.footprint-overlap",
+      "classification": "NONTRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "g0",
+          "resource": "map:witness.0",
+          "expression": [
+            {"op": "identity", "value": 0}
+          ]
+        }
+      ],
+      "behavior_mutation": "WRITE_SOURCE_FOOTPRINT",
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH",
+        "assessment": null,
+        "quantifier": null,
+        "evidence_grade": null,
+        "reason": "CONTEXT_FOOTPRINT_EFFECT_CONFLICT"
+      }
+    },
+    {
+      "case_id": "reject.observer-change",
+      "classification": "NONTRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_observer",
+          "resource": "map:ctx_observer.0",
+          "expression": [
+            {"op": "identity", "value": 0}
+          ]
+        }
+      ],
+      "behavior_mutation": "CHANGE_RETURN_VALUE",
+      "obligation_overrides": {
+        "observer_reflected": false
+      },
+      "expected": {
+        "stage": "TARGET_RUNTIME_VALIDATION",
+        "status": "INVALID",
+        "assessment": null,
+        "quantifier": null,
+        "evidence_grade": null,
+        "reason": "RETVAL_CASE_MISMATCH"
+      }
+    },
+    {
+      "case_id": "reject.suffix-change",
+      "classification": "NONTRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "PRE_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_pre_suffix",
+          "resource": "map:ctx_pre_suffix.0",
+          "expression": [
+            {"op": "xor", "value": 1515870810}
+          ]
+        }
+      ],
+      "behavior_mutation": null,
+      "obligation_overrides": {
+        "common_suffix_preserved": false
+      },
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH",
+        "assessment": null,
+        "quantifier": null,
+        "evidence_grade": null,
+        "reason": "CONTEXT_OBLIGATION_FAILED"
+      }
+    },
+    {
+      "case_id": "reject.correspondence-gap",
+      "classification": "NONTRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_gap",
+          "resource": "map:ctx_gap.0",
+          "expression": [
+            {"op": "add", "value": 17}
+          ]
+        }
+      ],
+      "behavior_mutation": "DROP_INSTRUCTION_CORRESPONDENCE",
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH",
+        "assessment": null,
+        "quantifier": null,
+        "evidence_grade": null,
+        "reason": "CONTEXT_INSTRUCTION_MAP_INCOMPLETE"
+      }
+    },
+    {
+      "case_id": "reject.missing-bridge",
+      "classification": "NONTRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_no_bridge",
+          "resource": "map:ctx_no_bridge.0",
+          "expression": [
+            {"op": "mul_odd", "value": 2654435761}
+          ]
+        }
+      ],
+      "behavior_mutation": "WITHHOLD_TARGET_BRIDGE",
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "BLOCKED",
+        "assessment": "INCONCLUSIVE",
+        "quantifier": null,
+        "evidence_grade": null,
+        "reason": "TARGET_CONFORMANCE_BRIDGE"
+      }
+    },
+    {
+      "case_id": "reject.outcome-dependent-selection",
+      "classification": "NONTRANSPARENT",
+      "case_claim_boundary": "EXACT_TARGET_ONLY",
+      "placement": "POST_SUFFIX",
+      "frames": [
+        {
+          "map_name": "ctx_selected",
+          "resource": "map:ctx_selected.0",
+          "expression": [
+            {"op": "xor", "value": 1515870810}
+          ]
+        }
+      ],
+      "behavior_mutation": "ADD_OUTCOME_TRANSFORM_DEPENDENCY",
+      "obligation_overrides": {},
+      "expected": {
+        "stage": "CRL_CHECK",
+        "status": "INVALID_GRAPH",
+        "assessment": null,
+        "quantifier": null,
+        "evidence_grade": null,
+        "reason": "CONTEXT_OUTCOME_DEPENDENCY"
+      }
+    }
+  ]
+}

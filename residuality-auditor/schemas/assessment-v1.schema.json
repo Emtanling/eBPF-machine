@@ -1,0 +1,745 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rac:evidence-audit:assessment:v1",
+  "title": "Residuality Auditor assessment v1",
+  "description": "A scope-bound semantic verdict or a mutually exclusive meta-result. INVALID_EVIDENCE and OUT_OF_SCOPE never carry a semantic verdict.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/nonfactoringAssessment"
+    },
+    {
+      "$ref": "#/$defs/factoringAssessment"
+    },
+    {
+      "$ref": "#/$defs/unknownAssessment"
+    },
+    {
+      "$ref": "#/$defs/invalidAssessment"
+    },
+    {
+      "$ref": "#/$defs/outOfScopeAssessment"
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*(/[A-Za-z0-9][A-Za-z0-9._-]*)*$",
+      "not": {
+        "pattern": "(^|/)\\.\\.(/|$)"
+      }
+    },
+    "queryRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "query_digest_sha256"
+      ],
+      "properties": {
+        "query_id": {
+          "$ref": "#/$defs/id"
+        },
+        "query_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "evidence_digest_sha256",
+        "path",
+        "file_sha256"
+      ],
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/id"
+        },
+        "evidence_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "file_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "inputRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_id",
+        "path",
+        "file_sha256"
+      ],
+      "properties": {
+        "input_id": {
+          "$ref": "#/$defs/id"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "file_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_id",
+        "scope_digest_sha256",
+        "artifact_id",
+        "artifact_sha256",
+        "target_system_identity_sha256",
+        "frontier_id",
+        "context_id"
+      ],
+      "properties": {
+        "scope_id": {
+          "$ref": "#/$defs/id"
+        },
+        "scope_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "artifact_id": {
+          "$ref": "#/$defs/id"
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "target_system_identity_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "frontier_id": {
+          "$ref": "#/$defs/id"
+        },
+        "context_id": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capture_accounting",
+        "history",
+        "report",
+        "transition_outcome",
+        "continuation",
+        "environment_determinism"
+      ],
+      "properties": {
+        "capture_accounting": {
+          "enum": [
+            "COMPLETE",
+            "INCOMPLETE",
+            "UNKNOWN"
+          ]
+        },
+        "history": {
+          "$ref": "#/$defs/semanticCoverageStatus"
+        },
+        "report": {
+          "$ref": "#/$defs/semanticCoverageStatus"
+        },
+        "transition_outcome": {
+          "$ref": "#/$defs/semanticCoverageStatus"
+        },
+        "continuation": {
+          "$ref": "#/$defs/semanticCoverageStatus"
+        },
+        "environment_determinism": {
+          "$ref": "#/$defs/semanticCoverageStatus"
+        }
+      }
+    },
+    "semanticCoverageStatus": {
+      "enum": [
+        "CLOSED",
+        "OPEN",
+        "UNKNOWN"
+      ]
+    },
+    "selectionProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection_timing",
+        "contract_precommitted",
+        "query_digest_consumed",
+        "outcome_free_definition"
+      ],
+      "properties": {
+        "selection_timing": {
+          "enum": [
+            "PROSPECTIVE",
+            "RETROSPECTIVE"
+          ]
+        },
+        "contract_precommitted": {
+          "type": "boolean"
+        },
+        "query_digest_consumed": {
+          "$ref": "#/$defs/sha256"
+        },
+        "outcome_free_definition": {
+          "type": "boolean"
+        },
+        "selection_policy_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "policy_id",
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "policy_id": {
+              "$ref": "#/$defs/id"
+            },
+            "path": {
+              "$ref": "#/$defs/relativePath"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "precommit_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "file_sha256",
+            "recorded_query_digest_sha256",
+            "recorded_selection_policy_sha256"
+          ],
+          "properties": {
+            "path": {
+              "$ref": "#/$defs/relativePath"
+            },
+            "file_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "recorded_query_digest_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "recorded_selection_policy_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "contract_precommitted": {
+                "const": true
+              }
+            },
+            "required": [
+              "contract_precommitted"
+            ]
+          },
+          "then": {
+            "required": [
+              "selection_policy_ref",
+              "precommit_ref"
+            ],
+            "properties": {
+              "selection_timing": {
+                "const": "PROSPECTIVE"
+              },
+              "outcome_free_definition": {
+                "const": true
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "selection_timing": {
+                "const": "RETROSPECTIVE"
+              },
+              "outcome_free_definition": {
+                "const": false
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "selection_policy_ref"
+                  ]
+                },
+                {
+                  "required": [
+                    "precommit_ref"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "relatedAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relation",
+        "assessment_id",
+        "query_digest_sha256"
+      ],
+      "properties": {
+        "relation": {
+          "enum": [
+            "NARROWER_SCOPE",
+            "BROADER_SCOPE",
+            "SAME_EVIDENCE_DIFFERENT_QUERY"
+          ]
+        },
+        "assessment_id": {
+          "$ref": "#/$defs/id"
+        },
+        "query_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "semanticBase": {
+      "type": "object",
+      "required": [
+        "schema",
+        "assessment_id",
+        "query_ref",
+        "evidence_ref",
+        "scope",
+        "assessment_status",
+        "verdict",
+        "decision_basis",
+        "coverage",
+        "provenance_digest_sha256",
+        "selection_provenance",
+        "trust_assumption_refs",
+        "related_assessments"
+      ],
+      "properties": {
+        "schema": {
+          "const": "rac-assessment-v1"
+        },
+        "assessment_id": {
+          "$ref": "#/$defs/id"
+        },
+        "query_ref": {
+          "$ref": "#/$defs/queryRef"
+        },
+        "evidence_ref": {
+          "$ref": "#/$defs/evidenceRef"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "assessment_status": {
+          "const": "ASSESSED"
+        },
+        "coverage": {
+          "$ref": "#/$defs/coverage"
+        },
+        "provenance_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selection_provenance": {
+          "$ref": "#/$defs/selectionProvenance"
+        },
+        "trust_assumption_refs": {
+          "type": "array",
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "related_assessments": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/relatedAssessment"
+          }
+        }
+      }
+    },
+    "nonfactoringAssessment": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/semanticBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "const": "NONFACTORING"
+            },
+            "decision_basis": {
+              "$ref": "#/$defs/robustWitnessBasis"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "robustWitnessBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "witnesses"
+      ],
+      "properties": {
+        "kind": {
+          "const": "ROBUST_WITNESS"
+        },
+        "witnesses": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1024,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "left_history_id",
+              "right_history_id",
+              "report_cell_id",
+              "context_id",
+              "suffix_id",
+              "left_outcome_id",
+              "right_outcome_id",
+              "outcome_eligibility_ref"
+            ],
+            "properties": {
+              "left_history_id": {
+                "$ref": "#/$defs/id"
+              },
+              "right_history_id": {
+                "$ref": "#/$defs/id"
+              },
+              "report_cell_id": {
+                "$ref": "#/$defs/id"
+              },
+              "context_id": {
+                "$ref": "#/$defs/id"
+              },
+              "suffix_id": {
+                "$ref": "#/$defs/id"
+              },
+              "left_outcome_id": {
+                "$ref": "#/$defs/id"
+              },
+              "right_outcome_id": {
+                "$ref": "#/$defs/id"
+              },
+              "outcome_eligibility_ref": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        }
+      }
+    },
+    "factoringAssessment": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/semanticBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "const": "FACTORING"
+            },
+            "decision_basis": {
+              "$ref": "#/$defs/closedFiniteBasis"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "closedFiniteBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "completion_count",
+        "proof_ref",
+        "proof_digest_sha256",
+        "checker_ref",
+        "checker_digest_sha256",
+        "input_refs",
+        "bound_query_digest_sha256",
+        "bound_scope_digest_sha256",
+        "bound_evidence_digest_sha256",
+        "closure_dimensions"
+      ],
+      "properties": {
+        "kind": {
+          "const": "CLOSED_FINITE_PROOF"
+        },
+        "completion_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "proof_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "proof_ref": {
+          "$ref": "#/$defs/id"
+        },
+        "checker_ref": {
+          "$ref": "#/$defs/id"
+        },
+        "checker_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_refs": {
+          "type": "array",
+          "description": "Manifest source_refs for actual query/raw/normalized proof inputs. FACTORIZATION_PROOF and CHECKER outputs belong in proof_ref/checker_ref and are not inputs.",
+          "minItems": 1,
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "bound_query_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bound_scope_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bound_evidence_digest_sha256": {
+          "description": "RFC 8785 SHA-256 of the complete evidence-v1 document consumed by this closed finite proof.",
+          "$ref": "#/$defs/sha256"
+        },
+        "closure_dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "history",
+            "report",
+            "transition_outcome",
+            "continuation",
+            "environment_determinism"
+          ],
+          "properties": {
+            "history": {
+              "const": "CLOSED"
+            },
+            "report": {
+              "const": "CLOSED"
+            },
+            "transition_outcome": {
+              "const": "CLOSED"
+            },
+            "continuation": {
+              "const": "CLOSED"
+            },
+            "environment_determinism": {
+              "const": "CLOSED"
+            }
+          }
+        }
+      }
+    },
+    "unknownAssessment": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/semanticBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "const": "UNKNOWN"
+            },
+            "decision_basis": {
+              "$ref": "#/$defs/unknownBasis"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "unknownBasis": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "missing_obligations"
+          ],
+          "properties": {
+            "kind": {
+              "const": "MISSING_OBLIGATIONS"
+            },
+            "missing_obligations": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 128,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "factoring_completion_digest_sha256",
+            "nonfactoring_completion_digest_sha256"
+          ],
+          "properties": {
+            "kind": {
+              "const": "MIXED_COMPLETIONS"
+            },
+            "factoring_completion_digest_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "nonfactoring_completion_digest_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    },
+    "reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/id"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      }
+    },
+    "invalidAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "assessment_id",
+        "assessment_status",
+        "input_refs",
+        "reasons"
+      ],
+      "properties": {
+        "schema": {
+          "const": "rac-assessment-v1"
+        },
+        "assessment_id": {
+          "$ref": "#/$defs/id"
+        },
+        "assessment_status": {
+          "const": "INVALID_EVIDENCE"
+        },
+        "query_ref": {
+          "$ref": "#/$defs/queryRef"
+        },
+        "input_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/inputRef"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/reason"
+          }
+        }
+      }
+    },
+    "outOfScopeAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "assessment_id",
+        "query_ref",
+        "assessment_status",
+        "undefined_components",
+        "reasons"
+      ],
+      "properties": {
+        "schema": {
+          "const": "rac-assessment-v1"
+        },
+        "assessment_id": {
+          "$ref": "#/$defs/id"
+        },
+        "query_ref": {
+          "$ref": "#/$defs/queryRef"
+        },
+        "assessment_status": {
+          "const": "OUT_OF_SCOPE"
+        },
+        "undefined_components": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "REPORT_RULE",
+              "OBSERVER"
+            ]
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/reason"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,932 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rac:evidence-audit:query:v1",
+  "title": "Residuality Auditor canonical query v1",
+  "description": "A frozen, evidence-independent report-factorization query. The SHA-256 digest covers canonical_query only, encoded with RFC 8785.",
+  "x-rac-canonicalization": {
+    "set_arrays": {
+      "/scope/target_system/identity": "name",
+      "/observer/projection": "$value",
+      "/continuation_universe/suffixes": "suffix_id",
+      "/environment/parameters": "name",
+      "/admissible_assumptions": "assumption_id",
+      "/bounded_completion/universes/histories": "$value",
+      "/bounded_completion/universes/report_cells": "$value",
+      "/bounded_completion/universes/outcomes": "outcome_id",
+      "/bounded_completion/universes/contexts": "$value"
+    },
+    "ordered_arrays": [
+      "/continuation_universe/suffixes/*/actions",
+      "/bounded_completion/canonical_enumeration_order",
+      "arrays nested inside jsonValue"
+    ]
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "query_id",
+    "canonical_query",
+    "query_digest_sha256",
+    "freeze"
+  ],
+  "properties": {
+    "schema": {
+      "const": "rac-query-v1"
+    },
+    "query_id": {
+      "$ref": "#/$defs/id"
+    },
+    "canonical_query": {
+      "$ref": "#/$defs/canonicalQuery"
+    },
+    "query_digest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "freeze": {
+      "$ref": "#/$defs/freeze"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*(/[A-Za-z0-9][A-Za-z0-9._-]*)*$",
+      "not": {
+        "pattern": "(^|/)\\.\\.(/|$)"
+      }
+    },
+    "jsonValue": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "string",
+          "maxLength": 4096
+        },
+        {
+          "type": "array",
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "maxProperties": 256,
+          "propertyNames": {
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      ]
+    },
+    "namedValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/id"
+        },
+        "value": {
+          "$ref": "#/$defs/jsonValue"
+        }
+      }
+    },
+    "environmentParameter": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "semantic_kind",
+            "value"
+          ],
+          "properties": {
+            "name": {
+              "const": "serialized"
+            },
+            "semantic_kind": {
+              "const": "EXECUTION_SERIALIZATION"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "semantic_kind",
+            "value"
+          ],
+          "properties": {
+            "name": {
+              "const": "reset_protocol"
+            },
+            "semantic_kind": {
+              "const": "RESET_PROTOCOL"
+            },
+            "value": {
+              "enum": [
+                "fresh-instance",
+                "verified-reset",
+                "none"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "canonicalQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "report_rule",
+        "observer",
+        "continuation_universe",
+        "environment",
+        "admissible_assumptions",
+        "bounded_completion",
+        "resource_bounds"
+      ],
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "report_rule": {
+          "$ref": "#/$defs/reportRule"
+        },
+        "observer": {
+          "$ref": "#/$defs/observer"
+        },
+        "continuation_universe": {
+          "$ref": "#/$defs/continuationUniverse"
+        },
+        "environment": {
+          "$ref": "#/$defs/environment"
+        },
+        "admissible_assumptions": {
+          "type": "array",
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/assumption"
+          }
+        },
+        "bounded_completion": {
+          "$ref": "#/$defs/boundedCompletion"
+        },
+        "resource_bounds": {
+          "$ref": "#/$defs/resourceBounds"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_id",
+        "artifact",
+        "target_system",
+        "frontier_id",
+        "context_id"
+      ],
+      "properties": {
+        "scope_id": {
+          "$ref": "#/$defs/id"
+        },
+        "artifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "artifact_id",
+            "kind",
+            "sha256"
+          ],
+          "properties": {
+            "artifact_id": {
+              "$ref": "#/$defs/id"
+            },
+            "kind": {
+              "enum": [
+                "FINITE_MODEL",
+                "EBPF_OBJECT",
+                "EXECUTABLE",
+                "OTHER"
+              ]
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "target_system": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "system_id",
+            "identity"
+          ],
+          "properties": {
+            "system_id": {
+              "$ref": "#/$defs/id"
+            },
+            "identity": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 64,
+              "items": {
+                "$ref": "#/$defs/namedValue"
+              }
+            }
+          }
+        },
+        "frontier_id": {
+          "$ref": "#/$defs/id"
+        },
+        "context_id": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "reportRule": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "defined",
+            "rule_id",
+            "relation_semantics",
+            "source_kind"
+          ],
+          "properties": {
+            "defined": {
+              "const": true
+            },
+            "rule_id": {
+              "$ref": "#/$defs/id"
+            },
+            "relation_semantics": {
+              "const": "PARTIAL_MEMBERSHIP_RELATION"
+            },
+            "source_kind": {
+              "enum": [
+                "TARGET_SPECIFICATION",
+                "OPERATIONAL_OBSERVATION",
+                "RESEARCHER_DECLARED"
+              ]
+            },
+            "specification_ref": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "document_id",
+                "sha256"
+              ],
+              "properties": {
+                "document_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "sha256": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "source_kind": {
+                    "const": "TARGET_SPECIFICATION"
+                  }
+                },
+                "required": [
+                  "source_kind"
+                ]
+              },
+              "then": {
+                "required": [
+                  "specification_ref"
+                ]
+              },
+              "else": {
+                "not": {
+                  "required": [
+                    "specification_ref"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "defined",
+            "rule_id",
+            "relation_semantics",
+            "source_kind",
+            "undefined_reason"
+          ],
+          "properties": {
+            "defined": {
+              "const": false
+            },
+            "rule_id": {
+              "$ref": "#/$defs/id"
+            },
+            "relation_semantics": {
+              "const": "PARTIAL_MEMBERSHIP_RELATION"
+            },
+            "source_kind": {
+              "const": "TARGET_CONTRACT_UNDEFINED"
+            },
+            "undefined_reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          }
+        }
+      ]
+    },
+    "observer": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "defined",
+            "observer_id",
+            "projection",
+            "equivalence"
+          ],
+          "properties": {
+            "defined": {
+              "const": true
+            },
+            "observer_id": {
+              "$ref": "#/$defs/id"
+            },
+            "projection": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            },
+            "equivalence": {
+              "enum": [
+                "CANONICAL_JSON_EQUALITY",
+                "OUTCOME_ID_EQUALITY"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "defined",
+            "observer_id",
+            "undefined_reason"
+          ],
+          "properties": {
+            "defined": {
+              "const": false
+            },
+            "observer_id": {
+              "$ref": "#/$defs/id"
+            },
+            "undefined_reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          }
+        }
+      ]
+    },
+    "continuationUniverse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "universe_id",
+        "no_fresh_elements",
+        "suffixes"
+      ],
+      "properties": {
+        "universe_id": {
+          "$ref": "#/$defs/id"
+        },
+        "no_fresh_elements": {
+          "const": true
+        },
+        "suffixes": {
+          "type": "array",
+          "maxItems": 256,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "suffix_id",
+              "actions"
+            ],
+            "properties": {
+              "suffix_id": {
+                "$ref": "#/$defs/id"
+              },
+              "actions": {
+                "type": "array",
+                "maxItems": 256,
+                "items": {
+                  "$ref": "#/$defs/id"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_id",
+        "parameters"
+      ],
+      "properties": {
+        "environment_id": {
+          "$ref": "#/$defs/id"
+        },
+        "parameters": {
+          "type": "array",
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/environmentParameter"
+          }
+        }
+      }
+    },
+    "assumption": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assumption_id",
+            "kind",
+            "environment_parameter_ref",
+            "predicate",
+            "value"
+          ],
+          "properties": {
+            "assumption_id": {
+              "$ref": "#/$defs/id"
+            },
+            "kind": {
+              "const": "ENVIRONMENT"
+            },
+            "environment_parameter_ref": {
+              "$ref": "#/$defs/id"
+            },
+            "predicate": {
+              "const": "EQUALS"
+            },
+            "value": {
+              "$ref": "#/$defs/jsonValue"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assumption_id",
+            "kind",
+            "subject_ref",
+            "type_id"
+          ],
+          "properties": {
+            "assumption_id": {
+              "$ref": "#/$defs/id"
+            },
+            "kind": {
+              "const": "TYPE"
+            },
+            "subject_ref": {
+              "$ref": "#/$defs/id"
+            },
+            "type_id": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assumption_id",
+            "kind",
+            "universe",
+            "maximum"
+          ],
+          "properties": {
+            "assumption_id": {
+              "$ref": "#/$defs/id"
+            },
+            "kind": {
+              "const": "FINITE_UNIVERSE"
+            },
+            "universe": {
+              "enum": [
+                "HISTORIES",
+                "REPORT_CELLS",
+                "SUFFIXES",
+                "OUTCOMES",
+                "CONTEXTS"
+              ]
+            },
+            "maximum": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4096
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assumption_id",
+            "kind",
+            "resource",
+            "maximum"
+          ],
+          "properties": {
+            "assumption_id": {
+              "$ref": "#/$defs/id"
+            },
+            "kind": {
+              "const": "RESOURCE_BOUND"
+            },
+            "resource": {
+              "enum": [
+                "FILES",
+                "BYTES",
+                "NESTING",
+                "CPU_MILLISECONDS",
+                "WALL_MILLISECONDS",
+                "MEMORY_BYTES"
+              ]
+            },
+            "maximum": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1099511627776
+            }
+          }
+        }
+      ]
+    },
+    "boundedCompletion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fragment",
+        "require_nonempty",
+        "no_fresh_elements",
+        "universes",
+        "max_cardinalities",
+        "totalization",
+        "canonical_enumeration_order"
+      ],
+      "properties": {
+        "fragment": {
+          "const": "BOUNDED_NO_FRESH_V1"
+        },
+        "require_nonempty": {
+          "const": true
+        },
+        "no_fresh_elements": {
+          "const": true
+        },
+        "universes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "histories",
+            "report_cells",
+            "outcomes",
+            "contexts"
+          ],
+          "properties": {
+            "histories": {
+              "type": "array",
+              "maxItems": 4096,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            },
+            "report_cells": {
+              "type": "array",
+              "maxItems": 4096,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            },
+            "outcomes": {
+              "type": "array",
+              "maxItems": 4096,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "outcome_id",
+                  "value"
+                ],
+                "properties": {
+                  "outcome_id": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "value": {
+                    "$ref": "#/$defs/jsonValue"
+                  }
+                }
+              }
+            },
+            "contexts": {
+              "type": "array",
+              "maxItems": 4096,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        },
+        "max_cardinalities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "histories",
+            "report_cells",
+            "suffixes",
+            "outcomes",
+            "contexts",
+            "report_memberships",
+            "observations",
+            "completions"
+          ],
+          "properties": {
+            "histories": {
+              "$ref": "#/$defs/cardinality"
+            },
+            "report_cells": {
+              "$ref": "#/$defs/cardinality"
+            },
+            "suffixes": {
+              "$ref": "#/$defs/cardinality"
+            },
+            "outcomes": {
+              "$ref": "#/$defs/cardinality"
+            },
+            "contexts": {
+              "$ref": "#/$defs/cardinality"
+            },
+            "report_memberships": {
+              "$ref": "#/$defs/cardinality"
+            },
+            "observations": {
+              "$ref": "#/$defs/cardinality"
+            },
+            "completions": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000
+            }
+          }
+        },
+        "totalization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "report_membership",
+            "observations",
+            "absent_fact"
+          ],
+          "properties": {
+            "report_membership": {
+              "const": "ENUMERATE_PARTIAL_RELATION_EXTENSIONS"
+            },
+            "observations": {
+              "const": "ENUMERATE_PARTIAL_RELATION_EXTENSIONS"
+            },
+            "absent_fact": {
+              "const": "UNKNOWN_NOT_FALSE"
+            }
+          }
+        },
+        "canonical_enumeration_order": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "history_id",
+              "report_cell_id",
+              "suffix_id",
+              "outcome_id",
+              "context_id"
+            ]
+          }
+        }
+      }
+    },
+    "cardinality": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4096
+    },
+    "resourceBounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_files",
+        "max_total_bytes",
+        "max_json_nesting",
+        "max_cpu_milliseconds",
+        "max_wall_milliseconds",
+        "max_memory_bytes"
+      ],
+      "properties": {
+        "max_files": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "max_total_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1073741824
+        },
+        "max_json_nesting": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 128
+        },
+        "max_cpu_milliseconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        },
+        "max_wall_milliseconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        },
+        "max_memory_bytes": {
+          "type": "integer",
+          "minimum": 1048576,
+          "maximum": 17179869184
+        }
+      }
+    },
+    "freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "audit_query_frozen",
+        "frozen_digest_sha256",
+        "contract_precommitted",
+        "selection_timing",
+        "outcome_free_definition"
+      ],
+      "properties": {
+        "audit_query_frozen": {
+          "const": true
+        },
+        "frozen_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "contract_precommitted": {
+          "type": "boolean"
+        },
+        "selection_timing": {
+          "enum": [
+            "PROSPECTIVE",
+            "RETROSPECTIVE"
+          ]
+        },
+        "outcome_free_definition": {
+          "type": "boolean"
+        },
+        "precommit_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "file_sha256",
+            "recorded_query_digest_sha256",
+            "recorded_selection_policy_sha256"
+          ],
+          "properties": {
+            "path": {
+              "$ref": "#/$defs/relativePath"
+            },
+            "file_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "recorded_query_digest_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "recorded_selection_policy_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "contract_precommitted": {
+                "const": true
+              }
+            },
+            "required": [
+              "contract_precommitted"
+            ]
+          },
+          "then": {
+            "required": [
+              "precommit_ref"
+            ],
+            "properties": {
+              "selection_timing": {
+                "const": "PROSPECTIVE"
+              },
+              "outcome_free_definition": {
+                "const": true
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "selection_timing": {
+                "const": "RETROSPECTIVE"
+              },
+              "outcome_free_definition": {
+                "const": false
+              }
+            },
+            "not": {
+              "required": [
+                "precommit_ref"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

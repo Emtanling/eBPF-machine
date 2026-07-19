@@ -74,7 +74,10 @@ build targets:
 ```bash
 make stock-r-preflight
 make stock-r-build
+make stock-r-v2-build
+make test-stock-r-v2-local
 make test-stock-r-tools
+make test-stock-r-v2
 ```
 
 Equivalently, from `eBPF-machine/residuality-auditor/`:
@@ -82,6 +85,12 @@ Equivalently, from `eBPF-machine/residuality-auditor/`:
 ```bash
 ./linux/scripts/preflight.sh
 make -C linux all
+```
+
+To build only the prospective Stock-R V2 tracer and witness:
+
+```bash
+make -C linux v2
 ```
 
 ## Live capture
@@ -120,11 +129,68 @@ The exact program remains pinned after collection so its kernel identity and
 translated bytecode can be inspected. Run the explicit cleanup command printed
 by the script after that inspection.
 
+## Prospective Stock-R V2 capture
+
+V2 uses a new invocation-scoped fentry/fexit tracer and array-map witness. It
+does not mutate `stock-linux-r-proof/`, and repeated samples remain separate
+from the checked must-outcome proof and the exact history-case binding.
+
+```bash
+./linux/scripts/run_stock_r_v2.sh output/stock-r-v2-$(date -u +%Y%m%dT%H%M%SZ)
+```
+
+The runner writes a self-contained bundle under the chosen output directory:
+
+```text
+output/stock-r-v2-.../
+├── query/
+├── contract/
+├── raw/
+├── build/
+├── proof/must-outcome-proof.json
+├── proof/history-case-binding.json
+├── audit/audit.json
+├── MANIFEST.json
+└── CHECKSUMS.sha256
+```
+
+A V2 bundle without a checked proof remains `assessment.status = UNKNOWN` with
+`outcome_eligibility.status = NOT_ESTABLISHED`. A checked proof without
+`proof/history-case-binding.json` also remains `UNKNOWN`: the proof cases have
+not yet been mechanically joined to the selected operational-prune histories.
+The current runner writes both the V2-local proof and binding; when both pass
+all structural gates, the auditor may report `assessment.status = NONFACTORING`
+with `outcome_eligibility.method =
+MUST_OUTCOME_PROOF_WITH_HISTORY_CASE_BINDING`, `assessment.scope =
+EXACT_STOCK_R_V2_QUERY`, and `assessment.certificate =
+NONFACTORING@<exact-scope-digest>`. See
+`../../docs/design/stock-r-v2-experiment.md`.
+
 The automatically generated contract deliberately leaves the bytecode
 frontier, path correspondence, report-contract scope, and concretization
 review unset. The first live run is therefore an evidence inventory, not an R
 candidate. Select the relevant translated instruction frontier before asking
 the correlator for a candidate verdict.
+
+## Stock-R contextual target pilot
+
+After a complete Stock-R V2 bundle has passed the exact EBRC checker, the
+contextual pilot can generate one nontrivial target variant and derive a
+target-bound CRL certificate:
+
+```bash
+PYTHON=/path/to/venv/bin/python \
+  bash linux/scripts/run_stock_r_context.sh \
+  output/stock-r-v2-YYYYMMDDTHHMMSSZ \
+  output/stock-r-context-YYYYMMDDTHHMMSSZ
+```
+
+The runner builds a temporary transformed witness, loads it, dumps the target
+translated bytecode, validates the target runtime bridge, derives the
+`TRANSPORTED` EBRC certificate, runs the contextual hostile matrix, records
+checksums, and removes the temporary bpffs pin before exit. This pilot
+establishes only the generated exact target instance; it does not establish a
+`FORALL` or general Linux claim.
 
 ## Reviewing the contract
 

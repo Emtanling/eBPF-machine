@@ -13,6 +13,10 @@ REPORT_RUN := results/interpreter/interpreter-final-20260711-02
 INTERPRETER_RUN ?= $(REPORT_RUN)
 AUX_R_RUN := results/linux_r/linux-r-v1
 STOCK_R_ROOT := residuality-auditor
+CONTEXT_SUITE ?= $(STOCK_R_ROOT)/linux/context-suite-v1.json
+STOCK_R_V2_BUNDLE ?=
+CONTEXT_MATRIX_OUT ?= $(STOCK_R_ROOT)/output/contextual-matrix-live
+REPRO_OUT ?= $(STOCK_R_ROOT)/output/reproduction-summary.json
 
 UNAME_M := $(shell uname -m)
 ifeq ($(UNAME_M),aarch64)
@@ -35,7 +39,9 @@ LIBBPF_CFLAGS := $(shell pkg-config --cflags libbpf 2>/dev/null)
 
 .PHONY: all test data clean env verify circuits interpreter-data \
 	verify-interpreter verify-aux-r verify-stock-r stock-r-preflight \
-	stock-r-build test-stock-r-tools
+	stock-r-build stock-r-v2-build stock-r-test-deps test-stock-r-tools \
+	test-stock-r-v2 test-stock-r-v2-local test-ebrc test-ebrc-context \
+	test-ebrc-context-runner contextual-matrix-live reproduce-paper
 
 all: $(BUILD)/wm_user $(BUILD)/wm_vm_user
 
@@ -108,9 +114,52 @@ stock-r-preflight:
 stock-r-build:
 	$(MAKE) -C $(STOCK_R_ROOT)/linux all
 
-test-stock-r-tools:
+stock-r-v2-build:
+	$(MAKE) -C $(STOCK_R_ROOT)/linux v2
+
+stock-r-test-deps:
+	@cd $(STOCK_R_ROOT) && \
+		$(PYTHON) -c 'import jsonschema, rfc8785' >/dev/null 2>&1 || { \
+			echo "missing stock-R test dependencies: jsonschema and rfc8785" >&2; \
+			echo "from the repository root, run: $(PYTHON) -m pip install -e './residuality-auditor[test]'" >&2; \
+			exit 2; \
+		}
+
+test-stock-r-tools: stock-r-test-deps
 	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:. \
 		$(PYTHON) -m unittest discover -s tests -v
+
+test-stock-r-v2: stock-r-test-deps
+	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:. \
+		$(PYTHON) -m unittest tests.test_stock_r_v2 -v
+
+test-stock-r-v2-local:
+	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:. \
+		$(PYTHON) -m unittest tests.test_stock_r_v2 -v
+
+test-ebrc: stock-r-test-deps
+	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:. \
+		$(PYTHON) -m unittest tests.test_ebrc -v
+
+test-ebrc-context: stock-r-test-deps
+	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:. \
+		$(PYTHON) -m unittest tests.test_ebrc_context -v
+
+test-ebrc-context-runner: stock-r-test-deps
+	cd $(STOCK_R_ROOT) && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src:. \
+		$(PYTHON) -m unittest tests.test_ebrc_context_runner -v
+
+contextual-matrix-live:
+	@test -n "$(STOCK_R_V2_BUNDLE)" || \
+		{ echo "set STOCK_R_V2_BUNDLE" >&2; exit 2; }
+	PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(STOCK_R_ROOT)/src:$(STOCK_R_ROOT) \
+		$(PYTHON) $(STOCK_R_ROOT)/linux/scripts/run_stock_r_context_suite.py \
+		"$(STOCK_R_V2_BUNDLE)" "$(CONTEXT_MATRIX_OUT)" \
+		--suite "$(CONTEXT_SUITE)" --python "$(PYTHON)"
+
+reproduce-paper: stock-r-test-deps
+	PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(STOCK_R_ROOT)/src:$(STOCK_R_ROOT) \
+		$(PYTHON) $(STOCK_R_ROOT)/artifact/reproduce.py --json-out "$(REPRO_OUT)"
 
 verify: verify-interpreter verify-aux-r verify-stock-r
 

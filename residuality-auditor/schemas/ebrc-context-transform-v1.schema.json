@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rac:ebrc:context-transform:v1",
+  "title": "EBRC contextual transform v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "kind",
+    "status",
+    "transform_id",
+    "primitive",
+    "trivial",
+    "source_scope_digest_sha256",
+    "target_scope_digest_sha256",
+    "source_xlated_sha256",
+    "target_xlated_sha256",
+    "parameters"
+  ],
+  "properties": {
+    "schema": {"const": "rac-ebrc-context-transform-v1"},
+    "kind": {"const": "CONTEXT_TERM"},
+    "status": {"enum": ["VERIFIED", "BLOCKED"]},
+    "transform_id": {"$ref": "#/$defs/id"},
+    "primitive": {
+      "enum": [
+        "IDENTITY",
+        "POST_COLLISION_FRAMED_COMPUTATION",
+        "REGISTER_RENAMING",
+        "SYMMETRIC_CONTROL_EMBEDDING"
+      ]
+    },
+    "trivial": {"type": "boolean"},
+    "source_scope_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "target_scope_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "source_xlated_sha256": {"$ref": "#/$defs/sha256"},
+    "target_xlated_sha256": {"$ref": "#/$defs/sha256"},
+    "parameters": {"type": "object"}
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

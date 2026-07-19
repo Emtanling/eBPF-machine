@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rac:ebrc:claim:v1",
+  "title": "EBRC exact claim v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "claim_id",
+    "predicate",
+    "quantifier",
+    "scope",
+    "evidence_grade",
+    "subject"
+  ],
+  "properties": {
+    "schema": {"const": "rac-ebrc-claim-v1"},
+    "claim_id": {"$ref": "#/$defs/id"},
+    "predicate": {
+      "enum": [
+        "MAY_OUTCOME",
+        "MUST_OUTCOME",
+        "REPORT_COLLISION",
+        "OBSERVER_INEQUALITY",
+        "NONFACTORING"
+      ]
+    },
+    "quantifier": {"enum": ["AT", "EXISTS", "FORALL"]},
+    "scope": {"$ref": "#/$defs/scope"},
+    "evidence_grade": {
+      "enum": [
+        "RETROSPECTIVE_EXACT",
+        "OUTCOME_FREE_PRECOMMITTED",
+        "TRANSPORTED"
+      ]
+    },
+    "subject": {
+      "type": "object",
+      "minProperties": 1
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_digest_sha256",
+        "report_authority",
+        "report_relation_id",
+        "frontier_id",
+        "context_id",
+        "suffix_id",
+        "observer_id"
+      ],
+      "properties": {
+        "scope_digest_sha256": {"$ref": "#/$defs/sha256"},
+        "report_authority": {
+          "enum": [
+            "OPERATIONAL_OBSERVATION",
+            "IMPLEMENTATION_SPECIFIED",
+            "EXTERNAL_SPECIFIED"
+          ]
+        },
+        "report_relation_id": {"$ref": "#/$defs/id"},
+        "frontier_id": {"$ref": "#/$defs/id"},
+        "context_id": {"$ref": "#/$defs/id"},
+        "suffix_id": {"$ref": "#/$defs/id"},
+        "observer_id": {"$ref": "#/$defs/id"}
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Integrated Definition 2 checker for a frozen stock-Linux RAC evidence bundle."""
+"""Legacy-adapter Definition 2 checker for a frozen stock-Linux RAC evidence bundle."""
 from __future__ import annotations
 
 import argparse

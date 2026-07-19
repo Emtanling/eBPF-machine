@@ -15,9 +15,30 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Topic :: Security",
 ]
+dependencies = [
+  "rfc8785>=0.1.4,<1",
+]
 
 [project.scripts]
 residuality-auditor = "residuality_auditor.cli:main"
 
+[project.optional-dependencies]
+test = [
+  "jsonschema>=4.23,<5",
+  "rfc8785>=0.1.4,<1",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.data-files]
+"share/residuality-auditor/schemas" = [
+  "schemas/query-v1.schema.json",
+  "schemas/evidence-v1.schema.json",
+  "schemas/assessment-v1.schema.json",
+  "schemas/ebrc-claim-v1.schema.json",
+  "schemas/ebrc-evidence-graph-v1.schema.json",
+  "schemas/ebrc-proof-v1.schema.json",
+  "schemas/ebrc-context-transform-v1.schema.json",
+  "schemas/ebrc-context-transport-v1.schema.json",
+]

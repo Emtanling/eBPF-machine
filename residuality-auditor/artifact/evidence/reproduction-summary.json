@@ -1,0 +1,92 @@
+{
+  "comparison": {
+    "all_expected": true,
+    "mismatches": []
+  },
+  "schema": "rac-stock-r-reproduce-run-v1",
+  "summary": {
+    "contexts": [
+      {
+        "assessment": "NONFACTORING",
+        "case_id": "transparent.xor.depth1",
+        "certificate": "NONFACTORING@23b72c129e12520df1b05580f4ab74582f49b4e4f442db3e05e207a7deffc1e2",
+        "evidence_grade": "TRANSPORTED",
+        "hostile": {
+          "all_expected": true,
+          "case_count": 12,
+          "summary": {
+            "BLOCKED": 3,
+            "INVALID_GRAPH": 9
+          }
+        },
+        "object_sha256": "84c0ba6fc0d1a702dded1037f7e782d51d3713b54221e67db4474e0aaf6ac531",
+        "quantifier": "AT",
+        "report_authority": "OPERATIONAL_OBSERVATION",
+        "root": "0",
+        "runtime_validation": {
+          "status": "VERIFIED",
+          "trial_count": 4
+        },
+        "scope": "EXACT_TARGET_ONLY",
+        "status": "CERTIFIED",
+        "xlated_sha256": "c902feca11d3825fa1317fab7605312795d4531d83e26aa653fcc214632217de"
+      },
+      {
+        "assessment": "NONFACTORING",
+        "case_id": "transparent.add-mul.depth2",
+        "certificate": "NONFACTORING@1d19c14f69a186648acaeee58c57c68faf7b9719a51b2e870e53bafb81efc663",
+        "evidence_grade": "TRANSPORTED",
+        "hostile": {
+          "all_expected": true,
+          "case_count": 12,
+          "summary": {
+            "BLOCKED": 3,
+            "INVALID_GRAPH": 9
+          }
+        },
+        "object_sha256": "13902d95bac31c2fe861dccd24a58b5e3b4d43f7d4b90a0165bf85a1310c7a02",
+        "quantifier": "AT",
+        "report_authority": "OPERATIONAL_OBSERVATION",
+        "root": "1",
+        "runtime_validation": {
+          "status": "VERIFIED",
+          "trial_count": 4
+        },
+        "scope": "EXACT_TARGET_ONLY",
+        "status": "CERTIFIED",
+        "xlated_sha256": "e36423e7fcf712ee187636fd0dbe3a91fafdbd82b85f60b6ee4cbe85df49adad"
+      }
+    ],
+    "hostile": {
+      "v2": {
+        "all_expected": true,
+        "case_count": 12,
+        "summary": {
+          "BLOCKED": 5,
+          "INVALID_GRAPH": 7
+        }
+      }
+    },
+    "schema": "rac-stock-r-reproduction-summary-v1",
+    "unexpected_results": 0,
+    "v1": {
+      "missing_obligations": [
+        "HISTORY_CASE_BINDING",
+        "MUST_OUTCOME_PROOF",
+        "OUTCOME_FREE_PRECOMMITMENT",
+        "PROOF_FOR_REQUESTED_CLAIM"
+      ],
+      "status": "BLOCKED",
+      "unknown_kind": "INCONCLUSIVE"
+    },
+    "v2": {
+      "assessment": "NONFACTORING",
+      "certificate": "NONFACTORING@1d5f86d80494575c23f539248614105559dd15380c580d0d2388c24941b6d255",
+      "evidence_grade": "OUTCOME_FREE_PRECOMMITTED",
+      "quantifier": "AT",
+      "report_authority": "OPERATIONAL_OBSERVATION",
+      "scope": "EXACT_STOCK_R_V2_QUERY",
+      "status": "CERTIFIED"
+    }
+  }
+}

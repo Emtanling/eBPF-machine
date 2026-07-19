@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rac:ebrc:context-transport:v1",
+  "title": "EBRC contextual transport v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "kind",
+    "status",
+    "transport_id",
+    "derivation_kind",
+    "derivation_chain",
+    "source_claim_digest_sha256",
+    "source_scope_digest_sha256",
+    "target_scope_digest_sha256",
+    "transform_digest_sha256",
+    "target_scope",
+    "target_subject",
+    "obligations",
+    "instruction_correspondence",
+    "footprint",
+    "effect",
+    "history_map"
+  ],
+  "properties": {
+    "schema": {"const": "rac-ebrc-context-transport-v1"},
+    "kind": {"const": "CONTEXT_TRANSPORT"},
+    "status": {"enum": ["VERIFIED", "BLOCKED"]},
+    "transport_id": {"$ref": "#/$defs/id"},
+    "derivation_kind": {"const": "DERIVED_CONTEXTUAL"},
+    "derivation_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "rule",
+        "source_claim_digest_sha256",
+        "transform_digest_sha256",
+        "target_claim_digest_sha256"
+      ],
+      "properties": {
+        "kind": {"const": "DERIVED_CONTEXTUAL"},
+        "rule": {"const": "CONTEXT_TRANSPORT"},
+        "source_claim_digest_sha256": {"$ref": "#/$defs/sha256"},
+        "transform_digest_sha256": {"$ref": "#/$defs/sha256"},
+        "target_claim_digest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_claim_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "source_scope_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "target_scope_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "transform_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "target_scope": {"$ref": "#/$defs/scope"},
+    "target_identity_digest_sha256": {"$ref": "#/$defs/sha256"},
+    "target_subject": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "obligations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_certificate",
+        "source_target_scope_distinct_or_identity_marked",
+        "instruction_correspondence_total_on_witness",
+        "footprint_effect_disjoint",
+        "collision_preserved",
+        "common_suffix_preserved",
+        "must_outcomes_preserved",
+        "observer_reflected",
+        "report_cell_preserved",
+        "frontier_preserved",
+        "history_map_total",
+        "target_conformance_bridge",
+        "outcome_independent_selection",
+        "no_target_terminal_verdict"
+      ],
+      "properties": {
+        "source_certificate": {"type": "boolean"},
+        "source_target_scope_distinct_or_identity_marked": {"type": "boolean"},
+        "instruction_correspondence_total_on_witness": {"type": "boolean"},
+        "footprint_effect_disjoint": {"type": "boolean"},
+        "collision_preserved": {"type": "boolean"},
+        "common_suffix_preserved": {"type": "boolean"},
+        "must_outcomes_preserved": {"type": "boolean"},
+        "observer_reflected": {"type": "boolean"},
+        "report_cell_preserved": {"type": "boolean"},
+        "frontier_preserved": {"type": "boolean"},
+        "history_map_total": {"type": "boolean"},
+        "target_conformance_bridge": {"type": "boolean"},
+        "outcome_independent_selection": {"type": "boolean"},
+        "no_target_terminal_verdict": {"type": "boolean"}
+      }
+    },
+    "instruction_correspondence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "total_on_witness", "entries"],
+      "properties": {
+        "status": {"enum": ["VERIFIED", "BLOCKED"]},
+        "total_on_witness": {"type": "boolean"},
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_insn", "target_insn", "relation"],
+            "properties": {
+              "source_insn": {"type": "integer", "minimum": 0},
+              "target_insn": {"type": "integer", "minimum": 0},
+              "relation": {"enum": ["IDENTITY", "RENAMED", "FRAMED"]}
+            }
+          }
+        }
+      }
+    },
+    "footprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resources"],
+      "properties": {
+        "resources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["writes"],
+      "properties": {
+        "writes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "history_map": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_history_id", "target_history_id"],
+        "properties": {
+          "source_history_id": {"$ref": "#/$defs/id"},
+          "target_history_id": {"$ref": "#/$defs/id"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_digest_sha256",
+        "report_authority",
+        "report_relation_id",
+        "frontier_id",
+        "context_id",
+        "suffix_id",
+        "observer_id"
+      ],
+      "properties": {
+        "scope_digest_sha256": {"$ref": "#/$defs/sha256"},
+        "report_authority": {
+          "enum": [
+            "OPERATIONAL_OBSERVATION",
+            "IMPLEMENTATION_SPECIFIED",
+            "EXTERNAL_SPECIFIED"
+          ]
+        },
+        "report_relation_id": {"$ref": "#/$defs/id"},
+        "frontier_id": {"$ref": "#/$defs/id"},
+        "context_id": {"$ref": "#/$defs/id"},
+        "suffix_id": {"$ref": "#/$defs/id"},
+        "observer_id": {"$ref": "#/$defs/id"}
+      }
+    }
+  }
+}

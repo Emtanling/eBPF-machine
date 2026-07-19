@@ -1,0 +1,429 @@
+{
+  "archive": {
+    "format": "USTAR+XZ",
+    "sha256": "3df6b96e3dded26e9f876db8f607278bc0a65a6df31b297cb6bd3043f44151f7",
+    "size": 2208232
+  },
+  "certificates": {
+    "context_claim_digest_sha256": [
+      "6972389ec28fb724673dd3ba4eb7466cbdb411cf98f731fc1d9bac43881e06b9",
+      "ff0141bc69b83e609af18e3b474310406ee1b17a2e71e90863a240682c5713ce"
+    ],
+    "contexts": [
+      "NONFACTORING@23b72c129e12520df1b05580f4ab74582f49b4e4f442db3e05e207a7deffc1e2",
+      "NONFACTORING@1d19c14f69a186648acaeee58c57c68faf7b9719a51b2e870e53bafb81efc663"
+    ],
+    "mode": "checked-current-code",
+    "source_claim_digest_sha256": "b0bb121eb78c8a20c0a7b75f9b5e6c5c9f35ece58bb9a83175f95ee045785357",
+    "v2": "NONFACTORING@1d5f86d80494575c23f539248614105559dd15380c580d0d2388c24941b6d255"
+  },
+  "contexts": [
+    {
+      "case_id": "transparent.xor.depth1",
+      "common_btf": "v2/build/btf-vmlinux",
+      "identity": {
+        "btf_sha256": "418da9e2d375fecf6f450fb9569a37bedd0723c32cb2786fd6c2117ef687ebe8",
+        "kernel_release": "6.17.0-35-generic",
+        "object_sha256": "84c0ba6fc0d1a702dded1037f7e782d51d3713b54221e67db4474e0aaf6ac531",
+        "program_id": 7473,
+        "program_load_time": 486269825024480,
+        "program_name": "rac_v2_single",
+        "program_tag": "fb16ba367df8639b",
+        "xlated_sha256": "c902feca11d3825fa1317fab7605312795d4531d83e26aa653fcc214632217de"
+      },
+      "root": "contexts/0",
+      "suite_id": "stock-r-v2-crl-bounded-v1"
+    },
+    {
+      "case_id": "transparent.add-mul.depth2",
+      "common_btf": "v2/build/btf-vmlinux",
+      "identity": {
+        "btf_sha256": "418da9e2d375fecf6f450fb9569a37bedd0723c32cb2786fd6c2117ef687ebe8",
+        "kernel_release": "6.17.0-35-generic",
+        "object_sha256": "13902d95bac31c2fe861dccd24a58b5e3b4d43f7d4b90a0165bf85a1310c7a02",
+        "program_id": 7493,
+        "program_load_time": 486277247940984,
+        "program_name": "rac_v2_single",
+        "program_tag": "e4e09ea34511a763",
+        "xlated_sha256": "e36423e7fcf712ee187636fd0dbe3a91fafdbd82b85f60b6ee4cbe85df49adad"
+      },
+      "root": "contexts/1",
+      "suite_id": "stock-r-v2-crl-bounded-v1"
+    }
+  ],
+  "entries": [
+    {
+      "path": "contexts/0/context/transform-metadata.json",
+      "role": "CONTEXT_TRANSFORM_METADATA",
+      "sha256": "39420a54115376685593971c196ba17b2d579c3ebb166c8f90218aa83ccccf43",
+      "size": 1962
+    },
+    {
+      "path": "contexts/0/generated-source.bpf.c",
+      "role": "CONTEXT_GENERATED_SOURCE",
+      "sha256": "01debbfd686992ee0c5ed959b025918d781981972fe3f1510ed9879009725ede",
+      "size": 2741
+    },
+    {
+      "path": "contexts/0/target/audit/runtime-validation.json",
+      "role": "CONTEXT_RUNTIME_VALIDATION",
+      "sha256": "d711adee32b9cc1a038aeb7c99693e1054acde9b699077f873820016fd14f384",
+      "size": 398
+    },
+    {
+      "path": "contexts/0/target/build/rac_v2_contextual.bpf.o",
+      "role": "CONTEXT_OBJECT",
+      "sha256": "84c0ba6fc0d1a702dded1037f7e782d51d3713b54221e67db4474e0aaf6ac531",
+      "size": 12936
+    },
+    {
+      "path": "contexts/0/target/identity.json",
+      "role": "CONTEXT_IDENTITY",
+      "sha256": "6024f6011e080173eb569845a34818f3cd2f440162d5fdafe863fc960cb91a9f",
+      "size": 436
+    },
+    {
+      "path": "contexts/0/target/raw/program-info.json",
+      "role": "CONTEXT_PROGRAM_INFO",
+      "sha256": "9fea0f8cc25e40c4a5eb55be6784a4f5a47fbbbfebadc813bb347444973f4277",
+      "size": 255
+    },
+    {
+      "path": "contexts/0/target/raw/runtime.json",
+      "role": "CONTEXT_RUNTIME",
+      "sha256": "90ad01e4b78894aa41754c2bcf540b718834d47cf443f17da0eee58a9fe83a9a",
+      "size": 4153
+    },
+    {
+      "path": "contexts/0/target/raw/xlated-rac_v2_contextual.txt",
+      "role": "CONTEXT_XLATED",
+      "sha256": "c902feca11d3825fa1317fab7605312795d4531d83e26aa653fcc214632217de",
+      "size": 15810
+    },
+    {
+      "path": "contexts/1/context/transform-metadata.json",
+      "role": "CONTEXT_TRANSFORM_METADATA",
+      "sha256": "272b492a28fa8164c4dfc3bb7a243da62139a92a68010adcec87c6dd0f36b267",
+      "size": 2060
+    },
+    {
+      "path": "contexts/1/generated-source.bpf.c",
+      "role": "CONTEXT_GENERATED_SOURCE",
+      "sha256": "00094745aa59b3c13bbf4ae36b3320d16cf3cf563e0d7b98563ed34e3ff3db40",
+      "size": 2780
+    },
+    {
+      "path": "contexts/1/target/audit/runtime-validation.json",
+      "role": "CONTEXT_RUNTIME_VALIDATION",
+      "sha256": "9914b5c4ef908db62215e61cfa4d2338a6dbee42d9bca90939d6a6aeba3d5d8d",
+      "size": 398
+    },
+    {
+      "path": "contexts/1/target/build/rac_v2_contextual.bpf.o",
+      "role": "CONTEXT_OBJECT",
+      "sha256": "13902d95bac31c2fe861dccd24a58b5e3b4d43f7d4b90a0165bf85a1310c7a02",
+      "size": 13000
+    },
+    {
+      "path": "contexts/1/target/identity.json",
+      "role": "CONTEXT_IDENTITY",
+      "sha256": "255851ea570920bfda72d08c49a28a453bffc4af2957474deeef166eb031f410",
+      "size": 436
+    },
+    {
+      "path": "contexts/1/target/raw/program-info.json",
+      "role": "CONTEXT_PROGRAM_INFO",
+      "sha256": "92c70828e08498efb49d36929ad5e99f5fa3af48a33ae5ab9abbe46ac0e376e9",
+      "size": 255
+    },
+    {
+      "path": "contexts/1/target/raw/runtime.json",
+      "role": "CONTEXT_RUNTIME",
+      "sha256": "51188255407cc1059fa26706cdd8d9ca7a02e8a3159f0479e5e0747bacdd4b9e",
+      "size": 4153
+    },
+    {
+      "path": "contexts/1/target/raw/xlated-rac_v2_contextual.txt",
+      "role": "CONTEXT_XLATED",
+      "sha256": "e36423e7fcf712ee187636fd0dbe3a91fafdbd82b85f60b6ee4cbe85df49adad",
+      "size": 16063
+    },
+    {
+      "path": "v2/build/artifact-manifest.json",
+      "role": "V2_BUILD_MANIFEST",
+      "sha256": "3b527e6f8170faaf67716d5ab4b6cb033fdf44a3837ad5f001747536e11a4435",
+      "size": 842
+    },
+    {
+      "path": "v2/build/btf-vmlinux",
+      "role": "V2_BUILD_CLOSURE",
+      "sha256": "418da9e2d375fecf6f450fb9569a37bedd0723c32cb2786fd6c2117ef687ebe8",
+      "size": 7955749
+    },
+    {
+      "path": "v2/build/rac-v2-collect-fentry",
+      "role": "V2_BUILD_CLOSURE",
+      "sha256": "ab3bb56e31cee53d8debf0e788ca7f0dc6d8860bbd6815b924f20f43d16fc227",
+      "size": 1608848
+    },
+    {
+      "path": "v2/build/rac-v2-witness",
+      "role": "V2_BUILD_CLOSURE",
+      "sha256": "11cae1a5506ee4f6afaec52bfbd7a5f9ef6306c87f85a11da1f72bc6bf8b040d",
+      "size": 94912
+    },
+    {
+      "path": "v2/build/rac_v2_tracer_fentry.bpf.o",
+      "role": "V2_BUILD_CLOSURE",
+      "sha256": "edcaef550c001b8bf6f00a7433677a44a2336e860a46f0038415cca2f49ab3d4",
+      "size": 1526304
+    },
+    {
+      "path": "v2/build/rac_v2_witness.bpf.o",
+      "role": "V2_BUILD_CLOSURE",
+      "sha256": "f3514154b8e8a4b31ae69a0e9cd371444ab230cf9e576186bb98a3d02e7d45be",
+      "size": 11392
+    },
+    {
+      "path": "v2/build/source-manifest.json",
+      "role": "V2_SOURCE_MANIFEST",
+      "sha256": "8073726af3731b2e4677f66e062ea3c7dace0acf7e24e3a4e1dc42bb902c7df8",
+      "size": 4609
+    },
+    {
+      "path": "v2/build/source/Makefile",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "b7f4284c9ef896106d3adab990eeda6fec9e924b11103b43a65f975c94fcc125",
+      "size": 6713
+    },
+    {
+      "path": "v2/build/source/docs/design/ebrc-u0-definition-freeze.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "669e2c3857263fbded65cb9bc6b41c51a15b8e35d8c099aefcedeab0bab96791",
+      "size": 14042
+    },
+    {
+      "path": "v2/build/source/docs/design/ebrc-u1-hostile-derivability-gate.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "915d9d464dbb1e28c402c1ad9d9aa7de0e76b25bb6a75e449b15eb85038e6271",
+      "size": 16245
+    },
+    {
+      "path": "v2/build/source/docs/design/evidence-bounded-residual-certification.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "81c5e30e1f4e487fda5e6630ee2b85871a95238a6ae7b54ab3d8c07289880e90",
+      "size": 28671
+    },
+    {
+      "path": "v2/build/source/docs/design/stock-r-v2-experiment.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "20088c63e7481357a373868c0867e396db1f356850c55d07f1ba8eb03555ea87",
+      "size": 4581
+    },
+    {
+      "path": "v2/build/source/docs/plans/2026-07-19-006-feat-stock-r-v2-must-outcome-proof-plan.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "333d98ac47105a251cd0f329ff29d6c35b3bca7cb5f4cb698877fe31def5b938",
+      "size": 18901
+    },
+    {
+      "path": "v2/build/source/docs/plans/2026-07-19-007-evidence-bounded-residual-certification-plan.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "532b33d7573d9d8db125a2f6627ca344cfd5b6f9e1ecac557d16e6d26a519880",
+      "size": 15910
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/README.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "e1e846e0e15e22f4bc2bf414f65c7df999a9139dd77ebadecf45dd1393155ae0",
+      "size": 4048
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/REPRODUCE.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "871debecad02b47309491f08520780fb44829c4f02f83c44b4311619d0094c8b",
+      "size": 6391
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/Makefile",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "b06f69070f8392d4b3edf3b56e7cc40498144ba372ac138a659b3f250e571ff0",
+      "size": 3638
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/README.md",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "7449283c0874a64dc2fe21d640c926b717abe0a6092863a34b1dd5d7689428e0",
+      "size": 9910
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/include/rac_v2_events.h",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "b101d9125c9902d6ceb85d89760f75f506181e0ed132573e28ce67a6ce88ef71",
+      "size": 1543
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/scripts/preflight.sh",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "ec69838c1759e09c071cc37b42227b1f1cb90884bb2b850ec4b1a8ae34c373b2",
+      "size": 1057
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/scripts/run_stock_r_v2.sh",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "203db6eabffab7a13b48bc4661bdb72d49ee8c3850b4bb9b3405a07f72fe314a",
+      "size": 6835
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/scripts/stock_r_v2.py",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "12c871039e3e1825b6b49e20006f8b70d332a33e987de4226a2531b27b88c051",
+      "size": 16091
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/tracer/rac_v2_collect_fentry.c",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "92cbaa6904ab7d17a7dfb519c8f2149bf79ac42fc600ad5375bc3b32ec8ed917",
+      "size": 8813
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/tracer/rac_v2_tracer_common.bpf.h",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "12831c2e39cbd9db061101d4ac831cb970b657d0fa2f1f32de3b49d9192f4e79",
+      "size": 15774
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/tracer/rac_v2_tracer_fentry.bpf.c",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "002678c6f8b0895ea2899b61a7be87a994cf2850307fc695e04d04191575e4ae",
+      "size": 918
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/tracer/state_collector.c",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "bb0bf7655b72f84dd0f9c90451a360c3c03d84b910dd6f17dd18101e714de5e6",
+      "size": 6814
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/tracer/verifier_state_v2.h",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "582ab9a44e9bf79c5c65c65efb4f6f52bd655070b0e75b29cfcd0f7e017f16aa",
+      "size": 10491
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/witness/rac_v2_witness.bpf.c",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "4c20634cba3f64ac3a1779b5434392cfdd8f091a43bc249dbbc58f17409a31ff",
+      "size": 2309
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/witness/rac_v2_witness.c",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "f634dbc3992366c260b39b630b3c8aab9a74a6d6ed7b93f7e3da03592c6bfc95",
+      "size": 8649
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/linux/witness/rac_v2_witness.h",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "7029c7580cdb149c76e739acac520ec333f17069d5e7819dda32f8ec579cc117",
+      "size": 554
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/src/residuality_auditor/stock_r_v2.py",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "f09e21a81fa48998d41f0eba003b032b6350f00a1ce2c6bb78ee5ccf35db778e",
+      "size": 66131
+    },
+    {
+      "path": "v2/build/source/residuality-auditor/tests/test_stock_r_v2.py",
+      "role": "V2_SOURCE_CLOSURE",
+      "sha256": "4b8d31287182e0f5da3ca6fa4514fc12067bcc6f5028b0da73b7a4e4a25824ee",
+      "size": 35390
+    },
+    {
+      "path": "v2/contract/capture-contract.json",
+      "role": "V2_CAPTURE_CONTRACT",
+      "sha256": "8346bab0feb4c815f0f25d9ec4f079de65aed20f9f86075e1782c4673aba35f7",
+      "size": 585
+    },
+    {
+      "path": "v2/proof/history-case-binding.json",
+      "role": "V2_HISTORY_CASE_BINDING",
+      "sha256": "ea1dcfa4ef604e2f01817e3fd7d9fbe6405e46fbdd15c64487e0e7999fb8cf5c",
+      "size": 5127
+    },
+    {
+      "path": "v2/proof/must-outcome-proof.json",
+      "role": "V2_MUST_OUTCOME_PROOF",
+      "sha256": "8054317e447584429359d5e659c2103d65ba199a6cf56aae91dcc7b83af759f2",
+      "size": 3828
+    },
+    {
+      "path": "v2/query/precommit.json",
+      "role": "V2_PRECOMMIT",
+      "sha256": "f6ce3513f44d630f16a9ed05add47cda73fa361767d1d57a5b02fd308d9c82c6",
+      "size": 296
+    },
+    {
+      "path": "v2/query/query.json",
+      "role": "V2_QUERY",
+      "sha256": "5e0a283bc946f39786fd0cc2528ab572198f2900c87fb2617a7ada5378210aed",
+      "size": 910
+    },
+    {
+      "path": "v2/query/selection-policy.json",
+      "role": "V2_SELECTION_POLICY",
+      "sha256": "ea9eed16fcbbafcf8a7d75396150b42ab2b8253d013287bac9d7dbc4e3bc2a71",
+      "size": 343
+    },
+    {
+      "path": "v2/raw/events.jsonl",
+      "role": "V2_EVENTS",
+      "sha256": "d05963384fd4419d7bad56bcbb77c8c0b50d96dc0df32ac8c0fcb7f1eff50ef6",
+      "size": 31456
+    },
+    {
+      "path": "v2/raw/program-info.json",
+      "role": "V2_PROGRAM_INFO",
+      "sha256": "d4b9acc12fe329ef93f4b5d478415d1ec754b37c2b4b2d1d5e24f948ebc9a08b",
+      "size": 250
+    },
+    {
+      "path": "v2/raw/runtime.json",
+      "role": "V2_RUNTIME",
+      "sha256": "7461f350c7fcfa03ed7285901fc0ef8521dc0818cd8d1860d73abcc73c769209",
+      "size": 4153
+    },
+    {
+      "path": "v2/raw/xlated-rac_v2_single.txt",
+      "role": "V2_XLATED",
+      "sha256": "7ad9ea5deda3827b5a61edd20a2dc57a3fe351ec68f4ec02da3f63262245f2b8",
+      "size": 10294
+    }
+  ],
+  "limits": {
+    "max_archive_size": 26214400,
+    "max_member_count": 4096,
+    "max_uncompressed_size": 67108864,
+    "member_count": 58,
+    "total_uncompressed_size": 11648153
+  },
+  "roots": {
+    "context_bundles": [
+      "contexts/0",
+      "contexts/1"
+    ],
+    "v2_bundle": "v2"
+  },
+  "schema": "rac-stock-r-replay-manifest-v1",
+  "source_identity": {
+    "btf_sha256": "418da9e2d375fecf6f450fb9569a37bedd0723c32cb2786fd6c2117ef687ebe8",
+    "kernel_release": "6.17.0-35-generic",
+    "object_sha256": "f3514154b8e8a4b31ae69a0e9cd371444ab230cf9e576186bb98a3d02e7d45be",
+    "program_id": 7450,
+    "program_load_time": 447153471466954,
+    "program_name": "rac_v2_single",
+    "program_tag": "65cff4a7662dfab2",
+    "xlated_sha256": "7ad9ea5deda3827b5a61edd20a2dc57a3fe351ec68f4ec02da3f63262245f2b8"
+  }
+}

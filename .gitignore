@@ -1,5 +1,6 @@
 __pycache__/
 *.py[cod]
+*.egg-info/
 .DS_Store
 ._*
 
@@ -11,6 +12,7 @@ __pycache__/
 /.revision-backups/
 /.revision-incoming/
 /reviews/
+/tmp/
 /.interpreter_suite.lock
 
 # Rebuildable native and generated source artifacts.
@@ -34,6 +36,7 @@ __pycache__/
 /output/pdf/*
 !/output/pdf/PAPER_REPORT.pdf
 !/output/pdf/PAPER_REPORT_ZH.pdf
+!/output/pdf/BUILD-INFO.md
 /*.aux
 /*.log
 /*.out
@@ -47,12 +50,26 @@ __pycache__/
 !/residuality-auditor/README.md
 !/residuality-auditor/REPRODUCE.md
 !/residuality-auditor/pyproject.toml
+!/residuality-auditor/MANIFEST.in
+!/residuality-auditor/artifact/
+!/residuality-auditor/artifact/README.md
+!/residuality-auditor/artifact/build_replay_capsule.py
+!/residuality-auditor/artifact/reproduce.py
+!/residuality-auditor/artifact/expected-results.json
+!/residuality-auditor/artifact/replay-manifest.json
+!/residuality-auditor/artifact/evidence/
+!/residuality-auditor/artifact/evidence/contextual-matrix-live-20260720-03.json
+!/residuality-auditor/artifact/evidence/replay-capsule.tar.xz
+!/residuality-auditor/artifact/evidence/reproduction-summary.json
+!/residuality-auditor/schemas/
+!/residuality-auditor/schemas/**
 !/residuality-auditor/examples/
 !/residuality-auditor/examples/**
 !/residuality-auditor/linux/
 !/residuality-auditor/linux/**
 !/residuality-auditor/src/
 !/residuality-auditor/src/**
+/residuality-auditor/src/*.egg-info/
 !/residuality-auditor/tests/
 !/residuality-auditor/tests/**
 !/residuality-auditor/tools/

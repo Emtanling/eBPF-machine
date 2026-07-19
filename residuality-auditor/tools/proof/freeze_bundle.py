@@ -160,11 +160,20 @@ def _docs(src: Path, dst: Path) -> dict[str, Any]:
         "xlated_sha256": identity.get("xlated_sha256") or identity.get("recorded_xlated_sha256"),
         "definition2_verdict": verdict.get("verdict"),
     }
-    claim = f"""# Stock Linux R claim for the frozen tuple
+    claim = f"""# Legacy-adapter factoring-failure replay for the frozen tuple
 
-For the frozen kernel build, accepted artifact, xlated frontier, execution contract, and prune-report extractor recorded in this evidence bundle, the two reachable concrete states are uniquely assigned to one retained report representative while belonging to distinct future-observation classes. Therefore `R(M_K)` holds for this frozen tuple.
+This bundle preserves a historical adapter result.  Its integrated checker
+replays a deterministic finite model constructed from the retained samples and
+emits the historical identifier below.  That identifier means only that the
+adapter's encoded gates replay on the retained bytes; it is **not** a verdict
+about real Linux behavior and it does not establish `R(M_{{Linux}})`.
 
-Final integrated checker verdict: `{verdict.get('verdict')}`.
+Historical integrated-checker identifier: `{verdict.get('verdict')}`.
+
+The legacy model/report construction is retained for provenance and regression
+analysis.  A real-Linux positive result requires a separately predeclared
+transition/report contract and evidence-model outcome eligibility; those
+requirements are not supplied by this freeze operation.
 
 ## Frozen tuple
 
@@ -180,6 +189,7 @@ Final integrated checker verdict: `{verdict.get('verdict')}`.
 
 This frozen proof bundle does not claim any of the following:
 
+- it does not establish a real-Linux R verdict or stable must outcomes;
 - it does not generalize to other kernels, configs, BTFs, compiler outputs, or eBPF objects;
 - it does not prove Linux verifier unsoundness;
 - it does not prove a security vulnerability;

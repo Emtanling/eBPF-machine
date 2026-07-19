@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Strict four-certificate checker for stock Linux R on the frozen tuple."""
+"""Strict legacy-adapter four-check replay for a frozen stock-Linux tuple."""
 from __future__ import annotations
 
 import argparse
